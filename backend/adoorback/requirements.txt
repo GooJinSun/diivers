@@ -67,7 +67,6 @@ MarkupSafe==1.1.1
 mccabe==0.6.1
 mecab-python3==1.0.3
 msgpack==1.0.0
-mysqlclient>=2.0.1
 ndg-httpsclient==0.5.1
 nltk==3.5
 numpy==1.19.4
