@@ -92,7 +92,6 @@ pylint-plugin-utils==0.6
 pyOpenSSL==20.0.1
 PySocks==1.7.1
 python-dateutil==2.8.1
-Python-dev==2.0.0.dev0
 python-slugify==4.0.1
 pytz==2020.1
 PyYAML==5.3.1
