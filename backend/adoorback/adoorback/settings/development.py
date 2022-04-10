@@ -33,4 +33,4 @@ sentry_sdk.init(
     send_default_pii=True
 )
 
-ALLOWED_HOSTS = ['ec2-54-237-96-51.compute-1.amazonaws.com', 'localhost']
+ALLOWED_HOSTS = ['ec2-3-34-134-169.ap-northeast-2.compute.amazonaws.com', 'localhost']

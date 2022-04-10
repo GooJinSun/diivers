@@ -39,7 +39,7 @@ sentry_sdk.init(
 #    "localhost"
 # ]
 
-ALLOWED_HOSTS = ['ec2-54-237-96-51.compute-1.amazonaws.com', 'localhost']
+ALLOWED_HOSTS = ['ec2-3-34-134-169.ap-northeast-2.compute.amazonaws.com', 'localhost']
 
 # CORS_ALLOWED_ORIGINS = [
 #    "https://develop.d3t1tnno5uz3sa.amplifyapp.com",
