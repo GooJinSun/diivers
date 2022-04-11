@@ -28,6 +28,9 @@ import MobileSearchPage from './pages/MobileSearchPage';
 import { getCurrentUser } from './modules/user';
 import { initGA, trackPage } from './ga';
 
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+axios.defaults.xsrfCookieName = "csrftoken";
+
 const theme = createMuiTheme({
   palette: {
     primary: { main: '#ff395b' },
