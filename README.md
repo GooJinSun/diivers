@@ -35,6 +35,9 @@ set_seed(20)
 python manage.py runserver
 ```
 
+psycopg2, mysqlclient, python-dev
+이 세 가지는 requirements.txt에서 제거하고 설치해도 됩니당
+
 ### Test
 
 ```
