@@ -1,7 +1,8 @@
 import 'intersection-observer';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js.cookie';
 import Login from './pages/Login';
@@ -28,10 +29,10 @@ import MobileSearchPage from './pages/MobileSearchPage';
 import { getCurrentUser } from './modules/user';
 import { initGA, trackPage } from './ga';
 
-axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
-axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
+axios.defaults.xsrfCookieName = 'csrftoken';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: { main: '#ff395b' },
     secondary: { light: '#eee', main: '#777' }

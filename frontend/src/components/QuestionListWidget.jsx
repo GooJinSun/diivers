@@ -94,9 +94,8 @@ const QuestionListWidget = ({
     initialIsRandomQuestions
   );
   const [isFolded, setIsFolded] = useState(initialIsFolded);
-  const [isCustomQuestionModalOpen, setCustomQuestionModalOpen] = useState(
-    false
-  );
+  const [isCustomQuestionModalOpen, setCustomQuestionModalOpen] =
+    useState(false);
 
   const handleModalOpen = () => {
     setCustomQuestionModalOpen(true);

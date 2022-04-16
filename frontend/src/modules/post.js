@@ -136,30 +136,32 @@ export const editSelectedPost = (postObj) => async (dispatch) => {
   });
 };
 
-export const getPostsByType = (type, userId = null) => async (dispatch) => {
-  const postType = type.toUpperCase();
-  dispatch({ type: `post/GET_${postType}_POSTS_REQUEST` });
-  let result;
-  try {
-    if (userId) {
-      result = await axios.get(`feed/${userId}/`);
-    } else {
-      result =
-        type === 'anon'
-          ? await axios.get('feed/anonymous/')
-          : await axios.get(`feed/${type}/`);
+export const getPostsByType =
+  (type, userId = null) =>
+  async (dispatch) => {
+    const postType = type.toUpperCase();
+    dispatch({ type: `post/GET_${postType}_POSTS_REQUEST` });
+    let result;
+    try {
+      if (userId) {
+        result = await axios.get(`feed/${userId}/`);
+      } else {
+        result =
+          type === 'anon'
+            ? await axios.get('feed/anonymous/')
+            : await axios.get(`feed/${type}/`);
+      }
+    } catch (error) {
+      dispatch({ type: `post/GET_${postType}_POSTS_FAILURE`, error });
+      return;
     }
-  } catch (error) {
-    dispatch({ type: `post/GET_${postType}_POSTS_FAILURE`, error });
-    return;
-  }
-  const { data } = result;
-  dispatch({
-    type: `post/GET_${postType}_POSTS_SUCCESS`,
-    result: data.results,
-    next: data.next ?? null
-  });
-};
+    const { data } = result;
+    dispatch({
+      type: `post/GET_${postType}_POSTS_SUCCESS`,
+      result: data.results,
+      next: data.next ?? null
+    });
+  };
 
 export const getSelectedUserPosts = (userId) => async (dispatch) => {
   let result;
@@ -235,92 +237,86 @@ export const createPost = (newPost) => async (dispatch, getState) => {
   }
 };
 
-export const createComment = (newComment, postKey, targetId) => async (
-  dispatch,
-  getState
-) => {
-  dispatch({
-    type: CREATE_COMMENT_REQUEST
-  });
-
-  let result;
-  try {
-    result = await axios.post(`comments/`, newComment);
-  } catch (error) {
+export const createComment =
+  (newComment, postKey, targetId) => async (dispatch, getState) => {
     dispatch({
-      type: CREATE_COMMENT_FAILURE,
-      error
+      type: CREATE_COMMENT_REQUEST
     });
-    return;
-  }
-  dispatch({
-    type: CREATE_COMMENT_SUCCESS,
-    result: result.data,
-    postKey
-  });
-  const { selectedQuestion } = getState().questionReducer;
-  if (+selectedQuestion?.id === +targetId) {
-    dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
-  }
-};
 
-export const createReply = (newReply, postKey, targetId) => async (
-  dispatch,
-  getState
-) => {
-  dispatch({
-    type: CREATE_REPLY_REQUEST
-  });
-
-  let result;
-  try {
-    result = await axios.post(`comments/`, newReply);
-  } catch (error) {
+    let result;
+    try {
+      result = await axios.post(`comments/`, newComment);
+    } catch (error) {
+      dispatch({
+        type: CREATE_COMMENT_FAILURE,
+        error
+      });
+      return;
+    }
     dispatch({
-      type: CREATE_REPLY_FAILURE,
-      error
+      type: CREATE_COMMENT_SUCCESS,
+      result: result.data,
+      postKey
     });
-    return;
-  }
-  dispatch({
-    type: CREATE_REPLY_SUCCESS,
-    result: result.data,
-    postKey
-  });
-  const { selectedQuestion } = getState().questionReducer;
-  if (+selectedQuestion?.id === +targetId) {
-    dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
-  }
-};
+    const { selectedQuestion } = getState().questionReducer;
+    if (+selectedQuestion?.id === +targetId) {
+      dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
+    }
+  };
 
-export const deleteComment = (commentId, postKey, isReply, targetId) => async (
-  dispatch,
-  getState
-) => {
-  dispatch({
-    type: DELETE_COMMENT_REQUEST
-  });
-
-  try {
-    await axios.delete(`comments/${commentId}`);
-  } catch (error) {
+export const createReply =
+  (newReply, postKey, targetId) => async (dispatch, getState) => {
     dispatch({
-      type: DELETE_COMMENT_FAILURE,
-      error
+      type: CREATE_REPLY_REQUEST
     });
-    return;
-  }
-  dispatch({
-    type: DELETE_COMMENT_SUCCESS,
-    commentId,
-    isReply,
-    postKey
-  });
-  const { selectedQuestion } = getState().questionReducer;
-  if (+selectedQuestion?.id === +targetId) {
-    dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
-  }
-};
+
+    let result;
+    try {
+      result = await axios.post(`comments/`, newReply);
+    } catch (error) {
+      dispatch({
+        type: CREATE_REPLY_FAILURE,
+        error
+      });
+      return;
+    }
+    dispatch({
+      type: CREATE_REPLY_SUCCESS,
+      result: result.data,
+      postKey
+    });
+    const { selectedQuestion } = getState().questionReducer;
+    if (+selectedQuestion?.id === +targetId) {
+      dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
+    }
+  };
+
+export const deleteComment =
+  (commentId, postKey, isReply, targetId) => async (dispatch, getState) => {
+    dispatch({
+      type: DELETE_COMMENT_REQUEST
+    });
+
+    try {
+      await axios.delete(`comments/${commentId}`);
+    } catch (error) {
+      dispatch({
+        type: DELETE_COMMENT_FAILURE,
+        error
+      });
+      return;
+    }
+    dispatch({
+      type: DELETE_COMMENT_SUCCESS,
+      commentId,
+      isReply,
+      postKey
+    });
+    const { selectedQuestion } = getState().questionReducer;
+    if (+selectedQuestion?.id === +targetId) {
+      dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
+    }
+  };
 
 export const deletePost = (postId, type) => async (dispatch, getState) => {
   const postType = type.toLowerCase();
@@ -331,10 +327,8 @@ export const deletePost = (postId, type) => async (dispatch, getState) => {
     return;
   }
   dispatch({ type: DELETE_POST_SUCCESS, postId, postType: type });
-  const {
-    selectedQuestion,
-    selectedQuestionResponses
-  } = getState().questionReducer;
+  const { selectedQuestion, selectedQuestionResponses } =
+    getState().questionReducer;
   if (
     type === 'Response' &&
     selectedQuestionResponses.find((response) => response.id === postId)

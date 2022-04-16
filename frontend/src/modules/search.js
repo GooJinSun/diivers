@@ -23,62 +23,61 @@ export const getPageCount = (total, denominator) => {
   return Math.floor(total / denominator) + valueToBeAdded;
 };
 
-export const fetchSearchResults = (updatedPageNo, query) => async (
-  dispatch
-) => {
-  const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
-  const searchUrl = `user/search/?query=${query}${pageNumber}`;
+export const fetchSearchResults =
+  (updatedPageNo, query) => async (dispatch) => {
+    const pageNumber = updatedPageNo ? `&page=${updatedPageNo}` : '';
+    const searchUrl = `user/search/?query=${query}${pageNumber}`;
 
-  let result;
+    let result;
 
-  if (!query) {
-    dispatch({
-      type: 'search/GET_SEARCH_RESULTS',
-      results: [],
-      message: '',
-      totalPages: 0,
-      loading: false,
-      searchError: false,
-      numResults: 0
-    });
-  } else {
-    dispatch({
-      query,
-      type: 'search/GET_SEARCH_RESULTS_REQUEST',
-      loading: true,
-      message: '',
-      searchError: false
-    });
-
-    try {
-      result = await axios.get(searchUrl, {});
-      const total = result.data.count;
-      const totalPagesCount = getPageCount(total, 15);
-      const resultNotFoundMsg =
-        !result.data.results.length && total > 0
-          ? '검색 결과는 이게 끝입니다?'
-          : '';
+    if (!query) {
       dispatch({
-        type: 'search/GET_SEARCH_RESULTS_SUCCESS',
-        results: result?.data.results,
-        message: resultNotFoundMsg,
-        totalPages: totalPagesCount,
-        currentPageNo: updatedPageNo,
-        numResults: total,
+        type: 'search/GET_SEARCH_RESULTS',
+        results: [],
+        message: '',
+        totalPages: 0,
         loading: false,
+        searchError: false,
+        numResults: 0
+      });
+    } else {
+      dispatch({
+        query,
+        type: 'search/GET_SEARCH_RESULTS_REQUEST',
+        loading: true,
+        message: '',
         searchError: false
       });
-    } catch (error) {
-      dispatch({
-        type: 'search/GET_SEARCH_RESULTS_FAILURE',
-        loading: false,
-        searchError: true,
-        message: '검색 결과를 찾을 수 없습니다.',
-        error
-      });
+
+      try {
+        result = await axios.get(searchUrl, {});
+        const total = result.data.count;
+        const totalPagesCount = getPageCount(total, 15);
+        const resultNotFoundMsg =
+          !result.data.results.length && total > 0
+            ? '검색 결과는 이게 끝입니다?'
+            : '';
+        dispatch({
+          type: 'search/GET_SEARCH_RESULTS_SUCCESS',
+          results: result?.data.results,
+          message: resultNotFoundMsg,
+          totalPages: totalPagesCount,
+          currentPageNo: updatedPageNo,
+          numResults: total,
+          loading: false,
+          searchError: false
+        });
+      } catch (error) {
+        dispatch({
+          type: 'search/GET_SEARCH_RESULTS_FAILURE',
+          loading: false,
+          searchError: true,
+          message: '검색 결과를 찾을 수 없습니다.',
+          error
+        });
+      }
     }
-  }
-};
+  };
 
 export default function searchReducer(state = initialState, action) {
   if (typeof state === 'undefined') {

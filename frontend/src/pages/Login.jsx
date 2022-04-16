@@ -1,12 +1,9 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import Cookies from 'js.cookie';
 import { CommonInput, CommonButton } from '../styles';
-
 import { requestLogin } from '../modules/user';
 
 const LoginWrapper = styled.div`
