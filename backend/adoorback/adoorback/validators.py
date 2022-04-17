@@ -1,4 +1,4 @@
-import sentry_sdk
+# import sentry_sdk
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
@@ -25,5 +25,5 @@ def adoor_exception_handler(e, context):
     #                             status.HTTP_405_METHOD_NOT_ALLOWED,
     #                             status.HTTP_404_NOT_FOUND,
     #                             status.HTTP_403_FORBIDDEN]:
-    sentry_sdk.capture_exception(e)
+    # sentry_sdk.capture_exception(e)
     return response

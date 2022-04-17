@@ -1,5 +1,5 @@
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
+# import sentry_sdk
+# from sentry_sdk.integrations.django import DjangoIntegration
 from .base import *
 
 DEBUG = False
@@ -25,12 +25,12 @@ DATABASES = {
 #     },
 # }
 
-sentry_sdk.init(
-    dsn="https://3525cb8e094e49fe9973fd92ccbf456b@o486285.ingest.sentry.io/5543025",
-    integrations=[DjangoIntegration()],
-    traces_sample_rate=1.0,
+# sentry_sdk.init(
+#     dsn="https://3525cb8e094e49fe9973fd92ccbf456b@o486285.ingest.sentry.io/5543025",
+#     integrations=[DjangoIntegration()],
+#     traces_sample_rate=1.0,
 
-    send_default_pii=True
-)
+#     send_default_pii=True
+# )
 
 ALLOWED_HOSTS = ['ec2-3-34-134-169.ap-northeast-2.compute.amazonaws.com', 'localhost']
