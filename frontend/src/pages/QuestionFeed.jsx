@@ -39,9 +39,8 @@ export default function QuestionFeed() {
       (state) => state.loadingReducer['question/GET_DAILY_QUESTIONS']
     ) === 'REQUEST';
 
-  const [isCustomQuestionModalOpen, setCustomQuestionModalOpen] = useState(
-    false
-  );
+  const [isCustomQuestionModalOpen, setCustomQuestionModalOpen] =
+    useState(false);
 
   const handleModalOpen = () => {
     setCustomQuestionModalOpen(true);

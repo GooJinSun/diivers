@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import axios from '../apis';
 import { mockQuestions } from '../constants';
 
@@ -177,68 +176,65 @@ export const getRandomQuestions = () => {
   };
 };
 
-export const getResponsesByQuestionWithType = (id, type) => async (
-  dispatch
-) => {
-  let res;
-  const responseType = type.toUpperCase();
-  dispatch({
-    type: `question/GET_SELECTED_QUESTION_${responseType}_RESPONSES_REQUEST`
-  });
-  try {
-    if (type === 'all') {
-      res = await axios.get(`/feed/questions/${id}/`);
-    } else {
-      res = await axios.get(`/feed/questions/${id}/${type}/`);
-    }
-  } catch (error) {
+export const getResponsesByQuestionWithType =
+  (id, type) => async (dispatch) => {
+    let res;
+    const responseType = type.toUpperCase();
     dispatch({
-      type: `question/GET_SELECTED_QUESTION_${responseType}_RESPONSES_FAILURE`,
-      error
+      type: `question/GET_SELECTED_QUESTION_${responseType}_RESPONSES_REQUEST`
     });
-    return;
-  }
-  dispatch({
-    type: `question/GET_SELECTED_QUESTION_${responseType}_RESPONSES_SUCCESS`,
-    res: res?.data?.response_set,
-    question: res?.data,
-    next: res.data.max_page > 1 ? 2 : null,
-    maxPage: res.data.max_page
-  });
-};
-
-export const appendResponsesByQuestionWithType = (id, type) => async (
-  dispatch,
-  getState
-) => {
-  let res;
-  const { next, maxPage } = getState().questionReducer;
-
-  if (!next) return;
-
-  dispatch({
-    type: `question/APPEND_SELECTED_QUESTION_RESPONSES_REQUEST`
-  });
-  try {
-    if (type === 'all') {
-      res = await axios.get(`/feed/questions/${id}/?page=${next}`);
-    } else {
-      res = await axios.get(`/feed/questions/${id}/${type}/?page=${next}`);
+    try {
+      if (type === 'all') {
+        res = await axios.get(`/feed/questions/${id}/`);
+      } else {
+        res = await axios.get(`/feed/questions/${id}/${type}/`);
+      }
+    } catch (error) {
+      dispatch({
+        type: `question/GET_SELECTED_QUESTION_${responseType}_RESPONSES_FAILURE`,
+        error
+      });
+      return;
     }
-  } catch (error) {
     dispatch({
-      type: `question/APPEND_SELECTED_QUESTION_RESPONSES_FAILURE`,
-      error
+      type: `question/GET_SELECTED_QUESTION_${responseType}_RESPONSES_SUCCESS`,
+      res: res?.data?.response_set,
+      question: res?.data,
+      next: res.data.max_page > 1 ? 2 : null,
+      maxPage: res.data.max_page
     });
-    return;
-  }
-  dispatch({
-    type: `question/APPEND_SELECTED_QUESTION_RESPONSES_SUCCESS`,
-    res: res?.data?.response_set,
-    question: res?.data,
-    next: next === maxPage ? null : next + 1
-  });
-};
+  };
+
+export const appendResponsesByQuestionWithType =
+  (id, type) => async (dispatch, getState) => {
+    let res;
+    const { next, maxPage } = getState().questionReducer;
+
+    if (!next) return;
+
+    dispatch({
+      type: `question/APPEND_SELECTED_QUESTION_RESPONSES_REQUEST`
+    });
+    try {
+      if (type === 'all') {
+        res = await axios.get(`/feed/questions/${id}/?page=${next}`);
+      } else {
+        res = await axios.get(`/feed/questions/${id}/${type}/?page=${next}`);
+      }
+    } catch (error) {
+      dispatch({
+        type: `question/APPEND_SELECTED_QUESTION_RESPONSES_FAILURE`,
+        error
+      });
+      return;
+    }
+    dispatch({
+      type: `question/APPEND_SELECTED_QUESTION_RESPONSES_SUCCESS`,
+      res: res?.data?.response_set,
+      question: res?.data,
+      next: next === maxPage ? null : next + 1
+    });
+  };
 
 export const getResponseRequestsByQuestion = (id) => async (dispatch) => {
   let res;
@@ -258,29 +254,28 @@ export const getResponseRequestsByQuestion = (id) => async (dispatch) => {
   });
 };
 
-export const createResponseRequest = (responseRequestObj) => async (
-  dispatch
-) => {
-  let res;
-  dispatch({ type: 'question/CREATE_RESPONSE_REQUEST_REQUEST' });
-  try {
-    res = await axios.post(
-      `/feed/questions/response-request/`,
-      responseRequestObj
-    );
-  } catch (error) {
+export const createResponseRequest =
+  (responseRequestObj) => async (dispatch) => {
+    let res;
+    dispatch({ type: 'question/CREATE_RESPONSE_REQUEST_REQUEST' });
+    try {
+      res = await axios.post(
+        `/feed/questions/response-request/`,
+        responseRequestObj
+      );
+    } catch (error) {
+      dispatch({
+        type: 'question/CREATE_RESPONSE_REQUEST_FAILURE',
+        error
+      });
+      return;
+    }
     dispatch({
-      type: 'question/CREATE_RESPONSE_REQUEST_FAILURE',
-      error
+      type: 'question/CREATE_RESPONSE_REQUEST_SUCCESS',
+      res: res?.data
     });
-    return;
-  }
-  dispatch({
-    type: 'question/CREATE_RESPONSE_REQUEST_SUCCESS',
-    res: res?.data
-  });
-  dispatch(getResponseRequestsByQuestion(responseRequestObj.question_id));
-};
+    dispatch(getResponseRequestsByQuestion(responseRequestObj.question_id));
+  };
 
 export const deleteResponseRequest = (qid, rid) => async (dispatch) => {
   let res;

@@ -22,13 +22,28 @@ const WarningMessage = styled.div`
   margin-bottom: 4px;
 `;
 
+const ButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: -16px;
+`;
+
 const LoginButton = styled.button`
   float: right;
   border: none;
   background: #fff;
   color: #777;
   font-size: 16px;
-  margin-top: -16px;
+`;
+
+const PrivacyButton = styled.button`
+  float: right;
+  border: none;
+  background: #fff;
+  color: #777;
+  font-size: 16px;
 `;
 
 export default function SignUp({ setRefreshToken }) {
@@ -133,14 +148,24 @@ export default function SignUp({ setRefreshToken }) {
       >
         다음 단계로
       </CommonButton>
-      <LoginButton
-        type="button"
-        id="login-button"
-        margin="5px 0"
-        onClick={() => history.push('/login')}
-      >
-        로그인
-      </LoginButton>
+      <ButtonWrapper>
+        <LoginButton
+          type="button"
+          id="login-button"
+          onClick={() => history.push('/login')}
+        >
+          로그인
+        </LoginButton>
+        <PrivacyButton
+          type="button"
+          id="privacy-button"
+          onClick={() => {
+            window.location.href = './privacy.html';
+          }}
+        >
+          개인정보처리방침
+        </PrivacyButton>
+      </ButtonWrapper>
     </SignUpWrapper>
   );
 }
