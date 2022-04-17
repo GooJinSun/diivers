@@ -1,5 +1,5 @@
 import json
-import sentry_sdk
+# import sentry_sdk
 
 from django.apps import apps
 from django.contrib.auth import get_user_model, authenticate, login
@@ -79,7 +79,7 @@ def user_login(request):
             username = str(req_data['username'])
             password = str(req_data['password'])
         except (KeyError, TypeError, json.JSONDecodeError) as e:
-            sentry_sdk.capture_exception(e)
+            # sentry_sdk.capture_exception(e)
             return HttpResponseBadRequest()
 
         user = authenticate(username=username, password=password)
