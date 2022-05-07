@@ -35,6 +35,10 @@ set_seed(20)
 python manage.py runserver
 ```
 
+```
+psycopg2==2.8.6
+django-mysql==3.9.0
+```
 psycopg2, mysqlclient, python-dev
 이 세 가지는 requirements.txt에서 제거하고 설치해도 됩니당
 
