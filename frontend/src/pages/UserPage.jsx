@@ -105,6 +105,8 @@ export default function UserPage() {
     (friendIdList.includes(selectedUser?.id) ||
       selectedUser?.id === currentUser?.id);
 
+  const isMyPage = selectedUser && selectedUser?.id === currentUser?.id;
+
   const [value, setValue] = useState('All');
   const selectedUserPosts = useSelector(
     (state) => state.postReducer.selectedUserPosts
@@ -172,13 +174,19 @@ export default function UserPage() {
       ) : (
         <>
           <Container fixed>
-            <UserPageWrapper>
-              <UserReportButtonWrapper>
-                <FriendReportButton
-                  onClickBlockUser={onClickBlockUser}
-                  onClickReportUser={onClickReportUser}
-                />
-              </UserReportButtonWrapper>
+            <UserPageWrapper
+              style={{
+                paddingTop: isMyPage ? 50 : 0
+              }}
+            >
+              {!isMyPage && (
+                <UserReportButtonWrapper>
+                  <FriendReportButton
+                    onClickBlockUser={onClickBlockUser}
+                    onClickReportUser={onClickReportUser}
+                  />
+                </UserReportButtonWrapper>
+              )}
               <FaceIcon
                 style={{
                   color: selectedUser?.profile_pic
