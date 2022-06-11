@@ -20,6 +20,7 @@ import NewComment from '../comments/NewComment';
 import { likePost, unlikePost } from '../../modules/like';
 import { createComment, deletePost } from '../../modules/post';
 import AlertDialog from '../common/AlertDialog';
+import ReportButton from './ReportButton';
 
 PostItemWrapper.displayName = 'PostItemWrapper';
 
@@ -144,6 +145,7 @@ export default function PostItem({
             onClickDelete={() => setIsDeleteDialogOpen(true)}
           />
         )}
+        {!isAuthor && <ReportButton />}
       </PostItemHeaderWrapper>
       {postObj.question && <QuestionBox questionObj={postObj.question} />}
       <ContentWrapper>{postObj.content}</ContentWrapper>
