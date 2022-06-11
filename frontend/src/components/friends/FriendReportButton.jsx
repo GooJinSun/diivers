@@ -28,19 +28,16 @@ const ReportButtonText = styled.div`
   font-size: 12px;
 `;
 
-export default function ReportButton() {
+export default function FriendReportButton({
+  onClickBlockUser,
+  onClickReportUser
+}) {
   const classes = useStyles();
   const [showButtons, setShowButtons] = useState(false);
 
   const ItemText = ({ text }) => (
     <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
   );
-
-  // TODO: 게시글 신고 기능 연결
-  const onClickReportPost = () => {};
-
-  // TODO: 사용자 신고 기능 연결
-  const onClickReportUser = () => {};
 
   return (
     <ReportButtonWrapper>
@@ -57,16 +54,16 @@ export default function ReportButton() {
           <List style={{ padding: '0' }}>
             <ListItem button>
               <ListItemText
-                id="report-post-button"
-                primary={<ItemText text="게시글 신고" />}
-                onClick={onClickReportPost}
+                id="report-user-button"
+                primary={<ItemText text="사용자 신고" />}
+                onClick={onClickReportUser}
               />
             </ListItem>
             <ListItem button>
               <ListItemText
-                id="report-user-button"
-                primary={<ItemText text="사용자 신고" />}
-                onClick={onClickReportUser}
+                id="block-user-button"
+                primary={<ItemText text="사용자 차단" />}
+                onClick={onClickBlockUser}
               />
             </ListItem>
           </List>
@@ -76,4 +73,4 @@ export default function ReportButton() {
   );
 }
 
-ReportButton.displayName = 'ReportButton';
+FriendReportButton.displayName = 'FriendReportButton';

@@ -17,6 +17,7 @@ import { getSelectedUser } from '../modules/user';
 import { getFriendList } from '../modules/friend';
 import FriendStatusButtons from '../components/friends/FriendStatusButtons';
 import Message from '../components/Message';
+import FriendReportButton from '../components/friends/FriendReportButton';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -57,10 +58,17 @@ const MobileTabPanel = styled(TabPanel)`
 
 const UserPageWrapper = styled.div`
   background: #ffffff;
-  height: 120px;
   text-align: center;
-  padding-top: 50px;
   margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const UserReportButtonWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const MobileWrapper = styled.div`
@@ -151,14 +159,26 @@ export default function UserPage() {
     setValue(newValue);
   };
 
+  // TODO: 사용자 차단 기능 연결
+  const onClickBlockUser = () => {};
+
+  // TODO: 사용자 신고 기능 연결
+  const onClickReportUser = () => {};
+
   return (
     <MobileWrapper className={classes.root}>
       {getUserFailure ? (
-        <Message message="존재하지 않는 사용자입니다:(" />
+        <Message message="존재하지 않는 사용자입니다 :(" />
       ) : (
         <>
           <Container fixed>
             <UserPageWrapper>
+              <UserReportButtonWrapper>
+                <FriendReportButton
+                  onClickBlockUser={onClickBlockUser}
+                  onClickReportUser={onClickReportUser}
+                />
+              </UserReportButtonWrapper>
               <FaceIcon
                 style={{
                   color: selectedUser?.profile_pic
