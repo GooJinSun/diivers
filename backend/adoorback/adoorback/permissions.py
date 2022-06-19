@@ -38,3 +38,15 @@ class IsShared(permissions.BasePermission):
             return True
         else:
             return obj.author == request.user
+
+
+class IsNotBlocked(permissions.BasePermission):
+    """
+    Custom permission to only display contents (of users) that are not blocked.
+    """
+
+    def has_object_permission(self, request, view, obj):
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+
+        return obj.author.id in request.user.reported_user_ids:
