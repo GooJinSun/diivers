@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-// import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -101,7 +100,7 @@ export default function UserPage() {
   const currentUser = useSelector((state) => state.userReducer.currentUser);
   const friendList = useSelector((state) => state.friendReducer.friendList);
   const friendIdList = friendList.map((friend) => friend.id);
-  const isFriend = selectedUser && friendIdList.includes(selectedUser?.id);
+  const isFriend = friendIdList.includes(selectedUser?.id);
   const isMyPage = selectedUser?.id === currentUser?.id;
 
   const isFriendOrMyPage = isFriend || isMyPage;
