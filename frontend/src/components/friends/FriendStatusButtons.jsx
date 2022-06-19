@@ -4,12 +4,10 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   acceptFriendRequest,
-  deleteFriend,
   deleteFriendRequest,
   requestFriend,
   rejectFriendRequest
 } from '../../modules/friend';
-import AlertDialog from '../common/AlertDialog';
 
 const FriendButton = styled(Button)`
   padding: 5px 0 !important;
@@ -35,27 +33,13 @@ export default function FriendStatusButtons({
   const [isRequestSubmitted, setIsRequestSubmitted] = useState(false);
   const [isRequestAccepted, setIsRequestAccepted] = useState(false);
 
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isRequestResetted, setIsRequestResetted] = useState(false);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
-  const onClickDeleteFriendButton = () => {
-    setIsDeleteDialogOpen(true);
-  };
-
-  const onConfirmDeleteFriend = () => {
-    dispatch(deleteFriend(friendObj.id));
-    setIsDeleteDialogOpen(false);
-    setIsRequestResetted(true);
-  };
-
   const onClickRejectRequestButton = () => {
     dispatch(rejectFriendRequest(friendObj.id));
     setIsRequestResetted(true);
-  };
-  const onCancelDeleteFriend = () => {
-    setIsDeleteDialogOpen(false);
   };
 
   const onClickDeleteRequestButton = () => {
@@ -98,20 +82,6 @@ export default function FriendStatusButtons({
         >
           친구 ✓
         </FriendButton>
-        <FriendButton
-          variant="outlined"
-          color="secondary"
-          id="friend-delete-button"
-          onClick={onClickDeleteFriendButton}
-        >
-          삭제
-        </FriendButton>
-        <AlertDialog
-          message="친구를 삭제하시겠습니까?"
-          onConfirm={onConfirmDeleteFriend}
-          onClose={onCancelDeleteFriend}
-          isOpen={isDeleteDialogOpen}
-        />
       </ButtonsWrapper>
     );
   if (isPending)

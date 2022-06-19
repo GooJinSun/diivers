@@ -10,6 +10,7 @@ import {
   ListItemText,
   Typography
 } from '@material-ui/core';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -23,21 +24,19 @@ const ReportButtonWrapper = styled.div`
   justify-self: right;
 `;
 
-const ReportButtonText = styled.div`
-  color: #777;
-  font-size: 12px;
-`;
-
-export default function FriendReportButton({
-  onClickBlockUser,
-  onClickReportUser
-}) {
+export default function PostReportButton() {
   const classes = useStyles();
   const [showButtons, setShowButtons] = useState(false);
 
   const ItemText = ({ text }) => (
     <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
   );
+
+  // TODO: 게시글 신고 기능 연결
+  const onClickReportPost = () => {};
+
+  // TODO: 사용자 신고 기능 연결
+  const onClickReportUser = () => {};
 
   return (
     <ReportButtonWrapper>
@@ -47,23 +46,23 @@ export default function FriendReportButton({
         style={{ padding: '4px' }}
         onClick={() => setShowButtons((prev) => !prev)}
       >
-        <ReportButtonText>신고하기</ReportButtonText>
+        <MoreHorizIcon className="more-button" />
       </IconButton>
       <Grow in={showButtons}>
         <Card className={classes.card}>
           <List style={{ padding: '0' }}>
             <ListItem button>
               <ListItemText
-                id="report-user-button"
-                primary={<ItemText text="사용자 신고" />}
-                onClick={onClickReportUser}
+                id="report-post-button"
+                primary={<ItemText text="게시글 신고" />}
+                onClick={onClickReportPost}
               />
             </ListItem>
             <ListItem button>
               <ListItemText
-                id="block-user-button"
-                primary={<ItemText text="사용자 차단" />}
-                onClick={onClickBlockUser}
+                id="report-user-button"
+                primary={<ItemText text="사용자 신고" />}
+                onClick={onClickReportUser}
               />
             </ListItem>
           </List>
@@ -73,4 +72,4 @@ export default function FriendReportButton({
   );
 }
 
-FriendReportButton.displayName = 'FriendReportButton';
+PostReportButton.displayName = 'PostReportButton';

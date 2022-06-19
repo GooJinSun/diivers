@@ -10,25 +10,28 @@ import {
   ListItemText,
   Typography
 } from '@material-ui/core';
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
 const useStyles = makeStyles(() => ({
   card: {
     position: 'absolute',
-    right: '12px',
-    zIndex: 1
+    right: '6px',
+    zIndex: 1,
+    width: 'max-content'
   }
 }));
 
 const ReportButtonWrapper = styled.div`
   justify-self: right;
+  position: relative;
 `;
 
-const ReportButtonText = styled.div`
-  color: #777;
-  font-size: 12px;
-`;
-
-export default function ReportButton() {
+export default function UserReportButton({
+  onClickBlockUser,
+  onClickReportUser,
+  onClickDeleteFriend,
+  isFriend
+}) {
   const classes = useStyles();
   const [showButtons, setShowButtons] = useState(false);
 
@@ -36,11 +39,10 @@ export default function ReportButton() {
     <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
   );
 
-  // TODO: 게시글 신고 기능 연결
-  const onClickReportPost = () => {};
-
-  // TODO: 사용자 신고 기능 연결
-  const onClickReportUser = () => {};
+  const handleOnClick = (handlingFunction) => {
+    handlingFunction();
+    setShowButtons(false);
+  };
 
   return (
     <ReportButtonWrapper>
@@ -50,25 +52,34 @@ export default function ReportButton() {
         style={{ padding: '4px' }}
         onClick={() => setShowButtons((prev) => !prev)}
       >
-        <ReportButtonText>신고하기</ReportButtonText>
+        <MoreHorizIcon className="more-button" />
       </IconButton>
       <Grow in={showButtons}>
         <Card className={classes.card}>
-          <List style={{ padding: '0' }}>
-            <ListItem button>
-              <ListItemText
-                id="report-post-button"
-                primary={<ItemText text="게시글 신고" />}
-                onClick={onClickReportPost}
-              />
-            </ListItem>
+          <List>
             <ListItem button>
               <ListItemText
                 id="report-user-button"
                 primary={<ItemText text="사용자 신고" />}
-                onClick={onClickReportUser}
+                onClick={() => handleOnClick(onClickReportUser)}
               />
             </ListItem>
+            <ListItem button>
+              <ListItemText
+                id="block-user-button"
+                primary={<ItemText text="사용자 차단" />}
+                onClick={() => handleOnClick(onClickBlockUser)}
+              />
+            </ListItem>
+            {isFriend && (
+              <ListItem button>
+                <ListItemText
+                  id="block-user-button"
+                  primary={<ItemText text="친구 끊기" />}
+                  onClick={() => handleOnClick(onClickDeleteFriend)}
+                />
+              </ListItem>
+            )}
           </List>
         </Card>
       </Grow>
@@ -76,4 +87,4 @@ export default function ReportButton() {
   );
 }
 
-ReportButton.displayName = 'ReportButton';
+UserReportButton.displayName = 'UserReportButton';
