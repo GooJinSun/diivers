@@ -26,6 +26,8 @@ SECRET_KEY = '((5+vsn)pefc7()9_x2oud)po=@0=@gf0=8j)lrk*(*sy47c+='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField' # django 버전업하면서 추가
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15,
