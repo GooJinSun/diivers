@@ -53,6 +53,7 @@ BASE_URL = 'http://localhost:8000'
 # Application definition
 
 INSTALLED_APPS = [
+    'user_report.apps.UserReportConfig',
     'feed.apps.FeedConfig',
     'like.apps.LikeConfig',
     'comment.apps.CommentConfig',
