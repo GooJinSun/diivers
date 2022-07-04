@@ -139,9 +139,8 @@ const Header = ({ isMobile, setRefreshToken }) => {
   };
 
   const handleClickOutside = ({ target }) => {
-    if (isNotiOpen || !notiDropDownRef.current.contains(target)) {
+    if (isNotiOpen || !notiDropDownRef.current.contains(target))
       handleNotiClose();
-    }
   };
 
   useEffect(() => {
@@ -315,7 +314,6 @@ const Header = ({ isMobile, setRefreshToken }) => {
           onClick={(e) => {
             e.stopPropagation();
             handleClickLogout();
-            setQuery('');
           }}
         >
           로그아웃

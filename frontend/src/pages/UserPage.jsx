@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+// import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -13,11 +14,9 @@ import AppBar from '@material-ui/core/AppBar';
 import UserPostList from '../components/posts/UserPostList';
 import { getSelectedUserPosts, appendPosts } from '../modules/post';
 import { getSelectedUser } from '../modules/user';
-import { getFriendList, deleteFriend } from '../modules/friend';
+import { getFriendList } from '../modules/friend';
 import FriendStatusButtons from '../components/friends/FriendStatusButtons';
 import Message from '../components/Message';
-import UserReportButton from '../components/friends/UserReportButton';
-import AlertDialog from '../components/common/AlertDialog';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,17 +57,10 @@ const MobileTabPanel = styled(TabPanel)`
 
 const UserPageWrapper = styled.div`
   background: #ffffff;
+  height: 120px;
   text-align: center;
+  padding-top: 50px;
   margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const UserReportButtonWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
 `;
 
 const MobileWrapper = styled.div`
@@ -100,10 +92,10 @@ export default function UserPage() {
   const currentUser = useSelector((state) => state.userReducer.currentUser);
   const friendList = useSelector((state) => state.friendReducer.friendList);
   const friendIdList = friendList.map((friend) => friend.id);
-  const isFriend = friendIdList.includes(selectedUser?.id);
-  const isMyPage = selectedUser?.id === currentUser?.id;
-
-  const isFriendOrMyPage = isFriend || isMyPage;
+  const isFriendOrMyPage =
+    selectedUser &&
+    (friendIdList.includes(selectedUser?.id) ||
+      selectedUser?.id === currentUser?.id);
 
   const [value, setValue] = useState('All');
   const selectedUserPosts = useSelector(
@@ -159,54 +151,14 @@ export default function UserPage() {
     setValue(newValue);
   };
 
-  // TODO: 사용자 차단 기능 연결
-  const onClickBlockUser = () => {};
-
-  // TODO: 사용자 신고 기능 연결
-  const onClickReportUser = () => {};
-
-  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const onClickDeleteFriendButton = () => {
-    setIsDeleteDialogOpen(true);
-  };
-
-  const onCancelDeleteFriend = () => {
-    setIsDeleteDialogOpen(false);
-  };
-
-  const onConfirmDeleteFriend = () => {
-    dispatch(deleteFriend(selectedUser.id));
-    setIsDeleteDialogOpen(false);
-  };
-
   return (
     <MobileWrapper className={classes.root}>
       {getUserFailure ? (
-        <Message message="존재하지 않는 사용자입니다 :(" />
+        <Message message="존재하지 않는 사용자입니다:(" />
       ) : (
         <>
           <Container fixed>
-            <UserPageWrapper
-              style={{
-                paddingTop: isMyPage ? 50 : 20
-              }}
-            >
-              {!isMyPage && (
-                <UserReportButtonWrapper>
-                  <UserReportButton
-                    onClickBlockUser={onClickBlockUser}
-                    onClickReportUser={onClickReportUser}
-                    isFriend={isFriend}
-                    onClickDeleteFriend={onClickDeleteFriendButton}
-                  />
-                  <AlertDialog
-                    message="친구를 삭제하시겠습니까?"
-                    onConfirm={onConfirmDeleteFriend}
-                    onClose={onCancelDeleteFriend}
-                    isOpen={isDeleteDialogOpen}
-                  />
-                </UserReportButtonWrapper>
-              )}
+            <UserPageWrapper>
               <FaceIcon
                 style={{
                   color: selectedUser?.profile_pic
