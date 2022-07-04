@@ -56,7 +56,7 @@ jdcal>=1.4.1
 Jinja2>=2.11.2
 jinja2-time>=0.2.0
 joblib>=0.17.0
-JPype11.1.2
+JPype>=11.1.2
 kombu>=5.0.2
 konlpy>=0.5.2
 lazy-object-proxy>=1.4.3
