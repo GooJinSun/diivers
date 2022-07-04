@@ -2,7 +2,7 @@ import 'intersection-observer';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { MuiThemeProvider, createTheme } from '@material-ui/core';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import Cookies from 'js.cookie';
 import Login from './pages/Login';
