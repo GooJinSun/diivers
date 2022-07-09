@@ -1,6 +1,6 @@
 import 'intersection-observer';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
@@ -27,6 +27,7 @@ import MobileQuestionPage from './pages/MobileQuestionPage';
 import MobileSearchPage from './pages/MobileSearchPage';
 import { initGA, trackPage } from './ga';
 import useLoginWithToken from './hooks/auth/useLoginWithToken';
+import useIsMobile from './hooks/auth/env/useIsMobile';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -42,20 +43,6 @@ const theme = createTheme({
 });
 
 const App = () => {
-  const [isMobile, setIsMobile] = useState(window?.innerWidth < 650);
-
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 650);
-  };
-
-  useEffect(() => {
-    initGA();
-    window.addEventListener('resize', handleResize, false);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const dispatch = useDispatch();
   const history = useHistory();
   const selectQuestion = useSelector(
@@ -66,9 +53,13 @@ const App = () => {
   const signUpRedirectPath = currentUser?.question_history
     ? '/home'
     : 'select-questions';
+  const isMobile = useIsMobile();
 
   useEffect(() => {
-    // eslint-disable-next-line no-unused-vars
+    initGA();
+  }, []);
+
+  useEffect(() => {
     return history.listen((location) => {
       if (currentUser) {
         dispatch(getNotifications());
