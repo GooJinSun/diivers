@@ -37,3 +37,7 @@ class UserReport(AdoorTimestampedModel):
     @property
     def type(self):
         return self.__class__.__name__
+
+    @property
+    def reported_user_ids(self):
+        return list(UserReport.objects.filter(user=self.request.user).values_list('reported_user_id', flat=True))
