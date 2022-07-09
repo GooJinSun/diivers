@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Cookies from 'js.cookie';
 import { CommonInput, CommonButton } from '../styles';
 import { requestLogin } from '../modules/user';
+import { JWT_REFRESH_TOKEN } from '../constants/cookies';
 
 const LoginWrapper = styled.div`
   width: 500px;
@@ -57,7 +58,7 @@ export default function Login({ setRefreshToken }) {
 
   useEffect(() => {
     if (loginSuccess) {
-      setRefreshToken(Cookies.get('jwt_token_refresh'));
+      setRefreshToken(Cookies.get(JWT_REFRESH_TOKEN));
     }
   }, [loginSuccess]);
 

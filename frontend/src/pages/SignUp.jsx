@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Cookies from 'js.cookie';
 import { requestSignUp } from '../modules/user';
 import { CommonInput, CommonButton } from '../styles';
+import { JWT_REFRESH_TOKEN } from '../constants/cookies';
 
 const SignUpWrapper = styled.div`
   width: 500px;
@@ -73,7 +74,7 @@ export default function SignUp({ setRefreshToken }) {
   }, [isSubmitted, signUpError]);
 
   useEffect(() => {
-    setRefreshToken(Cookies.get('jwt_token_refresh'));
+    setRefreshToken(Cookies.get(JWT_REFRESH_TOKEN));
   }, [loginSuccess]);
 
   const [signUpInfo, setSignUpInfo] = useState({
@@ -97,7 +98,7 @@ export default function SignUp({ setRefreshToken }) {
     setIsUsernameValid(true);
     setIsEmailValid(true);
     dispatch(requestSignUp(signUpInfo));
-    setRefreshToken(Cookies.get('jwt_token_refresh'));
+    setRefreshToken(Cookies.get(JWT_REFRESH_TOKEN));
   };
 
   const onKeySubmit = (e) => {

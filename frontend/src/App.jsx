@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
-import Cookies from 'js.cookie';
 import Login from './pages/Login';
 import { GlobalStyle, MainWrapper, FeedWrapper } from './styles';
 import Header from './components/Header';
@@ -26,8 +25,8 @@ import UserPage from './pages/UserPage';
 import { getNotifications } from './modules/notification';
 import MobileQuestionPage from './pages/MobileQuestionPage';
 import MobileSearchPage from './pages/MobileSearchPage';
-import { getCurrentUser } from './modules/user';
 import { initGA, trackPage } from './ga';
+import useLoginWithToken from './hooks/auth/useLoginWithToken';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -57,36 +56,16 @@ const App = () => {
     };
   }, []);
 
-  // todo: use hooks
-  const [refreshToken, setRefreshToken] = useState(
-    Cookies.get('jwt_token_refresh')
-  );
-  const currentUser = useSelector((state) => state.userReducer.currentUser);
   const dispatch = useDispatch();
   const history = useHistory();
   const selectQuestion = useSelector(
     (state) => state.userReducer.selectQuestion
   );
 
-  const loginFailure =
-    useSelector((state) => state.loadingReducer['user/GET_CURRENT_USER']) ===
-    'FAILURE';
-
+  const { currentUser, refreshToken, setRefreshToken } = useLoginWithToken();
   const signUpRedirectPath = currentUser?.question_history
     ? '/home'
     : 'select-questions';
-
-  useEffect(() => {
-    if (refreshToken) {
-      dispatch(getCurrentUser());
-    }
-  }, [dispatch, refreshToken]);
-
-  useEffect(() => {
-    if (loginFailure) {
-      setRefreshToken(null);
-    }
-  }, [loginFailure]);
 
   useEffect(() => {
     // eslint-disable-next-line no-unused-vars

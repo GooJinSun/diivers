@@ -2,6 +2,7 @@
 /* eslint-disable no-param-reassign */
 import axios from 'axios';
 import Cookies from 'js.cookie';
+import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../constants/cookies';
 // eslint-disable-next-line import/no-cycle
 
 const developBaseUrl = 'http://localhost:3000/api/';
@@ -13,14 +14,21 @@ const instance = axios.create({
   withCredentials: true
 });
 
+const getBearerToken = (token) => `Bearer ${token}`;
+
 instance.defaults.headers.common['Content-Type'] = 'application/json';
 
 instance.interceptors.request.use((config) => {
   const csrf_token = Cookies.get('csrftoken');
-  const jwt_token = Cookies.get('jwt_token_access');
+  const jwt_token = Cookies.get(JWT_ACCESS_TOKEN);
 
-  config.headers.Authorization = jwt_token;
-  config.headers['X-CSRFToken'] = csrf_token;
+  if (jwt_token) {
+    config.headers.Authorization = getBearerToken(jwt_token);
+  }
+
+  if (csrf_token) {
+    config.headers['X-CSRFToken'] = csrf_token;
+  }
 
   return config;
 });
@@ -29,20 +37,22 @@ instance.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
+    const refresh_token = Cookies.get(JWT_REFRESH_TOKEN);
 
-    const refresh_token = Cookies.get('jwt_token_refresh');
-    // TODO: 404 error handling
-    // if (error.response.status === 404) window.location.href = '/';
-    // else if (error.response.status === 401 && refresh_token) {
-    if (error.response.status === 401 && refresh_token) {
+    // access token이 만료된 경우 token refresh 후 재요청
+    if (error.response.status === 403 && refresh_token) {
       return instance
         .post('user/token/refresh/', { refresh: refresh_token })
         .then((response) => {
-          Cookies.set('jwt_token_refresh', response.data.refresh);
-          Cookies.set('jwt_token_access', response.data.access);
+          Cookies.set(JWT_REFRESH_TOKEN, response.data.refresh);
+          Cookies.set(JWT_ACCESS_TOKEN, response.data.access);
 
-          instance.defaults.headers.Authorization = `${response.data.access}`;
-          originalRequest.headers.Authorization = `${response.data.access}`;
+          instance.defaults.headers.Authorization = getBearerToken(
+            response.data.access
+          );
+          originalRequest.headers.Authorization = getBearerToken(
+            response.data.access
+          );
 
           instance.get('user/me/');
 
