@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from user_report.models import UserReport
 from user_report.serializers import UserReportSerializer
 
-from adoorback.permissions import IsOwnerOrReadOnly
+from adoorback.permissions import IsNotBlocked
 from adoorback.content_types import get_generic_relation_type
 from adoorback.validators import adoor_exception_handler
 
@@ -28,4 +28,3 @@ class UserReportList(generics.CreateAPIView):
                             reported_user_id=self.request.data['reported_user_id'])
         except IntegrityError:
             pass
-            

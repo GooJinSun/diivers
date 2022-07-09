@@ -54,6 +54,11 @@ class User(AbstractUser, AdoorTimestampedModel):
     def friend_ids(self):
         return list(self.friends.values_list('id', flat=True))
 
+    @property
+    def reported_user_ids(self):
+        from user_report.models import UserReport
+        return list(UserReport.objects.filter(user=self).values_list('reported_user_id', flat=True))
+
 
 class FriendRequest(AdoorTimestampedModel):
     """FriendRequest Model

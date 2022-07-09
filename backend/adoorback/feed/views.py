@@ -10,7 +10,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
-from adoorback.permissions import IsAuthorOrReadOnly, IsShared
+from adoorback.permissions import IsAuthorOrReadOnly, IsShared, IsNotBlocked
 from adoorback.validators import adoor_exception_handler
 import feed.serializers as fs
 from feed.algorithms.data_crawler import select_daily_questions
@@ -24,20 +24,20 @@ class FriendFeedPostList(generics.ListAPIView):
     List friend feed posts
     """
     serializer_class = fs.PostFriendSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
 
     def get_queryset(self):
         current_user = self.request.user
-        queryset = cache.get('friend-{}'.format(current_user.id))
-        if queryset:
-            return queryset
-        else:
-            queryset = Post.objects.friend_posts_only().filter(author_id__in=current_user.friend_ids) | \
-                    Post.objects.filter(author_id=current_user.id)
-            cache.set('friend-{}'.format(current_user.id), queryset)
+        # queryset = cache.get('friend-{}'.format(current_user.id))
+        # if queryset:
+        #     return queryset
+        # else:
+        queryset = Post.objects.friend_posts_only().filter(author_id__in=current_user.friend_ids).  exclude(author_id__in=current_user.reported_user_ids) | \
+                Post.objects.filter(author_id=current_user.id).exclude(author_id__in=current_user.reported_user_ids)
+            # cache.set('friend-{}'.format(current_user.id), queryset)
         return queryset
 
 
@@ -46,13 +46,14 @@ class AnonymousFeedPostList(generics.ListAPIView):
     List anonymous feed posts
     """
     serializer_class = fs.PostAnonymousSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_queryset(self):
-        queryset = cache.get('anonymous')
-        if not queryset:
-            queryset = Post.objects.anonymous_posts_only()
-            cache.set('anonymous', queryset)
+        current_user = self.request.user
+        # queryset = cache.get('anonymous')
+        # if not queryset:
+        queryset = Post.objects.anonymous_posts_only().exclude(author_id__in=current_user.reported_user_ids)
+            # cache.set('anonymous', queryset)
         return queryset
 
     def get_exception_handler(self):
@@ -64,7 +65,7 @@ class UserFeedPostList(generics.ListAPIView):
     List feed posts for user page
     """
     serializer_class = fs.PostFriendSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
@@ -73,9 +74,9 @@ class UserFeedPostList(generics.ListAPIView):
         selected_user_id = self.kwargs.get('pk')
         current_user = self.request.user
         if selected_user_id in current_user.friend_ids:
-            return Post.objects.friend_posts_only().filter(author_id=self.kwargs.get('pk'))
+            return Post.objects.friend_posts_only().filter(author_id=self.kwargs.get('pk')).exclude(author_id__in=current_user.reported_user_ids)
         elif selected_user_id == current_user.id:
-            return Post.objects.filter(author_id=current_user.id)
+            return Post.objects.filter(author_id=current_user.id).exclude(author_id__in=current_user.reported_user_ids)
         raise PermissionDenied("you're not his/her friend...")
 
 
@@ -85,15 +86,15 @@ class ArticleList(generics.CreateAPIView):
     """
     queryset = Article.objects.all()
     serializer_class = fs.ArticleFriendSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
 
     @transaction.atomic
     def perform_create(self, serializer):
-        cache.delete('friend-{}'.format(self.request.user.id))
-        cache.delete('anonymous')
+        # cache.delete('friend-{}'.format(self.request.user.id))
+        # cache.delete('anonymous')
         serializer.save(author=self.request.user)
 
 
@@ -102,7 +103,7 @@ class ArticleDetail(generics.RetrieveUpdateDestroyAPIView):
     Retrieve, update, or destroy an article.
     """
     queryset = Article.objects.all()
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
@@ -120,16 +121,16 @@ class ResponseList(generics.ListCreateAPIView):
     """
     queryset = Response.objects.all()
     serializer_class = fs.ResponseFriendSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
 
     @transaction.atomic
     def perform_create(self, serializer):
-        cache.delete('questions')
-        cache.delete('friend-{}'.format(self.request.user.id))
-        cache.delete('anonymous')
+        # cache.delete('questions')
+        # cache.delete('friend-{}'.format(self.request.user.id))
+        # cache.delete('anonymous')
         serializer.save(author=self.request.user)
 
 
@@ -138,7 +139,7 @@ class ResponseDetail(generics.RetrieveUpdateDestroyAPIView):
     Retrieve, update, or destroy a response.
     """
     queryset = Response.objects.all()
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
@@ -156,16 +157,16 @@ class QuestionList(generics.ListCreateAPIView):
     """
     queryset = Question.objects.order_by('-id')
     serializer_class = fs.QuestionResponsiveSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
 
     @transaction.atomic
     def perform_create(self, serializer):
-        cache.delete('friend-{}'.format(self.request.user.id))
-        cache.delete('anonymous')
-        cache.delete('questions')
+        # cache.delete('friend-{}'.format(self.request.user.id))
+        # cache.delete('anonymous')
+        # cache.delete('questions')
         serializer.save(author=self.request.user)
 
 
@@ -174,13 +175,13 @@ class QuestionAllResponsesDetail(generics.RetrieveUpdateDestroyAPIView):
     Retrieve, update, or destroy a question.
     """
     serializer_class = fs.QuestionDetailAllResponsesSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared, IsNotBlocked]
 
     def get_queryset(self):
-        queryset = cache.get('questions')
-        if not queryset:
-            queryset = Question.objects.all()
-            cache.set('questions', queryset)
+        # queryset = cache.get('questions')
+        # if not queryset:
+        queryset = Question.objects.all()
+        cache.set('questions', queryset)
         return queryset
 
     def get_exception_handler(self):
@@ -192,13 +193,13 @@ class QuestionFriendResponsesDetail(generics.RetrieveUpdateDestroyAPIView):
     Retrieve, update, or destroy a question.
     """
     serializer_class = fs.QuestionDetailFriendResponsesSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared, IsNotBlocked]
 
     def get_queryset(self):
-        queryset = cache.get('questions')
-        if not queryset:
-            queryset = Question.objects.all()
-            cache.set('questions', queryset)
+        # queryset = cache.get('questions')
+        # if not queryset:
+        queryset = Question.objects.all()
+        cache.set('questions', queryset)
         return queryset
 
     def get_exception_handler(self):
@@ -210,13 +211,13 @@ class QuestionAnonymousResponsesDetail(generics.RetrieveUpdateDestroyAPIView):
     Retrieve, update, or destroy a question.
     """
     serializer_class = fs.QuestionDetailAnonymousResponsesSerializer
-    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly, IsShared, IsNotBlocked]
 
     def get_queryset(self):
-        queryset = cache.get('questions')
-        if not queryset:
-            queryset = Question.objects.all()
-            cache.set('questions', queryset)
+        # queryset = cache.get('questions')
+        # if not queryset:
+        queryset = Question.objects.all()
+        cache.set('questions', queryset)
         return queryset
 
     def get_exception_handler(self):
@@ -229,7 +230,7 @@ class ResponseRequestList(generics.ListAPIView):
     (for frontend 'send' button implementation purposes)
     """
     serializer_class = fs.ResponseRequestSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
     pagination_class = None
 
     def get_exception_handler(self):
@@ -252,7 +253,7 @@ class ResponseRequestCreate(generics.CreateAPIView):
     """
     queryset = ResponseRequest.objects.all()
     serializer_class = fs.ResponseRequestSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
@@ -271,7 +272,7 @@ class ResponseRequestCreate(generics.CreateAPIView):
 
 class ResponseRequestDestroy(generics.DestroyAPIView):
     serializer_class = fs.ResponseRequestSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler
@@ -285,7 +286,7 @@ class ResponseRequestDestroy(generics.DestroyAPIView):
 
 class DailyQuestionList(generics.ListAPIView):
     serializer_class = fs.DailyQuestionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
     pagination_class = None
 
     def get_exception_handler(self):
@@ -299,7 +300,7 @@ class DailyQuestionList(generics.ListAPIView):
 
 class RecommendedQuestionList(generics.ListAPIView):
     serializer_class = fs.QuestionBaseSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler

@@ -9,7 +9,7 @@ python manage.py migrate
 coverage run --source '.' ./manage.py test ```file_name```
 
 # model tests - all models
-coverage run --source='.' ./manage.py test account.tests.UserTestCase comment.tests.CommentTestCase like.tests.LikeTestCase feed.tests.FeedTestCase notification.tests.NotificationTestCase
+coverage run --source='.' ./manage.py test account.tests.UserTestCase comment.tests.CommentTestCase like.tests.LikeTestCase feed.tests.FeedTestCase notification.tests.NotificationTestCase user_report.tests.UserReportTestCase
 
 # coverage - all files
 coverage run --source='.' --omit='*/migrations/*','adoorback/*','feed/algorithms/*','feed/cron.py','account/cron.py','locustfile.py','manage.py','*/wsgi.py','*/asgi.py','*/utils/*' ./manage.py test

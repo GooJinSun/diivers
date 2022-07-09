@@ -49,4 +49,4 @@ class IsNotBlocked(permissions.BasePermission):
         from django.contrib.auth import get_user_model
         User = get_user_model()
 
-        return obj.author.id in request.user.reported_user_ids:
+        return obj.author.id in request.user.reported_user_ids
