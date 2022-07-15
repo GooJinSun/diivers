@@ -37,3 +37,20 @@ class UserReport(AdoorTimestampedModel):
     @property
     def type(self):
         return self.__class__.__name__
+
+
+@transaction.atomic
+@receiver(post_save, sender=UserReport)
+def delete_blocked_user_friendship(instance, **kwargs):
+    user = instance.user
+    reported_user = instance.reported_user
+
+    if reported_user.id in user.friend_ids:
+        user.friends.remove(reported_user)
+    
+    from account.models import FriendRequest
+    from feed.models import ResponseRequest
+    FriendRequest.objects.filter(requester=user, requestee=reported_user).delete()
+    FriendRequest.objects.filter(requester=reported_user, requestee=user).delete()
+    ResponseRequest.objects.filter(requester=user, requestee=reported_user).delete()
+    ResponseRequest.objects.filter(requester=reported_user, requestee=user).delete()

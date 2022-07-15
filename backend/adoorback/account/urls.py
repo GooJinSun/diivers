@@ -25,7 +25,7 @@ urlpatterns = [
     # Current User Related
     path('me/', views.CurrentUserProfile.as_view(), name='current-user'),
     path('me/friends/', views.CurrentUserFriendList.as_view(), name='current-user-friends'),
-
+ 
     # Friendship related
     path('friend/<int:pk>/', views.UserFriendDestroy.as_view(), name='user-friend-destroy'),
 

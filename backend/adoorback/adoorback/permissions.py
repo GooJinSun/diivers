@@ -49,4 +49,7 @@ class IsNotBlocked(permissions.BasePermission):
         from django.contrib.auth import get_user_model
         User = get_user_model()
 
-        return obj.author.id in request.user.reported_user_ids
+        if obj.type in ['Question', 'Response', 'Article']:
+            return obj.author.id not in request.user.user_report_blocked_ids
+        else:
+            return obj.id not in request.user.user_report_blocked_ids

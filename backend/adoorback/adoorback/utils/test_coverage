@@ -22,6 +22,7 @@ coverage run --source='.' ./manage.py test comment.tests.CommentTestCase
 coverage run --source='.' ./manage.py test like.tests.LikeTestCase
 coverage run --source='.' ./manage.py test feed.tests.DailyQuestionTestCase
 coverage run --source='.' ./manage.py test notification.tests.NotificationTestCase
+coverage run --source='.' ./manage.py test user_report.tests.UserReportTestCase
 
 # coverage - account (including friendship, friend requests)
 coverage run --source='.' ./manage.py test notification.tests

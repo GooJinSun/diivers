@@ -59,6 +59,11 @@ class User(AbstractUser, AdoorTimestampedModel):
         from user_report.models import UserReport
         return list(UserReport.objects.filter(user=self).values_list('reported_user_id', flat=True))
 
+    @property
+    def user_report_blocked_ids(self):
+        from user_report.models import UserReport
+        return list(UserReport.objects.filter(user=self).values_list('reported_user_id', flat=True)) + list(UserReport.objects.filter(reported_user=self).values_list('user_id', flat=True))
+
 
 class FriendRequest(AdoorTimestampedModel):
     """FriendRequest Model
@@ -114,6 +119,9 @@ def create_friend_noti(created, instance, **kwargs):
     Notification = apps.get_model('notification', 'Notification')
     requester = instance.requester
     requestee = instance.requestee
+
+    if requester.id in requestee.user_report_blocked_ids: # do not create notification from/for blocked user
+        return
 
     if created:
         Notification.objects.create(user=requestee, actor=requester,
