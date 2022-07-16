@@ -1,14 +1,9 @@
-from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models, transaction
-from django.contrib.contenttypes.fields import GenericRelation
-from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 
-from adoorback.content_types import get_comment_type
 from adoorback.models import AdoorTimestampedModel
-from notification.models import Notification
 
 User = get_user_model()
 
