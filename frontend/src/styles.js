@@ -75,9 +75,10 @@ export const MainWrapper = styled.main`
     width: 100vw;
     margin-top: 70px;
   }
-  width: 1280px;
+  width: ${(props) => (props.isSelectQuestionPage ? '100%' : '1280px')};
   margin: 80px auto 100px auto;
   display: flex;
+  justify-content: center;
 `;
 
 export const FeedWrapper = styled.div`

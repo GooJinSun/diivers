@@ -1,45 +1,30 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import Cookies from 'js.cookie';
 import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../constants/cookies';
-// eslint-disable-next-line import/no-cycle
 
-const developBaseUrl = 'http://localhost:3000/api/';
-const prodBaseUrl = 'https://adoor.world/api/';
+const csrf_token = Cookies.get('csrftoken');
+const access_token = Cookies.get(JWT_ACCESS_TOKEN);
+const getBearerToken = (token) => `Bearer ${token}`;
 
 const instance = axios.create({
   baseURL: '/api/',
-  // baseURL: developBaseUrl,
-  withCredentials: true
+  withCredentials: true,
+  headers: {
+    ...(csrf_token ? { 'X-CSRFToken': csrf_token } : {}),
+    'Content-Type': 'application/json',
+    ...(access_token
+      ? { Authorization: `${getBearerToken(access_token)}` }
+      : {})
+  }
 });
 
-const getBearerToken = (token) => `Bearer ${token}`;
-
-instance.defaults.headers.common['Content-Type'] = 'application/json';
-
-instance.interceptors.request.use((config) => {
-  const csrf_token = Cookies.get('csrftoken');
-  const jwt_token = Cookies.get(JWT_ACCESS_TOKEN);
-
-  if (jwt_token) {
-    config.headers.Authorization = getBearerToken(jwt_token);
-  }
-
-  if (csrf_token) {
-    config.headers['X-CSRFToken'] = csrf_token;
-  }
-
-  return config;
-});
-
+// access token이 만료된 경우 refresh token이 있다면 토큰 refresh 요청
 instance.interceptors.response.use(
   (response) => response,
   (error) => {
     const originalRequest = error.config;
     const refresh_token = Cookies.get(JWT_REFRESH_TOKEN);
 
-    // access token이 만료된 경우 token refresh 후 재요청
     if (error.response.status === 403 && refresh_token) {
       return instance
         .post('user/token/refresh/', { refresh: refresh_token })

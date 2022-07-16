@@ -1,17 +1,16 @@
 /* eslint-disable react/jsx-curly-newline */
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import Cookies from 'js.cookie';
-import { JWT_REFRESH_TOKEN } from '../constants/cookies';
+import { useSelector } from 'react-redux';
 
-// eslint-disable-next-line react/prop-types
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const refresh_token = Cookies.get(JWT_REFRESH_TOKEN);
+  const currentUser = useSelector((state) => state.userReducer.currentUser);
+
   return (
     <Route
       {...rest}
       render={(props) =>
-        refresh_token ? (
+        currentUser ? (
           <Component {...props} {...rest} />
         ) : (
           <Redirect to="/login" />

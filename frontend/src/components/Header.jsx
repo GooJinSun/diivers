@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // eslint-disable-next-line react/prop-types
-const Header = ({ isMobile, setRefreshToken }) => {
+const Header = ({ isMobile }) => {
   const classes = useStyles();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -154,7 +154,6 @@ const Header = ({ isMobile, setRefreshToken }) => {
 
   const handleClickLogout = () => {
     dispatch(logout());
-    setRefreshToken(null);
     history.push('/login');
   };
 
@@ -163,7 +162,7 @@ const Header = ({ isMobile, setRefreshToken }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchSearchResults(1, ''));
+    // dispatch(fetchSearchResults(1, ''));
     // reset search results when mounted
   }, [dispatch]);
 

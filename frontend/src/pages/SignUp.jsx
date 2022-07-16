@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import Cookies from 'js.cookie';
 import { requestSignUp } from '../modules/user';
 import { CommonInput, CommonButton } from '../styles';
-import { JWT_REFRESH_TOKEN } from '../constants/cookies';
 
 const SignUpWrapper = styled.div`
   width: 500px;
@@ -47,7 +45,7 @@ const PrivacyButton = styled.button`
   font-size: 16px;
 `;
 
-export default function SignUp({ setRefreshToken }) {
+export default function SignUp() {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -58,8 +56,6 @@ export default function SignUp({ setRefreshToken }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isUsernameValid, setIsUsernameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const loginSuccess =
-    useSelector((state) => state.loadingReducer['user/LOGIN']) === 'SUCCESS';
 
   useEffect(() => {
     if (currentUser && currentUser?.id) {
@@ -72,10 +68,6 @@ export default function SignUp({ setRefreshToken }) {
     if (signUpError && signUpError.username) setIsUsernameValid(false);
     if (signUpError && signUpError.email) setIsEmailValid(false);
   }, [isSubmitted, signUpError]);
-
-  useEffect(() => {
-    setRefreshToken(Cookies.get(JWT_REFRESH_TOKEN));
-  }, [loginSuccess]);
 
   const [signUpInfo, setSignUpInfo] = useState({
     email: '',
@@ -98,7 +90,6 @@ export default function SignUp({ setRefreshToken }) {
     setIsUsernameValid(true);
     setIsEmailValid(true);
     dispatch(requestSignUp(signUpInfo));
-    setRefreshToken(Cookies.get(JWT_REFRESH_TOKEN));
   };
 
   const onKeySubmit = (e) => {

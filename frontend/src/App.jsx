@@ -1,7 +1,14 @@
+/* eslint-disable no-unused-vars */
 import 'intersection-observer';
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
+import {
+  Route,
+  Switch,
+  Redirect,
+  useHistory,
+  useLocation
+} from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import Login from './pages/Login';
@@ -44,58 +51,48 @@ const theme = createTheme({
 
 const App = () => {
   const dispatch = useDispatch();
-  const history = useHistory();
-  const selectQuestion = useSelector(
-    (state) => state.userReducer.selectQuestion
-  );
+  const location = useLocation();
 
-  const { currentUser, refreshToken, setRefreshToken } = useLoginWithToken();
+  useLoginWithToken();
+  const currentUser = useSelector((state) => state.userReducer.currentUser);
+
+  const isMobile = useIsMobile();
+  const isSelectQuestionPage = location.pathname === '/select-questions';
+
   const signUpRedirectPath = currentUser?.question_history
     ? '/home'
     : 'select-questions';
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     initGA();
   }, []);
 
   useEffect(() => {
-    return history.listen((location) => {
-      if (currentUser) {
-        dispatch(getNotifications());
-      }
-      window.scrollTo(0, 0);
-      trackPage(location.pathname);
-    });
-  }, [history, dispatch, currentUser]);
+    if (currentUser) {
+      dispatch(getNotifications());
+    }
+    window.scrollTo(0, 0);
+    trackPage(location.pathname);
+  }, [location, dispatch, currentUser]);
 
   return (
     <MuiThemeProvider theme={theme}>
       <GlobalStyle />
-      <Header isMobile={isMobile} setRefreshToken={setRefreshToken} />
-      {!refreshToken ||
-      (!selectQuestion && currentUser?.question_history === null) ? (
+      <Header isMobile={isMobile} />
+      {!currentUser ? (
         <Switch>
-          <Route
-            exact
-            path="/login"
-            render={() => <Login setRefreshToken={setRefreshToken} />}
-          />
-          <Route
-            exact
-            path="/signup"
-            render={() => <SignUp setRefreshToken={setRefreshToken} />}
-          />
-          <Route exact path="/select-questions" component={QuestionSelection} />
-          <Redirect from="/" to="/login" />
+          <>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
+            <Redirect from="/" to="/login" />
+          </>
         </Switch>
       ) : (
-        <MainWrapper>
-          {!isMobile && <QuestionListWidget />}
+        <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
+          {!isMobile && !isSelectQuestionPage && <QuestionListWidget />}
           <FeedWrapper>
             <Switch>
               <Redirect from="/my-page" to={`/users/${currentUser?.id}`} />
-
               <Redirect from="/login" to="/home" />
               <Redirect from="/signup" to={signUpRedirectPath} />
               <Route
@@ -152,7 +149,7 @@ const App = () => {
               <Redirect exact path="/" to="/home" />
             </Switch>
           </FeedWrapper>
-          {!isMobile && <FriendListWidget />}
+          {!isMobile && !isSelectQuestionPage && <FriendListWidget />}
         </MainWrapper>
       )}
     </MuiThemeProvider>

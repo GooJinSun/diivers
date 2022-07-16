@@ -13,6 +13,7 @@ export const LOGIN_REQUEST = 'user/LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'user/LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'user/LOGIN_FAILURE';
 
+export const LOGOUT_REQUEST = 'user/LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'user/LOGOUT_SUCCESS';
 
 export const UPDATE_QUESTION_SELECT_REQUEST =
@@ -49,7 +50,6 @@ export const requestSignUp = (signUpInfo) => {
   return async (dispatch) => {
     dispatch({ type: SIGN_UP_REQUEST });
     try {
-      await axios.get('user/token/anonymous/');
       const { data } = await axios.post('user/signup/', signUpInfo);
       if (data.id) {
         dispatch({
@@ -94,7 +94,6 @@ export const requestLogin = (loginInfo) => {
   return async (dispatch) => {
     dispatch({ type: 'user/LOGIN_REQUEST' });
 
-    let currentUser;
     try {
       const res = await axios.post('user/token/', loginInfo);
       // set jwt token set
@@ -102,9 +101,8 @@ export const requestLogin = (loginInfo) => {
       Cookies.set(JWT_ACCESS_TOKEN, res.data.access);
 
       // set user info
-      const userInfoRes = await axios.get('/user/me/');
-      currentUser = userInfoRes.data;
-      dispatch({ type: 'user/LOGIN_SUCCESS', currentUser });
+      dispatch(getCurrentUser());
+      dispatch({ type: 'user/LOGIN_SUCCESS' });
     } catch (error) {
       dispatch({ type: 'user/LOGIN_FAILURE', error });
       dispatch({ type: 'user/REMOVE_ERROR' });
@@ -191,7 +189,6 @@ export default function userReducer(state, action) {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        currentUser: action.currentUser,
         loginError: false
       };
     case LOGIN_FAILURE:
@@ -200,7 +197,7 @@ export default function userReducer(state, action) {
         currentUser: null,
         loginError: action.error
       };
-    case LOGOUT_SUCCESS:
+    case LOGOUT_REQUEST:
       return {
         ...state,
         currentUser: null,
