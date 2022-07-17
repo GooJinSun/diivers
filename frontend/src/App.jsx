@@ -2,14 +2,8 @@
 import 'intersection-observer';
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import {
-  Route,
-  Switch,
-  Redirect,
-  useHistory,
-  useLocation
-} from 'react-router-dom';
-import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
+import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
+import { MuiThemeProvider, createTheme } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import Login from './pages/Login';
 import { GlobalStyle, MainWrapper, FeedWrapper } from './styles';

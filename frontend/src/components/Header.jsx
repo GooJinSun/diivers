@@ -139,8 +139,9 @@ const Header = ({ isMobile }) => {
   };
 
   const handleClickOutside = ({ target }) => {
-    if (isNotiOpen || !notiDropDownRef.current.contains(target))
+    if (isNotiOpen || !notiDropDownRef.current.contains(target)) {
       handleNotiClose();
+    }
   };
 
   useEffect(() => {
@@ -313,6 +314,7 @@ const Header = ({ isMobile }) => {
           onClick={(e) => {
             e.stopPropagation();
             handleClickLogout();
+            setQuery('');
           }}
         >
           로그아웃

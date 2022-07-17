@@ -33,4 +33,4 @@ DATABASES = {
 #     send_default_pii=True
 # )
 
-ALLOWED_HOSTS = ['ec2-3-34-134-169.ap-northeast-2.compute.amazonaws.com', 'localhost']
+ALLOWED_HOSTS = ['ec2-3-34-134-169.ap-northeast-2.compute.amazonaws.com', 'localhost', "127.0.0.1"]
