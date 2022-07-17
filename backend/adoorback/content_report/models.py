@@ -9,4 +9,17 @@ User = get_user_model()
 
 
 class ContentReport(AdoorTimestampedModel):
-    user = models.ForeignKey()
+    user = models.ForeignKey(User, related_name='content_report_set', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='post_set', on_delete=models.CASCADE)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['id']),
+        ]
+
+    def __str__(self):
+        return f'{self.user} reported {self.post.content_type} {self.post.object_id}'
+
+    @property
+    def type(self):
+        return self.__class__.__name__

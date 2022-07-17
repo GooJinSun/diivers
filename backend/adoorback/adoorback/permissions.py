@@ -50,6 +50,6 @@ class IsNotBlocked(permissions.BasePermission):
         User = get_user_model()
 
         if obj.type in ['Question', 'Response', 'Article']:
-            return obj.author.id not in request.user.user_report_blocked_ids
-        else:
+            return obj.author.id not in request.user.user_report_blocked_ids and obj.id not in request.user.content_report_blocked_ids
+        else: # obj.type == user (can't access user detail page)
             return obj.id not in request.user.user_report_blocked_ids

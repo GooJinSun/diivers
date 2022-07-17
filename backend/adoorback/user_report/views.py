@@ -24,7 +24,7 @@ class UserReportList(generics.CreateAPIView):
     @transaction.atomic
     def perform_create(self, serializer):
         try:
-            serializer.save(user=self.reuqest.user,
+            serializer.save(user=self.request.user,
                             reported_user_id=self.request.data['reported_user_id'])
         except IntegrityError:
             pass

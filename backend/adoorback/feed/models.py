@@ -174,7 +174,7 @@ class Post(AdoorModel):
         indexes = [
             models.Index(fields=['-id']),
         ]
-
+ 
 
 @transaction.atomic
 @receiver(post_save, sender=Question)

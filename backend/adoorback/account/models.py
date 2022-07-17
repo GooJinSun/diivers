@@ -60,9 +60,14 @@ class User(AbstractUser, AdoorTimestampedModel):
         return list(UserReport.objects.filter(user=self).values_list('reported_user_id', flat=True))
 
     @property
-    def user_report_blocked_ids(self):
+    def user_report_blocked_ids(self): # returns ids of users
         from user_report.models import UserReport
         return list(UserReport.objects.filter(user=self).values_list('reported_user_id', flat=True)) + list(UserReport.objects.filter(reported_user=self).values_list('user_id', flat=True))
+
+    @property
+    def content_report_blocked_ids(self): # returns ids of posts
+        from content_report.models import ContentReport
+        return list(ContentReport.objects.filter(user=self).values_list('post_id', flat=True))
 
 
 class FriendRequest(AdoorTimestampedModel):
