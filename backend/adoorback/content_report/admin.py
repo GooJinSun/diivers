@@ -17,4 +17,4 @@ class ContentReportAdmin(ImportExportModelAdmin):
     resource_class = ContentReportResource
 
 
-admin.site.register(UserReport, UserReportAdmin)
+admin.site.register(ContentReport, ContentReportAdmin)
