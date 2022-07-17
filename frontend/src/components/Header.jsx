@@ -162,7 +162,7 @@ const Header = ({ isMobile }) => {
   };
 
   useEffect(() => {
-    // dispatch(fetchSearchResults(1, ''));
+    dispatch(fetchSearchResults(1, ''));
     // reset search results when mounted
   }, [dispatch]);
 
