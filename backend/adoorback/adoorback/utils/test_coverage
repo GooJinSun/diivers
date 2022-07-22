@@ -10,10 +10,10 @@ coverage run --source '.' ./manage.py test ```file_name```
 coverage run --source '.' ./manage.py test user_report.tests
 coverage run --source '.' ./manage.py test content_report.tests
 
-# model tests - all models
+# model tests - models only
 coverage run --source='.' ./manage.py test account.tests.UserTestCase comment.tests.CommentTestCase like.tests.LikeTestCase feed.tests.FeedTestCase notification.tests.NotificationTestCase user_report.tests.UserReportTestCase content_report.test.ContentReportTestCase
 
-# coverage - all files***
+# coverage - all files*********
 coverage run --source='.' --omit='*/migrations/*','adoorback/*','feed/algorithms/*','feed/cron.py','account/cron.py','locustfile.py','manage.py','*/wsgi.py','*/asgi.py','*/utils/*' ./manage.py test
 coverage run --source='.' --branch --omit='*/migrations/*','adoorback/*','feed/algorithms/*','feed/cron.py','account/cron.py','locustfile.py','manage.py','*/wsgi.py','*/asgi.py','*/utils/*' ./manage.py test
 coverage report -m
