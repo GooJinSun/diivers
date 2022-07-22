@@ -4,6 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from content_report.models import ContentReport
 from content_report.serializers import ContentReportSerializer
+from feed.models import Post
 
 from adoorback.permissions import IsNotBlocked
 from adoorback.content_types import get_generic_relation_type
@@ -23,8 +24,11 @@ class ContentReportList(generics.CreateAPIView):
 
     @transaction.atomic
     def perform_create(self, serializer):
+        content_type_id = get_generic_relation_type(self.request.data['target_type']).id
+        post = Post.objects.get(content_type_id=content_type_id, object_id=self.request.data['target_id'])
+
         try:
             serializer.save(user=self.request.user,
-                            post_id=self.request.data['reported_content_id'])
+                            post=post)
         except IntegrityError:
             pass

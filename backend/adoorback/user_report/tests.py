@@ -138,11 +138,20 @@ class UserReportAPITestCase(APITestCase):
         user2 = self.make_user(username='user2')
 
         with self.login(username=user1.username, password='password'):
-            data = {"reported_user_id": 2}
+            data = {"reported_user_id": user2.id}
             response = self.post('user-report-list', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
 
     def test_restrictions(self):
+        user1 = self.make_user(username='user1')
+        user2 = self.make_user(username='user2')
+        user3 = self.make_user(username='user3')
+
+        with self.login(username=user3.username, password='password'):
+            data = {"reported_user_id": user1.id}
+            response = self.post('user-report-list', data=data, extra={'format': 'json'})
+            self.assertEqual(response.status_code, 201)
+
         with self.login(username=user1.username, password='password'):
             response = self.get('current-user-friends')
             self.assertEqual(response.status_code, 200)

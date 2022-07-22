@@ -11,7 +11,7 @@ User = get_user_model()
 
 class ContentReport(AdoorTimestampedModel):
     user = models.ForeignKey(User, related_name='content_report_set', on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, related_name='post_set', on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, related_name='content_report_set', on_delete=models.CASCADE)
 
     class Meta:
         indexes = [

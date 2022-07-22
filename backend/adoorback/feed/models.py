@@ -174,6 +174,10 @@ class Post(AdoorModel):
         indexes = [
             models.Index(fields=['-id']),
         ]
+
+    @property
+    def target_type(self):
+        return self.target.type
  
 
 @transaction.atomic
