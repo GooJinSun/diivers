@@ -4,9 +4,11 @@ from rest_framework.test import APIClient
 from rest_framework.utils import json
 from test_plus.test import TestCase
 
+from account.models import FriendRequest
 from user_report.models import UserReport
 from feed.models import Article, Question, Response, ResponseRequest
 from comment.models import Comment
+from like.models import Like
 from notification.models import Notification
 from adoorback.utils.seed import set_seed
 
@@ -74,6 +76,73 @@ class UserReportTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.data['count'], 0)  # blocked user don't show up in friend list
 
+    def test_user_report_noti(self):
+        user1 = self.make_user(username='user1')
+        user2 = self.make_user(username='user2')
+        user3 = self.make_user(username='user3')
+
+        # test notification
+        question = Question.objects.create(author=user1, content='test question', is_admin_question=True)
+        article = Article.objects.create(author=user3, content='test article')
+
+        with self.login(username=user3.username, password='password'):
+            UserReport.objects.create(user_id=user3.id, reported_user_id=user1.id)
+            prev_noti_count = Notification.objects.count()
+            ResponseRequest.objects.create(requester=user1, requestee=user3, question=question)
+            ResponseRequest.objects.create(requester=user3, requestee=user1, question=question)
+            Response.objects.create(question=question, author=user1)
+            Comment.objects.create(target=article, author=user1)
+            Like.objects.create(target=article, user=user1)
+            curr_noti_count = Notification.objects.count()
+            self.assertEqual(curr_noti_count, prev_noti_count)  # notis from/for blocked users should NOT be created
+
+    def test_user_report_deletion(self):
+        user4 = self.make_user(username='user4')
+        user5 = self.make_user(username='user5')
+        user6 = self.make_user(username='user6')
+
+        # initialization
+        ResponseRequest.objects.all().delete()
+        FriendRequest.objects.all().delete()
+        UserReport.objects.all().delete()
+
+        question = Question.objects.create(author_id=1, content='test question', is_admin_question=True)
+
+        ResponseRequest.objects.create(requester=user4, requestee=user5, question=question)
+        ResponseRequest.objects.create(requester=user5, requestee=user4, question=question)
+        FriendRequest.objects.create(requester=user4, requestee=user5)
+
+        self.assertEqual(ResponseRequest.objects.count(), 2)
+        self.assertEqual(FriendRequest.objects.count(), 1)
+
+        UserReport.objects.create(user_id=4, reported_user_id=5)
+
+        self.assertEqual(ResponseRequest.objects.count(), 0)
+        self.assertEqual(FriendRequest.objects.count(), 0)
+
+        User.objects.get(id=user4.id).delete()
+
+        self.assertEqual(UserReport.objects.count(), 0)
+
+
+class APITestCase(TestCase):
+    client_class = APIClient
+
+
+class UserReportAPITestCase(APITestCase):
+    def setUp(self):
+        set_seed(N)
+
+    def test_user_report_list(self):
+        user1 = self.make_user(username='user1')
+        user2 = self.make_user(username='user2')
+
+        with self.login(username=user1.username, password='password'):
+            data = {"reported_user_id": 2}
+            response = self.post('user-report-list', data=data, extra={'format': 'json'})
+            self.assertEqual(response.status_code, 201)
+
+    def test_restrictions(self):
         with self.login(username=user1.username, password='password'):
             response = self.get('current-user-friends')
             self.assertEqual(response.status_code, 200)
@@ -90,11 +159,3 @@ class UserReportTestCase(TestCase):
         with self.login(username=user1.username, password='password'):
             response = self.get(self.reverse('user-detail', pk=user3.id))
             self.assertEqual(response.status_code, 403)  # can't access blocked user's page
-
-        question = Question.objects.create(author_id=1, content='test question', is_admin_question=True)
-        
-        prev_noti_count = Notification.objects.count()
-        ResponseRequest.objects.create(requester=user1, requestee=user3, question=question)
-        ResponseRequest.objects.create(requester=user3, requestee=user1, question=question)
-        curr_noti_count = Notification.objects.count()
-        self.assertEqual(curr_noti_count, prev_noti_count)  # notis from/for blocked users should NOT be created

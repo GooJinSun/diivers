@@ -103,7 +103,7 @@ class LikeAPITestCase(APITestCase):
             pk = Like.objects.last().id
             response = self.delete(self.reverse('like-destroy', pk=pk))
             self.assertEqual(response.status_code, 403)
-
+ 
 
 class LikeNotiAPITestCase(APITestCase):
 

@@ -20,9 +20,3 @@ class UserReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserReport
         fields = ['user_id', 'reported_user_id']
-        validators = [
-            UniqueTogetherValidator(
-                queryset=UserReport.objects.all(),
-                fields=['user_id', 'reported_user_id']
-            )
-        ]

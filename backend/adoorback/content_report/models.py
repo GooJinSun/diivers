@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 
 from adoorback.models import AdoorTimestampedModel
+from feed.models import Post
 
 User = get_user_model()
 

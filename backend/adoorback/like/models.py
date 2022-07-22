@@ -63,6 +63,7 @@ def create_like_noti(instance, **kwargs):
 
     if user == actor:  # do not create notification for liker him/herself.
         return
+
     if actor.id in user.user_report_blocked_ids: # do not create notification from/for blocked user
         return
     actor_name = '익명의 사용자가' if instance.is_anonymous else f'{actor.username}님이'
