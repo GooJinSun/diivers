@@ -1,6 +1,5 @@
-import Cookies from 'js.cookie';
-import axios, { deleteAxiosToken } from '../apis';
-import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../constants/cookies';
+import axios, { deleteTokens } from '../apis';
+import { setTokensInCookies } from '../utils/tokenCookiesHelpers';
 
 export const GET_CURRENT_USER_REQUEST = 'user/GET_CURRENT_USER_REQUEST';
 export const GET_CURRENT_USER_SUCCESS = 'user/GET_CURRENT_USER_SUCCESS';
@@ -97,8 +96,8 @@ export const requestLogin = (loginInfo) => {
     try {
       const res = await axios.post('user/token/', loginInfo);
       // set jwt token set
-      Cookies.set(JWT_REFRESH_TOKEN, res.data.refresh);
-      Cookies.set(JWT_ACCESS_TOKEN, res.data.access);
+      const { access, refresh } = res.data;
+      setTokensInCookies(access, refresh);
 
       // set user info
       dispatch(getCurrentUser());
@@ -113,10 +112,8 @@ export const requestLogin = (loginInfo) => {
 export const logout = () => async (dispatch) => {
   dispatch({ type: 'user/LOGOUT_REQUEST' });
   try {
-    await axios.get('user/logout');
-    Cookies.remove(JWT_ACCESS_TOKEN);
-    Cookies.remove(JWT_REFRESH_TOKEN);
-    deleteAxiosToken();
+    await axios.get('user/logout/');
+    deleteTokens();
   } catch (error) {
     dispatch({ type: 'user/LOGOUT_FAILURE', error });
     return;

@@ -28,7 +28,8 @@ import MobileQuestionPage from './pages/MobileQuestionPage';
 import MobileSearchPage from './pages/MobileSearchPage';
 import { initGA, trackPage } from './ga';
 import useLoginWithToken from './hooks/auth/useLoginWithToken';
-import useIsMobile from './hooks/auth/env/useIsMobile';
+import useIsMobile from './hooks/env/useIsMobile';
+import useAxiosInterceptorsForToken from './hooks/auth/useAxiosInterceptorsForToken';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -48,6 +49,8 @@ const App = () => {
   const location = useLocation();
 
   useLoginWithToken();
+  useAxiosInterceptorsForToken();
+
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
   const isMobile = useIsMobile();

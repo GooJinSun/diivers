@@ -1,10 +1,11 @@
 import axios from 'axios';
 import Cookies from 'js.cookie';
-import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../constants/cookies';
+import { JWT_ACCESS_TOKEN } from '../constants/cookies';
+import { deleteTokensFromCookies } from '../utils/tokenCookiesHelpers';
 
 const csrf_token = Cookies.get('csrftoken');
 const access_token = Cookies.get(JWT_ACCESS_TOKEN);
-const getBearerToken = (token) => `Bearer ${token}`;
+export const getBearerToken = (token) => `Bearer ${token}`;
 
 const instance = axios.create({
   baseURL: '/api/',
@@ -18,41 +19,21 @@ const instance = axios.create({
   }
 });
 
-export const deleteAxiosToken = () => {
+export const deleteAxiosHeaderToken = () => {
   delete instance.defaults.headers.Authorization;
 };
 
-// access token이 만료된 경우 refresh token이 있다면 토큰 refresh 요청
-instance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const originalRequest = error.config;
-    const refresh_token = Cookies.get(JWT_REFRESH_TOKEN);
+export const deleteTokens = () => {
+  deleteAxiosHeaderToken();
+  deleteTokensFromCookies();
+};
 
-    // FIXME: Unauthorized 401 로 수정되면 수정 필요!
-    if (error.response.status === 403 && refresh_token) {
-      return instance
-        .post('user/token/refresh/', { refresh: refresh_token })
-        .then((response) => {
-          Cookies.set(JWT_REFRESH_TOKEN, response.data.refresh);
-          Cookies.set(JWT_ACCESS_TOKEN, response.data.access);
+instance.interceptors.request.use((config) => {
+  if (config.url === 'user/signup/') return config;
 
-          instance.defaults.headers.Authorization = getBearerToken(
-            response.data.access
-          );
-          originalRequest.headers.Authorization = getBearerToken(
-            response.data.access
-          );
+  // eslint-disable-next-line no-param-reassign
+  config.headers.Authorization = getBearerToken(Cookies.get(JWT_ACCESS_TOKEN));
+  return config;
+});
 
-          instance.get('user/me/');
-
-          return instance(originalRequest);
-        })
-        .catch((err, dispatch) => {
-          dispatch({ type: 'user/LOGIN_FAILURE', error: err });
-        });
-    }
-    return Promise.reject(error);
-  }
-);
 export default instance;
