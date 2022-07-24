@@ -18,6 +18,10 @@ const instance = axios.create({
   }
 });
 
+export const deleteAxiosToken = () => {
+  delete instance.defaults.headers.Authorization;
+};
+
 // access token이 만료된 경우 refresh token이 있다면 토큰 refresh 요청
 instance.interceptors.response.use(
   (response) => response,

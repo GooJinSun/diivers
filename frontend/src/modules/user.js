@@ -1,5 +1,5 @@
 import Cookies from 'js.cookie';
-import axios from '../apis';
+import axios, { deleteAxiosToken } from '../apis';
 import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../constants/cookies';
 
 export const GET_CURRENT_USER_REQUEST = 'user/GET_CURRENT_USER_REQUEST';
@@ -116,6 +116,7 @@ export const logout = () => async (dispatch) => {
     await axios.get('user/logout');
     Cookies.remove(JWT_ACCESS_TOKEN);
     Cookies.remove(JWT_REFRESH_TOKEN);
+    deleteAxiosToken();
   } catch (error) {
     dispatch({ type: 'user/LOGOUT_FAILURE', error });
     return;
