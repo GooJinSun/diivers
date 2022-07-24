@@ -25,6 +25,7 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
     const refresh_token = Cookies.get(JWT_REFRESH_TOKEN);
 
+    // FIXME: Unauthorized 401 로 수정되면 수정 필요!
     if (error.response.status === 403 && refresh_token) {
       return instance
         .post('user/token/refresh/', { refresh: refresh_token })
