@@ -35,7 +35,8 @@
     "react/jsx-props-no-spreading": "off",
     "react/prop-types": "off",
     "no-case-declarations": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "consistent-return": "off"
   },
   "globals": {
     "shallow": true,

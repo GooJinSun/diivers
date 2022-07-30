@@ -18,42 +18,36 @@ const useAxiosInterceptorsForToken = () => {
     const refreshTokenInterceptor = axios.interceptors.response.use(
       (response) => response,
       async (error) => {
+        if (error.response.status !== 401) return Promise.reject(error);
+
         const originalRequest = error.config;
 
+        // refresh token이 만료된 경우 로그아웃
+        if (originalRequest.url === 'user/token/refresh/') {
+          return dispatch(logout());
+        }
         // access token이 만료된 경우 refresh 토큰 refresh 요청
-        // FIXME: Unauthorized 401 로 수정되면 수정 필요!
-        if (error.response.status === 403) {
-          try {
-            const res = await axios.post('user/token/refresh/', {
-              refresh: Cookies.get(JWT_REFRESH_TOKEN)
-            });
-            const { access, refresh } = res.data;
+        try {
+          const res = await axios.post('user/token/refresh/', {
+            refresh: Cookies.get(JWT_REFRESH_TOKEN)
+          });
+          const { access, refresh } = res.data;
 
-            setTokensInCookies(access, refresh);
+          setTokensInCookies(access, refresh);
 
-            axios.defaults.headers.Authorization = getBearerToken(access);
-            originalRequest.headers.Authorization = getBearerToken(access);
-
-            return axios(originalRequest);
-          } catch (err) {
-            dispatch(logout());
-          }
+          axios.defaults.headers.Authorization = getBearerToken(access);
+          originalRequest.headers.Authorization = getBearerToken(access);
+          return axios(originalRequest);
+        } catch (err) {
+          return dispatch(logout());
         }
-
-        if (error.response.status === 401) {
-          // refresh token이 만료된 경우 로그아웃
-          if (originalRequest.url === 'user/token/refresh/') {
-            dispatch(logout());
-          }
-        }
-        return Promise.reject(error);
       }
     );
 
     return () => {
       axios.interceptors.response.eject(refreshTokenInterceptor);
     };
-  }, []);
+  }, [dispatch]);
 };
 
 export default useAxiosInterceptorsForToken;
