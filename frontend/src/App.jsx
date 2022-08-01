@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
 import 'intersection-observer';
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
+import Cookies from 'js.cookie';
 import Login from './pages/Login';
 import { GlobalStyle, MainWrapper, FeedWrapper } from './styles';
 import Header from './components/Header';
@@ -30,6 +30,7 @@ import { initGA, trackPage } from './ga';
 import useLoginWithToken from './hooks/auth/useLoginWithToken';
 import useIsMobile from './hooks/env/useIsMobile';
 import useAxiosInterceptorsForToken from './hooks/auth/useAxiosInterceptorsForToken';
+import { JWT_REFRESH_TOKEN } from './constants/cookies';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -81,7 +82,9 @@ const App = () => {
           <>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
-            <Redirect from="/" to="/login" />
+            {!Cookies.get(JWT_REFRESH_TOKEN) && (
+              <Redirect from="/" to="/login" />
+            )}
           </>
         </Switch>
       ) : (
