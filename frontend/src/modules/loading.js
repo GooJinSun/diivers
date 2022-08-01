@@ -1,7 +1,3 @@
-/* eslint-disable no-unused-vars */
-import Cookies from 'js.cookie';
-import history from '../history';
-
 export default function loadingReducer(state, action) {
   if (typeof state === 'undefined') {
     return {};
