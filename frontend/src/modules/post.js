@@ -62,6 +62,10 @@ export const DELETE_POST_REQUEST = 'post/DELETE_POST_REQUEST';
 export const DELETE_POST_SUCCESS = 'post/DELETE_POST_SUCCESS';
 export const DELETE_POST_FAILURE = 'post/DELETE_POST_FAILURE';
 
+export const REPORT_POST_REQUEST = 'post/REPORT_POST_REQUEST';
+export const REPORT_POST_SUCCESS = 'post/REPORT_POST_SUCCESS';
+export const REPORT_POST_FAILURE = 'post/REPORT_POST_FAILURE';
+
 const initialState = {
   anonymousPosts: [],
   friendPosts: [],
@@ -342,6 +346,21 @@ export const deletePost = (postId, type) => async (dispatch, getState) => {
       res: newResponses
     });
   }
+};
+
+// 사용자 신고
+export const reportPost = (reportInfo) => {
+  // ex) request 형식 : reportInfo = { target_type: 'Question', target_id: 12 }
+  return async (dispatch) => {
+    dispatch({ type: REPORT_POST_REQUEST });
+    try {
+      const res = await axios.post('content_reports/', reportInfo);
+      // response 어떻게 오냐에 따라서 언제 dispatch 해줄지 정해줄 것
+      if (res) dispatch({ type: REPORT_POST_SUCCESS });
+    } catch (error) {
+      dispatch({ type: REPORT_POST_FAILURE, error });
+    }
+  };
 };
 
 const getNewCommentsWithReply = (comments, reply) => {
