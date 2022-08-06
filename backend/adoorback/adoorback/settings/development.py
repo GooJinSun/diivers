@@ -33,6 +33,6 @@ DATABASES = {
 #     send_default_pii=True
 # )
 
-ALLOWED_HOSTS = ['ec2-3-39-220-146.ap-northeast-2.compute.amazonaws.com', 'localhost']
+ALLOWED_HOSTS = ['ec2-3-39-220-146.ap-northeast-2.compute.amazonaws.com', 'localhost', "127.0.0.1"]
 
 FRONTEND_URL = 'http://localhost:3000'
