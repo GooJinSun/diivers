@@ -28,6 +28,10 @@ export const GET_SELECTED_USER_REQUEST = 'user/GET_SELECTED_USER_REQUEST';
 export const GET_SELECTED_USER_SUCCESS = 'user/GET_SELECTED_USER_SUCCESS';
 export const GET_SELECTED_USER_FAILURE = 'user/GET_SELECTED_USER_FAILURE';
 
+export const REPORT_USER_REQUEST = 'user/REPORT_USER_REQUEST';
+export const REPORT_USER_SUCCESS = 'user/REPORT_USER_SUCCESS';
+export const REPORT_USER_FAILURE = 'user/REPORT_USER_FAILURE';
+
 export const REMOVE_ERROR = 'user/REMOVE_ERROR';
 
 const initialState = {
@@ -157,6 +161,24 @@ export const getSelectedUser = (id) => async (dispatch) => {
     type: `user/GET_SELECTED_USER_SUCCESS`,
     selectedUser: result?.data
   });
+};
+
+// 사용자 신고
+export const reportUser = (reportInfo) => {
+  // ex) request 형식 : reportInfo = { reported_user_id: 120 }
+  return async (dispatch, getState) => {
+    const userId = getState().userReducer.currentUser?.id;
+    // 본인이 본인을 차단하지는 못하도록 처리
+    if (reportInfo.reported_user_id === userId) throw Error;
+    dispatch({ type: REPORT_USER_REQUEST });
+    try {
+      const res = await axios.post('user_reports/', reportInfo);
+      // response 어떻게 오냐에 따라서 언제 dispatch 해줄지 정해줄 것
+      if (res) dispatch({ type: REPORT_USER_SUCCESS });
+    } catch (error) {
+      dispatch({ type: REPORT_USER_FAILURE, error });
+    }
+  };
 };
 
 export default function userReducer(state, action) {
