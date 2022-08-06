@@ -39,8 +39,7 @@ DATABASES = {
 #    "localhost"
 # ]
 
-ALLOWED_HOSTS = [
-    'ec2-3-39-220-146.ap-northeast-2.compute.amazonaws.com', 'localhost', '3.34.134.169']
+ALLOWED_HOSTS = ['ec2-3-39-220-146.ap-northeast-2.compute.amazonaws.com', 'localhost', '3.34.134.169']
 
 # CORS_ALLOWED_ORIGINS = [
 #    "https://develop.d3t1tnno5uz3sa.amplifyapp.com",
