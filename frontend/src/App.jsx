@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import Cookies from 'js.cookie';
 import Login from './pages/Login';
 import { GlobalStyle, MainWrapper, FeedWrapper } from './styles';
 import Header from './components/Header';
@@ -30,7 +29,6 @@ import { initGA, trackPage } from './ga';
 import useLoginWithToken from './hooks/auth/useLoginWithToken';
 import useIsMobile from './hooks/env/useIsMobile';
 import useAxiosInterceptorsForToken from './hooks/auth/useAxiosInterceptorsForToken';
-import { JWT_REFRESH_TOKEN } from './constants/cookies';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -57,10 +55,6 @@ const App = () => {
   const isMobile = useIsMobile();
   const isSelectQuestionPage = location.pathname === '/select-questions';
 
-  const signUpRedirectPath = currentUser?.question_history
-    ? '/home'
-    : 'select-questions';
-
   useEffect(() => {
     initGA();
   }, []);
@@ -77,81 +71,73 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <GlobalStyle />
       <Header isMobile={isMobile} />
-      {!currentUser ? (
-        <Switch>
-          <>
+
+      <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
+        {!isMobile && !isSelectQuestionPage && currentUser && (
+          <QuestionListWidget />
+        )}
+        <FeedWrapper>
+          <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
-            {!Cookies.get(JWT_REFRESH_TOKEN) && (
-              <Redirect from="/" to="/login" />
-            )}
-          </>
-        </Switch>
-      ) : (
-        <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
-          {!isMobile && !isSelectQuestionPage && <QuestionListWidget />}
-          <FeedWrapper>
-            <Switch>
-              <Redirect from="/my-page" to={`/users/${currentUser?.id}`} />
-              <Redirect from="/login" to="/home" />
-              <Redirect from="/signup" to={signUpRedirectPath} />
-              <Route
-                exact
-                path="/select-questions"
-                component={QuestionSelection}
-              />
-              <PrivateRoute exact path="/home" component={FriendFeed} />
-              <PrivateRoute exact path="/anonymous" component={AnonymousFeed} />
-              <PrivateRoute exact path="/questions" component={QuestionFeed} />
-              <PrivateRoute exact path="/users/:id" component={UserPage} />
-              <PrivateRoute
-                exact
-                path="/notifications"
-                component={NotificationPage}
-              />
-              <PrivateRoute
-                exact
-                path="/notifications/friend-request"
-                component={NotificationPage}
-                tabType="FriendRequest"
-              />
-              <PrivateRoute
-                exact
-                path="/notifications/response-request"
-                component={NotificationPage}
-                tabType="ResponseRequest"
-              />
-              <PrivateRoute
-                exact
-                path="/questions/:id"
-                component={QuestionDetail}
-              />
-              <PrivateRoute
-                exact
-                path="/:postType/:id/edit"
-                component={PostEdit}
-              />
-              <Route exact path="/search" component={SearchResults} />
+            <Route
+              exact
+              path="/select-questions"
+              component={QuestionSelection}
+            />
+            <PrivateRoute exact path="/home" component={FriendFeed} />
+            <PrivateRoute exact path="/anonymous" component={AnonymousFeed} />
+            <PrivateRoute exact path="/questions" component={QuestionFeed} />
+            <PrivateRoute exact path="/users/:id" component={UserPage} />
+            <PrivateRoute
+              exact
+              path="/notifications"
+              component={NotificationPage}
+            />
+            <PrivateRoute
+              exact
+              path="/notifications/friend-request"
+              component={NotificationPage}
+              tabType="FriendRequest"
+            />
+            <PrivateRoute
+              exact
+              path="/notifications/response-request"
+              component={NotificationPage}
+              tabType="ResponseRequest"
+            />
+            <PrivateRoute
+              exact
+              path="/questions/:id"
+              component={QuestionDetail}
+            />
+            <PrivateRoute
+              exact
+              path="/:postType/:id/edit"
+              component={PostEdit}
+            />
+            <Route exact path="/search" component={SearchResults} />
 
-              <PrivateRoute path="/:postType/:id" component={PostDetail} />
-              <PrivateRoute exact path="/my-friends" component={FriendsPage} />
-              <PrivateRoute
-                exact
-                path="/recommended-questions"
-                component={MobileQuestionPage}
-              />
-              <PrivateRoute
-                exact
-                path="/user-search"
-                component={MobileSearchPage}
-              />
-
-              <Redirect exact path="/" to="/home" />
-            </Switch>
-          </FeedWrapper>
-          {!isMobile && !isSelectQuestionPage && <FriendListWidget />}
-        </MainWrapper>
-      )}
+            <PrivateRoute path="/:postType/:id" component={PostDetail} />
+            <PrivateRoute exact path="/my-friends" component={FriendsPage} />
+            <PrivateRoute
+              exact
+              path="/recommended-questions"
+              component={MobileQuestionPage}
+            />
+            <PrivateRoute
+              exact
+              path="/user-search"
+              component={MobileSearchPage}
+            />
+            <Redirect from="/my-page" to={`/users/${currentUser?.id}`} />
+            <Redirect exact path="/" to="/home" />
+          </Switch>
+        </FeedWrapper>
+        {!isMobile && !isSelectQuestionPage && currentUser && (
+          <FriendListWidget />
+        )}
+      </MainWrapper>
     </MuiThemeProvider>
   );
 };
