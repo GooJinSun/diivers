@@ -33,15 +33,23 @@ WarningMessage.displayName = 'WarningMessage';
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
+
   const [loginInfo, setLoginInfo] = useState({ username: '', password: '' });
   const loginError = useSelector((state) => state.userReducer.loginError);
   const [loginWarning, setLoginWarning] = useState(false);
+
+  const currentUser = useSelector((state) => state.userReducer.currentUser);
 
   useEffect(() => {
     if (loginError) {
       setLoginWarning(true);
     }
   }, [loginError]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    history.push('/');
+  }, [currentUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
