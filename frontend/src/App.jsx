@@ -54,6 +54,7 @@ const App = () => {
 
   const isMobile = useIsMobile();
   const isSelectQuestionPage = location.pathname === '/select-questions';
+  const showWidget = !isMobile && !isSelectQuestionPage && currentUser;
 
   useEffect(() => {
     initGA();
@@ -73,9 +74,7 @@ const App = () => {
       <Header isMobile={isMobile} />
 
       <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
-        {!isMobile && !isSelectQuestionPage && currentUser && (
-          <QuestionListWidget />
-        )}
+        {showWidget && <QuestionListWidget />}
         <FeedWrapper>
           <Switch>
             <Route exact path="/login" component={Login} />
@@ -134,9 +133,7 @@ const App = () => {
             <Redirect exact path="/" to="/home" />
           </Switch>
         </FeedWrapper>
-        {!isMobile && !isSelectQuestionPage && currentUser && (
-          <FriendListWidget />
-        )}
+        {showWidget && <FriendListWidget />}
       </MainWrapper>
     </MuiThemeProvider>
   );
