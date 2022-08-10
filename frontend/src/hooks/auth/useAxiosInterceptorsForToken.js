@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import Cookies from 'js.cookie';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 import axios, { getBearerToken } from '../../apis';
 import { JWT_REFRESH_TOKEN } from '../../constants/cookies';
 import { setTokensInCookies } from '../../utils/tokenCookiesHelpers';
@@ -13,6 +14,12 @@ import { logout } from '../../modules/user';
  */
 const useAxiosInterceptorsForToken = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const logOut = () => {
+    dispatch(logout());
+    history.push('/login');
+  };
 
   useEffect(() => {
     const refreshTokenInterceptor = axios.interceptors.response.use(
@@ -24,7 +31,8 @@ const useAxiosInterceptorsForToken = () => {
 
         // refresh token이 만료된 경우 로그아웃
         if (originalRequest.url === 'user/token/refresh/') {
-          return dispatch(logout());
+          logOut();
+          return;
         }
         // access token이 만료된 경우 refresh 토큰 refresh 요청
         try {
@@ -39,7 +47,7 @@ const useAxiosInterceptorsForToken = () => {
           originalRequest.headers.Authorization = getBearerToken(access);
           return axios(originalRequest);
         } catch (err) {
-          return dispatch(logout());
+          logOut();
         }
       }
     );
