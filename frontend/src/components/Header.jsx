@@ -17,7 +17,6 @@ import { primaryColor, borderColor } from '../constants/colors';
 import NotificationDropdownList from './NotificationDropdownList';
 import SearchDropdownList from './SearchDropdownList';
 import { logout } from '../modules/user';
-import { getNotifications } from '../modules/notification';
 import { fetchSearchResults } from '../modules/search';
 import MobileDrawer from './posts/MobileDrawer';
 import MobileFooter from './MobileFooter';
@@ -100,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// eslint-disable-next-line react/prop-types
 const Header = ({ isMobile }) => {
   const classes = useStyles();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
@@ -123,12 +121,6 @@ const Header = ({ isMobile }) => {
 
   const unreadNotifications = notifications?.filter((noti) => !noti.is_read);
   const notiBadgeInvisible = unreadNotifications?.length === 0;
-
-  useEffect(() => {
-    if (currentUser) {
-      dispatch(getNotifications());
-    }
-  }, [dispatch, currentUser]);
 
   const handleNotiClose = () => {
     setIsNotiOpen(false);
