@@ -29,7 +29,13 @@ export const deleteTokens = () => {
 };
 
 instance.interceptors.request.use((config) => {
-  if (config.url === 'user/signup/') return config;
+  if (config.url === 'user/signup/')
+    return {
+      ...config,
+      headers: {
+        Authorization: '' // 회원가입 시, 이전 사용자의 토큰을 기본으로 세팅하는 걸 방지하기 위해 명시적으로 Authorization 헤더를 제거해서 요청
+      }
+    };
 
   // eslint-disable-next-line no-param-reassign
   config.headers.Authorization = getBearerToken(Cookies.get(JWT_ACCESS_TOKEN));
