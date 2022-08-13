@@ -3,6 +3,7 @@ import { setTokensInCookies } from '../utils/tokenCookiesHelpers';
 
 export const GET_CURRENT_USER_REQUEST = 'user/GET_CURRENT_USER_REQUEST';
 export const GET_CURRENT_USER_SUCCESS = 'user/GET_CURRENT_USER_SUCCESS';
+export const GET_CURRENT_USER_FAILURE = 'user/GET_CURRENT_USER_FAILURE';
 
 export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
@@ -233,6 +234,12 @@ export default function userReducer(state, action) {
       return {
         ...state,
         currentUser: action.currentUser
+      };
+    }
+    case GET_CURRENT_USER_FAILURE: {
+      return {
+        ...state,
+        currentUser: null
       };
     }
     case REMOVE_ERROR: {
