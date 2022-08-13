@@ -209,13 +209,11 @@ const Header = ({ isMobile }) => {
       >
         <MenuIcon />
       </IconButton>
-      {isMobile && (
-        <MobileDrawer
-          open={isDrawerOpen}
-          handleDrawerClose={handleDrawerClose}
-          onLogout={handleClickLogout}
-        />
-      )}
+      <MobileDrawer
+        open={isDrawerOpen}
+        handleDrawerClose={handleDrawerClose}
+        onLogout={handleClickLogout}
+      />
     </>
   ) : (
     <>
@@ -275,7 +273,6 @@ const Header = ({ isMobile }) => {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-
         <IconButton
           aria-label="account of current user"
           className={classes.iconButton}
@@ -292,7 +289,6 @@ const Header = ({ isMobile }) => {
             </HelloUsername>
           </Link>
         </IconButton>
-
         <Button
           variant="outlined"
           size="medium"
