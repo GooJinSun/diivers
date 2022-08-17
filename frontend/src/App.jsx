@@ -28,7 +28,7 @@ import MobileSearchPage from './pages/MobileSearchPage';
 import { initGA, trackPage } from './ga';
 import useLoginWithToken from './hooks/auth/useLoginWithToken';
 import useIsMobile from './hooks/env/useIsMobile';
-import useAxiosInterceptorsForToken from './hooks/auth/useAxiosInterceptorsForToken';
+import useLogOutIfRefreshTokenExpired from './hooks/auth/useLogOutIfRefreshTokenExpired';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -48,7 +48,7 @@ const App = () => {
   const location = useLocation();
 
   useLoginWithToken();
-  useAxiosInterceptorsForToken();
+  useLogOutIfRefreshTokenExpired();
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
@@ -72,10 +72,14 @@ const App = () => {
     <MuiThemeProvider theme={theme}>
       <GlobalStyle />
       <Header isMobile={isMobile} />
-
       <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
         {showWidget && <QuestionListWidget />}
-        <FeedWrapper>
+        <FeedWrapper
+          style={{
+            left: !currentUser ? '275px' : '',
+            width: !currentUser ? '655px' : ''
+          }}
+        >
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />

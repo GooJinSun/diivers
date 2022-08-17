@@ -84,10 +84,10 @@ export const MainWrapper = styled.main`
 export const FeedWrapper = styled.div`
   @media (max-width: 650px) {
     width: calc(100vw - 12px);
-    margin: 0 12px;
+    padding: 0 12px;
   }
   width: 720px;
-  margin: 0 40px;
+  padding: 0 40px;
 `;
 
 export const WidgetWrapper = styled.div`
