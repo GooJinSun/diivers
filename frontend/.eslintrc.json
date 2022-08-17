@@ -36,7 +36,8 @@
     "react/prop-types": "off",
     "no-case-declarations": "off",
     "camelcase": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "no-nested-ternary": "off"
   },
   "globals": {
     "shallow": true,

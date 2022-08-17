@@ -111,6 +111,10 @@ const Header = ({ isMobile }) => {
   const searchRef = useRef(null);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+  const currentUserIsLoading =
+    useSelector((state) => state.loadingReducer['user/GET_CURRENT_USER']) ===
+    'REQUEST';
+
   const totalPages = useSelector(
     (state) => state.searchReducer.searchObj?.totalPages
   );
@@ -313,14 +317,14 @@ const Header = ({ isMobile }) => {
 
   return (
     <>
-      {isMobile && currentUser !== null && (
+      {isMobile && currentUser && (
         <MobileFooter notiBadgeInvisible={notiBadgeInvisible} />
       )}
       <div className={classes.grow}>
         <AppBar position="static" className={classes.header}>
           <Toolbar>
             <Link to="/" className={classes.logo} />
-            {currentUser !== null ? (
+            {currentUserIsLoading ? null : currentUser ? (
               renderHeaderSignedInItems
             ) : (
               <>
