@@ -36,8 +36,7 @@ class FriendFeedPostList(generics.ListAPIView):
         # if queryset:
         #     return queryset
         # else:
-        queryset = Post.objects.friend_posts_only().filter(author_id__in=current_user.friend_ids).exclude(author_id__in=current_user.user_report_blocked_ids) | \
-                Post.objects.filter(author_id=current_user.id).exclude(Q(author_id__in=current_user.user_report_blocked_ids) | Q(id__in=current_user.content_report_blocked_ids))
+        queryset = Post.objects.friend_posts_only().filter(author_id__in=current_user.friend_ids).exclude(Q(author_id__in=current_user.user_report_blocked_ids) | Q(id__in=current_user.content_report_blocked_ids))
             # cache.set('friend-{}'.format(current_user.id), queryset)
         return queryset
 
@@ -74,10 +73,12 @@ class UserFeedPostList(generics.ListAPIView):
     def get_queryset(self):
         selected_user_id = self.kwargs.get('pk')
         current_user = self.request.user
-        if selected_user_id in current_user.friend_ids:
-            return Post.objects.friend_posts_only().filter(author_id=self.kwargs.get('pk')).exclude(author_id__in=current_user.user_report_blocked_ids)
+        if selected_user_id in current_user.user_report_blocked_ids:
+            raise PermissionDenied("current user blocked this user")
+        elif selected_user_id in current_user.friend_ids:
+            return Post.objects.friend_posts_only().filter(author_id=self.kwargs.get('pk'))
         elif selected_user_id == current_user.id:
-            return Post.objects.filter(author_id=current_user.id).exclude(Q(author_id__in=current_user.user_report_blocked_ids) | Q(id__in=current_user.content_report_blocked_ids))
+            return Post.objects.filter(author_id=current_user.id)
         raise PermissionDenied("you're not his/her friend...")
 
 
