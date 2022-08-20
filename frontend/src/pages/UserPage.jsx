@@ -12,7 +12,7 @@ import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import UserPostList from '../components/posts/UserPostList';
 import { getSelectedUserPosts, appendPosts } from '../modules/post';
-import { getSelectedUser } from '../modules/user';
+import { getSelectedUser, reportUser } from '../modules/user';
 import { getFriendList, deleteFriend } from '../modules/friend';
 import FriendStatusButtons from '../components/friends/FriendStatusButtons';
 import Message from '../components/Message';
@@ -159,11 +159,23 @@ export default function UserPage() {
     setValue(newValue);
   };
 
-  // TODO: 사용자 차단 기능 연결
-  const onClickBlockUser = () => {};
+  // 사용자 차단 기능 연결
+  const onClickBlockUser = async () => {
+    await dispatch(
+      reportUser({
+        reported_user_id: id
+      })
+    );
+  };
 
-  // TODO: 사용자 신고 기능 연결
-  const onClickReportUser = () => {};
+  // 사용자 신고 기능 연결 (실제로는 차단과 동일)
+  const onClickReportUser = async () => {
+    await dispatch(
+      reportUser({
+        reported_user_id: id
+      })
+    );
+  };
 
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const onClickDeleteFriendButton = () => {

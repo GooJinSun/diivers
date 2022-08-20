@@ -361,7 +361,6 @@ export const reportPost = (reportInfo) => {
       dispatch({ type: REPORT_POST_FAILURE, error });
       return;
     }
-
     dispatch({ type: REPORT_POST_SUCCESS });
   };
 };
