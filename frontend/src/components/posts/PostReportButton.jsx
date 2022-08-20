@@ -11,6 +11,8 @@ import {
   Typography
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { useDispatch } from 'react-redux';
+import { reportPost } from '../../modules/post';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -24,16 +26,24 @@ const ReportButtonWrapper = styled.div`
   justify-self: right;
 `;
 
-export default function PostReportButton() {
+export default function PostReportButton({ postObj }) {
   const classes = useStyles();
   const [showButtons, setShowButtons] = useState(false);
+  const dispatch = useDispatch();
 
   const ItemText = ({ text }) => (
     <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
   );
 
   // TODO: 게시글 신고 기능 연결
-  const onClickReportPost = () => {};
+  const onClickReportPost = async () => {
+    await dispatch(
+      reportPost({
+        target_type: postObj.type,
+        target_id: postObj.id
+      })
+    );
+  };
 
   // TODO: 사용자 신고 기능 연결
   const onClickReportUser = () => {};
