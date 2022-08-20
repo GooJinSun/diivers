@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import datetime
 import os.path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -36,12 +37,15 @@ REST_FRAMEWORK = {
     ],
 }
 
-JWT_AUTH = {
-    'JWT_VERIFY': False,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=30000),
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+}
 
 CORS_ORIGIN_WHITELIST = [
     "https://develop.d3t1tnno5uz3sa.amplifyapp.com",
