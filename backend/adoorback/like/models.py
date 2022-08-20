@@ -30,7 +30,7 @@ class Like(AdoorTimestampedModel):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.IntegerField()
     target = GenericForeignKey('content_type', 'object_id')
-
+ 
     like_targetted_notis = GenericRelation(Notification,
                                            content_type_field='target_type',
                                            object_id_field='target_id')
@@ -62,6 +62,9 @@ def create_like_noti(instance, **kwargs):
     target = instance
 
     if user == actor:  # do not create notification for liker him/herself.
+        return
+
+    if actor.id in user.user_report_blocked_ids: # do not create notification from/for blocked user
         return
     actor_name = '익명의 사용자가' if instance.is_anonymous else f'{actor.username}님이'
 

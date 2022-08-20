@@ -37,7 +37,7 @@ REST_FRAMEWORK = {
 }
 
 JWT_AUTH = {
-    'JWT_VERIFY': False,
+    'JWT_VERIFY': True,
     'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=30000),
     'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
@@ -53,6 +53,8 @@ BASE_URL = 'http://localhost:8000'
 # Application definition
 
 INSTALLED_APPS = [
+    'content_report.apps.ContentReportConfig',
+    'user_report.apps.UserReportConfig',
     'feed.apps.FeedConfig',
     'like.apps.LikeConfig',
     'comment.apps.CommentConfig',
