@@ -13,6 +13,7 @@ import {
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useDispatch } from 'react-redux';
 import { reportPost } from '../../modules/post';
+import { reportUser } from '../../modules/user';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -46,7 +47,13 @@ export default function PostReportButton({ postObj }) {
   };
 
   // TODO: 사용자 신고 기능 연결
-  const onClickReportUser = () => {};
+  const onClickReportUser = async () => {
+    await dispatch(
+      reportUser({
+        reported_user_id: postObj.author_detail.id
+      })
+    );
+  };
 
   return (
     <ReportButtonWrapper>
