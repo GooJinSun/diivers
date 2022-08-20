@@ -355,12 +355,14 @@ export const reportPost = (reportInfo) => {
   return async (dispatch) => {
     dispatch({ type: REPORT_POST_REQUEST });
     try {
-      const res = await axios.post('content_reports/', reportInfo);
+      await axios.post('content_reports/', reportInfo);
       // response 어떻게 오냐에 따라서 언제 dispatch 해줄지 정해줄 것
-      if (res) dispatch({ type: REPORT_POST_SUCCESS });
     } catch (error) {
       dispatch({ type: REPORT_POST_FAILURE, error });
+      return;
     }
+
+    dispatch({ type: REPORT_POST_SUCCESS });
   };
 };
 

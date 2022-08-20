@@ -172,12 +172,12 @@ export const reportUser = (reportInfo) => {
     if (reportInfo.reported_user_id === userId) throw Error;
     dispatch({ type: REPORT_USER_REQUEST });
     try {
-      const res = await axios.post('user_reports/', reportInfo);
-      // response 어떻게 오냐에 따라서 언제 dispatch 해줄지 정해줄 것
-      if (res) dispatch({ type: REPORT_USER_SUCCESS });
+      await axios.post('user_reports/', reportInfo);
     } catch (error) {
       dispatch({ type: REPORT_USER_FAILURE, error });
+      return;
     }
+    dispatch({ type: REPORT_USER_SUCCESS });
   };
 };
 
