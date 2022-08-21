@@ -42,9 +42,13 @@ instance.interceptors.response.use(
 
     const originalRequest = error.config;
 
-    //  refresh token이 만료된 경우는 useLogOutIfRefreshTokenExpired에서 처리
-    if (originalRequest.url === 'user/token/refresh') {
-      return;
+    // refresh token이 만료된 경우는 useLogOutIfRefreshTokenExpired에서 처리
+    // 로그인 오류(닉네임/비밀번호 오류)에도 user/token/은 400이 아닌 401 응답
+    if (
+      originalRequest.url === 'user/token/refresh/' ||
+      originalRequest.url === 'user/token/'
+    ) {
+      return Promise.reject(error);
     }
 
     // access token이 만료된 경우 refresh 토큰 refresh 요청
