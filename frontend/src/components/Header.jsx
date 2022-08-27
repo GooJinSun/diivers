@@ -17,7 +17,6 @@ import { primaryColor, borderColor } from '../constants/colors';
 import NotificationDropdownList from './NotificationDropdownList';
 import SearchDropdownList from './SearchDropdownList';
 import { logout } from '../modules/user';
-import { getNotifications } from '../modules/notification';
 import { fetchSearchResults } from '../modules/search';
 import MobileDrawer from './posts/MobileDrawer';
 import MobileFooter from './MobileFooter';
@@ -100,8 +99,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// eslint-disable-next-line react/prop-types
-const Header = ({ isMobile, setRefreshToken }) => {
+const Header = ({ isMobile }) => {
   const classes = useStyles();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -113,6 +111,10 @@ const Header = ({ isMobile, setRefreshToken }) => {
   const searchRef = useRef(null);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+  const currentUserIsLoading =
+    useSelector((state) => state.loadingReducer['user/GET_CURRENT_USER']) ===
+    'REQUEST';
+
   const totalPages = useSelector(
     (state) => state.searchReducer.searchObj?.totalPages
   );
@@ -123,12 +125,6 @@ const Header = ({ isMobile, setRefreshToken }) => {
 
   const unreadNotifications = notifications?.filter((noti) => !noti.is_read);
   const notiBadgeInvisible = unreadNotifications?.length === 0;
-
-  useEffect(() => {
-    if (currentUser) {
-      dispatch(getNotifications());
-    }
-  }, [dispatch, currentUser]);
 
   const handleNotiClose = () => {
     setIsNotiOpen(false);
@@ -155,7 +151,6 @@ const Header = ({ isMobile, setRefreshToken }) => {
 
   const handleClickLogout = () => {
     dispatch(logout());
-    setRefreshToken(null);
     history.push('/login');
   };
 
@@ -218,13 +213,11 @@ const Header = ({ isMobile, setRefreshToken }) => {
       >
         <MenuIcon />
       </IconButton>
-      {isMobile && (
-        <MobileDrawer
-          open={isDrawerOpen}
-          handleDrawerClose={handleDrawerClose}
-          onLogout={handleClickLogout}
-        />
-      )}
+      <MobileDrawer
+        open={isDrawerOpen}
+        handleDrawerClose={handleDrawerClose}
+        onLogout={handleClickLogout}
+      />
     </>
   ) : (
     <>
@@ -284,7 +277,6 @@ const Header = ({ isMobile, setRefreshToken }) => {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-
         <IconButton
           aria-label="account of current user"
           className={classes.iconButton}
@@ -301,7 +293,6 @@ const Header = ({ isMobile, setRefreshToken }) => {
             </HelloUsername>
           </Link>
         </IconButton>
-
         <Button
           variant="outlined"
           size="medium"
@@ -326,14 +317,14 @@ const Header = ({ isMobile, setRefreshToken }) => {
 
   return (
     <>
-      {isMobile && currentUser !== null && (
+      {isMobile && currentUser && (
         <MobileFooter notiBadgeInvisible={notiBadgeInvisible} />
       )}
       <div className={classes.grow}>
         <AppBar position="static" className={classes.header}>
           <Toolbar>
             <Link to="/" className={classes.logo} />
-            {currentUser !== null ? (
+            {currentUserIsLoading ? null : currentUser ? (
               renderHeaderSignedInItems
             ) : (
               <>

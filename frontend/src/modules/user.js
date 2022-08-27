@@ -1,8 +1,9 @@
-import Cookies from 'js.cookie';
-import axios from '../apis';
+import axios, { deleteTokens } from '../apis';
+import { setTokensInCookies } from '../utils/tokenCookiesHelpers';
 
 export const GET_CURRENT_USER_REQUEST = 'user/GET_CURRENT_USER_REQUEST';
 export const GET_CURRENT_USER_SUCCESS = 'user/GET_CURRENT_USER_SUCCESS';
+export const GET_CURRENT_USER_FAILURE = 'user/GET_CURRENT_USER_FAILURE';
 
 export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
@@ -12,6 +13,7 @@ export const LOGIN_REQUEST = 'user/LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'user/LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'user/LOGIN_FAILURE';
 
+export const LOGOUT_REQUEST = 'user/LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'user/LOGOUT_SUCCESS';
 
 export const UPDATE_QUESTION_SELECT_REQUEST =
@@ -52,7 +54,6 @@ export const requestSignUp = (signUpInfo) => {
   return async (dispatch) => {
     dispatch({ type: SIGN_UP_REQUEST });
     try {
-      await axios.get('user/token/anonymous/');
       const { data } = await axios.post('user/signup/', signUpInfo);
       if (data.id) {
         dispatch({
@@ -97,19 +98,15 @@ export const requestLogin = (loginInfo) => {
   return async (dispatch) => {
     dispatch({ type: 'user/LOGIN_REQUEST' });
 
-    let currentUser;
     try {
-      // set jwt token set
       const res = await axios.post('user/token/', loginInfo);
-      Cookies.set('jwt_token_refresh', res.data.refresh);
-      Cookies.set('jwt_token_access', res.data.access);
+      // set jwt token set
+      const { access, refresh } = res.data;
+      setTokensInCookies(access, refresh);
 
-      // try login
-      await axios.post('user/login/', loginInfo);
       // set user info
-      const userInfoRes = await axios.get('/user/me/');
-      currentUser = userInfoRes.data;
-      dispatch({ type: 'user/LOGIN_SUCCESS', currentUser });
+      dispatch(getCurrentUser());
+      dispatch({ type: 'user/LOGIN_SUCCESS' });
     } catch (error) {
       dispatch({ type: 'user/LOGIN_FAILURE', error });
       dispatch({ type: 'user/REMOVE_ERROR' });
@@ -120,8 +117,8 @@ export const requestLogin = (loginInfo) => {
 export const logout = () => async (dispatch) => {
   dispatch({ type: 'user/LOGOUT_REQUEST' });
   try {
-    await axios.get('user/logout');
-    Cookies.remove('jwt_token_refresh');
+    await axios.get('user/logout/');
+    deleteTokens();
   } catch (error) {
     dispatch({ type: 'user/LOGOUT_FAILURE', error });
     return;
@@ -213,7 +210,6 @@ export default function userReducer(state, action) {
     case LOGIN_SUCCESS:
       return {
         ...state,
-        currentUser: action.currentUser,
         loginError: false
       };
     case LOGIN_FAILURE:
@@ -222,7 +218,7 @@ export default function userReducer(state, action) {
         currentUser: null,
         loginError: action.error
       };
-    case LOGOUT_SUCCESS:
+    case LOGOUT_REQUEST:
       return {
         ...state,
         currentUser: null,
@@ -260,6 +256,12 @@ export default function userReducer(state, action) {
       return {
         ...state,
         currentUser: action.currentUser
+      };
+    }
+    case GET_CURRENT_USER_FAILURE: {
+      return {
+        ...state,
+        currentUser: null
       };
     }
     case REMOVE_ERROR: {
