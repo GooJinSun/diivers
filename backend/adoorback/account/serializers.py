@@ -29,8 +29,10 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
+        user.is_active = False
         user.save()
         return user
+
 
 
 class AuthorFriendSerializer(serializers.ModelSerializer):
