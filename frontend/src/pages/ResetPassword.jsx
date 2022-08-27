@@ -52,6 +52,8 @@ export default function ResetPassword() {
   };
 
   const onClickSubmitButton = () => {
+    setIsResetPasswordSuccess(false);
+    setIsResetPasswordFail(false);
     dispatch(requestResetPassword(id, token, passwordInfo));
   };
 

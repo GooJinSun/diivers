@@ -88,6 +88,7 @@ export default function SignUp() {
   };
 
   const onClickSubmitButton = () => {
+    setIsSignUpSuccess(false);
     setIsSubmitted(true);
     setIsUsernameValid(true);
     setIsEmailValid(true);
