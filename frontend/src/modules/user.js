@@ -172,9 +172,10 @@ export const reportUser = (reportInfo) => {
       await axios.post('user_reports/', reportInfo);
     } catch (error) {
       dispatch({ type: REPORT_USER_FAILURE, error });
-      return;
+      return false;
     }
     dispatch({ type: REPORT_USER_SUCCESS });
+    return true;
   };
 };
 

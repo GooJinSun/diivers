@@ -14,6 +14,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useDispatch } from 'react-redux';
 import { reportPost } from '../../modules/post';
 import { reportUser } from '../../modules/user';
+import ConfirmAlertDialog from '../common/ConfirmAlertDialog';
 
 const useStyles = makeStyles(() => ({
   card: {
@@ -30,29 +31,39 @@ const ReportButtonWrapper = styled.div`
 export default function PostReportButton({ postObj }) {
   const classes = useStyles();
   const [showButtons, setShowButtons] = useState(false);
+  const [isReportDialogOpen, setIsReportDialogOpen] = useState(false);
+
   const dispatch = useDispatch();
 
   const ItemText = ({ text }) => (
     <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
   );
 
-  // TODO: 게시글 신고 기능 연결
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
   const onClickReportPost = async () => {
-    await dispatch(
+    const res = await dispatch(
       reportPost({
         target_type: postObj.type,
         target_id: postObj.id
       })
     );
+    if (res) {
+      setIsReportDialogOpen(true);
+    }
   };
 
-  // TODO: 사용자 신고 기능 연결
   const onClickReportUser = async () => {
-    await dispatch(
+    const res = await dispatch(
       reportUser({
         reported_user_id: postObj.author_detail.id
       })
     );
+    if (res) {
+      setIsReportDialogOpen(true);
+    }
   };
 
   return (
@@ -85,6 +96,11 @@ export default function PostReportButton({ postObj }) {
           </List>
         </Card>
       </Grow>
+      <ConfirmAlertDialog
+        onConfirm={refreshPage}
+        message="신고가 완료되었습니다."
+        isOpen={isReportDialogOpen}
+      />
     </ReportButtonWrapper>
   );
 }
