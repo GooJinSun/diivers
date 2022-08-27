@@ -16,6 +16,18 @@ export const LOGIN_FAILURE = 'user/LOGIN_FAILURE';
 export const LOGOUT_REQUEST = 'user/LOGOUT_REQUEST';
 export const LOGOUT_SUCCESS = 'user/LOGOUT_SUCCESS';
 
+export const ACTIVATE_REQUEST = 'user/ACTIVATE_REQUEST';
+export const ACTIVATE_SUCCESS = 'user/ACTIVATE_SUCCESS';
+export const ACTIVATE_FAILURE = 'user/ACTIVATE_FAILURE';
+
+export const RESET_PASSWORD_EMAIL_REQUEST = 'user/RESET_PASSWORD_EMAIL_REQUEST';
+export const RESET_PASSWORD_EMAIL_SUCCESS = 'user/RESET_PASSWORD_EMAIL_SUCCESS';
+export const RESET_PASSWORD_EMAIL_FAILURE = 'user/RESET_PASSWORD_EMAIL_FAILURE';
+
+export const RESET_PASSWORD_REQUEST = 'user/RESET_PASSWORD_REQUEST';
+export const RESET_PASSWORD_SUCCESS = 'user/RESET_PASSWORD_SUCCESS';
+export const RESET_PASSWORD_FAILURE = 'user/RESET_PASSWORD_FAILURE';
+
 export const UPDATE_QUESTION_SELECT_REQUEST =
   'user/UPDATE_QUESTION_SELECT_REQUEST';
 export const UPDATE_QUESTION_SELECT_SUCCESS =
@@ -56,7 +68,6 @@ export const requestSignUp = (signUpInfo) => {
           type: SIGN_UP_SUCCESS,
           currentUser: data
         });
-        dispatch(requestLogin(signUpInfo));
       } else {
         dispatch({
           type: SIGN_UP_FAILURE,
@@ -68,6 +79,42 @@ export const requestSignUp = (signUpInfo) => {
         type: SIGN_UP_FAILURE,
         error: error.response?.data
       });
+    }
+  };
+};
+
+export const requestResetPasswordEmail = (emailInfo) => {
+  return async (dispatch) => {
+    dispatch({ type: RESET_PASSWORD_EMAIL_REQUEST });
+    try {
+      await axios.post(`user/send-reset-password-email/`, emailInfo);
+      dispatch({ type: RESET_PASSWORD_EMAIL_SUCCESS });
+    } catch (error) {
+      dispatch({ type: RESET_PASSWORD_EMAIL_FAILURE });
+    }
+  };
+};
+
+export const requestResetPassword = (id, token, passwordInfo) => {
+  return async (dispatch) => {
+    dispatch({ type: RESET_PASSWORD_REQUEST });
+    try {
+      await axios.patch(`user/reset-password/${id}/${token}/`, passwordInfo);
+      dispatch({ type: RESET_PASSWORD_SUCCESS });
+    } catch (error) {
+      dispatch({ type: RESET_PASSWORD_FAILURE });
+    }
+  };
+};
+
+export const requestActivate = (id, token) => {
+  return async (dispatch) => {
+    dispatch({ type: ACTIVATE_REQUEST });
+    try {
+      await axios.put(`user/activate/${id}/${token}/`);
+      dispatch({ type: ACTIVATE_SUCCESS });
+    } catch (error) {
+      dispatch({ type: ACTIVATE_FAILURE, error });
     }
   };
 };
