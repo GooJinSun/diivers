@@ -351,7 +351,6 @@ export const deletePost = (postId, type) => async (dispatch, getState) => {
 // 사용자 신고
 export const reportPost = (reportInfo) => {
   // ex) request 형식 : reportInfo = { target_type: 'Question', target_id: 12 }
-  // 본인의 포스트 신고하는 것도 block 필요
   return async (dispatch) => {
     dispatch({ type: REPORT_POST_REQUEST });
     try {
