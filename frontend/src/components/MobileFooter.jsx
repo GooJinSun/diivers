@@ -92,7 +92,12 @@ export default function MobileFooter({ notiBadgeInvisible }) {
         value="/notifications"
         label="알림"
         icon={
-          <Badge variant="dot" invisible={notiBadgeInvisible} color="primary">
+          <Badge
+            variant="dot"
+            invisible={notiBadgeInvisible}
+            color="primary"
+            overlap="rectangular"
+          >
             <NotificationsIcon />
           </Badge>
         }

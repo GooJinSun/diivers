@@ -273,7 +273,12 @@ const Header = ({ isMobile }) => {
           disableRipple
           color="secondary"
         >
-          <Badge variant="dot" invisible={notiBadgeInvisible} color="primary">
+          <Badge
+            variant="dot"
+            invisible={notiBadgeInvisible}
+            color="primary"
+            overlap="rectangular"
+          >
             <NotificationsIcon />
           </Badge>
         </IconButton>
