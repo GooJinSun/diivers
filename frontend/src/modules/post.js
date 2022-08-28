@@ -348,22 +348,6 @@ export const deletePost = (postId, type) => async (dispatch, getState) => {
   }
 };
 
-// 사용자 신고
-export const reportPost = (reportInfo) => {
-  // ex) request 형식 : reportInfo = { target_type: 'Question', target_id: 12 }
-  return async (dispatch) => {
-    dispatch({ type: REPORT_POST_REQUEST });
-    try {
-      await axios.post('content_reports/', reportInfo);
-    } catch (error) {
-      dispatch({ type: REPORT_POST_FAILURE, error });
-      return false;
-    }
-    dispatch({ type: REPORT_POST_SUCCESS });
-    return true;
-  };
-};
-
 const getNewCommentsWithReply = (comments, reply) => {
   const newComments = comments?.map((comment) => {
     if (comment.id === reply.target_id) {

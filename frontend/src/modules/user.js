@@ -160,25 +160,6 @@ export const getSelectedUser = (id) => async (dispatch) => {
   });
 };
 
-// 사용자 신고
-export const reportUser = (reportInfo) => {
-  // ex) request 형식 : reportInfo = { reported_user_id: 120 }
-  return async (dispatch, getState) => {
-    const userId = getState().userReducer.currentUser?.id;
-    // 본인이 본인을 차단하지는 못하도록 처리
-    if (reportInfo.reported_user_id === userId) throw Error;
-    dispatch({ type: REPORT_USER_REQUEST });
-    try {
-      await axios.post('user_reports/', reportInfo);
-    } catch (error) {
-      dispatch({ type: REPORT_USER_FAILURE, error });
-      return false;
-    }
-    dispatch({ type: REPORT_USER_SUCCESS });
-    return true;
-  };
-};
-
 export default function userReducer(state, action) {
   if (typeof state === 'undefined') {
     return initialState;
