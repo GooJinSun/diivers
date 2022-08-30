@@ -30,7 +30,6 @@ django-cors-headers==3.5.0
 django-cron==0.5.1
 django-extensions==3.0.9
 django-import-export==2.4.0
-django-mysql==3.9.0
 django-polymorphic==3.0.0
 django-queryset-csv==1.1.0
 django-redis==4.12.1
@@ -79,7 +78,6 @@ Pillow==8.0.1
 poyo==0.5.0
 prompt-toolkit==3.0.8
 psutil==5.7.3
-psycopg2==2.8.6
 pyasn1==0.4.8
 pycodestyle==2.6.0
 pycparser==2.20

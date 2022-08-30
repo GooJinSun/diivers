@@ -20,6 +20,8 @@ from django.urls import include, path
 
 
 urlpatterns = [
+    path('api/content_reports/', include('content_report.urls')),
+    path('api/user_reports/', include('user_report.urls')),
     path('api/likes/', include('like.urls')),
     path('api/comments/', include('comment.urls')),
     path('api/notifications/', include('notification.urls')),
