@@ -14,7 +14,7 @@ const LoginWrapper = styled.div`
   }
 `;
 
-const SignUpButton = styled.button`
+const SubButton = styled.button`
   float: right;
   border: none;
   background: #fff;
@@ -48,7 +48,8 @@ export default function Login() {
 
   useEffect(() => {
     if (!currentUser) return;
-    history.push('/');
+    if (!currentUser.question_history) history.push('/select-questions');
+    else history.push('/');
   }, [currentUser]);
 
   const handleChange = (e) => {
@@ -68,6 +69,10 @@ export default function Login() {
 
   const onClickSignupButton = () => {
     history.push('/signup');
+  };
+
+  const onClickLostPassword = () => {
+    history.push('/lost-password');
   };
 
   return (
@@ -92,7 +97,7 @@ export default function Login() {
       />
       {loginWarning && (
         <WarningMessage id="login-error-message">
-          닉네임 혹은 비밀번호를 다시 확인해주세요!
+          이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다.
         </WarningMessage>
       )}
       <CommonButton
@@ -103,14 +108,22 @@ export default function Login() {
       >
         로그인
       </CommonButton>
-      <SignUpButton
+      <SubButton
         type="button"
         id="signup-button"
         margin="5px 0"
+        onClick={onClickLostPassword}
+      >
+        비밀번호를 잊어버렸어요
+      </SubButton>
+      <SubButton
+        type="button"
+        id="signup-button"
+        margin="40px 0"
         onClick={onClickSignupButton}
       >
         회원가입
-      </SignUpButton>
+      </SubButton>
     </LoginWrapper>
   );
 }

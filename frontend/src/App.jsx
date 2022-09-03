@@ -10,6 +10,7 @@ import Header from './components/Header';
 import QuestionListWidget from './components/QuestionListWidget';
 import FriendListWidget from './components/FriendListWidget';
 import SignUp from './pages/SignUp';
+import Activate from './pages/Activate';
 import QuestionSelection from './pages/QuestionSelection';
 import FriendFeed from './pages/FriendFeed';
 import AnonymousFeed from './pages/AnonymousFeed';
@@ -29,6 +30,8 @@ import { initGA, trackPage } from './ga';
 import useLoginWithToken from './hooks/auth/useLoginWithToken';
 import useIsMobile from './hooks/env/useIsMobile';
 import useLogOutIfRefreshTokenExpired from './hooks/auth/useLogOutIfRefreshTokenExpired';
+import LostPassword from './pages/LostPassword';
+import ResetPassword from './pages/ResetPassword';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -83,6 +86,13 @@ const App = () => {
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/activate/:id/:token" component={Activate} />
+            <Route exact path="/lost-password" component={LostPassword} />
+            <Route
+              exact
+              path="/reset-password/:id/:token"
+              component={ResetPassword}
+            />
             <Route
               exact
               path="/select-questions"

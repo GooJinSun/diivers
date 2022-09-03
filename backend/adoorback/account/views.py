@@ -9,7 +9,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 
 from account.models import FriendRequest
@@ -19,21 +18,10 @@ from account.serializers import UserProfileSerializer, \
 from feed.serializers import QuestionAnonymousSerializer
 from feed.models import Question
 from adoorback.validators import adoor_exception_handler
+from.email import email_manager
 from adoorback.permissions import IsNotBlocked
 
 User = get_user_model()
-
-
-class JSONResponse(HttpResponse):
-    """
-    An HttpResponse that renders its content into JSON.
-    """
-
-    def __init__(self, data, **kwargs):
-        content = JSONRenderer().render(data)
-        kwargs['content_type'] = 'application/json'
-        super().__init__(content, **kwargs)
-
 
 @transaction.atomic
 @ensure_csrf_cookie
@@ -45,7 +33,6 @@ def token_anonymous(request):
 
 
 class UserSignup(generics.CreateAPIView):
-    queryset = User.objects.all()
     serializer_class = UserProfileSerializer
 
     def get_exception_handler(self):
@@ -55,6 +42,10 @@ class UserSignup(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+        user = User.objects.get(username=request.data.get('username'))
+        email_manager.send_verification_email(user)
+
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=201, headers=headers)
 
@@ -70,6 +61,29 @@ class UserSignup(generics.CreateAPIView):
                                     origin=admin,
                                     message=f"{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?",
                                     redirect_url='/anonymous')
+
+
+class UserActivate(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+
+    def get_exception_handler(self):
+        print(self.request.headers)
+        return adoor_exception_handler
+
+    def update(self, request, *args, **kwargs):
+        token = self.kwargs.get('token')
+        user = self.get_object()
+        if email_manager.check_activate_token(user, token):
+            self.activate(user)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=400)
+
+    @transaction.atomic
+    def activate(self, user):
+        user.is_active = True
+        user.save()
 
 
 @transaction.atomic
@@ -90,6 +104,44 @@ def user_login(request):
         return HttpResponse(status=401)
 
     return HttpResponseNotAllowed(['POST'])
+
+
+class SendResetPasswordEmail(generics.CreateAPIView):
+    serializer_class = UserProfileSerializer
+
+    def get_exception_handler(self):
+        return adoor_exception_handler
+    
+    def get_object(self):
+        return User.objects.filter(email=self.request.data['email']).first()
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        if user and user.is_active:
+            email_manager.send_reset_password_email(user)
+            
+        return HttpResponse(status=200) # whether email is valid or not, response will be always success-response
+
+
+class ResetPassword(generics.UpdateAPIView):
+    serializer_class = UserProfileSerializer
+    queryset = User.objects.all()
+
+    def get_exception_handler(self):
+        return adoor_exception_handler
+
+    def update(self, request, *args, **kwargs):
+        token = self.kwargs.get('token')
+        user = self.get_object()
+        if email_manager.check_reset_password_token(user, token):
+            self.update_password(user, self.request.data['password'])
+            return HttpResponse(status=200)
+        return HttpResponse(status=400)
+
+    @transaction.atomic
+    def update_password(self, user, raw_password):
+        user.set_password(raw_password)
+        user.save()
 
 
 class SignupQuestions(generics.ListAPIView):

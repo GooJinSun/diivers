@@ -45,3 +45,5 @@ ALLOWED_HOSTS = ['ec2-3-34-134-169.ap-northeast-2.compute.amazonaws.com', 'local
 #    "https://develop.d3t1tnno5uz3sa.amplifyapp.com",
 #    "http://localhost:3000",
 # ]
+
+FRONTEND_URL = 'https://adoor.world'
