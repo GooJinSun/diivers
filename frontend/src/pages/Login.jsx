@@ -97,7 +97,7 @@ export default function Login() {
       />
       {loginWarning && (
         <WarningMessage id="login-error-message">
-          닉네임 혹은 비밀번호를 다시 확인해주세요!
+          이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다.
         </WarningMessage>
       )}
       <CommonButton

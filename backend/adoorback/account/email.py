@@ -23,7 +23,7 @@ class EmailManager():
         token = self.pw_reset_token_generator.make_token(user)
         mail_title = "비밀번호 변경 링크입니다."
         mail_to = [user.email]
-        message_data = f"{user.username} 님, 아래 링크를 클릭하면 비밀번호 변경이 가능합니다.\n\n회원가입 링크 : http://localhost:3000/reset-password/{user.id}/{token}\n\n감사합니다."
+        message_data = f"{user.username}님, 아래 링크를 클릭하면 비밀번호 변경이 가능합니다.\n\n회원가입 링크 : http://localhost:3000/reset-password/{user.id}/{token}\n\n감사합니다."
         email = EmailMessage(mail_title, message_data, to=mail_to)
         email.send()
 

@@ -141,11 +141,11 @@ export default function SignUp() {
           />
 
           <CommonButton
-            disabled={!isFilled}
+            disabled={isSubmitted || !isFilled}
             margin="40px 0"
             onClick={onClickSubmitButton}
           >
-            다음 단계로
+            회원가입
           </CommonButton>
           <ButtonWrapper>
             <LoginButton
