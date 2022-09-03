@@ -1,5 +1,5 @@
-import os
 import six
+from django.conf import settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 
@@ -15,7 +15,7 @@ class EmailManager():
         token = self.activate_token_generator.make_token(user)
         mail_title = "이메일 인증을 완료해주세요"
         mail_to = [user.email]
-        message_data = f"아래 링크를 클릭하면 회원가입 인증이 완료됩니다.\n\n회원가입 링크 : http://localhost:3000/activate/{user.id}/{token}\n\n감사합니다."
+        message_data = f"아래 링크를 클릭하면 회원가입 인증이 완료됩니다.\n\n회원가입 링크 : {settings.FRONTEND_URL}/activate/{user.id}/{token}\n\n감사합니다."
         email = EmailMessage(mail_title, message_data, to=mail_to)
         email.send()
 
@@ -23,7 +23,7 @@ class EmailManager():
         token = self.pw_reset_token_generator.make_token(user)
         mail_title = "비밀번호 변경 링크입니다."
         mail_to = [user.email]
-        message_data = f"{user.username}님, 아래 링크를 클릭하면 비밀번호 변경이 가능합니다.\n\n회원가입 링크 : http://localhost:3000/reset-password/{user.id}/{token}\n\n감사합니다."
+        message_data = f"{user.username}님, 아래 링크를 클릭하면 비밀번호 변경이 가능합니다.\n\n회원가입 링크 : {settings.FRONTEND_URL}/reset-password/{user.id}/{token}\n\n감사합니다."
         email = EmailMessage(mail_title, message_data, to=mail_to)
         email.send()
 
