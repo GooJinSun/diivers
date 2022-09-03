@@ -145,7 +145,7 @@ export default function PostItem({
             onClickDelete={() => setIsDeleteDialogOpen(true)}
           />
         ) : (
-          <PostReportButton />
+          <PostReportButton postObj={postObj} />
         )}
       </PostItemHeaderWrapper>
       {postObj.question && <QuestionBox questionObj={postObj.question} />}

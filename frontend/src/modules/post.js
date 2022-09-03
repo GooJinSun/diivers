@@ -62,6 +62,10 @@ export const DELETE_POST_REQUEST = 'post/DELETE_POST_REQUEST';
 export const DELETE_POST_SUCCESS = 'post/DELETE_POST_SUCCESS';
 export const DELETE_POST_FAILURE = 'post/DELETE_POST_FAILURE';
 
+export const REPORT_POST_REQUEST = 'post/REPORT_POST_REQUEST';
+export const REPORT_POST_SUCCESS = 'post/REPORT_POST_SUCCESS';
+export const REPORT_POST_FAILURE = 'post/REPORT_POST_FAILURE';
+
 const initialState = {
   anonymousPosts: [],
   friendPosts: [],

@@ -19,6 +19,7 @@ from feed.serializers import QuestionAnonymousSerializer
 from feed.models import Question
 from adoorback.validators import adoor_exception_handler
 from.email import email_manager
+from adoorback.permissions import IsNotBlocked
 
 User = get_user_model()
 
@@ -212,7 +213,7 @@ class CurrentUserProfile(generics.RetrieveUpdateAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserFriendshipStatusSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsNotBlocked]
 
     def get_exception_handler(self):
         return adoor_exception_handler

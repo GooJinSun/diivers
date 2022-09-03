@@ -175,6 +175,10 @@ class Post(AdoorModel):
             models.Index(fields=['-id']),
         ]
 
+    @property
+    def target_type(self):
+        return self.target.type
+ 
 
 @transaction.atomic
 @receiver(post_save, sender=Question)
@@ -216,6 +220,8 @@ def create_response_request_noti(instance, **kwargs):
     origin = instance.question
     requester = instance.requester
     requestee = instance.requestee
+    if requester.id in requestee.user_report_blocked_ids: # do not create notification from/for blocked user
+        return
     message = f'똑똑똑~ {requester.username}님으로부터 질문이 왔어요!'
     redirect_url = f'/questions/{origin.id}'
     Notification.objects.create(actor=requester, user=requestee,
@@ -240,6 +246,8 @@ def create_request_answered_noti(instance, created, **kwargs):
 
     for request in related_requests:
         user = request.requester
+        if actor.id in user.user_report_blocked_ids: # do not create notification from/for blocked user
+            return
         message = f'{actor.username}님이 회원님이 보낸 질문에 답했습니다.'
         Notification.objects.create(actor=actor, user=user,
                                     origin=origin, target=target,

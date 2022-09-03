@@ -7,7 +7,8 @@ import {
   Grow,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Typography
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 
@@ -22,6 +23,10 @@ const useStyles = makeStyles(() => ({
 const PostAuthorWrapper = styled.div`
   justify-self: right;
 `;
+
+const ItemText = ({ text }) => (
+  <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
+);
 
 export default function PostAuthorButtons({
   isQuestion,
@@ -48,7 +53,7 @@ export default function PostAuthorButtons({
               <ListItem button>
                 <ListItemText
                   id="post-edit-button"
-                  primary="수정하기"
+                  primary={<ItemText text="수정하기" />}
                   onClick={onClickEdit}
                 />
               </ListItem>
@@ -56,7 +61,7 @@ export default function PostAuthorButtons({
             <ListItem button>
               <ListItemText
                 id="post-delete-button"
-                primary="삭제하기"
+                primary={<ItemText text="삭제하기" />}
                 onClick={onClickDelete}
               />
             </ListItem>
