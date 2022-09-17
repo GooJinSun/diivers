@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import datetime
 import os.path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,18 +31,21 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        'adoorback.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ],
 }
 
-JWT_AUTH = {
-    'JWT_VERIFY': False,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(seconds=30000),
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-}
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+}
 
 CORS_ORIGIN_WHITELIST = [
     "https://develop.d3t1tnno5uz3sa.amplifyapp.com",
@@ -53,6 +57,8 @@ BASE_URL = 'http://localhost:8000'
 # Application definition
 
 INSTALLED_APPS = [
+    'content_report.apps.ContentReportConfig',
+    'user_report.apps.UserReportConfig',
     'feed.apps.FeedConfig',
     'like.apps.LikeConfig',
     'comment.apps.CommentConfig',
@@ -182,3 +188,11 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com' 
+EMAIL_HOST_USER = 'adoor.team@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ['EMAIL_HOST_PASSWORD']
+SERVER_EMAIL = 'adoor.team'

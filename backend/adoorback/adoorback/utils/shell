@@ -10,7 +10,7 @@ from adoorback.content_types import get_article_type, get_question_type, get_com
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-set_seed(10)
+set_seed(50)
 
 user = User.objects.last()
 

@@ -6,7 +6,6 @@ from account import views
 
 urlpatterns = [
     # Token related
-    path('token/anonymous/', views.token_anonymous, name="token-anonymous"),
     path('token/', ensure_csrf_cookie(TokenObtainPairView.as_view()), name='token-obtain-pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),
@@ -14,8 +13,11 @@ urlpatterns = [
     # Auth related
     path('login/', views.user_login, name='user-login'),
     path('signup/', views.UserSignup.as_view(), name='user-signup'),
+    path('activate/<int:pk>/<str:token>/', views.UserActivate.as_view(), name='user-activate'),
     path('select-questions/', views.SignupQuestions.as_view(),
          name='signup-questions'),
+    path('send-reset-password-email/', views.SendResetPasswordEmail.as_view(), name='user-send-reset-password-email'),
+    path('reset-password/<int:pk>/<str:token>/', views.ResetPassword.as_view(), name='user-reset-password'),
 
     # User Profile related
     path('', views.UserList.as_view(), name='user-list'),
@@ -25,7 +27,7 @@ urlpatterns = [
     # Current User Related
     path('me/', views.CurrentUserProfile.as_view(), name='current-user'),
     path('me/friends/', views.CurrentUserFriendList.as_view(), name='current-user-friends'),
-
+ 
     # Friendship related
     path('friend/<int:pk>/', views.UserFriendDestroy.as_view(), name='user-friend-destroy'),
 

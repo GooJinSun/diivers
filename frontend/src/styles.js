@@ -75,18 +75,19 @@ export const MainWrapper = styled.main`
     width: 100vw;
     margin-top: 70px;
   }
-  width: 1280px;
+  width: ${(props) => (props.isSelectQuestionPage ? '100%' : '1280px')};
   margin: 80px auto 100px auto;
   display: flex;
+  justify-content: center;
 `;
 
 export const FeedWrapper = styled.div`
   @media (max-width: 650px) {
     width: calc(100vw - 12px);
-    margin: 0 12px;
+    padding: 0 12px;
   }
   width: 720px;
-  margin: 0 40px;
+  padding: 0 40px;
 `;
 
 export const WidgetWrapper = styled.div`

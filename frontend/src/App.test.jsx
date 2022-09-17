@@ -14,6 +14,7 @@ import axios from './apis';
 import * as actionCreators from './modules/user';
 
 import { mockNotifications } from './constants';
+import { JWT_REFRESH_TOKEN } from './constants/cookies';
 
 global.scrollTo = jest.fn();
 
@@ -65,7 +66,7 @@ describe('App unit mount test', () => {
 
   it('should get current user when refresh token is set', () => {
     let wrapper = getWrapper();
-    let refresh_token = Cookies.get('jwt_token_refresh');
+    let refresh_token = Cookies.get(JWT_REFRESH_TOKEN);
     const mockUser = {
       id: 4,
       username: 'aa',
@@ -91,7 +92,7 @@ describe('App unit mount test', () => {
     wrapper.unmount();
     wrapper = getWrapper();
 
-    refresh_token = Cookies.set('jwt_token_refresh', 'test_token');
+    refresh_token = Cookies.set(JWT_REFRESH_TOKEN, 'test_token');
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
