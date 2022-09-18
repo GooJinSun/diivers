@@ -10,9 +10,9 @@ DEBUG = True
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'adoor',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'adoor2020:)',
+        'PASSWORD': os.environ['DB_PASSWORD'],
         'HOST': 'localhost',
         'POST': '',
     },
