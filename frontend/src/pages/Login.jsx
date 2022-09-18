@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import Cookies from 'js.cookie';
 import { CommonInput, CommonButton } from '../styles';
 import { requestLogin } from '../modules/user';
 
@@ -15,7 +14,7 @@ const LoginWrapper = styled.div`
   }
 `;
 
-const SignUpButton = styled.button`
+const SubButton = styled.button`
   float: right;
   border: none;
   background: #fff;
@@ -31,20 +30,27 @@ const WarningMessage = styled.div`
 
 WarningMessage.displayName = 'WarningMessage';
 
-export default function Login({ setRefreshToken }) {
+export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
+
   const [loginInfo, setLoginInfo] = useState({ username: '', password: '' });
   const loginError = useSelector((state) => state.userReducer.loginError);
   const [loginWarning, setLoginWarning] = useState(false);
-  const loginSuccess =
-    useSelector((state) => state.loadingReducer['user/LOGIN']) === 'SUCCESS';
+
+  const currentUser = useSelector((state) => state.userReducer.currentUser);
 
   useEffect(() => {
     if (loginError) {
       setLoginWarning(true);
     }
   }, [loginError]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    if (!currentUser.question_history) history.push('/select-questions');
+    else history.push('/');
+  }, [currentUser]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,12 +61,6 @@ export default function Login({ setRefreshToken }) {
     dispatch(requestLogin(loginInfo));
   };
 
-  useEffect(() => {
-    if (loginSuccess) {
-      setRefreshToken(Cookies.get('jwt_token_refresh'));
-    }
-  }, [loginSuccess]);
-
   const onKeySubmit = (e) => {
     if (e.key === 'Enter') {
       dispatch(requestLogin(loginInfo));
@@ -69,6 +69,10 @@ export default function Login({ setRefreshToken }) {
 
   const onClickSignupButton = () => {
     history.push('/signup');
+  };
+
+  const onClickLostPassword = () => {
+    history.push('/lost-password');
   };
 
   return (
@@ -93,7 +97,7 @@ export default function Login({ setRefreshToken }) {
       />
       {loginWarning && (
         <WarningMessage id="login-error-message">
-          닉네임 혹은 비밀번호를 다시 확인해주세요!
+          이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다.
         </WarningMessage>
       )}
       <CommonButton
@@ -104,14 +108,22 @@ export default function Login({ setRefreshToken }) {
       >
         로그인
       </CommonButton>
-      <SignUpButton
+      <SubButton
         type="button"
         id="signup-button"
         margin="5px 0"
+        onClick={onClickLostPassword}
+      >
+        비밀번호를 잊어버렸어요
+      </SubButton>
+      <SubButton
+        type="button"
+        id="signup-button"
+        margin="40px 0"
         onClick={onClickSignupButton}
       >
         회원가입
-      </SignUpButton>
+      </SubButton>
     </LoginWrapper>
   );
 }

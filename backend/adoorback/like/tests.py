@@ -103,7 +103,7 @@ class LikeAPITestCase(APITestCase):
             pk = Like.objects.last().id
             response = self.delete(self.reverse('like-destroy', pk=pk))
             self.assertEqual(response.status_code, 403)
-
+ 
 
 class LikeNotiAPITestCase(APITestCase):
 
@@ -174,7 +174,7 @@ class LikeNotiAPITestCase(APITestCase):
                                              target=Article.objects.last())
             num_notis_before = Notification.objects.count()
             data = {"target_type": "Comment", "target_id": comment.id, "content": "test_reply"}
-            response = self.post('like-list', data=data, extra={'format': 'json'})
+            response = self.post('like-list', data=data, extra={'format': 'json'}) 
             self.assertEqual(response.status_code, 201)
 
             num_notis_after = Notification.objects.count()

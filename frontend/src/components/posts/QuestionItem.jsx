@@ -19,6 +19,7 @@ import { mockFriendList } from '../../constants';
 import { likePost, unlikePost } from '../../modules/like';
 import { deletePost } from '../../modules/post';
 import AlertDialog from '../common/AlertDialog';
+import PostReportButton from './PostReportButton';
 
 const QuestionItemWrapper = styled.div`
   @media (max-width: 650px) {
@@ -76,6 +77,7 @@ export default function QuestionItem({
     location?.pathname.includes('anonymous') ||
     location?.search?.includes('anonymous=True');
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+
   const isAuthor = currentUser?.id === questionObj.author_detail.id;
 
   const classes = useStyles();
@@ -156,11 +158,13 @@ export default function QuestionItem({
       />
       <PostItemHeaderWrapper>
         <AuthorProfile author={questionObj.author_detail} />
-        {!questionObj.is_admin_question && isAuthor && (
+        {isAuthor ? (
           <PostAuthorButtons
             isQuestion
             onClickDelete={() => setIsDeleteDialogOpen(true)}
           />
+        ) : (
+          <PostReportButton postObj={questionObj} />
         )}
       </PostItemHeaderWrapper>
       <Question>

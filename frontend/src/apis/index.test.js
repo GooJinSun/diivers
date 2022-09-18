@@ -1,13 +1,14 @@
 import Cookies from 'js.cookie';
 import axios from 'axios';
+import { JWT_REFRESH_TOKEN } from '../constants/cookies';
 
 jest.mock('axios');
 
 describe('interceptor', () => {
-  it('get jwt_token_access when response status is 401', async () => {
-    Cookies.set('jwt_token_refresh', 'test_token');
+  it('get jwt_token_access when response status is 403', async () => {
+    Cookies.set(JWT_REFRESH_TOKEN, 'test_token');
 
-    const spy = jest.spyOn(axios, 'get').mockImplementation(() => {
+    const spy = jest.spyOn(axios, 'post').mockImplementation(() => {
       return new Promise((resolve) => {
         const result = {
           data: {
@@ -21,7 +22,7 @@ describe('interceptor', () => {
     axios.interceptors.response.use = jest.fn((successCb, failCb) => {
       failCb({
         response: {
-          status: 401
+          status: 403
         },
         config: {
           url: '/home'
@@ -29,8 +30,8 @@ describe('interceptor', () => {
       });
     });
 
-    if (Cookies.get('jwt_token_refresh')) {
-      const tokenRes = await axios.get('/user/token');
+    if (Cookies.get(JWT_REFRESH_TOKEN)) {
+      const tokenRes = await axios.post('/user/token');
       expect(tokenRes?.data.access).toEqual('test_token');
 
       expect(spy).toHaveBeenCalled();

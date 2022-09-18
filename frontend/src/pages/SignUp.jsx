@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import Cookies from 'js.cookie';
 import { requestSignUp } from '../modules/user';
 import { CommonInput, CommonButton } from '../styles';
 
@@ -46,35 +45,31 @@ const PrivacyButton = styled.button`
   font-size: 16px;
 `;
 
-export default function SignUp({ setRefreshToken }) {
+export default function SignUp() {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { currentUser, signUpError } = useSelector(
-    (state) => state.userReducer
-  );
+  const currentUser = useSelector((state) => state.userReducer.currentUser);
+
+  useEffect(() => {
+    if (currentUser) history.push('/');
+  }, [currentUser]);
+
+  const { signUpError } = useSelector((state) => state.userReducer);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isUsernameValid, setIsUsernameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const loginSuccess =
-    useSelector((state) => state.loadingReducer['user/LOGIN']) === 'SUCCESS';
+  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
+
+  const signUpSuccess =
+    useSelector((state) => state.loadingReducer['user/SIGN_UP']) === 'SUCCESS';
 
   useEffect(() => {
-    if (currentUser && currentUser?.id) {
-      history.push('/select-questions');
-    }
-  }, [currentUser, history]);
-
-  useEffect(() => {
-    if (!isSubmitted) return;
+    setIsSignUpSuccess(signUpSuccess);
     if (signUpError && signUpError.username) setIsUsernameValid(false);
     if (signUpError && signUpError.email) setIsEmailValid(false);
-  }, [isSubmitted, signUpError]);
-
-  useEffect(() => {
-    setRefreshToken(Cookies.get('jwt_token_refresh'));
-  }, [loginSuccess]);
+  }, [signUpSuccess, signUpError]);
 
   const [signUpInfo, setSignUpInfo] = useState({
     email: '',
@@ -93,11 +88,11 @@ export default function SignUp({ setRefreshToken }) {
   };
 
   const onClickSubmitButton = () => {
+    setIsSignUpSuccess(false);
     setIsSubmitted(true);
     setIsUsernameValid(true);
     setIsEmailValid(true);
     dispatch(requestSignUp(signUpInfo));
-    setRefreshToken(Cookies.get('jwt_token_refresh'));
   };
 
   const onKeySubmit = (e) => {
@@ -108,64 +103,70 @@ export default function SignUp({ setRefreshToken }) {
 
   return (
     <SignUpWrapper>
-      <h1 id="signup-title">회원가입</h1>
-      <CommonInput
-        name="username"
-        id="username-input"
-        value={signUpInfo.username}
-        placeholder="닉네임"
-        onChange={onInputChange}
-        invalid={isSubmitted && !isUsernameValid}
-      />
-      {isSubmitted && !isUsernameValid && (
-        <WarningMessage>닉네임이 유효하지 않습니다 :(</WarningMessage>
-      )}
-      <CommonInput
-        id="email-input"
-        name="email"
-        value={signUpInfo.email}
-        placeholder="이메일"
-        onChange={onInputChange}
-        invalid={isSubmitted && !isEmailValid}
-      />
-      {isSubmitted && !isEmailValid && (
-        <WarningMessage>이메일이 유효하지 않습니다 :(</WarningMessage>
-      )}
-      <CommonInput
-        name="password"
-        type="password"
-        id="password-input"
-        value={signUpInfo.password}
-        placeholder="비밀번호"
-        onChange={onInputChange}
-        onKeyDown={onKeySubmit}
-      />
+      {isSubmitted && isSignUpSuccess ? (
+        <div>이메일 인증 완료해주세요.</div>
+      ) : (
+        <div>
+          <h1 id="signup-title">회원가입</h1>
+          <CommonInput
+            name="username"
+            id="username-input"
+            value={signUpInfo.username}
+            placeholder="닉네임"
+            onChange={onInputChange}
+            invalid={isSubmitted && !isUsernameValid}
+          />
+          {isSubmitted && !isUsernameValid && (
+            <WarningMessage>닉네임이 유효하지 않습니다 :(</WarningMessage>
+          )}
+          <CommonInput
+            id="email-input"
+            name="email"
+            value={signUpInfo.email}
+            placeholder="이메일"
+            onChange={onInputChange}
+            invalid={isSubmitted && !isEmailValid}
+          />
+          {isSubmitted && !isEmailValid && (
+            <WarningMessage>이메일이 유효하지 않습니다 :(</WarningMessage>
+          )}
+          <CommonInput
+            name="password"
+            type="password"
+            id="password-input"
+            value={signUpInfo.password}
+            placeholder="비밀번호"
+            onChange={onInputChange}
+            onKeyDown={onKeySubmit}
+          />
 
-      <CommonButton
-        disabled={!isFilled}
-        margin="40px 0"
-        onClick={onClickSubmitButton}
-      >
-        다음 단계로
-      </CommonButton>
-      <ButtonWrapper>
-        <LoginButton
-          type="button"
-          id="login-button"
-          onClick={() => history.push('/login')}
-        >
-          로그인
-        </LoginButton>
-        <PrivacyButton
-          type="button"
-          id="privacy-button"
-          onClick={() => {
-            window.location.href = './privacy.html';
-          }}
-        >
-          개인정보처리방침
-        </PrivacyButton>
-      </ButtonWrapper>
+          <CommonButton
+            disabled={isSubmitted || !isFilled}
+            margin="40px 0"
+            onClick={onClickSubmitButton}
+          >
+            회원가입
+          </CommonButton>
+          <ButtonWrapper>
+            <LoginButton
+              type="button"
+              id="login-button"
+              onClick={() => history.push('/login')}
+            >
+              로그인
+            </LoginButton>
+            <PrivacyButton
+              type="button"
+              id="privacy-button"
+              onClick={() => {
+                window.location.href = './privacy.html';
+              }}
+            >
+              개인정보처리방침
+            </PrivacyButton>
+          </ButtonWrapper>
+        </div>
+      )}
     </SignUpWrapper>
   );
 }
