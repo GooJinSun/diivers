@@ -5,9 +5,11 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.db import IntegrityError
 
 from like.models import Like
 from notification.models import Notification
+from user_tag.models import UserTag
 from adoorback.models import AdoorModel
 from adoorback.utils.content_types import get_comment_type, get_generic_relation_type
 
@@ -36,7 +38,8 @@ class Comment(AdoorModel):
 
     replies = GenericRelation('self')
     comment_likes = GenericRelation(Like)
- 
+    comment_user_tags = GenericRelation(UserTag)
+
     comment_targetted_notis = GenericRelation(Notification,
                                               content_type_field='target_type',
                                               object_id_field='target_id')
@@ -84,7 +87,8 @@ def create_noti(instance, **kwargs):
     notification = Notification.objects.filter(actor=actor,
                                                user=user,
                                                origin_id=origin.id,
-                                               origin_type=get_generic_relation_type(origin.type))
+                                               origin_type=get_generic_relation_type(origin.type),
+                                               target_id=target.id)
     if notification.count() > 0:  # same notification exists --> update
         notification[0].save()
     else:
@@ -96,3 +100,39 @@ def create_noti(instance, **kwargs):
                                     target_type=get_comment_type(),
                                     message=message,
                                     redirect_url=redirect_url)
+
+
+@transaction.atomic
+@receiver(post_save, sender=Comment)
+def create_user_tag(instance, **kwargs):
+    content = instance.content
+    tagging_user = instance.author
+    object_id = instance.id
+    content_type = get_generic_relation_type(instance.type)
+
+    if not '@' in content:
+        return
+    if instance.is_anonymous:
+        return
+
+    words = content.split(' ')
+    for word in words:
+        if word[0] != '@':
+            continue
+        tagged_username = word[1:]
+        try:
+            tagged_user = User.objects.get(username=tagged_username)
+        except User.DoesNotExist:
+            continue
+        try:
+            UserTag.objects.create(tagging_user_id=tagging_user.id, tagged_user_id=tagged_user.id,
+                                   object_id=object_id, content_type=content_type)
+        except IntegrityError as e:
+            constraint_failed = False
+            for arg in e.args:
+                if 'constraint' in arg:
+                    constraint_failed = True
+            if constraint_failed:
+                continue
+            else:
+                print("error creating UserTag: ", e.args)

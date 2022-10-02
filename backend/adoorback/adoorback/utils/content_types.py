@@ -47,6 +47,11 @@ def get_post_type():
     return ContentType.objects.get_for_model(Post)
 
 
+def get_user_tag_type():
+    from user_tag.models import UserTag
+    return ContentType.objects.get_for_model(UserTag)
+
+
 def get_generic_relation_type(model):
     if model == 'Comment':
         return get_comment_type()
