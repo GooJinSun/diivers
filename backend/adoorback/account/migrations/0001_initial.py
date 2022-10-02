@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=254, unique=True)),
                 ('question_history', models.CharField(max_length=500, null=True)),
                 ('profile_pic', models.CharField(default=account.models.random_profile_color, max_length=7)),
-                ('friends', models.ManyToManyField(blank=True, related_name='_account_user_friends_+', to=settings.AUTH_USER_MODEL)),
+                ('friends', models.ManyToManyField(blank=True, related_name='_user_friends_+', to=settings.AUTH_USER_MODEL)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
             ],

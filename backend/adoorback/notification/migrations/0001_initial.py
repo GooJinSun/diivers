@@ -33,11 +33,11 @@ class Migration(migrations.Migration):
                 ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='received_noti_set', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'ordering': ['-created_at'],
+                'ordering': ['-updated_at'],
             },
         ),
         migrations.AddIndex(
             model_name='notification',
-            index=models.Index(fields=['-created_at'], name='notificatio_created_87dbca_idx'),
+            index=models.Index(fields=['-updated_at'], name='notificatio_updated_06394f_idx'),
         ),
     ]
