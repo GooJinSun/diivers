@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   logo: {
     width: '130px',
     height: '60px',
-    background: 'url("/full-logo.svg") no-repeat',
+    background: 'url("/assets/logo/full-logo.svg") no-repeat',
     backgroundSize: '130px 60px'
   },
   title: {
