@@ -1,7 +1,7 @@
 /* eslint-disable prefer-promise-reject-errors */
 import axios from '../utils/api';
 import store from '../utils/history/utils/storeTestHelper';
-import searchReducer, * as actionCreators from './search';
+import searchReducer, * as actionCreators from '.';
 
 const userInfo = {
   id: 1,

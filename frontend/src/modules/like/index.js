@@ -1,4 +1,4 @@
-import axios from '../utils/api';
+import axios from '../../utils/api';
 
 export const LIKE_POST_REQUEST = 'like/LIKE_POST_REQUEST';
 export const LIKE_POST_SUCCESS = 'like/LIKE_POST_SUCCESS';

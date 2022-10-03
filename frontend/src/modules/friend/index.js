@@ -1,5 +1,5 @@
-import axios from '../utils/api';
-import { getNotifications } from './notification';
+import axios from '../../utils/api';
+import { getNotifications } from '../notification';
 
 const initialState = {
   friendList: [],

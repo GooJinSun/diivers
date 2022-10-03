@@ -1,5 +1,5 @@
-import axios from '../utils/api';
-import { mockQuestions } from '../constants';
+import axios from '../../utils/api';
+import { mockQuestions } from '../../constants';
 
 export const APPEND_QUESTIONS_REQUEST = 'post/APPEND_QUESTIONS_REQUEST';
 export const APPEND_QUESTIONS_SUCCESS = 'post/APPEND_QUESTIONS_SUCCESS';

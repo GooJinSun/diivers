@@ -1,4 +1,4 @@
-import axios from '../utils/api';
+import axios from '../../utils/api';
 
 const initialState = {
   receivedNotifications: [],
