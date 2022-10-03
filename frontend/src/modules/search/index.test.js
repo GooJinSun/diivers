@@ -1,6 +1,6 @@
 /* eslint-disable prefer-promise-reject-errors */
 import axios from '../utils/api';
-import store from '../utils/history/utils/storeTestHelper';
+import { store } from '../utils/history/modulesTestHelper';
 import searchReducer, * as actionCreators from '.';
 
 const userInfo = {

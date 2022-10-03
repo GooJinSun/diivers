@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 // import { Integrations } from '@sentry/tracing';
 import App from './App';
 import history from './utils/history';
-import store from './utils/store';
+import { store } from './modules';
 
 // Sentry.init({
 //   dsn:

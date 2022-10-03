@@ -6,7 +6,7 @@ import {
   mockPost,
   mockResponse
 } from '../constants';
-import store from '../utils/store';
+import { store } from '../modules';
 import postReducer, * as actionCreators from './post';
 
 describe('postActions', () => {

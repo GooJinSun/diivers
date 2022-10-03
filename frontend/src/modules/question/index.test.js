@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import axios from '../utils/api';
-import store from '../utils/store';
+import { store } from '../modules';
 import {
   mockQuestionFeed,
   questionDetailPosts,
