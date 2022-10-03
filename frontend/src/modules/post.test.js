@@ -1,4 +1,4 @@
-import axios from '../apis';
+import axios from '../utils/api';
 import {
   mockAnonymousFeed,
   mockArticle,

@@ -10,7 +10,7 @@ import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
 import 'jest-styled-components';
 import history from '../history';
-import axios from '../apis';
+import axios from '../utils/api';
 import MobileSearchPage from './MobileSearchPage';
 
 jest.mock('../components/CustomQuestionModal', () => {
@@ -34,7 +34,7 @@ const mockEmptyStore = {
   }
 };
 
-jest.mock('../apis');
+jest.mock('../utils/api');
 
 jest.spyOn(axios, 'get').mockImplementation(() => {
   return new Promise((resolve) => {

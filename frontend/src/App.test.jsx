@@ -10,7 +10,7 @@ import App from './App';
 import { mockStore, mockStoreBeforeLogin } from './mockStore';
 import rootReducer from './modules';
 import history from './history';
-import axios from './apis';
+import axios from './utils/api';
 import * as actionCreators from './modules/user';
 
 import { mockNotifications } from './constants';

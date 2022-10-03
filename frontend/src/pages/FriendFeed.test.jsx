@@ -11,7 +11,7 @@ import FriendFeed from './FriendFeed';
 import 'jest-styled-components';
 import history from '../history';
 import { getPostsByType } from '../modules/post';
-import axios from '../apis';
+import axios from '../utils/api';
 
 jest.mock('../components/posts/PostList', () => {
   return jest.fn(() => {

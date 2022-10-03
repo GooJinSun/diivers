@@ -1,4 +1,4 @@
-import axios from '../apis';
+import axios from '../utils/api';
 
 export const GET_SEARCH_RESULTS = 'search/GET_SEARCH_RESULTS';
 export const GET_SEARCH_RESULTS_REQUEST = 'search/GET_SEARCH_RESULTS_REQUEST';

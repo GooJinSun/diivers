@@ -1,4 +1,4 @@
-import axios, { deleteTokens } from '../apis';
+import axios, { deleteTokens } from '../utils/api';
 import { setTokensInCookies } from '../utils/tokenCookiesHelpers';
 
 export const GET_CURRENT_USER_REQUEST = 'user/GET_CURRENT_USER_REQUEST';

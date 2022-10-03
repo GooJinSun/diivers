@@ -1,5 +1,5 @@
 /* eslint-disable prefer-promise-reject-errors */
-import axios from '../apis';
+import axios from '../utils/api';
 import store from '../store';
 import searchReducer, * as actionCreators from './search';
 

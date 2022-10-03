@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Cookies from 'js.cookie';
-import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../constants/cookies';
+import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../../constants/cookies';
 import {
   deleteTokensFromCookies,
   setTokensInCookies
-} from '../utils/tokenCookiesHelpers';
+} from '../tokenCookiesHelpers';
 
 const csrf_token = Cookies.get('csrftoken');
 const access_token = Cookies.get(JWT_ACCESS_TOKEN);

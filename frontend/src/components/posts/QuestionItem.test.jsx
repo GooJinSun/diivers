@@ -9,7 +9,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { act } from 'react-dom/test-utils';
-import axios from '../../apis';
+import axios from '../../utils/api';
 import history from '../../history';
 import rootReducer from '../../modules';
 import QuestionItem from './QuestionItem';

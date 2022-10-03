@@ -1,4 +1,4 @@
-import axios from '../apis';
+import axios from '../utils/api';
 import { mockQuestions } from '../constants';
 
 export const APPEND_QUESTIONS_REQUEST = 'post/APPEND_QUESTIONS_REQUEST';

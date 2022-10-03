@@ -99,7 +99,7 @@
       "!src/serviceWorker.js",
       "!src/utils/dateTimeHelpers.js",
       "!src/styles.js",
-      "!src/apis/index.js"
+      "!src/utils/api/index.js"
     ]
   },
   "proxy": "http://127.0.0.1:8000/"

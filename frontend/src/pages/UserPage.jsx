@@ -18,7 +18,7 @@ import FriendStatusButtons from '../components/friends/FriendStatusButtons';
 import Message from '../components/Message';
 import UserReportButton from '../components/friends/UserReportButton';
 import AlertDialog from '../components/common/AlertDialog';
-import axios from '../apis';
+import axios from '../utils/api';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

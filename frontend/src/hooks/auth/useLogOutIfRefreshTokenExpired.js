@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import axios from '../../apis';
+import axios from '../../utils/api';
 import { logout } from '../../modules/user';
 
 /**

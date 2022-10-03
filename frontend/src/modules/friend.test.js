@@ -1,4 +1,4 @@
-import axios from '../apis';
+import axios from '../utils/api';
 import { mockFriendList } from '../constants';
 import store from '../store';
 import friendReducer, * as actionCreators from './friend';

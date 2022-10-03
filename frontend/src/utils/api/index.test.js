@@ -1,6 +1,6 @@
 import Cookies from 'js.cookie';
 import axios from 'axios';
-import { JWT_REFRESH_TOKEN } from '../constants/cookies';
+import { JWT_REFRESH_TOKEN } from '../../constants/cookies';
 
 jest.mock('axios');
 

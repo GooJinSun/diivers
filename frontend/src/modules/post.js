@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import axios from '../apis';
+import axios from '../utils/api';
 import { getResponsesByQuestionWithType } from './question';
 
 export const APPEND_POSTS_REQUEST = 'post/APPEND_POSTS_REQUEST';

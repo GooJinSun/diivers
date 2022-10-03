@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ConfirmAlertDialog from '../common/ConfirmAlertDialog';
-import axios from '../../apis';
+import axios from '../../utils/api';
 import AlertDialog from '../common/AlertDialog';
 
 const useStyles = makeStyles(() => ({
