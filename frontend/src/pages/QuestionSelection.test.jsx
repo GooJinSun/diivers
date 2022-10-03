@@ -9,7 +9,7 @@ import thunk from 'redux-thunk';
 import { act } from 'react-dom/test-utils';
 import QuestionSelection from './QuestionSelection';
 import rootReducer from '../modules';
-import history from '../history';
+import history from '../utils/history';
 import { mockStore } from '../mockStore';
 import * as actionCreators from '../modules/user';
 

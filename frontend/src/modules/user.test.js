@@ -1,6 +1,6 @@
 /* eslint-disable prefer-promise-reject-errors */
 import axios from '../utils/api';
-import store from '../store';
+import store from '../utils/store';
 import userReducer, * as actionCreators from './user';
 
 describe('user Actions', () => {

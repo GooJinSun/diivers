@@ -10,7 +10,7 @@ import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
 import UserPage from './UserPage';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 
 jest.mock('../components/posts/PostList', () => {
   return jest.fn(() => {

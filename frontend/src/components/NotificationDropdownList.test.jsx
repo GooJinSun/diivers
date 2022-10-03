@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import NotificationDropdownList from './NotificationDropdownList';
 import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
-import history from '../history';
+import history from '../utils/history';
 
 describe('<NotificationDropdownList/>', () => {
   const store = createStore(

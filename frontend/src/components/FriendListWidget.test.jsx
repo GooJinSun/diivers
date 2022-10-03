@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 import FriendListWidget from './FriendListWidget';
 
 describe('Friend List Widget unit mount test', () => {

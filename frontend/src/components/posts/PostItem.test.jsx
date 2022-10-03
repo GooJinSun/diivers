@@ -8,7 +8,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { act } from 'react-dom/test-utils';
 import PostItem from './PostItem';
-import history from '../../history';
+import history from '../../utils/history';
 import rootReducer from '../../modules';
 import { mockStore } from '../../mockStore';
 import * as actionCreators from '../../modules/like';

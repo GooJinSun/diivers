@@ -6,7 +6,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 // import { act } from 'react-dom/test-utils';
-import history from '../history';
+import history from '../utils/history';
 import rootReducer from '../modules';
 import QuestionDetail from './QuestionDetail';
 import { mockStore } from '../mockStore';

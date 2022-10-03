@@ -95,8 +95,8 @@
       "src/**/*.{js,jsx}",
       "!src/constants/*",
       "!src/index.jsx",
-      "!src/store/index.js",
       "!src/serviceWorker.js",
+      "!src/utils/store/index.js",
       "!src/utils/dateTimeHelpers.js",
       "!src/styles.js",
       "!src/utils/api/index.js"

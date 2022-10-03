@@ -1,5 +1,5 @@
 import axios from '../utils/api';
-import store from '../store';
+import store from '../utils/store';
 import { mockNotifications } from '../constants';
 import notiReducer, * as actionCreators from './notification';
 

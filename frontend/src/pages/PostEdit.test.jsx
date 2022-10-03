@@ -5,7 +5,7 @@ import { Router } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import history from '../history';
+import history from '../utils/history';
 import rootReducer from '../modules';
 import PostEdit from './PostEdit';
 import { mockStore } from '../mockStore';

@@ -1,5 +1,5 @@
 import axios from '../utils/api';
-import store from '../store';
+import store from '../utils/store';
 import { mockLike } from '../constants';
 import * as actionCreators from './like';
 

@@ -7,7 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { mockStore } from '../../mockStore';
 import rootReducer from '../../modules';
-import history from '../../history';
+import history from '../../utils/history';
 import 'jest-styled-components';
 import FriendStatusButtons from './FriendStatusButtons';
 

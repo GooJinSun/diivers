@@ -12,7 +12,7 @@ import { act } from 'react-dom/test-utils';
 import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 import QuestionListWidget from './QuestionListWidget';
 
 jest.mock('./CustomQuestionModal', () => {

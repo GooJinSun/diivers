@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme';
 import { Router } from 'react-router-dom';
 
 import FriendItem from './FriendItem';
-import history from '../../history';
+import history from '../../utils/history';
 import 'jest-styled-components';
 
 const mockFriend = {

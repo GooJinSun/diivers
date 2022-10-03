@@ -9,7 +9,7 @@ import * as reactRedux from 'react-redux';
 import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 import axios from '../utils/api';
 import MobileSearchPage from './MobileSearchPage';
 

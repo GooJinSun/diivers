@@ -1,7 +1,7 @@
 import { shallow, mount } from 'enzyme/build';
 import React from 'react';
 import { Router } from 'react-router';
-import history from '../../history';
+import history from '../../utils/history';
 import MobileDrawer from './MobileDrawer';
 
 describe('<MobileDrawer />', () => {

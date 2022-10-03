@@ -9,7 +9,7 @@ import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
 import FriendsPage from './FriendsPage';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 
 describe('Friends Page unit mount test', () => {
   const store = createStore(

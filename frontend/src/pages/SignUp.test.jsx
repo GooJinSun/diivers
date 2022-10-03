@@ -7,7 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import axios from '../utils/api';
 import rootReducer from '../modules';
-import history from '../history';
+import history from '../utils/history';
 import { mockStore } from '../mockStore';
 import SignUp from './SignUp';
 

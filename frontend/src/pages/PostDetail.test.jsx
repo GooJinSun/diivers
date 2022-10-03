@@ -11,7 +11,7 @@ import QuestionItem from '../components/posts/QuestionItem';
 import rootReducer from '../modules';
 import { mockStore, mockStoreWithArticle } from '../mockStore';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 
 const mockCustomQuestion = {
   id: 4758,

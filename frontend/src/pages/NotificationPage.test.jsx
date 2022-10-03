@@ -10,7 +10,7 @@ import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
 import NotificationPage from './NotificationPage';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 
 const observe = jest.fn();
 const unobserve = jest.fn();

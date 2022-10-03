@@ -10,7 +10,7 @@ import { mockNotiArrays } from '../constants';
 import NotificationItem from './NotificationItem';
 import { mockStore } from '../mockStore';
 import rootReducer from '../modules';
-import history from '../history';
+import history from '../utils/history';
 import * as actionCreators from '../modules/notification';
 
 describe('<NotificationItem/>', () => {

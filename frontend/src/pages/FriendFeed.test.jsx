@@ -9,7 +9,7 @@ import { mockStore, mockStoreWithNoFriendFeed } from '../mockStore';
 import rootReducer from '../modules';
 import FriendFeed from './FriendFeed';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 import { getPostsByType } from '../modules/post';
 import axios from '../utils/api';
 

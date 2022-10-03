@@ -2,7 +2,7 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import { shallow, mount } from 'enzyme';
 import MobileFooter from './MobileFooter';
-import history from '../history';
+import history from '../utils/history';
 
 Object.defineProperty(window, 'location', {
   value: {

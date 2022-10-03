@@ -9,7 +9,7 @@ import QuestionFeed from './QuestionFeed';
 import rootReducer from '../modules';
 import { mockStore } from '../mockStore';
 import 'jest-styled-components';
-import history from '../history';
+import history from '../utils/history';
 
 jest.mock('../components/posts/QuestionList', () => {
   return jest.fn(() => {

@@ -9,7 +9,7 @@ import Cookies from 'js.cookie';
 import App from './App';
 import { mockStore, mockStoreBeforeLogin } from './mockStore';
 import rootReducer from './modules';
-import history from './history';
+import history from './utils/history';
 import axios from './utils/api';
 import * as actionCreators from './modules/user';
 

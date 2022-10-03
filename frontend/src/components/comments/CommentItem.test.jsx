@@ -9,7 +9,7 @@ import { act } from 'react-dom/test-utils';
 import CommentItem from './CommentItem';
 import { mockStore } from '../../mockStore';
 import rootReducer from '../../modules';
-import history from '../../history';
+import history from '../../utils/history';
 import 'jest-styled-components';
 
 import * as actionCreators from '../../modules/like';

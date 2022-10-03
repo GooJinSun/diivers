@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import AuthorProfile from './AuthorProfile';
 import 'jest-styled-components';
-import history from '../../history';
+import history from '../../utils/history';
 
 jest.mock('react-router-dom', () => ({
   __esModule: true,
