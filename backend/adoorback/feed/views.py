@@ -36,7 +36,7 @@ class FriendFeedPostList(generics.ListAPIView):
         # if queryset:
         #     return queryset
         # else:
-        queryset = Post.objects.friend_posts_only().filter(author_id__in=current_user.friend_ids).exclude(Q(author_id__in=current_user.user_report_blocked_ids) | Q(id__in=current_user.content_report_blocked_ids))
+        queryset = Post.objects.friend_posts_only().filter(Q(author_id__in=current_user.friend_ids) | Q(author_id=current_user.id)).exclude(Q(author_id__in=current_user.user_report_blocked_ids) | Q(id__in=current_user.content_report_blocked_ids))
             # cache.set('friend-{}'.format(current_user.id), queryset)
         return queryset
 
