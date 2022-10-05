@@ -1,32 +1,22 @@
 ---
 name: Bug report
-about: Create a report to help us improve
-title: ""
-labels: ""
+about: 버그
+title: "[Bug] "
+labels: bug
 assignees: ""
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**내용**
 
-**To Reproduce**
-Steps to reproduce the behavior:
+**버그 재현 절차**
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+1.
+2.
+3.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**정상 결과**
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**이미지**
 
-**Environment**
-
-- Desktop [ ]
-- Smartphone [ ]
-
-**Additional context**
-Add any other context about the problem here.
+**테스트 환경**
+데스크탑 / 모바일 / 브라우저 등
