@@ -7,6 +7,7 @@ title: "(# ) "
 ## Self Check List
 
 - [ ] !!! Pr이 머지되는 Target Branch을 꼭 확인해주세요 !!!
+- [ ] Target branch로부터 rebase를 했나요?
 
 ## Types of changes
 
