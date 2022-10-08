@@ -9,15 +9,15 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import QuestionItem from '../components/posts/QuestionItem';
+import QuestionItem from '../posts/QuestionItem';
 import {
   getResponsesByQuestionWithType,
   appendResponsesByQuestionWithType,
   resetSelectedQuestion
-} from '../modules/question';
-import PostItem from '../components/posts/PostItem';
-import Message from '../components/Message';
-import LoadingList from '../components/posts/LoadingList';
+} from '../../modules/question';
+import PostItem from '../posts/PostItem';
+import Message from '../Message';
+import LoadingList from '../posts/LoadingList';
 
 Tabs.displayName = 'Tabs';
 function TabPanel(props) {

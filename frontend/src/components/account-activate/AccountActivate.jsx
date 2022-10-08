@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useParams } from 'react-router';
-import { requestActivate } from '../modules/user';
+import { requestActivate } from '../../modules/user';
 
 const LoginWrapper = styled.div`
   width: 500px;
@@ -13,7 +13,7 @@ const LoginWrapper = styled.div`
   }
 `;
 
-export default function Activate() {
+export default function AccountActivate() {
   const dispatch = useDispatch();
   const { id, token } = useParams();
 

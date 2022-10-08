@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { CommonInput, CommonButton } from '../styles';
-import { requestLogin } from '../modules/user';
+import { CommonInput, CommonButton } from '../../styles';
+import { requestLogin } from '../../modules/user';
 
 const LoginWrapper = styled.div`
   width: 500px;

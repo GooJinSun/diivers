@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
-import { CommonInput, CommonButton } from '../styles';
-import { requestResetPassword } from '../modules/user';
+import { requestResetPassword } from '@modules/user';
+import { CommonInput, CommonButton } from '../../styles';
 
 const ResetPasswordWrapper = styled.div`
   width: 500px;

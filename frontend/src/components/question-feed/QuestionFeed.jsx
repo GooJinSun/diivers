@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { appendDailyQuestions, getDailyQuestions } from '../modules/question';
-import QuestionList from '../components/posts/QuestionList';
-import CustomQuestionModal from '../components/CustomQuestionModal';
+import { appendDailyQuestions, getDailyQuestions } from '@modules/question';
+import QuestionList from '../posts/QuestionList';
+import CustomQuestionModal from '../CustomQuestionModal';
 
 const NewQuestionButton = styled.button`
   @media (min-width: 650px) {

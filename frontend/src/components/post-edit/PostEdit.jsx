@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { getSelectedPost } from '../modules/post';
-import PostEditItem from '../components/posts/PostEditItem';
+import { getSelectedPost } from '@modules/post';
+import PostEditItem from '@components/posts/PostEditItem';
 
 const PostEdit = () => {
   const { postType, id } = useParams();

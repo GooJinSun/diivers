@@ -10,15 +10,15 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
-import UserPostList from '../components/posts/UserPostList';
-import { getSelectedUserPosts, appendPosts } from '../modules/post';
-import { getSelectedUser } from '../modules/user';
-import { getFriendList, deleteFriend } from '../modules/friend';
-import FriendStatusButtons from '../components/friends/FriendStatusButtons';
-import Message from '../components/Message';
-import UserReportButton from '../components/friends/UserReportButton';
-import AlertDialog from '../components/common/AlertDialog';
-import axios from '../utils/api';
+import UserPostList from '../posts/UserPostList';
+import { getSelectedUserPosts, appendPosts } from '../../modules/post';
+import { getSelectedUser } from '../../modules/user';
+import { getFriendList, deleteFriend } from '../../modules/friend';
+import FriendStatusButtons from '../friends/FriendStatusButtons';
+import Message from '../Message';
+import UserReportButton from '../friends/UserReportButton';
+import AlertDialog from '../common/AlertDialog';
+import axios from '../../utils/api';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -245,7 +245,7 @@ export default function UserPage() {
                   color: selectedUser?.profile_pic
                 }}
               />
-              <h3 margin-bottom="10px">{selectedUser?.username}</h3>
+              <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
               <div>
                 {selectedUser && (
                   <FriendStatusButtons

@@ -1,5 +1,5 @@
 import React from 'react';
-import QuestionListWidget from '../components/QuestionListWidget';
+import QuestionListWidget from '../../QuestionListWidget';
 
 export default function MobileQuestionPage() {
   return <QuestionListWidget />;

@@ -8,8 +8,8 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
 
 import useOnClickOutside from 'use-onclickoutside';
-import { fetchSearchResults } from '../modules/search';
-import SearchDropdownList from '../components/SearchDropdownList';
+import { fetchSearchResults } from '@modules/search';
+import SearchDropdownList from '@components/SearchDropdownList';
 
 const SearchTitle = styled.div`
   margin: 16px 0;

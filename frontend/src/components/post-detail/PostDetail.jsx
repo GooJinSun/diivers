@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { getSelectedPost } from '../modules/post';
-import PostItem from '../components/posts/PostItem';
-import QuestionItem from '../components/posts/QuestionItem';
-import Message from '../components/Message';
-import LoadingItem from '../components/posts/LoadingItem';
+import { getSelectedPost } from '../../modules/post';
+import PostItem from '../posts/PostItem';
+import QuestionItem from '../posts/QuestionItem';
+import Message from '../Message';
+import LoadingItem from '../posts/LoadingItem';
 
 export default function PostDetail() {
   const selectedPost = useSelector((state) => state.postReducer.selectedPost);

@@ -7,12 +7,12 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import styled from 'styled-components';
 import { Button } from '@material-ui/core';
-import NotificationItem from '../components/NotificationItem';
-import FriendItem from '../components/friends/FriendItem';
+import NotificationItem from '../NotificationItem';
+import FriendItem from '../friends/FriendItem';
 import {
   readAllNotification,
   appendNotifications
-} from '../modules/notification';
+} from '../../modules/notification';
 
 Tabs.displayName = 'Tabs';
 function TabPanel(props) {

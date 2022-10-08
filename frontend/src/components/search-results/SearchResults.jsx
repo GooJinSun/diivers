@@ -3,10 +3,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-// import LinearProgress from '@material-ui/core/LinearProgress';
-import FriendItem from '../components/friends/FriendItem';
-import PageNavigation from '../components/PageNavigation';
-import { fetchSearchResults } from '../modules/search';
+import FriendItem from '../friends/FriendItem';
+import PageNavigation from '../PageNavigation';
+import { fetchSearchResults } from '../../modules/search';
 
 const FriendListWrapper = styled.div`
   padding: 16px;
