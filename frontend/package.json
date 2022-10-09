@@ -26,6 +26,8 @@
     "jest-styled-components": "^7.0.3",
     "js.cookie": "^0.0.4",
     "react": "^17.0.0",
+    "react-app-rewire-alias": "^1.1.7",
+    "react-app-rewired": "^2.2.1",
     "react-dom": "^17.0.0",
     "react-ga": "^3.3.0",
     "react-redux": "^7.2.1",
@@ -42,7 +44,7 @@
     "use-onclickoutside": "^0.3.1"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-app-rewired start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
