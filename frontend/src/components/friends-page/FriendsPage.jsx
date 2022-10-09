@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { getFriendList } from '@modules/friend';
-import FriendItem from '@components/friends/FriendItem';
+import FriendItem from '@common-components/friend-item/FriendItem';
 
 const FriendListWrapper = styled.div`
   padding: 16px;

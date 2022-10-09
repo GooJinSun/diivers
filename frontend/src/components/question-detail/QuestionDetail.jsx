@@ -1,5 +1,3 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/jsx-wrap-multilines */
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,15 +7,15 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import QuestionItem from '../posts/QuestionItem';
 import {
   getResponsesByQuestionWithType,
   appendResponsesByQuestionWithType,
   resetSelectedQuestion
-} from '../../modules/question';
-import PostItem from '../posts/PostItem';
-import Message from '../Message';
-import LoadingList from '../posts/LoadingList';
+} from '@modules/question';
+import LoadingList from '@common-components/loading-list/LoadingList';
+import PostItem from '@common-components/post-item/PostItem';
+import QuestionItem from '@common-components/question-item/QuestionItem';
+import Message from '@common-components/message/Message';
 
 Tabs.displayName = 'Tabs';
 function TabPanel(props) {

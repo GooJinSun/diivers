@@ -9,7 +9,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 import useOnClickOutside from 'use-onclickoutside';
 import { fetchSearchResults } from '@modules/search';
-import SearchDropdownList from '@components/SearchDropdownList';
+import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
 
 const SearchTitle = styled.div`
   margin: 16px 0;

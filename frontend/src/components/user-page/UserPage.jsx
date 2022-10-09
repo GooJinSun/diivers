@@ -10,15 +10,15 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
-import AlertDialog from '@common-components/AlertDialog';
-import UserPostList from '../posts/UserPostList';
-import { getSelectedUserPosts, appendPosts } from '../../modules/post';
-import { getSelectedUser } from '../../modules/user';
-import { getFriendList, deleteFriend } from '../../modules/friend';
-import FriendStatusButtons from '../friends/FriendStatusButtons';
-import Message from '../Message';
-import UserReportButton from '../friends/UserReportButton';
-import axios from '../../utils/api';
+import AlertDialog from '@common-components/alert-dialog/AlertDialog';
+import { getSelectedUser } from '@modules/user';
+import { getFriendList, deleteFriend } from '@modules/friend';
+import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
+import { getSelectedUserPosts, appendPosts } from '@modules/post';
+import Message from '@common-components/message/Message';
+import axios from '@utils/api';
+import UserPostList from './user-post-list/UserPostList';
+import UserReportButton from './user-report-button/UserReportButton';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;

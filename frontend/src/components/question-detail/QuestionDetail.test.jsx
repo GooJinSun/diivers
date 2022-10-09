@@ -2,14 +2,13 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-// import { act } from 'react-dom/test-utils';
-import history from '../utils/history';
-import rootReducer from '../modules';
+import history from '../../utils/history';
+import rootReducer from '../../modules';
 import QuestionDetail from './QuestionDetail';
-import { mockStore } from '../mockStore';
+import { mockStore } from '../../mockStore';
 
 const observe = jest.fn();
 const unobserve = jest.fn();

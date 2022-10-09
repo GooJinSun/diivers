@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { requestSignUp } from '../../modules/user';
+import { requestSignUp } from '@modules/user';
 import { CommonInput, CommonButton } from '../../styles';
 
 const SignUpWrapper = styled.div`

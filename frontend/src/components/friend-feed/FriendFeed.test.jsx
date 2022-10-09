@@ -2,16 +2,16 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-import { mockStore, mockStoreWithNoFriendFeed } from '../mockStore';
-import rootReducer from '../modules';
-import FriendFeed from './FriendFeed';
+import rootReducer from '../../modules';
 import 'jest-styled-components';
-import history from '../utils/history';
-import { getPostsByType } from '../modules/post';
-import axios from '../utils/api';
+import history from '../../utils/history';
+import { getPostsByType } from '../../modules/post';
+import axios from '../../utils/api';
+import FriendFeed from './FriendFeed';
+import { mockStore, mockStoreWithNoFriendFeed } from '../../mockStore';
 
 jest.mock('../components/posts/PostList', () => {
   return jest.fn(() => {

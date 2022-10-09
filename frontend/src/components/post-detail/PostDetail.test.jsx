@@ -3,15 +3,15 @@ import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createStore, applyMiddleware } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import QuestionItem from '../_common/question-item/QuestionItem';
+import history from '../../utils/history';
+import rootReducer from '../../modules';
+import PostItem from '../_common/post-item/PostItem';
 import PostDetail from './PostDetail';
-import PostItem from './posts/PostItem';
-import QuestionItem from './posts/QuestionItem';
-import rootReducer from '../modules';
-import { mockStore, mockStoreWithArticle } from '../mockStore';
+import { mockStore, mockStoreWithArticle } from '../../mockStore';
 import 'jest-styled-components';
-import history from '../utils/history';
 
 const mockCustomQuestion = {
   id: 4758,

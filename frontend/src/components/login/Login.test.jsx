@@ -2,13 +2,12 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
-import { createStore, applyMiddleware } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
-// import { getMockStore } from '../test-utils/mocks';
-import rootReducer from '../modules';
-import history from '../utils/history';
-import { mockStore } from '../mockStore';
+import rootReducer from '../../modules';
+import history from '../../utils/history';
+import { mockStore } from '../../mockStore';
 import Login from './Login';
 
 // const stubStateLoginError = {

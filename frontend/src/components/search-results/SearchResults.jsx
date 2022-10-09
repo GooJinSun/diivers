@@ -1,11 +1,9 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import FriendItem from '../friends/FriendItem';
-import PageNavigation from '../PageNavigation';
-import { fetchSearchResults } from '../../modules/search';
+import FriendItem from '@common-components/friend-item/FriendItem';
+import { fetchSearchResults } from '@modules/search';
+import PageNavigation from './page-navigation/PageNavigation';
 
 const FriendListWrapper = styled.div`
   padding: 16px;

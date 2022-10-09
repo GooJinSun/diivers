@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPostsByType, appendPosts } from '@modules/post';
-import PostList from '@components/posts/PostList';
+import PostList from '@common-components/post-list/PostList';
 
 const AnonymousFeed = () => {
   const [target, setTarget] = useState(null);

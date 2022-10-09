@@ -3,13 +3,13 @@ import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { Router } from 'react-router-dom';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createStore, applyMiddleware } from 'redux';
+import { legacy_createStore as createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import rootReducer from '../../modules';
+import history from '../../utils/history';
 import QuestionFeed from './QuestionFeed';
-import rootReducer from '../modules';
-import { mockStore } from '../mockStore';
+import { mockStore } from '../../mockStore';
 import 'jest-styled-components';
-import history from '../utils/history';
 
 jest.mock('../components/posts/QuestionList', () => {
   return jest.fn(() => {

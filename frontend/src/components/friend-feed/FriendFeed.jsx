@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import PostList from '../posts/PostList';
-import { appendPosts, getPostsByType } from '../../modules/post';
-import { getFriendList } from '../../modules/friend';
-import Message from '../Message';
-import NewPost from '../posts/NewPost';
+import { appendPosts, getPostsByType } from '@modules/post';
+import { getFriendList } from '@modules/friend';
+import NewPost from '@common-components/new-post/NewPost';
+import PostList from '@common-components/post-list/PostList';
+import Message from '@common-components/message/Message';
 
 const FriendFeed = () => {
   const [target, setTarget] = useState(false);
