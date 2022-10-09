@@ -5,6 +5,7 @@ import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
+import AlertDialog from '@common-components/AlertDialog';
 import AuthorProfile from './AuthorProfile';
 import CreateTime from './CreateTime';
 import PostAuthorButtons from './PostAuthorButtons';
@@ -19,7 +20,6 @@ import CommentItem from '../comments/CommentItem';
 import NewComment from '../comments/NewComment';
 import { likePost, unlikePost } from '../../modules/like';
 import { createComment, deletePost } from '../../modules/post';
-import AlertDialog from '../common/AlertDialog';
 import PostReportButton from './PostReportButton';
 
 PostItemWrapper.displayName = 'PostItemWrapper';

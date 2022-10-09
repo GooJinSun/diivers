@@ -11,9 +11,9 @@ import {
   Typography
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import ConfirmAlertDialog from '../common/ConfirmAlertDialog';
+import ConfirmAlertDialog from '@common-components/ConfirmAlertDialog';
+import AlertDialog from '@common-components/AlertDialog';
 import axios from '../../utils/api';
-import AlertDialog from '../common/AlertDialog';
 
 const useStyles = makeStyles(() => ({
   card: {

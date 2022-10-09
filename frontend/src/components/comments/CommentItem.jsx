@@ -6,11 +6,11 @@ import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRigh
 import { useParams } from 'react-router';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import AlertDialog from '@common-components/AlertDialog';
+import { createReply, deleteComment } from '@modules/post';
+import { likePost, unlikePost } from '@modules/like';
 import AuthorProfile from '../posts/AuthorProfile';
 import NewComment from './NewComment';
-import { createReply, deleteComment } from '../../modules/post';
-import AlertDialog from '../common/AlertDialog';
-import { likePost, unlikePost } from '../../modules/like';
 import CreateTime from '../posts/CreateTime';
 
 const CommentItemWrapper = styled.div`

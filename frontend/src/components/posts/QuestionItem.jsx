@@ -9,6 +9,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from '@material-ui/core/styles';
+import AlertDialog from '@common-components/AlertDialog';
 import AuthorProfile from './AuthorProfile';
 import CreateTime from './CreateTime';
 import PostAuthorButtons from './PostAuthorButtons';
@@ -18,7 +19,6 @@ import QuestionSendModal from '../QuestionSendModal';
 import { mockFriendList } from '../../constants';
 import { likePost, unlikePost } from '../../modules/like';
 import { deletePost } from '../../modules/post';
-import AlertDialog from '../common/AlertDialog';
 import PostReportButton from './PostReportButton';
 
 const QuestionItemWrapper = styled.div`

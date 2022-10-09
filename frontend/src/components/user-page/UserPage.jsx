@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
+import AlertDialog from '@common-components/AlertDialog';
 import UserPostList from '../posts/UserPostList';
 import { getSelectedUserPosts, appendPosts } from '../../modules/post';
 import { getSelectedUser } from '../../modules/user';
@@ -17,7 +18,6 @@ import { getFriendList, deleteFriend } from '../../modules/friend';
 import FriendStatusButtons from '../friends/FriendStatusButtons';
 import Message from '../Message';
 import UserReportButton from '../friends/UserReportButton';
-import AlertDialog from '../common/AlertDialog';
 import axios from '../../utils/api';
 
 function TabPanel(props) {
