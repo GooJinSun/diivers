@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-wrap-multilines */
 import React, { useState, useEffect } from 'react';
 import { FormControlLabel, Button, Checkbox } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
