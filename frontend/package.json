@@ -95,11 +95,11 @@
       "src/**/*.{js,jsx}",
       "!src/constants/*",
       "!src/index.jsx",
-      "!src/store/index.js",
       "!src/serviceWorker.js",
+      "!src/modules/index.js",
+      "!src/utils/api/index.js",
       "!src/utils/dateTimeHelpers.js",
-      "!src/styles.js",
-      "!src/apis/index.js"
+      "!src/styles.js"
     ]
   },
   "proxy": "http://127.0.0.1:8000/"

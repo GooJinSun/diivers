@@ -1,0 +1,64 @@
+import React, { useEffect, useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { appendPosts, getPostsByType } from '@modules/post';
+import { getFriendList } from '@modules/friend';
+import NewPost from '@common-components/new-post/NewPost';
+import PostList from '@common-components/post-list/PostList';
+import Message from '@common-components/message/Message';
+
+const FriendFeed = () => {
+  const [target, setTarget] = useState(false);
+  const dispatch = useDispatch();
+  const friendPosts = useSelector((state) => state.postReducer.friendPosts);
+  const isAppending =
+    useSelector((state) => state.loadingReducer['post/APPEND_POSTS']) ===
+    'REQUEST';
+  const isLoading =
+    useSelector((state) => state.loadingReducer['post/GET_FRIEND_POSTS']) ===
+    'REQUEST';
+
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        dispatch(appendPosts('friend'));
+      }
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    let observer;
+    if (target) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
+      observer.observe(target);
+    }
+    return () => observer && observer.disconnect();
+  }, [target, onIntersect]);
+
+  useEffect(() => {
+    dispatch(getPostsByType('friend'));
+    dispatch(getFriendList());
+  }, [dispatch]);
+
+  return (
+    <>
+      <NewPost />
+      {friendPosts?.length === 0 && !isLoading ? (
+        <Message
+          margin="16px 0"
+          message="표시할 게시물이 없습니다 :("
+          messageDetail="다른 사용자들과 친구를 맺어보세요!"
+        />
+      ) : (
+        <PostList
+          posts={friendPosts}
+          isAppending={isAppending}
+          isLoading={isLoading}
+        />
+      )}
+      <div ref={setTarget} />
+    </>
+  );
+};
+
+export default FriendFeed;
