@@ -32,8 +32,8 @@ import useIsMobile from '@hooks/env/useIsMobile';
 import useLogOutIfRefreshTokenExpired from '@hooks/auth/useLogOutIfRefreshTokenExpired';
 import GlobalStyle from '@styles/globalStyle';
 import { MainWrapper, FeedWrapper } from '@styles/wrappers';
-import { initGA, trackPage } from './ga';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { initGA, trackPage } from './ga';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
