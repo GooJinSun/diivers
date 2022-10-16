@@ -1,6 +1,6 @@
 import React from 'react';
 import Skeleton from '@material-ui/lab/Skeleton';
-import { PostItemWrapper } from '../../../styles';
+import { PostItemWrapper } from '@styles/wrappers';
 
 export default function LoadingList() {
   const loadingList = [...Array(5)].map((_, index) => (

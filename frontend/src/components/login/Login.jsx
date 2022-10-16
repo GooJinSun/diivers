@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestLogin } from '@modules/user';
+import { AuthentiCationWrapper } from '@styles/wrappers';
 import {
   CommonInput,
   CommonButton,
-  AuthentiCationWrapper,
   AuthSubButton,
   WarningMessage
 } from '../../styles';

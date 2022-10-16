@@ -10,7 +10,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { useSelector, useDispatch } from 'react-redux';
 import CustomQuestionModal from '@common-components/custom-question-modal/CustomQuestionModal';
-import { WidgetWrapper, WidgetTitleWrapper, FlexDiv } from '../../../styles';
+import {
+  WidgetWrapper,
+  WidgetTitleWrapper,
+  FlexWrapper
+} from '@styles/wrappers';
 import {
   getRecommendedQuestions,
   getRandomQuestions,
@@ -115,7 +119,7 @@ const QuestionListWidget = ({
               <Typography variant="h6" className={classes.title}>
                 추천 질문
               </Typography>
-              <FlexDiv>
+              <FlexWrapper>
                 {isFolded ? (
                   <IconButton
                     href=""
@@ -154,7 +158,7 @@ const QuestionListWidget = ({
                     </IconButton>
                   </>
                 )}
-              </FlexDiv>
+              </FlexWrapper>
             </WidgetTitleWrapper>
             {!isFolded &&
               (isLoading ? (

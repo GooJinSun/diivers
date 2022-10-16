@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestResetPasswordEmail } from '@modules/user';
-import {
-  CommonInput,
-  CommonButton,
-  AuthentiCationWrapper,
-  AuthSubButton
-} from '../../styles';
+import { AuthentiCationWrapper } from '@styles/wrappers';
+import { CommonInput, CommonButton, AuthSubButton } from '../../styles';
 
 export default function LostPassword() {
   const history = useHistory();

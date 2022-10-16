@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import { getFriendList } from '@modules/friend';
 import FriendItem from '@common-components/friend-item/FriendItem';
-import { WidgetWrapper, WidgetTitleWrapper } from '../../../styles';
+import { WidgetWrapper, WidgetTitleWrapper } from '@styles/wrappers';
 import { useStyles } from './FriendListWidget.styles';
 
 const FriendListWidget = () => {

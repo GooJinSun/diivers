@@ -3,12 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { requestResetPassword } from '@modules/user';
-import {
-  CommonInput,
-  CommonButton,
-  AuthentiCationWrapper,
-  AuthSubButton
-} from '../../styles';
+import { AuthentiCationWrapper } from '@styles/wrappers';
+import { CommonInput, CommonButton, AuthSubButton } from '../../styles';
 
 export default function ResetPassword() {
   const history = useHistory();

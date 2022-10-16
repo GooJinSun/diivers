@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import { requestActivate } from '@modules/user';
-import { AuthentiCationWrapper } from '../../styles';
+import { AuthentiCationWrapper } from '@styles/wrappers';
 
 export default function AccountActivate() {
   const dispatch = useDispatch();

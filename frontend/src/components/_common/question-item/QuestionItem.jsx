@@ -16,7 +16,10 @@ import CreateTime from '@common-components/create-time/CreateTime';
 import PostAuthorButtons from '@common-components/post-author-buttons/PostAuthorButtons';
 import PostReportButton from '@common-components/post-report-button/PostReportButton';
 import ShareSettings from '@common-components/share-settings/ShareSettings';
-import { PostItemHeaderWrapper, PostItemButtonsWrapper } from '../../../styles';
+import {
+  PostItemHeaderWrapper,
+  PostItemButtonsWrapper
+} from '@styles/wrappers';
 import QuestionSendModal from './question-send-modal/QuestionSendModal';
 import {
   useStyles,

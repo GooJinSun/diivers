@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { TextareaAutosize } from '@material-ui/core';
 import QuestionBox from '@common-components/question-box/QuestionBox';
 import ShareSettings from '@common-components/share-settings/ShareSettings';
-import { PostItemWrapper } from '../../../styles';
+import { PostItemWrapper } from '@styles/wrappers';
 import { useStyles } from './PostEditItem.styles';
 
 const PostEditItem = ({ postObj }) => {

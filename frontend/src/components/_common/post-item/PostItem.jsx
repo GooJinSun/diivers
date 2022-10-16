@@ -19,7 +19,7 @@ import {
   PostItemFooterWrapper,
   PostItemWrapper,
   PostItemButtonsWrapper
-} from '../../../styles';
+} from '@styles/wrappers';
 import {
   ContentWrapper,
   CommentWrapper,
