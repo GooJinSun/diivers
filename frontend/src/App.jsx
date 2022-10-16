@@ -4,34 +4,34 @@ import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
-import Login from './pages/Login';
-import { GlobalStyle, MainWrapper, FeedWrapper } from './styles';
-import Header from './components/Header';
-import QuestionListWidget from './components/QuestionListWidget';
-import FriendListWidget from './components/FriendListWidget';
-import SignUp from './pages/SignUp';
-import Activate from './pages/Activate';
-import QuestionSelection from './pages/QuestionSelection';
-import FriendFeed from './pages/FriendFeed';
-import AnonymousFeed from './pages/AnonymousFeed';
-import QuestionFeed from './pages/QuestionFeed';
-import PrivateRoute from './components/PrivateRoute';
-import QuestionDetail from './pages/QuestionDetail';
-import PostDetail from './pages/PostDetail';
-import FriendsPage from './pages/FriendsPage';
-import SearchResults from './pages/SearchResults';
-import NotificationPage from './pages/NotificationPage';
-import PostEdit from './pages/PostEdit';
-import UserPage from './pages/UserPage';
-import { getNotifications } from './modules/notification';
-import MobileQuestionPage from './pages/MobileQuestionPage';
-import MobileSearchPage from './pages/MobileSearchPage';
+import AccountActivate from '@components/account-activate/AccountActivate';
+import AnonymousFeed from '@components/anonymous-feed/AnonymousFeed';
+import FriendFeed from '@components/friend-feed/FriendFeed';
+import FriendsPage from '@components/friends-page/FriendsPage';
+import Login from '@components/login/Login';
+import LostPassword from '@components/lost-password/LostPassword';
+import MobileSearchPage from '@components/_mobile/mobile-search-page/MobileSearchPage';
+import MobileQuestionPage from '@components/_mobile/mobile-question-page/MobileQuestionPage';
+import NotificationPage from '@components/notification-page/NotificationPage';
+import PostDetail from '@components/post-detail/PostDetail';
+import PostEdit from '@components/post-edit/PostEdit';
+import ResetPassword from '@components/reset-password/ResetPassword';
+import SignUp from '@components/sign-up/SignUp';
+import QuestionSelection from '@components/question-selection/QuestionSelection';
+import QuestionFeed from '@components/question-feed/QuestionFeed';
+import QuestionDetail from '@components/question-detail/QuestionDetail';
+import SearchResults from '@components/search-results/SearchResults';
+import UserPage from '@components/user-page/UserPage';
+import { getNotifications } from '@modules/notification';
+import Header from '@common-components/header/Header';
+import QuestionListWidget from '@common-components/question-list-widget/QuestionListWidget';
+import FriendListWidget from '@common-components/friend-list-widget/FriendListWidget';
+import PrivateRoute from '@common-components/private-route/PrivateRoute';
+import useLoginWithToken from '@hooks/auth/useLoginWithToken';
+import useIsMobile from '@hooks/env/useIsMobile';
+import useLogOutIfRefreshTokenExpired from '@hooks/auth/useLogOutIfRefreshTokenExpired';
 import { initGA, trackPage } from './ga';
-import useLoginWithToken from './hooks/auth/useLoginWithToken';
-import useIsMobile from './hooks/env/useIsMobile';
-import useLogOutIfRefreshTokenExpired from './hooks/auth/useLogOutIfRefreshTokenExpired';
-import LostPassword from './pages/LostPassword';
-import ResetPassword from './pages/ResetPassword';
+import { GlobalStyle, MainWrapper, FeedWrapper } from './styles';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -86,7 +86,11 @@ const App = () => {
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/activate/:id/:token" component={Activate} />
+            <Route
+              exact
+              path="/activate/:id/:token"
+              component={AccountActivate}
+            />
             <Route exact path="/lost-password" component={LostPassword} />
             <Route
               exact
