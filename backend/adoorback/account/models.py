@@ -84,8 +84,8 @@ class FriendRequest(AdoorTimestampedModel):
                                                      content_type_field='target_type',
                                                      object_id_field='target_id')
     friend_request_originated_notis = GenericRelation("notification.Notification",
-                                                      content_type_field='target_type',
-                                                      object_id_field='target_id')
+                                                      content_type_field='origin_type',
+                                                      object_id_field='origin_id')
 
     class Meta:
         constraints = [
