@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { requestResetPassword } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
-import { CommonInput, CommonButton, AuthSubButton } from '../../styles';
+import { CommonButton, AuthSubButton } from '@styles/buttons';
+import { CommonInput } from '../../styles';
 
 export default function ResetPassword() {
   const history = useHistory();

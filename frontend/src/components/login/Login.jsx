@@ -3,12 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestLogin } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
-import {
-  CommonInput,
-  CommonButton,
-  AuthSubButton,
-  WarningMessage
-} from '../../styles';
+import { CommonButton, AuthSubButton } from '@styles/buttons';
+import { CommonInput, WarningMessage } from '../../styles';
 
 export default function Login() {
   const history = useHistory();

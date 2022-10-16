@@ -6,7 +6,7 @@ import {
   postSelectedQuestions,
   skipOrCompleteSelectQuestions
 } from '@modules/user';
-import { CommonButton } from '../../styles';
+import { CommonButton } from '@styles/buttons';
 import {
   QuestionsWrapper,
   TitleWrapper,

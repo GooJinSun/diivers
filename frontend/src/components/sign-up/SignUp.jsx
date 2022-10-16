@@ -2,12 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
-import {
-  CommonInput,
-  CommonButton,
-  WarningMessage,
-  AuthSubButton
-} from '../../styles';
+import { CommonButton, AuthSubButton } from '@styles/buttons';
+import { CommonInput, WarningMessage } from '../../styles';
 import { SignUpWrapper, ButtonWrapper } from './SignUp.styles';
 
 export default function SignUp() {

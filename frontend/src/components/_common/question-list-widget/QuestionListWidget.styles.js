@@ -1,8 +1,8 @@
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import styled from 'styled-components';
+import { CommonButton } from '@styles/buttons';
 import ListItemLink from './list-item-link/ListItemLink';
-import { CommonButton } from '../../../styles';
 
 export const NewQuestionButton = styled(CommonButton)`
   width: 275px;
