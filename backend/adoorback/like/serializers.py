@@ -10,7 +10,7 @@ User = get_user_model()
 class LikeSerializer(serializers.ModelSerializer):
     user = serializers.HyperlinkedIdentityField(
         view_name='user-detail', read_only=True, lookup_field='user', lookup_url_kwarg='username')
-    user_detail = serializers.SerializerMethodField(read_only=True)
+    user_detail = serializers.SerializerMethodField()
     target_type = serializers.SerializerMethodField()
     target_id = serializers.SerializerMethodField()
 
