@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -10,30 +9,7 @@ import List from '@material-ui/core/List';
 import { getFriendList } from '@modules/friend';
 import FriendItem from '@common-components/friend-item/FriendItem';
 import { WidgetWrapper, WidgetTitleWrapper } from '../../../styles';
-
-const useStyles = makeStyles({
-  card: {
-    position: 'fixed',
-    width: '275px',
-    maxHeight: '50vh',
-    overflow: 'scroll',
-    borderColor: '#eee',
-    boxShadow:
-      '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)'
-  },
-  cardContent: {
-    padding: '0 !important'
-  },
-  title: {
-    fontWeight: 'bold'
-  },
-  list: {
-    paddingTop: 0
-  },
-  friend: {
-    fontSize: 14
-  }
-});
+import { useStyles } from './FriendListWidget.styles';
 
 const FriendListWidget = () => {
   const classes = useStyles();

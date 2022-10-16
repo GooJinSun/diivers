@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -8,7 +7,6 @@ import { TextareaAutosize } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
-import { makeStyles } from '@material-ui/core/styles';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
 import AuthorProfile from '@common-components/author-profile/AuthorProfile';
 import { mockFriendList } from '@constants';
@@ -20,49 +18,11 @@ import PostReportButton from '@common-components/post-report-button/PostReportBu
 import ShareSettings from '@common-components/share-settings/ShareSettings';
 import { PostItemHeaderWrapper, PostItemButtonsWrapper } from '../../../styles';
 import QuestionSendModal from './question-send-modal/QuestionSendModal';
-
-const QuestionItemWrapper = styled.div`
-  @media (max-width: 650px) {
-    border: 1px solid #e7e7e7;
-    box-shadow: 0 2px 2px rgba(154, 160, 185, 0.05),
-      0 5px 5px rgba(166, 173, 201, 0.1);
-  }
-  background: #f4f4f4;
-  padding: 12px;
-  border-radius: 4px;
-  margin: 16px 0;
-  position: relative;
-`;
-
-const Question = styled.div`
-  text-align: center;
-  font-weight: 500;
-  font-size: 15px;
-  word-break: break-all;
-  padding: 8px 0;
-  white-space: pre-wrap;
-  @media (max-width: 650px) {
-    padding: 16px;
-  }
-`;
-
-QuestionItemWrapper.displayName = 'QuestionItemWrapper';
-TextareaAutosize.displayName = 'TextareaAutosize';
-
-const useStyles = makeStyles((theme) => ({
-  textArea: {
-    background: 'white',
-    width: '100%',
-    border: 'none',
-    resize: 'none',
-    padding: theme.spacing(1),
-    outline: 'none !important',
-    boxSizing: 'border-box',
-    margin: '8px 0',
-    fontFamily: 'Noto Sans KR',
-    fontsize: '14px'
-  }
-}));
+import {
+  useStyles,
+  QuestionItemWrapper,
+  Question
+} from './QuestionItem.styles';
 
 export default function QuestionItem({
   questionObj,

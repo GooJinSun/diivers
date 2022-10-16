@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import styled from 'styled-components';
 import {
   IconButton,
   Card,
@@ -14,18 +12,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
 import axios from '@utils/api';
-
-const useStyles = makeStyles(() => ({
-  card: {
-    position: 'absolute',
-    right: '12px',
-    zIndex: 1
-  }
-}));
-
-const ReportButtonWrapper = styled.div`
-  justify-self: right;
-`;
+import { useStyles, ReportButtonWrapper } from './PostReportButton.styles';
 
 export default function PostReportButton({ postObj }) {
   const classes = useStyles();

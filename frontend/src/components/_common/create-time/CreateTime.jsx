@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { getCreatedTime } from '@utils/dateTimeHelpers';
-
-const TimeWrapper = styled.div`
-  text-align: center;
-  color: #bbb;
-  font-size: 12px;
-  left: 50%;
-  bottom: 20px;
-`;
-
-TimeWrapper.displayName = 'TimeWrapper';
+import { TimeWrapper } from './CreateTime.styles';
 
 export default function CreateTime({ createdTime }) {
   const [displayTime, setDisplayTime] = useState(getCreatedTime(createdTime));
