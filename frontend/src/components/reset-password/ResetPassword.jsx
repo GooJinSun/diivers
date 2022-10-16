@@ -1,27 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { requestResetPassword } from '@modules/user';
-import { CommonInput, CommonButton } from '../../styles';
-
-const ResetPasswordWrapper = styled.div`
-  width: 500px;
-  margin: 0 auto;
-  margin-top: 120px;
-  @media (max-width: 650px) {
-    width: 90%;
-  }
-`;
-
-const SubButton = styled.button`
-  float: right;
-  border: none;
-  background: #fff;
-  color: #777;
-  font-size: 16px;
-`;
+import {
+  CommonInput,
+  CommonButton,
+  AuthentiCationWrapper,
+  AuthSubButton
+} from '../../styles';
 
 export default function ResetPassword() {
   const history = useHistory();
@@ -64,7 +51,7 @@ export default function ResetPassword() {
   };
 
   return (
-    <ResetPasswordWrapper>
+    <AuthentiCationWrapper>
       {isResetPasswordSuccess ? (
         <div>비밀번호 변경이 완료되었습니다.</div>
       ) : isResetPasswordFail ? (
@@ -89,15 +76,15 @@ export default function ResetPassword() {
           >
             비밀번호 변경
           </CommonButton>
-          <SubButton
+          <AuthSubButton
             type="button"
             id="login-button"
             onClick={() => history.push('/login')}
           >
             로그인
-          </SubButton>
+          </AuthSubButton>
         </div>
       )}
-    </ResetPasswordWrapper>
+    </AuthentiCationWrapper>
   );
 }

@@ -81,6 +81,15 @@ export const MainWrapper = styled.main`
   justify-content: center;
 `;
 
+export const AuthentiCationWrapper = styled.div`
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 120px;
+  @media (max-width: 650px) {
+    width: 90%;
+  }
+`;
+
 export const FeedWrapper = styled.div`
   @media (max-width: 650px) {
     width: calc(100vw - 12px);
@@ -127,6 +136,15 @@ export const CommonButton = styled.button`
     background-color: grey;
   }
 `;
+CommonButton.displayName = 'CommonButton';
+
+export const AuthSubButton = styled.button`
+  float: right;
+  border: none;
+  background: #fff;
+  color: #777;
+  font-size: 16px;
+`;
 
 export const PostItemHeaderWrapper = styled.div`
   display: flex;
@@ -159,3 +177,9 @@ export const PostItemWrapper = styled.div`
   border-radius: 4px;
 `;
 PostItemWrapper.displayName = 'PostItemWrapper';
+
+export const WarningMessage = styled.div`
+  font-size: 14px;
+  color: #ff395b;
+  margin-bottom: 4px;
+`;

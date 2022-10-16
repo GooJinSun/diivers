@@ -1,21 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import FriendItem from '@common-components/friend-item/FriendItem';
 import { fetchSearchResults } from '@modules/search';
 import PageNavigation from './page-navigation/PageNavigation';
-
-const FriendListWrapper = styled.div`
-  padding: 16px;
-  border: 1px solid whitesmoke;
-  padding-top: 0;
-  border-radius: 4px;
-  background: whitesmoke;
-  margin-top: 16px;
-  margin-bottom: 16px;
-`;
-
-FriendListWrapper.displayName = 'FriendListWrapper';
+import { FriendListWrapper } from './SearchResults.styles';
 
 export default function SearchResults() {
   const dispatch = useDispatch();

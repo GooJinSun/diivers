@@ -1,26 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { requestResetPasswordEmail } from '@modules/user';
-import { CommonInput, CommonButton } from '../../styles';
-
-const LostPasswordWrapper = styled.div`
-  width: 500px;
-  margin: 0 auto;
-  margin-top: 120px;
-  @media (max-width: 650px) {
-    width: 90%;
-  }
-`;
-
-const SubButton = styled.button`
-  float: right;
-  border: none;
-  background: #fff;
-  color: #777;
-  font-size: 16px;
-`;
+import {
+  CommonInput,
+  CommonButton,
+  AuthentiCationWrapper,
+  AuthSubButton
+} from '../../styles';
 
 export default function LostPassword() {
   const history = useHistory();
@@ -51,7 +38,7 @@ export default function LostPassword() {
   };
 
   return (
-    <LostPasswordWrapper>
+    <AuthentiCationWrapper>
       {isSubmitted ? (
         <div>이메일 전송이 완료되었습니다.</div>
       ) : (
@@ -73,15 +60,15 @@ export default function LostPassword() {
           >
             이메일 전송
           </CommonButton>
-          <SubButton
+          <AuthSubButton
             type="button"
             id="login-button"
             onClick={() => history.push('/login')}
           >
             로그인
-          </SubButton>
+          </AuthSubButton>
         </div>
       )}
-    </LostPasswordWrapper>
+    </AuthentiCationWrapper>
   );
 }

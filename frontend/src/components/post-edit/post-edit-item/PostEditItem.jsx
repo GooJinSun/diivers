@@ -1,29 +1,9 @@
 import React, { useState } from 'react';
 import { TextareaAutosize } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import QuestionBox from '@common-components/question-box/QuestionBox';
 import ShareSettings from '@common-components/share-settings/ShareSettings';
 import { PostItemWrapper } from '../../../styles';
-
-const useStyles = makeStyles({
-  textarea: {
-    padding: '5px',
-    borderRadius: '2px',
-    color: 'rgb(50, 50, 50)',
-    fontSize: '14px',
-    outline: 'none !important',
-    width: '100%',
-    height: 'auto',
-    boxSizing: 'border-box',
-    border: 'none',
-    margin: '4px 0',
-    background: '#fff',
-    cursor: 'auto',
-    resize: 'none',
-    overflow: 'hidden',
-    fontFamily: 'Noto Sans KR, sans-serif'
-  }
-});
+import { useStyles } from './PostEditItem.styles';
 
 const PostEditItem = ({ postObj }) => {
   const classes = useStyles();

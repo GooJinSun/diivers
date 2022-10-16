@@ -1,49 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
-import { CommonInput, CommonButton } from '../../styles';
-
-const SignUpWrapper = styled.div`
-  width: 500px;
-  margin: 0 auto;
-  margin-top: 130px;
-
-  @media (max-width: 650px) {
-    width: 90%;
-  }
-`;
-
-const WarningMessage = styled.div`
-  font-size: 14px;
-  color: #ff395b;
-  margin-bottom: 4px;
-`;
-
-const ButtonWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: -16px;
-`;
-
-const LoginButton = styled.button`
-  float: right;
-  border: none;
-  background: #fff;
-  color: #777;
-  font-size: 16px;
-`;
-
-const PrivacyButton = styled.button`
-  float: right;
-  border: none;
-  background: #fff;
-  color: #777;
-  font-size: 16px;
-`;
+import {
+  CommonInput,
+  CommonButton,
+  WarningMessage,
+  AuthSubButton
+} from '../../styles';
+import { SignUpWrapper, ButtonWrapper } from './SignUp.styles';
 
 export default function SignUp() {
   const dispatch = useDispatch();
@@ -148,14 +113,14 @@ export default function SignUp() {
             회원가입
           </CommonButton>
           <ButtonWrapper>
-            <LoginButton
+            <AuthSubButton
               type="button"
               id="login-button"
               onClick={() => history.push('/login')}
             >
               로그인
-            </LoginButton>
-            <PrivacyButton
+            </AuthSubButton>
+            <AuthSubButton
               type="button"
               id="privacy-button"
               onClick={() => {
@@ -163,7 +128,7 @@ export default function SignUp() {
               }}
             >
               개인정보처리방침
-            </PrivacyButton>
+            </AuthSubButton>
           </ButtonWrapper>
         </div>
       )}
