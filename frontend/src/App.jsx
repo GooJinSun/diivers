@@ -30,8 +30,9 @@ import PrivateRoute from '@common-components/private-route/PrivateRoute';
 import useLoginWithToken from '@hooks/auth/useLoginWithToken';
 import useIsMobile from '@hooks/env/useIsMobile';
 import useLogOutIfRefreshTokenExpired from '@hooks/auth/useLogOutIfRefreshTokenExpired';
+import GlobalStyle from '@styles/globalStyle';
 import { initGA, trackPage } from './ga';
-import { GlobalStyle, MainWrapper, FeedWrapper } from './styles';
+import { MainWrapper, FeedWrapper } from './styles';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
