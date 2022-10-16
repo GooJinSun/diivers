@@ -5,7 +5,7 @@ import { requestLogin } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
-import { WarningMessage } from '../../styles';
+import { WarningMessage } from '@styles/messages';
 
 export default function Login() {
   const history = useHistory();

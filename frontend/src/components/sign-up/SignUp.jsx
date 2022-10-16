@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
-import { WarningMessage } from '../../styles';
+import { WarningMessage } from '@styles/messages';
 import { SignUpWrapper, ButtonWrapper } from './SignUp.styles';
 
 export default function SignUp() {
