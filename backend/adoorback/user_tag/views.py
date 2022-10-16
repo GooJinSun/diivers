@@ -30,6 +30,5 @@ class UserTagSearch(generics.ListAPIView):
         queryset = User.objects.none()
         if username:
             queryset = user.friends.filter(
-                username__icontains=self.request.GET.get('query'))[:10]
-            # queryset = queryset.order_by('username')
+                username__icontains=self.request.GET.get('query')).order_by('username')[:10]
         return queryset
