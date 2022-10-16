@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 import { requestLogin } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
-import { CommonInput, WarningMessage } from '../../styles';
+import { CommonInput } from '@styles/inputs';
+import { WarningMessage } from '../../styles';
 
 export default function Login() {
   const history = useHistory();

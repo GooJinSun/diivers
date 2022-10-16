@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
-import { CommonInput, WarningMessage } from '../../styles';
+import { CommonInput } from '@styles/inputs';
+import { WarningMessage } from '../../styles';
 import { SignUpWrapper, ButtonWrapper } from './SignUp.styles';
 
 export default function SignUp() {

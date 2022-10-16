@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { requestResetPasswordEmail } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
-import { CommonInput } from '../../styles';
+import { CommonInput } from '@styles/inputs';
 
 export default function LostPassword() {
   const history = useHistory();
