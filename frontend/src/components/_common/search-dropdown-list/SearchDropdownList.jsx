@@ -8,8 +8,8 @@ const SearchDropdownList = () => {
   const classes = useStyles();
   const results = useSelector((state) => state.searchReducer.searchObj.results);
 
-  const userList = results?.map((user, index) => (
-    <FriendItem key={user.id + index.toString()} friendObj={user} isWidget />
+  const userList = results?.map((user) => (
+    <FriendItem key={user.id} friendObj={user} isWidget />
   ));
 
   return (
