@@ -1,17 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { useParams } from 'react-router';
 import { requestActivate } from '@modules/user';
-
-const LoginWrapper = styled.div`
-  width: 500px;
-  margin: 0 auto;
-  margin-top: 120px;
-  @media (max-width: 650px) {
-    width: 90%;
-  }
-`;
+import { AuthentiCationWrapper } from '@styles/wrappers';
 
 export default function AccountActivate() {
   const dispatch = useDispatch();
@@ -34,7 +25,7 @@ export default function AccountActivate() {
   }, [activateStatus]);
 
   return (
-    <LoginWrapper>
+    <AuthentiCationWrapper>
       {isActivatePending ? (
         <div>인증 중 ... </div>
       ) : isActivateSuccess ? (
@@ -42,6 +33,6 @@ export default function AccountActivate() {
       ) : (
         <div>유효하지 않은 링크입니다.</div>
       )}
-    </LoginWrapper>
+    </AuthentiCationWrapper>
   );
 }

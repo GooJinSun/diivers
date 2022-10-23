@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
-import styled from 'styled-components';
 import { Button } from '@material-ui/core';
 import FriendItem from '@common-components/friend-item/FriendItem';
 import NotificationItem from '@common-components/notification-item/NotificationItem';
@@ -13,53 +10,8 @@ import {
   readAllNotification,
   appendNotifications
 } from '@modules/notification';
-
-Tabs.displayName = 'Tabs';
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-`;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
-  },
-  header: {
-    backgroundColor: 'white',
-    boxShadow:
-      '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)'
-  },
-  tabPanel: {
-    marginTop: theme.spacing(1)
-  },
-  readAllButton: {
-    margin: '8px 0'
-  }
-}));
+import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
+import { useStyles, ButtonWrapper } from './NotificationPage.styles';
 
 export default function NotificationPage({ tabType }) {
   const dispatch = useDispatch();

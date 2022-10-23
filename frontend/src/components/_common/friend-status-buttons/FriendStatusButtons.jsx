@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { Button } from '@material-ui/core';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   acceptFriendRequest,
@@ -8,17 +6,8 @@ import {
   requestFriend,
   rejectFriendRequest
 } from '@modules/friend';
+import { FriendButton, ButtonsWrapper } from './FriendStatusButtons.styles';
 
-const FriendButton = styled(Button)`
-  padding: 5px 0 !important;
-  margin: 0 4px;
-`;
-
-const ButtonsWrapper = styled.div`
-  display: flex;
-  min-width: 150px;
-  justify-content: ${(props) => (props.center ? 'center' : 'flex-end')};
-`;
 // isFriend: 이미 친구
 // isPending: 해당 유저가 나한테 보낸 요청이 있음 => 이 때는 requestId 필수
 // hasSentRequest: 내가 유저한테 보낸 요청이 있음 => 이 때는 requestId 필수

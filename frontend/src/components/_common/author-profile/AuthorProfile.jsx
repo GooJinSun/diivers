@@ -1,21 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import FaceIcon from '@material-ui/icons/Face';
 import { useHistory, useLocation } from 'react-router-dom';
-
-const AuthorProfileWrapper = styled.div`
-  cursor: pointer !important;
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-`;
-const AnonIcon = styled.div`
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  background: ${(props) => (props.hex ? props.hex : '#f12c56')};
-`;
-AnonIcon.displayName = 'AnonIcon';
+import { AuthorProfileWrapper, AnonIcon } from './AuthorProfile.styles';
 
 export default function AuthorProfile({
   author,

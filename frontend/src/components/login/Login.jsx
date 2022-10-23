@@ -1,34 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { requestLogin } from '@modules/user';
-import { CommonInput, CommonButton } from '../../styles';
-
-const LoginWrapper = styled.div`
-  width: 500px;
-  margin: 0 auto;
-  margin-top: 120px;
-  @media (max-width: 650px) {
-    width: 90%;
-  }
-`;
-
-const SubButton = styled.button`
-  float: right;
-  border: none;
-  background: #fff;
-  color: #777;
-  font-size: 16px;
-`;
-
-const WarningMessage = styled.div`
-  font-size: 14px;
-  color: #ff395b;
-  margin-bottom: 4px;
-`;
-
-WarningMessage.displayName = 'WarningMessage';
+import { AuthentiCationWrapper } from '@styles/wrappers';
+import { CommonButton, AuthSubButton } from '@styles/buttons';
+import { CommonInput } from '@styles/inputs';
+import { WarningMessage } from '@styles/messages';
 
 export default function Login() {
   const history = useHistory();
@@ -76,7 +53,7 @@ export default function Login() {
   };
 
   return (
-    <LoginWrapper>
+    <AuthentiCationWrapper>
       <h1>로그인</h1>
       <CommonInput
         id="username-input"
@@ -108,22 +85,22 @@ export default function Login() {
       >
         로그인
       </CommonButton>
-      <SubButton
+      <AuthSubButton
         type="button"
         id="signup-button"
         margin="5px 0"
         onClick={onClickLostPassword}
       >
         비밀번호를 잊어버렸어요
-      </SubButton>
-      <SubButton
+      </AuthSubButton>
+      <AuthSubButton
         type="button"
         id="signup-button"
         margin="40px 0"
         onClick={onClickSignupButton}
       >
         회원가입
-      </SubButton>
-    </LoginWrapper>
+      </AuthSubButton>
+    </AuthentiCationWrapper>
   );
 }

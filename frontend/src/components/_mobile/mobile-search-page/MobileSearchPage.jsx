@@ -1,23 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import SearchIcon from '@material-ui/icons/Search';
-
 import useOnClickOutside from 'use-onclickoutside';
 import { fetchSearchResults } from '@modules/search';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
+import { SearchTitle, SearchTextField } from './MobileSearchPage.styles';
 
-const SearchTitle = styled.div`
-  margin: 16px 0;
-  font-size: 20px;
-`;
-const SearchTextField = styled(TextField)`
-  width: 100%;
-`;
 export default function MobileSearchPage() {
   const searchRef = useRef(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);

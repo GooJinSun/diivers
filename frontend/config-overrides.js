@@ -8,7 +8,8 @@ module.exports = function override(config) {
     '@constants': 'src/constants',
     '@hooks': 'src/hooks',
     '@modules': 'src/modules',
-    '@utils': 'src/utils'
+    '@utils': 'src/utils',
+    '@styles': 'src/styles'
   })(config);
 
   return config;

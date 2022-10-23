@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,79 +9,24 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import CustomQuestionModal from '@common-components/custom-question-modal/CustomQuestionModal';
-import ListItemLink from './list-item-link/ListItemLink';
 import {
   WidgetWrapper,
   WidgetTitleWrapper,
-  FlexDiv,
-  CommonButton
-} from '../../../styles';
+  FlexWrapper
+} from '@styles/wrappers';
 import {
   getRecommendedQuestions,
   getRandomQuestions,
   getDailyQuestions
 } from '../../../modules/question';
-
-const NewQuestionButton = styled(CommonButton)`
-  width: 275px;
-  box-shadow: '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)';
-  @media (max-width: 650px) {
-    padding-right: 10px;
-    width: 93vw;
-  }
-`;
-
-const QuestionWidgetWrapper = styled.div`
-  @media (min-width: 650px) {
-    position: fixed;
-  }
-`;
-
-const WidgetCard = styled(Card)`
-  @media (max-width: 650px) {
-    padding-right: 10px;
-    width: 90vw;
-  }
-`;
-
-const QuestionListItemLink = styled(ListItemLink)`
-  border: 1px solid #e7e7e7;
-  margin: 8px;
-  width: calc(100% - 16px);
-  border-radius: 4px;
-  word-break: break-all;
-`;
-
-NewQuestionButton.displayName = 'NewQuestionButton';
-
-const useStyles = makeStyles((theme) => ({
-  card: {
-    width: '275px',
-    borderColor: '#eee',
-    boxShadow:
-      '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)'
-  },
-  cardContent: {
-    padding: '0 !important'
-  },
-  title: {
-    fontWeight: 'bold'
-  },
-  iconButton: {
-    padding: theme.spacing(0.5)
-  },
-  icon: {
-    fontSize: 24
-  },
-  list: {
-    paddingTop: 0
-  },
-  question: {
-    fontSize: 14
-  }
-}));
+import {
+  useStyles,
+  NewQuestionButton,
+  QuestionWidgetWrapper,
+  WidgetCard,
+  QuestionListItemLink
+} from './QuestionListWidget.styles';
 
 const QuestionListWidget = ({
   initialIsRandomQuestions = false,
@@ -176,7 +119,7 @@ const QuestionListWidget = ({
               <Typography variant="h6" className={classes.title}>
                 추천 질문
               </Typography>
-              <FlexDiv>
+              <FlexWrapper>
                 {isFolded ? (
                   <IconButton
                     href=""
@@ -215,7 +158,7 @@ const QuestionListWidget = ({
                     </IconButton>
                   </>
                 )}
-              </FlexDiv>
+              </FlexWrapper>
             </WidgetTitleWrapper>
             {!isFolded &&
               (isLoading ? (

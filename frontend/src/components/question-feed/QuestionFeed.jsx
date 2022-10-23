@@ -1,23 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { appendDailyQuestions, getDailyQuestions } from '@modules/question';
 import CustomQuestionModal from '@common-components/custom-question-modal/CustomQuestionModal';
 import QuestionList from './question-list/QuestionList';
+import { NewQuestionButton } from './QuestionFeed.styles';
 
-const NewQuestionButton = styled.button`
-  @media (min-width: 650px) {
-    display: none;
-  }
-  border: 1px solid #f12c56;
-  border-radius: 4px;
-  padding: 8px 16px;
-  color: #f12c56;
-  opacity: 0.8;
-  font-weight: bold;
-  background: white;
-  float: right;
-`;
 export default function QuestionFeed() {
   const dailyQuestions = useSelector(
     (state) => state.questionReducer.dailyQuestions
