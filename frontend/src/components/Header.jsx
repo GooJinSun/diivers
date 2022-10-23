@@ -289,10 +289,10 @@ const Header = ({ isMobile }) => {
           disableRipple
           color="secondary"
         >
-          <Link to={`/users/${currentUser?.id}`}>
+          <Link to={`/users/${currentUser?.username}`}>
             <AccountCircle color="secondary" />
           </Link>
-          <Link to={`/users/${currentUser?.id}`}>
+          <Link to={`/users/${currentUser?.username}`}>
             <HelloUsername className="hello-username">
               {currentUser?.username}
             </HelloUsername>
