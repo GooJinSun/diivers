@@ -245,7 +245,7 @@ export default function UserPage() {
                   color: selectedUser?.profile_pic
                 }}
               />
-              <h3 margin-bottom="10px">{selectedUser?.username}</h3>
+              <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
               <div>
                 {selectedUser && (
                   <FriendStatusButtons
