@@ -1,58 +1,16 @@
-/* eslint-disable react/button-has-type */
 import React, { useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import { useDispatch } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { readAllNotification } from '@modules/notification';
 import NotificationItem from '@common-components/notification-item/NotificationItem';
+import { useStyles, ButtonWrapper } from './NotificationDropdownList.styles';
 
 const READ_ALL_NOTI_DELAY = 300;
-
-const useStyles = makeStyles({
-  notificationDropdown: {
-    width: 300,
-    maxHeight: 500,
-    overflow: 'scroll',
-    position: 'fixed',
-    top: 68,
-    right: 50,
-    zIndex: 2,
-    boxShadow: 'rgba(0, 0, 0, 0.08) 0px 1px 12px'
-  },
-  notificationDropdownContent: {
-    padding: 0,
-    '&:last-child': {
-      paddingBottom: '0 !important'
-    }
-  },
-  notiButtons: {
-    border: 'none',
-    background: 'transparent',
-    padding: '8px',
-    '&:hover': {
-      color: '#F12C56'
-    }
-  },
-  message: {
-    color: 'grey',
-    fontSize: '14px',
-    padding: '8px',
-    cursor: 'default'
-  }
-});
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 4px 16px 0px 16px;
-`;
 
 const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
   const classes = useStyles();
@@ -77,6 +35,7 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
     <Card variant="outlined" className={classes.notificationDropdown}>
       <ButtonWrapper>
         <button
+          type="button"
           className={`all-notifications ${classes.notiButtons}`}
           onClick={(e) => {
             e.stopPropagation();

@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import styled from 'styled-components';
 import {
   IconButton,
   Card,
@@ -11,18 +9,7 @@ import {
   Typography
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-
-const useStyles = makeStyles(() => ({
-  card: {
-    position: 'absolute',
-    right: '12px',
-    zIndex: 1
-  }
-}));
-
-const PostAuthorWrapper = styled.div`
-  justify-self: right;
-`;
+import { useStyles, PostAuthorWrapper } from './PostAuthorButtons.styles';
 
 const ItemText = ({ text }) => (
   <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>

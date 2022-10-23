@@ -3,54 +3,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
-import { makeStyles } from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
-import styled from 'styled-components';
 import { getResponseRequestsByQuestion } from '@modules/question';
 import QuestionSendFriendItem from '../question-send-friend-item/QuestionSendFriendItem';
-
-const useStyles = makeStyles((theme) => ({
-  content: {
-    padding: theme.spacing(1, 2, 2, 2),
-    margin: '8px 0'
-  },
-  modalTitle: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    margin: 0,
-    paddingBottom: 0
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500]
-  },
-  list: {
-    paddingTop: 0
-  }
-}));
-
-const Question = styled.div`
-  text-align: center;
-  font-weight: 500;
-  font-size: 15px;
-  word-break: break-all;
-  padding: 8px;
-`;
-
-const NoFriend = styled.div`
-  margin-top: 8px;
-  padding: 16px;
-  border: none;
-  border-radius: 4px;
-  text-align: center;
-  background: whitesmoke;
-`;
-
-NoFriend.displayName = 'NoFriend';
+import { useStyles, Question, NoFriend } from './QuestionSendModal.styles';
 
 const QuestionSendModal = ({ questionObj, open, handleClose }) => {
   const classes = useStyles();

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import LockIcon from '@material-ui/icons/Lock';
-import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import { useParams } from 'react-router';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
@@ -12,69 +10,14 @@ import { likePost, unlikePost } from '@modules/like';
 import AuthorProfile from '@common-components/author-profile/AuthorProfile';
 import CreateTime from '@common-components/create-time/CreateTime';
 import NewComment from '@common-components/new-comment/NewComment';
-
-const CommentItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  padding-bottom: 4px;
-  font-size: 12px;
-  justify-content: space-between;
-  .like {
-    width: 0.75em !important;
-  }
-
-  .unlike {
-    width: 0.75em !important;
-  }
-`;
-CommentItemWrapper.displayName = 'CommentItem';
-
-const CommentContent = styled.div`
-  margin: 4px 8px 0 8px;
-  word-break: break-all;
-  @media (max-width: 650px) {
-    margin: 3px 6px;
-  }
-`;
-
-const IconButton = styled.div``;
-
-const ReplyWrapper = styled.div`
-  min-width: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: #999;
-  margin-left: 10px;
-  :hover: {
-    color: #000;
-  }
-`;
-
-const DeleteWrapper = styled.div`
-  min-width: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: #999;
-  margin-left: 4px;
-  :hover: {
-    color: #000;
-  }
-`;
-
-ReplyWrapper.displayName = 'ReplyWrapper';
-DeleteWrapper.displayName = 'DeleteWrapper';
-
-const ReplyIcon = styled(SubdirectoryArrowRightIcon)`
-  @media (max-width: 650px) {
-    margin: 0;
-  }
-  margin-right: 3px;
-  color: #777;
-`;
+import {
+  CommentItemWrapper,
+  ReplyIcon,
+  CommentContent,
+  ReplyWrapper,
+  DeleteWrapper,
+  IconButton
+} from './CommentItem.styles';
 
 export default function CommentItem({
   postKey,

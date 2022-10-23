@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
@@ -20,29 +19,14 @@ import {
   PostItemFooterWrapper,
   PostItemWrapper,
   PostItemButtonsWrapper
-} from '../../../styles';
-
-PostItemWrapper.displayName = 'PostItemWrapper';
-
-const ContentWrapper = styled.div`
-  margin: 12px 0;
-  white-space: pre-wrap;
-`;
-
-const CommentWrapper = styled.div``;
-const ShareSettingsWrapper = styled.div``;
-const ShareSettingInfo = styled.span`
-  margin-right: 4px;
-  color: #777;
-  font-size: 12px;
-`;
-
-const CommentInfo = styled.div`
-  margin-left: 3px;
-  margin-bottom: 8px;
-  color: #aaa;
-  font-size: 10px;
-`;
+} from '@styles/wrappers';
+import {
+  ContentWrapper,
+  CommentWrapper,
+  ShareSettingsWrapper,
+  ShareSettingInfo,
+  CommentInfo
+} from './PostItem.styles';
 
 export default function PostItem({
   postObj,

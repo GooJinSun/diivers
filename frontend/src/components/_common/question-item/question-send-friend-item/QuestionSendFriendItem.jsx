@@ -1,40 +1,14 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import ListItemText from '@material-ui/core/ListItemText';
 import FaceIcon from '@material-ui/icons/Face';
 import { useSelector, useDispatch } from 'react-redux';
-import { FriendItemWrapper } from '@common-components/friend-item/FriendItem';
+import { FriendItemWrapper } from '@common-components/friend-item/FriendItem.styles';
 import {
   createResponseRequest,
   deleteResponseRequest
 } from '@modules/question';
-
-const SendButton = withStyles({
-  root: {
-    boxShadow: 'none',
-    outline: 'none',
-    opacity: 0.8,
-    '&:hover': {
-      boxShadow: 'none',
-      opacity: 1
-    },
-    '&:active': {
-      boxShadow: 'none',
-      opacity: 1
-    }
-  }
-})(Button);
-
-const useStyles = makeStyles((theme) => ({
-  username: {
-    fontSize: 14,
-    marginLeft: theme.spacing(1)
-  },
-  button: {
-    height: '30px'
-  }
-}));
+import { useStyles, SendButton } from './QuestionSendFriendItem.styles';
 
 const QuestionSendFriendItem = ({ questionObj, friendObj, sended }) => {
   const classes = useStyles();

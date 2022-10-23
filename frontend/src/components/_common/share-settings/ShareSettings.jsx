@@ -1,15 +1,6 @@
-/* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
-import {
-  FormGroup,
-  FormControlLabel,
-  Button,
-  Checkbox
-} from '@material-ui/core';
+import { FormControlLabel, Button, Checkbox } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,36 +8,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { createPost, editSelectedPost } from '../../../modules/post';
-
-const RespFormGroup = styled(FormGroup)`
-  @media (max-width: 650px) {
-    // flex-direction: row-reverse;
-    flex-direction: row;
-    justify-content: flex-end;
-    button {
-      width: 30%;
-    }
-  }
-`;
-
-const ShareSettingsWrapper = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-  font-size: 14px;
-`;
-
-const ArticleInfo = styled.div`
-  padding-top: 13px;
-  margin: 0 8px;
-  font-size: 10px;
-  color: #999;
-`;
-
-const useStyles = makeStyles(() => ({
-  label: {
-    fontSize: '14px'
-  }
-}));
+import {
+  useStyles,
+  ShareSettingsWrapper,
+  RespFormGroup,
+  ArticleInfo
+} from './ShareSettings.styles';
 
 export default function ShareSettings({
   newPost,

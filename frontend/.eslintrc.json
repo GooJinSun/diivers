@@ -38,7 +38,9 @@
     "no-case-declarations": "off",
     "camelcase": "off",
     "consistent-return": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off", 
+    "import/prefer-default-export": "off",
+    "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}]
   },
   "globals": {
     "shallow": true,

@@ -1,13 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Container from '@material-ui/core/Container';
-import styled from 'styled-components';
 import FaceIcon from '@material-ui/icons/Face';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
@@ -19,78 +15,14 @@ import Message from '@common-components/message/Message';
 import axios from '@utils/api';
 import UserPostList from './user-post-list/UserPostList';
 import UserReportButton from './user-report-button/UserReportButton';
-
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`full-width-tabpanel-${index}`}
-      aria-labelledby={`full-width-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box p={3}>
-          <Typography component="div">{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
-function a11yProps(index) {
-  return {
-    id: `wrapped-tab-${index}`,
-    'aria-controls': `wrapped-tabpanel-${index}`
-  };
-}
-
-const MobileTabPanel = styled(TabPanel)`
-  @media (max-width: 650px) {
-    padding: 0 !important;
-
-    .MuiBox-root {
-      padding: 0 !important;
-    }
-  }
-`;
-
-const UserPageWrapper = styled.div`
-  background: #ffffff;
-  text-align: center;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const UserReportButtonWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const MobileWrapper = styled.div`
-  @media (max-width: 650px) {
-    border: none !important;
-  }
-`;
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-    border: '1px solid #e7e7e7',
-    borderRadius: '4px'
-  },
-  header: {
-    backgroundColor: 'white',
-    boxShadow:
-      '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)'
-  }
-}));
+import {
+  MobileTabPanel,
+  UserPageWrapper,
+  UserReportButtonWrapper,
+  MobileWrapper,
+  useStyles
+} from './UserPage.styles';
+import { a11yProps } from './tab-panel/TabPanel';
 
 export default function UserPage() {
   const [target, setTarget] = useState(null);

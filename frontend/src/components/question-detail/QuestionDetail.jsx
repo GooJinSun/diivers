@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Box from '@material-ui/core/Box';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {
   getResponsesByQuestionWithType,
@@ -16,47 +14,8 @@ import LoadingList from '@common-components/loading-list/LoadingList';
 import PostItem from '@common-components/post-item/PostItem';
 import QuestionItem from '@common-components/question-item/QuestionItem';
 import Message from '@common-components/message/Message';
-
-Tabs.displayName = 'Tabs';
-function TabPanel(props) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box>{children}</Box>}
-    </div>
-  );
-}
-
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`
-  };
-}
-
-const useStyles = makeStyles((theme) => ({
-  switch: {
-    marginRight: theme.spacing(1)
-  },
-  switchLabel: {
-    marginTop: '-4px'
-  },
-  header: {
-    backgroundColor: 'white',
-    boxShadow:
-      '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)'
-  },
-  tabPanel: {
-    marginTop: theme.spacing(1)
-  }
-}));
+import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
+import { useStyles } from './QuestionDetail.styles';
 
 const QuestionDetail = (props) => {
   const classes = useStyles();

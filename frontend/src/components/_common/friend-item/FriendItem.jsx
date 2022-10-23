@@ -1,37 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import ListItemText from '@material-ui/core/ListItemText';
 import FaceIcon from '@material-ui/icons/Face';
-import styled from 'styled-components';
 import { useHistory } from 'react-router';
 import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
+import { useStyles, FriendItemWrapper, FriendLink } from './FriendItem.styles';
 
-export const FriendItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: #fff;
-  margin: 8px 0;
-  padding: 6px;
-  border: 1px solid #e7e7e7;
-  border-radius: 4px;
-  cursor: pointer !important;
-`;
-
-FriendItemWrapper.displayName = 'FriendItemWrapper';
-const FriendLink = styled.div`
-  display: flex;
-  align-items: center;
-  min-width: 50%;
-`;
-const useStyles = makeStyles((theme) => ({
-  username: {
-    fontSize: 14,
-    marginLeft: theme.spacing(1)
-  }
-}));
-
-// eslint-disable-next-line react/prop-types
 const FriendItem = ({
   friendObj,
   message,

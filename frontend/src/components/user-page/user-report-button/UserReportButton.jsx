@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import styled from 'styled-components';
 import {
   IconButton,
   Card,
@@ -11,20 +9,7 @@ import {
   Typography
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-
-const useStyles = makeStyles(() => ({
-  card: {
-    position: 'absolute',
-    right: '6px',
-    zIndex: 1,
-    width: 'max-content'
-  }
-}));
-
-const ReportButtonWrapper = styled.div`
-  justify-self: right;
-  position: relative;
-`;
+import { useStyles, ReportButtonWrapper } from './UserReportButton.styles';
 
 export default function UserReportButton({
   onClickBlockUser,
