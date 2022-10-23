@@ -1,6 +1,6 @@
 import { mockQuestions } from '@constants';
 import axios from '@utils/api';
-import getRandomNumber from '@utils/numberHelpers';
+import { getRandomNumber } from '@utils/numberHelpers';
 
 export const APPEND_QUESTIONS_REQUEST = 'post/APPEND_QUESTIONS_REQUEST';
 export const APPEND_QUESTIONS_SUCCESS = 'post/APPEND_QUESTIONS_SUCCESS';
