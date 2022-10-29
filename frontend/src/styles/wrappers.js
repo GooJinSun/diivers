@@ -35,6 +35,7 @@ export const WidgetWrapper = styled.div`
   @media (max-width: 650px) {
     width: 95vw;
   }
+  z-index: 2;
 `;
 
 export const WidgetTitleWrapper = styled.div`

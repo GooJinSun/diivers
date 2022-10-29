@@ -85,6 +85,7 @@ const Header = ({ isMobile }) => {
 
   useEffect(() => {
     if (query.length) {
+      if (!isSearchOpen) setIsSearchOpen(true);
       dispatch(fetchSearchResults(1, query));
     } else setIsSearchOpen(false);
   }, [query]);
