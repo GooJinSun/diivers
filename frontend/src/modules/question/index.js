@@ -1,6 +1,5 @@
 import { mockQuestions } from '@constants';
 import axios from '@utils/api';
-import { getRandomNumber } from '@utils/numberHelpers';
 
 export const APPEND_QUESTIONS_REQUEST = 'post/APPEND_QUESTIONS_REQUEST';
 export const APPEND_QUESTIONS_SUCCESS = 'post/APPEND_QUESTIONS_SUCCESS';
@@ -351,10 +350,7 @@ export default function questionReducer(state, action) {
       };
     case GET_RANDOM_QUESTIONS:
       const { dailyQuestions } = state;
-      // NOTE: fix random sort logic temporarily
-      const sortedQuestions = dailyQuestions.sort(
-        () => 0.5 - getRandomNumber(1)
-      );
+      const sortedQuestions = dailyQuestions.sort(() => Math.random() - 0.5);
       const randomQuestions = sortedQuestions.slice(0, 5);
       return {
         ...state,
