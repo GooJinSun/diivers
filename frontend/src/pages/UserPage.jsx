@@ -136,6 +136,11 @@ export default function UserPage() {
   }, [selectedUser]);
 
   useEffect(() => {
+    dispatch(getSelectedUser(id));
+    dispatch(getSelectedUserPosts(id));
+  }, [friendList]);
+
+  useEffect(() => {
     let observer;
     if (target) {
       observer = new IntersectionObserver(onIntersect, { threshold: 1 });
