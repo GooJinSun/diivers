@@ -11,8 +11,7 @@ export const FriendItemWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   background: #fff;
-  // FIXME: FriendItem을 래핑하는 컴포넌트에 padding을 넣는 방향 고민하기
-  margin: ${(props) => (props.isWidget ? '8px 16px' : '8px 0')};
+  margin: 8px 0;
   padding: 6px;
   border: 1px solid #e7e7e7;
   border-radius: 4px;
@@ -36,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
 const FriendItem = ({
   friendObj,
   message,
-  isWidget = false,
   showFriendStatus = false,
   isFriend,
   hasSentRequest,
@@ -51,7 +49,7 @@ const FriendItem = ({
   };
 
   return (
-    <FriendItemWrapper isWidget={isWidget.toString()} onClick={onClick}>
+    <FriendItemWrapper onClick={onClick}>
       <FriendLink onClick={onClick}>
         <FaceIcon />
         <ListItemText

@@ -70,7 +70,6 @@ const QuestionSendModal = ({ questionObj, open, handleClose }) => {
         key={friend.id}
         questionObj={questionObj}
         friendObj={friend}
-        isWidget
         sended={selectedQuestionResponseRequests?.find(
           (r) => r.requestee_id === friend.id
         )}

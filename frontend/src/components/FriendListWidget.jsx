@@ -22,7 +22,7 @@ const useStyles = makeStyles({
       '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)'
   },
   cardContent: {
-    padding: '0 !important'
+    '&:last-child': { paddingBottom: '0 !important' }
   },
   title: {
     fontWeight: 'bold'
@@ -45,7 +45,7 @@ const FriendListWidget = () => {
   }, [dispatch]);
 
   const friendItemList = friendList?.map((friend) => {
-    return <FriendItem key={friend.id} friendObj={friend} isWidget />;
+    return <FriendItem key={friend.id} friendObj={friend} />;
   });
 
   return (

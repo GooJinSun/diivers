@@ -101,7 +101,7 @@ export const WidgetWrapper = styled.div`
 export const WidgetTitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  padding: 16px;
+  padding-bottom: 16px;
 `;
 
 export const FlexDiv = styled.div`

@@ -50,8 +50,8 @@ const WidgetCard = styled(Card)`
 
 const QuestionListItemLink = styled(ListItemLink)`
   border: 1px solid #e7e7e7;
-  margin: 8px;
-  width: calc(100% - 16px);
+  width: 100%;
+  margin: 8px 0;
   border-radius: 4px;
   word-break: break-all;
 `;
@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme) => ({
       '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)'
   },
   cardContent: {
-    padding: '0 !important'
+    '&:last-child': { paddingBottom: '0 !important' }
   },
   title: {
     fontWeight: 'bold'

@@ -14,6 +14,7 @@ const SearchCard = styled(Card)`
     top: 68px;
     right: 230px;
     z-index: 120;
+    padding: 0 16px;
   }
 
   box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;
@@ -41,12 +42,11 @@ const SearchDropdownList = () => {
   const results = useSelector((state) => state.searchReducer.searchObj.results);
 
   const userList = results?.map((user) => (
-    // FIXME: isWidget 대신 더 의미있는 prop 필요함
-    <FriendItem key={user.id} friendObj={user} isWidget />
+    <FriendItem key={user.id} friendObj={user} />
   ));
 
   return (
-    <SearchCard variant="outlined">
+    <SearchCard variant="outlined" px={2} py={1}>
       <CardContent className={classes.searchDropdownContent}>
         {userList}
       </CardContent>
