@@ -1,5 +1,5 @@
-import axios from '../../utils/api';
-import { mockQuestions } from '../../constants';
+import { mockQuestions } from '@constants';
+import axios from '@utils/api';
 
 export const APPEND_QUESTIONS_REQUEST = 'post/APPEND_QUESTIONS_REQUEST';
 export const APPEND_QUESTIONS_SUCCESS = 'post/APPEND_QUESTIONS_SUCCESS';
@@ -350,12 +350,7 @@ export default function questionReducer(state, action) {
       };
     case GET_RANDOM_QUESTIONS:
       const { dailyQuestions } = state;
-      const array = new Uint32Array(1);
-      if (window.crypto) window.crypto.getRandomValues(array);
-      else array[0] = 123456789;
-      const sortedQuestions = dailyQuestions.sort(
-        () => 0.5 - array[0] / 10 ** 10
-      );
+      const sortedQuestions = dailyQuestions.sort(() => Math.random() - 0.5);
       const randomQuestions = sortedQuestions.slice(0, 5);
       return {
         ...state,
