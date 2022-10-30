@@ -11,7 +11,8 @@ export const FriendItemWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   background: #fff;
-  margin: ${(props) => (props.isWidget === 'true' ? '8px 16px' : '8px 0')};
+  // FIXME: FriendItem을 래핑하는 컴포넌트에 padding을 넣는 방향 고민하기
+  margin: ${(props) => (props.isWidget ? '8px 16px' : '8px 0')};
   padding: 6px;
   border: 1px solid #e7e7e7;
   border-radius: 4px;
@@ -36,6 +37,7 @@ const FriendItem = ({
   friendObj,
   message,
   isWidget = false,
+  showFriendStatus = false,
   isFriend,
   hasSentRequest,
   isPending
@@ -57,7 +59,7 @@ const FriendItem = ({
           primary={message || username}
         />
       </FriendLink>
-      {!isWidget && (
+      {showFriendStatus && (
         <FriendStatusButtons
           friendObj={friendObj}
           isFriend={isFriend}

@@ -55,7 +55,7 @@ const QuestionSendFriendItem = ({ questionObj, friendObj, sended }) => {
   };
 
   return (
-    <FriendItemWrapper isWidget={false}>
+    <FriendItemWrapper>
       <FaceIcon />
       <ListItemText
         classes={{ primary: classes.username }}

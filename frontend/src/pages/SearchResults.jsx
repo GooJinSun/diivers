@@ -48,6 +48,7 @@ export default function SearchResults() {
           isFriend={user.are_friends}
           isPending={user.received_friend_request_from}
           hasSentRequest={user.sent_friend_request_to}
+          showFriendStatus
         />
       );
     });

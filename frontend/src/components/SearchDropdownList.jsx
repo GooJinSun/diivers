@@ -41,6 +41,7 @@ const SearchDropdownList = () => {
   const results = useSelector((state) => state.searchReducer.searchObj.results);
 
   const userList = results?.map((user) => (
+    // FIXME: isWidget 대신 더 의미있는 prop 필요함
     <FriendItem key={user.id} friendObj={user} isWidget />
   ));
 
