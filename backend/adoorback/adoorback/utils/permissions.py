@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 from feed.models import Post
-from adoorback.content_types import get_generic_relation_type
+from adoorback.utils.content_types import get_generic_relation_type
 
 
 class IsAuthorOrReadOnly(permissions.BasePermission):

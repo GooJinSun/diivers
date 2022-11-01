@@ -17,9 +17,9 @@ from account.serializers import UserProfileSerializer, \
     UserFriendshipStatusSerializer, AuthorFriendSerializer
 from feed.serializers import QuestionAnonymousSerializer
 from feed.models import Question
-from adoorback.validators import adoor_exception_handler
+from adoorback.utils.validators import adoor_exception_handler
 from.email import email_manager
-from adoorback.permissions import IsNotBlocked
+from adoorback.utils.permissions import IsNotBlocked
 
 User = get_user_model()
 

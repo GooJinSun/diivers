@@ -5,9 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from like.models import Like
 from like.serializers import LikeSerializer
 
-from adoorback.permissions import IsOwnerOrReadOnly
-from adoorback.content_types import get_generic_relation_type
-from adoorback.validators import adoor_exception_handler
+from adoorback.utils.permissions import IsOwnerOrReadOnly
+from adoorback.utils.content_types import get_generic_relation_type
+from adoorback.utils.validators import adoor_exception_handler
 
 
 class LikeList(generics.CreateAPIView):

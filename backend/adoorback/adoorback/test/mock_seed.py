@@ -8,7 +8,7 @@ import pandas as pd
 from django.contrib.auth import get_user_model
 from faker import Faker
 
-from adoorback.content_types import get_article_type, get_question_type, \
+from adoorback.utils.content_types import get_article_type, get_question_type, \
     get_response_type, get_comment_type
 from account.models import FriendRequest
 from feed.models import Article, Response, Question, ResponseRequest

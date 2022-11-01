@@ -6,8 +6,8 @@ from comment.models import Comment
 from feed.models import Article
 from notification.models import Notification
 
-from adoorback.utils.seed import set_seed, fill_data
-from adoorback.content_types import get_article_type, get_response_type, get_comment_type
+from adoorback.test.seed import set_seed, fill_data
+from adoorback.utils.content_types import get_article_type, get_response_type, get_comment_type
 
 User = get_user_model()
 N = 10

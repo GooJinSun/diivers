@@ -5,9 +5,9 @@ from rest_framework.permissions import IsAuthenticated
 from comment.models import Comment
 from comment.serializers import CommentResponsiveSerializer
 
-from adoorback.permissions import IsAuthorOrReadOnly
-from adoorback.content_types import get_generic_relation_type
-from adoorback.validators import adoor_exception_handler
+from adoorback.utils.permissions import IsAuthorOrReadOnly
+from adoorback.utils.content_types import get_generic_relation_type
+from adoorback.utils.validators import adoor_exception_handler
 
 
 class CommentCreate(generics.ListCreateAPIView):

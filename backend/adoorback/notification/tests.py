@@ -6,8 +6,8 @@ from comment.models import Comment
 from like.models import Like
 from notification.models import Notification
 
-from adoorback.utils.seed import set_seed, fill_data
-from adoorback.content_types import get_comment_type, get_like_type, \
+from adoorback.test.seed import set_seed, fill_data
+from adoorback.utils.content_types import get_comment_type, get_like_type, \
     get_article_type, get_question_type, get_response_type, \
     get_response_request_type, get_friend_request_type
 

@@ -9,9 +9,9 @@ from django.db.models.signals import post_save
 from like.models import Like
 from notification.models import Notification
 from adoorback.models import AdoorModel
-from adoorback.content_types import get_comment_type, get_generic_relation_type
+from adoorback.utils.content_types import get_comment_type, get_generic_relation_type
 
-from utils import wrap_content
+from adoorback.utils.helpers import wrap_content
 
 User = get_user_model()
 

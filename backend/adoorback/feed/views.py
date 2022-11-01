@@ -11,8 +11,8 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import PermissionDenied
 
-from adoorback.permissions import IsAuthorOrReadOnly, IsShared, IsNotBlocked
-from adoorback.validators import adoor_exception_handler
+from adoorback.utils.permissions import IsAuthorOrReadOnly, IsShared, IsNotBlocked
+from adoorback.utils.validators import adoor_exception_handler
 import feed.serializers as fs
 from feed.algorithms.data_crawler import select_daily_questions
 from feed.models import Article, Response, Question, Post, ResponseRequest

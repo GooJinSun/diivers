@@ -5,7 +5,7 @@ from rest_framework.utils import json
 from test_plus.test import TestCase
 
 from account.models import FriendRequest
-from adoorback.utils.seed import set_seed
+from adoorback.test.seed import set_seed
 from notification.models import Notification
 
 User = get_user_model()

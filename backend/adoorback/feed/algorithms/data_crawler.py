@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 
 from feed.models import Question
 from notification.models import Notification
-from adoorback.content_types import get_response_request_type
+from adoorback.utils.content_types import get_response_request_type
 
 
 def select_daily_questions():
