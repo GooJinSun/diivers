@@ -10,8 +10,10 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models, transaction
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
+from django.utils.translation import gettext_lazy as _
 
 from adoorback.models import AdoorTimestampedModel
+from adoorback.validators import AdoorUsernameValidator
 
 
 def random_profile_color():
@@ -23,6 +25,18 @@ class User(AbstractUser, AdoorTimestampedModel):
     """User Model
     This model extends the Django Abstract User model
     """
+    username_validator = AdoorUsernameValidator()
+
+    username = models.CharField(
+        _('username'),
+        max_length=20,
+        unique=True,
+        help_text=_('Required. 20 characters or fewer. Letters (alphabet & 한글), digits and _ only.'),
+        validators=[username_validator],
+        error_messages={
+            'unique': _("A user with that username already exists."),
+        },
+    )
     email = models.EmailField(unique=True)
     question_history = models.CharField(null=True, max_length=500)
     profile_pic = models.CharField(default=random_profile_color, max_length=7)
