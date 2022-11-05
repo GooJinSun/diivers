@@ -22,7 +22,7 @@ urlpatterns = [
     # User Profile related
     path('', views.UserList.as_view(), name='user-list'),
     path(r'search/', views.UserSearch.as_view(), name='user-search'),
-    path('<int:pk>/', views.UserDetail.as_view(), name='user-detail'),
+    path('profile/<str:username>/', views.UserDetail.as_view(), name='user-detail'),
 
     # Current User Related
     path('me/', views.CurrentUserProfile.as_view(), name='current-user'),

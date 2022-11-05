@@ -4,6 +4,7 @@ from django.db import transaction
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
+from django.urls import reverse
 
 from account.models import FriendRequest
 from adoorback.settings.base import BASE_URL
@@ -16,7 +17,7 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     Serializer for auth and profile update
     """
     url = serializers.HyperlinkedIdentityField(
-        view_name='user-detail', read_only=True)
+        view_name='user-detail', read_only=True, lookup_field='username')
 
     class Meta:
         model = User
@@ -39,8 +40,7 @@ class AuthorFriendSerializer(serializers.ModelSerializer):
     url = serializers.SerializerMethodField(read_only=True)
 
     def get_url(self, obj):
-        return f'{BASE_URL}/api/user/{obj.id}/'
-
+        return BASE_URL + reverse('user-detail', kwargs={'username': obj.username})
     class Meta:
         model = User
         fields = ['id', 'username', 'profile_pic', 'url']
