@@ -49,8 +49,8 @@ const FriendItem = ({
   };
 
   return (
-    <FriendItemWrapper iswidget={isWidget.toString()}>
-      <FriendLink onClick={onClick}>
+    <FriendItemWrapper iswidget={isWidget.toString()} onClick={onClick}>
+      <FriendLink>
         <FaceIcon />
         <ListItemText
           classes={{ primary: classes.username }}
