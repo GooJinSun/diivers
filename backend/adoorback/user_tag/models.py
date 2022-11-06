@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 
 from adoorback.models import AdoorTimestampedModel
 from notification.models import Notification
+from adoorback.content_types import get_generic_relation_type
 
 User = get_user_model()
 
@@ -97,6 +98,12 @@ def create_user_tag_noti(instance, **kwargs):
         print("UserTag can only be created in comment or reply for now.")
         return
 
-    Notification.objects.create(actor=actor, user=user,
-                                origin=origin, target=target,
-                                message=message, redirect_url=redirect_url)
+    notification = Notification.objects.filter(actor=actor,
+                                               user=user,
+                                               origin_id=origin.id,
+                                               origin_type=get_generic_relation_type(origin.type))
+
+    if notification.count() == 0:  # create only one notification when user was tagged twice in the same comment
+        Notification.objects.create(actor=actor, user=user,
+                                    origin=origin, target=target,
+                                    message=message, redirect_url=redirect_url)
