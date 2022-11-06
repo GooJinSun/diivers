@@ -521,7 +521,7 @@ class ExceptionHandlerAPITestCase(APITestCase):
         response = self.get('current_user_friends')
         self.assertEqual(response.status_code, 404)
 
-        response = self.get(self.reverse('user-detail', pk=1))
+        response = self.get(self.reverse('user-detail', username=User.objects.get(id=1).username))
         self.assertEqual(response.status_code, 403)
 
         response = self.delete(self.reverse('user-friend-destroy', pk=1))

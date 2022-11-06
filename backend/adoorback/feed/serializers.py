@@ -3,6 +3,7 @@ from django.core.paginator import Paginator
 from rest_framework import serializers
 from rest_framework.exceptions import NotAcceptable
 from rest_framework.validators import UniqueTogetherValidator
+from django.urls import reverse
 
 from feed.models import Article, Response, Question, Post, ResponseRequest
 from adoorback.serializers import AdoorBaseSerializer
@@ -51,7 +52,7 @@ class PostAnonymousSerializer(serializers.ModelSerializer):
 
 class ArticleFriendSerializer(AdoorBaseSerializer):
     author = serializers.HyperlinkedIdentityField(
-        view_name='user-detail', read_only=True)
+        view_name='user-detail', read_only=True, lookup_field='author', lookup_url_kwarg='username')
     author_detail = AuthorFriendSerializer(source='author', read_only=True)
     comments = serializers.SerializerMethodField()
 
@@ -85,7 +86,7 @@ class ArticleAnonymousSerializer(AdoorBaseSerializer):
 
     def get_author(self, obj):
         if obj.author == self.context.get('request', None).user:
-            return f'{BASE_URL}/api/user/{obj.author.id}/'
+            return BASE_URL + reverse('user-detail', kwargs={'username': obj.author.username})
         return None
 
     def get_comments(self, obj):
@@ -129,7 +130,7 @@ class ResponseBaseSerializer(AdoorBaseSerializer):
 
 class ResponseFriendSerializer(ResponseBaseSerializer):
     author = serializers.HyperlinkedIdentityField(
-        view_name='user-detail', read_only=True)
+        view_name='user-detail', read_only=True, lookup_field='author', lookup_url_kwarg='username')
     author_detail = AuthorFriendSerializer(source='author', read_only=True)
     comments = serializers.SerializerMethodField()
 
@@ -163,7 +164,7 @@ class ResponseAnonymousSerializer(ResponseBaseSerializer):
 
     def get_author(self, obj):
         if obj.author == self.context.get('request', None).user:
-            return f'{BASE_URL}/api/user/{obj.author.id}/'
+            return BASE_URL + reverse('user-detail', kwargs={'username': obj.author.username})
         return None
 
     def get_comments(self, obj):
@@ -197,7 +198,7 @@ class ResponseResponsiveSerializer(ResponseBaseSerializer):
     def get_author(self, obj):
         current_user = self.context.get('request', None).user
         if obj.share_with_friends and (User.are_friends(current_user, obj.author) or obj.author == current_user):
-            return f'{BASE_URL}/api/user/{obj.author.id}/'
+            return BASE_URL + reverse('user-detail', kwargs={'username': obj.author.username})
         return None
 
     def get_comments(self, obj):
@@ -236,7 +237,7 @@ class QuestionResponsiveSerializer(QuestionBaseSerializer):
 
     def get_author(self, obj):
         if User.are_friends(self.context.get('request', None).user, obj.author):
-            return f'{BASE_URL}/api/user/{obj.author.id}/'
+            return BASE_URL + reverse('user-detail', kwargs={'username': obj.author.username})
         return None
 
     class Meta(QuestionBaseSerializer.Meta):
@@ -253,7 +254,7 @@ class QuestionFriendSerializer(QuestionBaseSerializer):
     but allows for faster responses when rendering friend/anonymous feeds.
     """
     author = serializers.HyperlinkedIdentityField(
-        view_name='user-detail', read_only=True)
+        view_name='user-detail', read_only=True, lookup_field='author', lookup_url_kwarg='username')
     author_detail = AuthorFriendSerializer(source='author', read_only=True)
 
     class Meta(QuestionBaseSerializer.Meta):
@@ -301,7 +302,7 @@ class QuestionAnonymousSerializer(QuestionBaseSerializer):
 
     def get_author(self, obj):
         if obj.author == self.context.get('request', None).user:
-            return f'{BASE_URL}/api/user/{obj.author.id}/'
+            return BASE_URL + reverse('user-detail', kwargs={'username': obj.author.username})
         return None
 
     class Meta(QuestionBaseSerializer.Meta):

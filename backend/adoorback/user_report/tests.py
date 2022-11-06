@@ -158,13 +158,13 @@ class UserReportAPITestCase(APITestCase):
             self.assertEqual(response.data['count'], 0)  # blocked user don't show up in friend list
 
         with self.login(username=user3.username, password='password'):
-            response = self.get(self.reverse('user-detail', pk=user1.id))
+            response = self.get(self.reverse('user-detail', username=user1.username))
             self.assertEqual(response.status_code, 403)  # can't access blocked user's page
 
         with self.login(username=user2.username, password='password'):
-            response = self.get(self.reverse('user-detail', pk=user1.id))
+            response = self.get(self.reverse('user-detail', username=user1.username))
             self.assertEqual(response.status_code, 200)
 
         with self.login(username=user1.username, password='password'):
-            response = self.get(self.reverse('user-detail', pk=user3.id))
+            response = self.get(self.reverse('user-detail', username=user3.username))
             self.assertEqual(response.status_code, 403)  # can't access blocked user's page
