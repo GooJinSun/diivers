@@ -30,8 +30,9 @@ export default function AuthorProfile({
   const { id, username, profile_pic: picHex, color_hex: hex } = author;
 
   const onClickProfile = () => {
-    if (id) history.push(`/users/${id}`);
+    history.push(`/users/${username}`);
   };
+
   return (
     <AuthorProfileWrapper onClick={onClickProfile}>
       {id && (!isAnonFeed || isAuthor) ? (
