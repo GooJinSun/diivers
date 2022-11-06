@@ -10,7 +10,6 @@ User = get_user_model()
 
 
 class UserTagSerializer(serializers.ModelSerializer):
-    tagged_user = serializers.SerializerMethodField()
     tagged_username = serializers.SerializerMethodField()
 
     def validate(self, attrs):
@@ -20,14 +19,10 @@ class UserTagSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('username length가 -1입니다')
         return attrs
 
-    def get_tagged_user(self, obj):
-        # FIXME: must change to username after merging userpage url change branch
-        return BASE_URL + reverse('user-detail', kwargs={'pk': obj.tagged_user.id})
-
     def get_tagged_username(self, obj):
         return obj.tagged_user.username
 
     class Meta:
         model = UserTag
-        fields = ['id', 'tagged_user', 'tagged_username', 'offset', 'length']
+        fields = ['id', 'tagged_username', 'offset', 'length']
         validators = []
