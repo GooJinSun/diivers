@@ -7,13 +7,16 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.db import IntegrityError
 
+import re
+
 from like.models import Like
 from notification.models import Notification
 from user_tag.models import UserTag
 from adoorback.models import AdoorModel
-from adoorback.utils.content_types import get_comment_type, get_generic_relation_type
 
 from adoorback.utils.helpers import wrap_content
+from adoorback.content_types import get_comment_type, get_generic_relation_type
+from adoorback.validators import USERNAME_REGEX
 
 User = get_user_model()
 
@@ -116,17 +119,21 @@ def create_user_tag(instance, **kwargs):
         return
 
     words = content.split(' ')
-    for word in words:
+    for i, word in enumerate(words):
         if word[0] != '@':
             continue
-        tagged_username = word[1:]
+
+        # cut username by regex (exclude unallowed characters)
+        tagged_username = re.compile(USERNAME_REGEX[1:-2]).match(word[1:]).group()
         try:
             tagged_user = User.objects.get(username=tagged_username)
         except User.DoesNotExist:
             continue
         try:
+            offset = sum([len(w) for w in words[:i]]) + i + 1  # length of words + spaces + '@'
             UserTag.objects.create(tagging_user_id=tagging_user.id, tagged_user_id=tagged_user.id,
-                                   object_id=object_id, content_type=content_type)
+                                   object_id=object_id, content_type=content_type, 
+                                   offset=offset, length=len(tagged_username))
         except IntegrityError as e:
             constraint_failed = False
             for arg in e.args:

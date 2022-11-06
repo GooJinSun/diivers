@@ -26,6 +26,9 @@ class UserTag(AdoorTimestampedModel):
     object_id = models.IntegerField()
     target = GenericForeignKey('content_type', 'object_id')
 
+    offset = models.IntegerField(default=-1)
+    length = models.IntegerField(default=0)
+
     user_tag_targetted_notis = GenericRelation(Notification,
                                                content_type_field='target_type',
                                                object_id_field='target_id')
@@ -36,11 +39,11 @@ class UserTag(AdoorTimestampedModel):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['tagging_user', 'tagged_user', 'content_type', 'object_id'], name='unique_user_tag'),
-            models.CheckConstraint(
-                check=~Q(tagging_user=F('tagged_user')),
-                name='tagging_user_and_tagged_user_cannot_be_equal'
-            )
+            models.UniqueConstraint(fields=['tagging_user', 'tagged_user', 'content_type', 'object_id', 'offset'], name='unique_user_tag'),
+            # models.CheckConstraint(
+            #     check=~Q(tagging_user=F('tagged_user')),
+            #     name='tagging_user_and_tagged_user_cannot_be_equal'
+            # )
         ]
         ordering = ['id']
 

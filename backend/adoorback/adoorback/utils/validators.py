@@ -8,6 +8,9 @@ from django.core import validators
 from rest_framework.views import exception_handler
 
 
+USERNAME_REGEX = r'^[가-힣|\w|_]+\Z'
+
+
 def validate_notification_message(message):
     if message not in ['sent friend request to',
                        'received friend request from',
@@ -31,7 +34,7 @@ def adoor_exception_handler(e, context):
 
 
 class AdoorUsernameValidator(validators.RegexValidator):
-    regex = r'^([\w_가-힣])([^ㄱ-ㅎ|ㅏ-ㅣ])+\Z'
+    regex = USERNAME_REGEX
     message = _(
         '유효한 닉네임을 입력해주세요. 영문, 한글, 숫자, 일부 특수문자(_)만 허용합니다.'
         '공백, 한글 자음/모음만 있는 경우는 허용되지 않습니다.'
