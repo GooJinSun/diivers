@@ -132,7 +132,7 @@ export default function UserPage() {
 
   useEffect(() => {
     if (!selectedUser) return;
-    dispatch(getSelectedUserPosts(selectedUser.username));
+    dispatch(getSelectedUserPosts(selectedUser.id));
   }, [selectedUser]);
 
   useEffect(() => {
