@@ -1,7 +1,5 @@
 interface QueryList {
-  key: {
-    param?: string;
-  };
+  GET_RECOMMENDED_QUESTIONS: undefined;
 }
 
 export const getQueryKey = <T extends keyof QueryList>(
