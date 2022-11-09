@@ -94,7 +94,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function UserPage() {
   const [target, setTarget] = useState(null);
-  const { id } = useParams();
+  const { username } = useParams();
   const dispatch = useDispatch();
   const classes = useStyles();
   const selectedUser = useSelector((state) => state.userReducer.selectedUser);
@@ -125,11 +125,15 @@ export default function UserPage() {
     'FAILURE';
 
   useEffect(() => {
-    dispatch(getSelectedUser(id));
+    dispatch(getSelectedUser(username));
     dispatch(getFriendList());
-    dispatch(getSelectedUserPosts(id));
     setValue('All');
-  }, [dispatch, id]);
+  }, [dispatch, username]);
+
+  useEffect(() => {
+    if (!selectedUser) return;
+    dispatch(getSelectedUserPosts(selectedUser.id));
+  }, [selectedUser]);
 
   useEffect(() => {
     let observer;
@@ -163,8 +167,9 @@ export default function UserPage() {
   };
 
   const onClickConfirmBlockUser = async () => {
+    if (!selectedUser) return;
     await axios.post('/user_reports/', {
-      reported_user_id: id
+      reported_user_id: selectedUser.id
     });
   };
 
@@ -174,8 +179,9 @@ export default function UserPage() {
   };
 
   const onClickConfirmReportUser = async () => {
+    if (!selectedUser) return;
     await axios.post('/user_reports/', {
-      reported_user_id: id
+      reported_user_id: selectedUser.id
     });
   };
 
@@ -245,7 +251,7 @@ export default function UserPage() {
                   color: selectedUser?.profile_pic
                 }}
               />
-              <h3 margin-bottom="10px">{selectedUser?.username}</h3>
+              <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
               <div>
                 {selectedUser && (
                   <FriendStatusButtons

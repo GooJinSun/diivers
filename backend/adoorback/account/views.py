@@ -214,6 +214,7 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserFriendshipStatusSerializer
     permission_classes = [IsAuthenticated, IsNotBlocked]
+    lookup_field = 'username'
 
     def get_exception_handler(self):
         return adoor_exception_handler

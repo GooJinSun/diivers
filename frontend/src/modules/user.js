@@ -192,11 +192,11 @@ export const getCurrentUser = () => async (dispatch) => {
   }
 };
 
-export const getSelectedUser = (id) => async (dispatch) => {
+export const getSelectedUser = (userName) => async (dispatch) => {
   let result;
   dispatch({ type: `user/GET_SELECTED_USER_REQUEST` });
   try {
-    result = await axios.get(`user/${id}/`);
+    result = await axios.get(`user/profile/${userName}/`);
   } catch (error) {
     dispatch({ type: `user/GET_SELECTED_USER_FAILURE`, error });
     return;
