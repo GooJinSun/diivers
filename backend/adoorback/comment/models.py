@@ -132,7 +132,7 @@ def create_user_tag(instance, **kwargs):
             offset = sum([len(w) for w in words[:i]]) + i + 1  # length of words + spaces + '@'
             UserTag.objects.create(tagging_user_id=tagging_user.id, tagged_user_id=tagged_user.id,
                                    object_id=object_id, content_type=content_type, 
-                                   offset=offset, length=len(tagged_username))
+                                   offset=offset, length=len(tagged_username), username_str=tagged_username)
         except IntegrityError as e:
             constraint_failed = False
             for arg in e.args:

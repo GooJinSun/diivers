@@ -20,7 +20,7 @@ class UserTagSerializer(serializers.ModelSerializer):
         return attrs
 
     def get_tagged_username(self, obj):
-        return obj.tagged_user.username
+        return obj.username_str
 
     class Meta:
         model = UserTag

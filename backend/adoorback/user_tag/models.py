@@ -29,6 +29,7 @@ class UserTag(AdoorTimestampedModel):
 
     offset = models.IntegerField(default=-1)
     length = models.IntegerField(default=0)
+    username_str = models.CharField(max_length=20, default='')  # save initial username string (in case tagged_user changes their username)
 
     user_tag_targetted_notis = GenericRelation(Notification,
                                                content_type_field='target_type',
