@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -124,6 +124,15 @@ export default function UserPage() {
     useSelector((state) => state.loadingReducer['user/GET_SELECTED_USER']) ===
     'FAILURE';
 
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        dispatch(appendPosts('selectedUser'));
+      }
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     dispatch(getSelectedUser(username));
     dispatch(getFriendList());
@@ -133,12 +142,7 @@ export default function UserPage() {
   useEffect(() => {
     if (!selectedUser) return;
     dispatch(getSelectedUserPosts(selectedUser.id));
-  }, [selectedUser]);
-
-  useEffect(() => {
-    dispatch(getSelectedUser(id));
-    dispatch(getSelectedUserPosts(id));
-  }, [friendList]);
+  }, [dispatch, selectedUser, friendList]);
 
   useEffect(() => {
     let observer;
@@ -147,13 +151,7 @@ export default function UserPage() {
       observer.observe(target);
     }
     return () => observer && observer.disconnect();
-  }, [target]);
-
-  const onIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(appendPosts('selectedUser'));
-    }
-  };
+  }, [target, onIntersect]);
 
   const userResponses = selectedUserPosts?.filter(
     (post) => post.type === 'Response'
