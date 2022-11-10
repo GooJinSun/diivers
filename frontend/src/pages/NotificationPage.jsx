@@ -114,6 +114,7 @@ export default function NotificationPage({ tabType }) {
           message={noti.message}
           isPending
           friendObj={noti?.actor_detail}
+          showFriendStatus
         />
       );
     }
@@ -135,6 +136,7 @@ export default function NotificationPage({ tabType }) {
           message={friendRequestNoti.message}
           isPending
           friendObj={friendRequestNoti?.actor_detail}
+          showFriendStatus
         />
       );
     });

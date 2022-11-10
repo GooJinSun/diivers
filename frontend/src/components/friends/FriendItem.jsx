@@ -11,7 +11,7 @@ export const FriendItemWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   background: #fff;
-  margin: ${(props) => (props.iswidget === 'true' ? '8px 16px' : '8px 0')};
+  margin: 8px 0;
   padding: 6px;
   border: 1px solid #e7e7e7;
   border-radius: 4px;
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const FriendItem = ({
   friendObj,
   message,
-  isWidget = false,
+  showFriendStatus = false,
   isFriend,
   hasSentRequest,
   isPending
@@ -49,15 +49,15 @@ const FriendItem = ({
   };
 
   return (
-    <FriendItemWrapper iswidget={isWidget.toString()} onClick={onClick}>
-      <FriendLink>
+    <FriendItemWrapper onClick={onClick}>
+      <FriendLink onClick={onClick}>
         <FaceIcon />
         <ListItemText
           classes={{ primary: classes.username }}
           primary={message || username}
         />
       </FriendLink>
-      {!isWidget && (
+      {showFriendStatus && (
         <FriendStatusButtons
           friendObj={friendObj}
           isFriend={isFriend}
