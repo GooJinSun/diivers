@@ -9,8 +9,8 @@ from comment.models import Comment
 from feed.models import Article, Response, Question, Post, ResponseRequest
 from notification.models import Notification
 
-from adoorback.utils.seed import set_seed, fill_data
-from adoorback.content_types import get_response_type
+from adoorback.test.seed import set_seed, fill_data
+from adoorback.utils.content_types import get_response_type
 
 User = get_user_model()
 N = 10

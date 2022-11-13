@@ -8,9 +8,9 @@ from rest_framework.response import Response
 from notification.models import Notification
 from notification.serializers import NotificationSerializer
 
-from adoorback.permissions import IsOwnerOrReadOnly
-from adoorback.validators import adoor_exception_handler
-from adoorback.content_types import get_friend_request_type, get_response_request_type
+from adoorback.utils.permissions import IsOwnerOrReadOnly
+from adoorback.utils.validators import adoor_exception_handler
+from adoorback.utils.content_types import get_friend_request_type, get_response_request_type
 
 
 class NotificationList(generics.ListAPIView, generics.UpdateAPIView):

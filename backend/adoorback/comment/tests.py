@@ -6,8 +6,8 @@ from comment.models import Comment
 from feed.models import Article
 from notification.models import Notification
 
-from adoorback.utils.seed import set_seed, fill_data
-from adoorback.content_types import get_article_type, get_response_type, get_comment_type
+from adoorback.test.seed import set_seed, fill_data
+from adoorback.utils.content_types import get_article_type, get_response_type, get_comment_type
 
 User = get_user_model()
 N = 10
@@ -159,8 +159,8 @@ class CommentNotiAPITestCase(APITestCase):
             num_notis_after = Notification.objects.count()
             self.assertEqual(num_notis_before, num_notis_after - 1)
             comment_noti = Notification.objects.first()  # notification is order_by '-updated_at'
-            self.assertEqual(comment_noti.message,
-                             "current_user님이 회원님의 게시글에 댓글을 남겼습니다.")
+            self.assertIn("current_user님이 회원님의 게시글에 댓글을 남겼습니다", comment_noti.message)
+            self.assertIn(data["content"].split()[0], comment_noti.message)
             self.assertEqual(comment_noti.user, Article.objects.get(id=1).author)
 
         # create comment (current_user -> author of Response with id=1)
@@ -168,9 +168,9 @@ class CommentNotiAPITestCase(APITestCase):
             data = {"target_type": "Response", "target_id": 1, "content": "test_comment"}
             response = self.post('comment-create', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
-
-            self.assertEqual(Notification.objects.first().message,
-                             "current_user님이 회원님의 답변에 댓글을 남겼습니다.")  # different message for response type
+            comment_noti = Notification.objects.first()
+            self.assertIn("current_user님이 회원님의 답변에 댓글을 남겼습니다", comment_noti.message)
+            self.assertIn(data["content"].split()[0], comment_noti.message)
 
         # create comment (current_user -> current_user): no new notification
         with self.login(username=current_user.username, password='password'):
@@ -196,9 +196,8 @@ class CommentNotiAPITestCase(APITestCase):
             num_notis_after = Notification.objects.count()
             self.assertEqual(num_notis_before, num_notis_after - 1)
             reply_noti = Notification.objects.first()  # notification is order_by '-updated_at'
-            self.assertEqual(reply_noti.message,
-                             "current_user님이 회원님의 댓글에 답글을 남겼습니다.")
-            self.assertEqual(reply_noti.user, Comment.objects.get(id=1).author)
+            self.assertIn("current_user님이 회원님의 댓글에 답글을 남겼습니다", reply_noti.message)
+            self.assertIn(data["content"].split()[0], reply_noti.message)
 
         # create reply (current_user -> current_user): no new notification
         with self.login(username=current_user.username, password='password'):

@@ -9,7 +9,9 @@ from django.db.models.signals import post_save
 from like.models import Like
 from notification.models import Notification
 from adoorback.models import AdoorModel
-from adoorback.content_types import get_comment_type, get_generic_relation_type
+from adoorback.utils.content_types import get_comment_type, get_generic_relation_type
+
+from adoorback.utils.helpers import wrap_content
 
 User = get_user_model()
 
@@ -69,13 +71,14 @@ def create_noti(instance, **kwargs):
     if actor.id in user.user_report_blocked_ids: # do not create notification from/for blocked user
         return
     actor_name = '익명의 사용자가' if instance.is_anonymous else f'{actor.username}님이'
+    content_preview = wrap_content(instance.content)
 
     if origin.type == 'Comment':  # if is_reply
-        message = f'{actor_name} 회원님의 댓글에 답글을 남겼습니다.'
+        message = f'{actor_name} 회원님의 댓글에 답글을 남겼습니다: "{content_preview}"'
         redirect_url = f'/{origin.target.type.lower()}s/{origin.target.id}?anonymous={instance.is_anonymous}'
     else:  # if not reply
         origin_target_name = '게시글' if origin.type == 'Article' else '답변'
-        message = f'{actor_name} 회원님의 {origin_target_name}에 댓글을 남겼습니다.'
+        message = f'{actor_name} 회원님의 {origin_target_name}에 댓글을 남겼습니다: "{content_preview}"'
         redirect_url = f'/{origin.type.lower()}s/{origin.id}?anonymous={instance.is_anonymous}'
 
     notification = Notification.objects.filter(actor=actor,
