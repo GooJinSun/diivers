@@ -31,9 +31,9 @@ class CommentCreate(generics.ListCreateAPIView):
         tagging_user = self.request.user
         for tagged_user in tagged_users:
             if tagged_user.id in tagging_user.user_report_blocked_ids:
-                raise BlockedUserTag("차단한 유저는 언급할 수 없습니다.")
+                raise BlockedUserTag()
             elif tagging_user.id in tagged_user.user_report_blocked_ids:
-                raise BlockingUserTag(f"{tagged_user.username}님은 모든 유저가 자신을 언급하도록 하지 않습니다.")
+                raise BlockingUserTag()
 
         serializer.save(author=self.request.user,
                         content_type_id=content_type_id,
