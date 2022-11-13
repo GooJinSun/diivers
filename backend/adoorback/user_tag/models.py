@@ -34,9 +34,6 @@ class UserTag(AdoorTimestampedModel):
     user_tag_targetted_notis = GenericRelation(Notification,
                                                content_type_field='target_type',
                                                object_id_field='target_id')
-    user_tag_originated_notis = GenericRelation(Notification,
-                                                content_type_field='origin_type',
-                                                object_id_field='origin_id')
     objects = UserTagManager()
 
     class Meta:

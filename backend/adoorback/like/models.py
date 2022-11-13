@@ -36,9 +36,6 @@ class Like(AdoorTimestampedModel):
     like_targetted_notis = GenericRelation(Notification,
                                            content_type_field='target_type',
                                            object_id_field='target_id')
-    like_originated_notis = GenericRelation(Notification,
-                                            content_type_field='origin_type',
-                                            object_id_field='origin_id')
     objects = LikeManager()
 
     class Meta:
