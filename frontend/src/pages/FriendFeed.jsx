@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostList from '../components/posts/PostList';
 import { appendPosts, getPostsByType } from '../modules/post';
@@ -17,6 +17,15 @@ const FriendFeed = () => {
     useSelector((state) => state.loadingReducer['post/GET_FRIEND_POSTS']) ===
     'REQUEST';
 
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        dispatch(appendPosts('friend'));
+      }
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     let observer;
     if (target) {
@@ -24,13 +33,7 @@ const FriendFeed = () => {
       observer.observe(target);
     }
     return () => observer && observer.disconnect();
-  }, [target]);
-
-  const onIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(appendPosts('friend'));
-    }
-  };
+  }, [target, onIntersect]);
 
   useEffect(() => {
     dispatch(getPostsByType('friend'));

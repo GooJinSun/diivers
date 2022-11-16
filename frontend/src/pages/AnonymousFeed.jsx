@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostList from '../components/posts/PostList';
 import { getPostsByType, appendPosts } from '../modules/post';
@@ -16,6 +16,15 @@ const AnonymousFeed = () => {
     useSelector((state) => state.loadingReducer['post/GET_ANON_POSTS']) ===
     'REQUEST';
 
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        dispatch(appendPosts('anonymous'));
+      }
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
     dispatch(getPostsByType('anon'));
   }, [dispatch]);
@@ -27,13 +36,7 @@ const AnonymousFeed = () => {
       observer.observe(target);
     }
     return () => observer && observer.disconnect();
-  }, [target]);
-
-  const onIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(appendPosts('anonymous'));
-    }
-  };
+  }, [target, onIntersect]);
 
   return (
     <>
