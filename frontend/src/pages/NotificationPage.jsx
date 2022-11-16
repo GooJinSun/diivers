@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,7 +11,12 @@ import NotificationItem from '../components/NotificationItem';
 import FriendItem from '../components/friends/FriendItem';
 import {
   readAllNotification,
-  appendNotifications
+  appendNotifications,
+  getNotifications,
+  getResponseRequests,
+  getFriendRequests,
+  appendFriendRequests,
+  appendResponseRequests
 } from '../modules/notification';
 
 Tabs.displayName = 'Tabs';
@@ -61,38 +66,25 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NotificationPage({ tabType }) {
+export default function NotificationPageNotificationPage() {
   const dispatch = useDispatch();
-  const friendList = useSelector((state) => state.friendReducer.friendList);
-  const classes = useStyles();
+
   const [target, setTarget] = useState(null);
+  const [tab, setTab] = useState(0);
 
-  useEffect(() => {
-    let observer;
-    if (target) {
-      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
-      observer.observe(target);
-    }
-    return () => observer && observer.disconnect();
-  }, [target]);
+  const classes = useStyles();
 
-  const onIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(appendNotifications());
-    }
-  };
-
-  let initialTab = 0;
-  if (tabType === 'FriendRequest') {
-    initialTab = 1;
-  } else if (tabType === 'ResponseRequest') {
-    initialTab = 2;
-  }
-
-  const [tab, setTab] = React.useState(initialTab);
   const notifications = useSelector(
     (state) => state.notiReducer.receivedNotifications
   );
+  const friendRequests = useSelector(
+    (state) => state.notiReducer.receivedFriendRequests
+  );
+  const responseRequests = useSelector(
+    (state) => state.notiReducer.receivedResponseRequests
+  );
+
+  const friendList = useSelector((state) => state.friendReducer.friendList);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -101,6 +93,54 @@ export default function NotificationPage({ tabType }) {
   const handleReadAllNotification = () => {
     dispatch(readAllNotification());
   };
+
+  const fetchNotifications = useCallback(() => {
+    switch (tab) {
+      case 0: // all
+        dispatch(getNotifications());
+        break;
+      case 1: // friend requests
+        dispatch(getFriendRequests());
+        break;
+      case 2: // response requests
+        dispatch(getResponseRequests());
+        break;
+      default:
+    }
+  }, [dispatch, tab]);
+
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        switch (tab) {
+          case 0: // all
+            dispatch(appendNotifications());
+            break;
+          case 1: // friend requests
+            dispatch(appendFriendRequests());
+            break;
+          case 2: // response requests
+            dispatch(appendResponseRequests());
+            break;
+          default:
+        }
+      }
+    },
+    [dispatch, tab]
+  );
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
+
+  useEffect(() => {
+    let observer;
+    if (target) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
+      observer.observe(target);
+    }
+    return () => observer && observer.disconnect();
+  }, [target, onIntersect]);
 
   const notificationList = notifications.map((noti) => {
     if (noti.is_friend_request) {
@@ -127,29 +167,25 @@ export default function NotificationPage({ tabType }) {
     );
   });
 
-  const friendRequestList = notifications
-    .filter((noti) => noti.is_friend_request)
-    .map((friendRequestNoti) => {
-      return (
-        <FriendItem
-          key={`friend-request-${friendRequestNoti?.id}`}
-          message={friendRequestNoti.message}
-          isPending
-          friendObj={friendRequestNoti?.actor_detail}
-          showFriendStatus
-        />
-      );
-    });
-
-  const responseRequestList = notifications
-    .filter((noti) => noti.is_response_request)
-    .map((responseRequest) => (
-      <NotificationItem
-        key={`response-request-${responseRequest?.id}`}
-        notiObj={responseRequest}
-        isNotificationPage
+  const friendRequestList = friendRequests.map((friendRequestNoti) => {
+    return (
+      <FriendItem
+        key={`friend-request-${friendRequestNoti?.id}`}
+        message={friendRequestNoti.message}
+        isPending
+        friendObj={friendRequestNoti?.actor_detail}
+        showFriendStatus
       />
-    ));
+    );
+  });
+
+  const responseRequestList = responseRequests.map((responseRequest) => (
+    <NotificationItem
+      key={`response-request-${responseRequest?.id}`}
+      notiObj={responseRequest}
+      isNotificationPage
+    />
+  ));
 
   return (
     <div className={classes.root}>
