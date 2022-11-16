@@ -2,7 +2,6 @@ import React from 'react';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PostItem from './PostItem';
 import QuestionItem from './QuestionItem';
-import NewPost from './NewPost';
 import LoadingList from './LoadingList';
 
 export default function PostList({ posts, isAppending, isLoading }) {
@@ -22,7 +21,6 @@ export default function PostList({ posts, isAppending, isLoading }) {
 
   return (
     <div id="post-list">
-      <NewPost />
       {isLoading ? <LoadingList /> : postList}
       <div style={{ margin: '8px', textAlign: 'center' }}>
         {isAppending && <CircularProgress id="spinner" color="primary" />}

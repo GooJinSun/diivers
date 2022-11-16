@@ -39,15 +39,13 @@ const FriendFeed = () => {
 
   return (
     <>
+      <NewPost />
       {friendPosts?.length === 0 && !isLoading ? (
-        <>
-          <NewPost />
-          <Message
-            margin="16px 0"
-            message="표시할 게시물이 없습니다 :("
-            messageDetail="다른 사용자들과 친구를 맺어보세요!"
-          />
-        </>
+        <Message
+          margin="16px 0"
+          message="표시할 게시물이 없습니다 :("
+          messageDetail="다른 사용자들과 친구를 맺어보세요!"
+        />
       ) : (
         <PostList
           posts={friendPosts}
