@@ -1,6 +1,6 @@
-from django.contrib.auth import get_user_model
-
 import re
+
+from django.contrib.auth import get_user_model
 
 from adoorback.validators import USERNAME_REGEX
 
@@ -9,7 +9,7 @@ User = get_user_model()
 
 def parse_user_tag_from_content(content):
     tagged_users = User.objects.none()
-    word_indices = list()
+    word_indices = []
     if not '@' in content:
         return tagged_users, word_indices
 

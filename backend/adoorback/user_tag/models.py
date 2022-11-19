@@ -3,7 +3,6 @@ from django.db import models, transaction
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
-from django.db.models import Q, F
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -29,7 +28,8 @@ class UserTag(AdoorTimestampedModel):
 
     offset = models.IntegerField(default=-1)
     length = models.IntegerField(default=0)
-    username_str = models.CharField(max_length=20, default='')  # save initial username string (in case tagged_user changes their username)
+    # save initial username string (in case tagged_user changes their username)
+    username_str = models.CharField(max_length=20, default='')
 
     user_tag_targetted_notis = GenericRelation(Notification,
                                                content_type_field='target_type',
@@ -38,27 +38,16 @@ class UserTag(AdoorTimestampedModel):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['tagging_user', 'tagged_user', 'content_type', 'object_id', 'offset'], name='unique_user_tag'),
-            # models.CheckConstraint(
-            #     check=~Q(tagging_user=F('tagged_user')),
-            #     name='tagging_user_and_tagged_user_cannot_be_equal'
-            # )
+            models.UniqueConstraint(
+                fields=['tagging_user', 'tagged_user', 'content_type', 'object_id', 'offset'],
+                name='unique_user_tag'
+                )
         ]
         ordering = ['id']
 
     def __str__(self):
         return f'{self.tagging_user} tagged {self.tagged_user} in {self.content_type} ({self.object_id})'
 
-    def clean(self):
-        if self.target.type == 'Comment' and self.target.target.type == 'Comment':
-            post = self.target.target.target
-        elif self.target.type == 'Comment':
-            post = self.target.target
-        else:
-            raise ValidationError(_('The target of a UserTag object must be Comment type.'))
-        if post.share_anonymously:
-            raise ValidationError(_('A UserTag object cannot be created in a comment of an anonymous post.'))
-        
     @property
     def type(self):
         return self.__class__.__name__

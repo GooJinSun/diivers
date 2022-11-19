@@ -1,10 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from django.urls import reverse
 
 from user_tag.models import UserTag
-from adoorback.settings.base import BASE_URL
-from adoorback.serializers import AdoorBaseSerializer
 
 User = get_user_model()
 

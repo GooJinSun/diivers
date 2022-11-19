@@ -7,8 +7,8 @@ from notification.models import Notification
 from user_tag.models import UserTag
 from feed.models import Article, Question, Response
 
-from adoorback.utils.seed import set_seed, fill_data
-from adoorback.content_types import get_comment_type, get_article_type, get_user_tag_type
+from adoorback.utils.seed import set_seed
+from adoorback.content_types import get_comment_type, get_user_tag_type
 
 User = get_user_model()
 N = 10
@@ -34,9 +34,9 @@ class UserTagTestCase(TestCase):
                                            content='hi @' + friend_user_2.username, is_private=False)
         comment_2 = Comment.objects.create(author=friend_user_1, target=response,
                                            content='@' + user.username, is_private=False)
-        reply = Comment.objects.create(author=friend_user_2, target=comment_1, 
+        reply = Comment.objects.create(author=friend_user_2, target=comment_1,
                                        content='hey @' + user.username, is_private=False)
-        
+
     def test_user_tag_create(self):
         comment_1 = Comment.objects.order_by('-created_at')[2]
         article = Article.objects.order_by('-created_at')[1]
@@ -62,7 +62,10 @@ class UserTagTestCase(TestCase):
         comment_1 = Comment.objects.order_by('-created_at')[2]
         user_tag_1 = UserTag.objects.filter(object_id=comment_1.id, content_type=get_comment_type()).first()
 
-        self.assertEqual(user_tag_1.__str__(), f'{user_tag_1.tagging_user} tagged {user_tag_1.tagged_user} in {user_tag_1.content_type} ({user_tag_1.object_id})')
+        self.assertEqual(
+            user_tag_1.__str__(),
+            f'{user_tag_1.tagging_user} tagged {user_tag_1.tagged_user} in {user_tag_1.content_type} ({user_tag_1.object_id})'
+            )
         self.assertEqual(user_tag_1.type, 'UserTag')
 
     def test_on_delete_user_cascade(self):
@@ -112,7 +115,7 @@ class UserTagAPITestCase(APITestCase):
         user = User.objects.get(username='user')
         friend_user_2 = User.objects.get(username='friend_user_2')
         article = Article.objects.order_by('created_at').last()
-        
+
         with self.login(username=user.username, password='password'):
             self.assertEqual(UserTag.objects.count(), 0)
 
@@ -127,19 +130,19 @@ class UserTagAPITestCase(APITestCase):
             self.assertEqual(user_tag_1.content_type, get_comment_type())
             self.assertEqual(user_tag_1.object_id, response.data['id'])
 
-    def test_restrictions(self):
-        user = User.objects.get(username='user')
-        article = Article.objects.order_by('created_at').last()
-
         # user tags him/herself
         with self.login(username=user.username, password='password'):
             num_user_tags_before = UserTag.objects.count()
             data = {'target_type': 'Article', 'target_id': article.id, 'content': 'hey @' + user.username}
             response = self.post('comment-create', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
-            
+
             num_user_tags_after = UserTag.objects.count()
-            self.assertEqual(num_user_tags_before, num_user_tags_after)  # user_tag should not have been created
+            self.assertEqual(num_user_tags_before, num_user_tags_after - 1)
+
+    def test_restrictions(self):
+        user = User.objects.get(username='user')
+        article = Article.objects.order_by('created_at').last()
 
         # user tags nonexistent user
         with self.login(username=user.username, password='password'):
@@ -154,7 +157,12 @@ class UserTagAPITestCase(APITestCase):
         # user tags another user in an anonymous comment
         with self.login(username=user.username, password='password'):
             num_user_tags_before = UserTag.objects.count()
-            data = {'target_type': 'Article', 'target_id': article.id, 'content': 'hi @' + user.username, 'is_anonymous': True}
+            data = {
+                    'target_type': 'Article',
+                    'target_id': article.id,
+                    'content': 'hi @' + user.username,
+                    'is_anonymous': True
+                    }
             response = self.post('comment-create', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
 
@@ -170,7 +178,7 @@ class UserTagAPITestCase(APITestCase):
             response = self.get('user_tag-search', data={'query': 'user'})
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.data['count'], 2)
-        
+
         with self.login(username=user.username, password='password'):
             response = self.get('user_tag-search', data={'query': '유저'})
             self.assertEqual(response.status_code, 200)
@@ -212,37 +220,82 @@ class UserTagNotiAPITestCase(APITestCase):
 
             num_notis_after = Notification.objects.count()
             self.assertEqual(num_notis_before, num_notis_after - 2)
-            user_tag_noti = Notification.objects.filter(origin_id=response.data['id'], target_type=get_user_tag_type()).first()
+            user_tag_noti = Notification.objects.filter(
+                                                        origin_id=response.data['id'],
+                                                        target_type=get_user_tag_type()
+                                                        ).first()
             self.assertEqual(user_tag_noti.message,
                              "user님이 댓글에서 회원님을 언급했습니다.")
             self.assertEqual(user_tag_noti.user, friend_user_2)
 
         # user tags another user in a comment where that user does not have permission to access
         with self.login(username=user.username, password='password'):
-            num_notis_before = Notification.objects.count()
-            data = {'target_type': 'Article', 'target_id': article.id, 'content': 'can you see this @' + non_friend_user.username}
+            data = {
+                    'target_type': 'Article',
+                    'target_id': article.id,
+                    'content': 'can you see this @' + non_friend_user.username
+                    }
             response = self.post('comment-create', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
 
-            num_notis_after = Notification.objects.count()
-            self.assertEqual(num_notis_before, num_notis_after - 1)  # user_tag noti should not have been created
+            user_tag_noti = Notification.objects.filter(
+                                                        user_id=non_friend_user.id,
+                                                        actor_id=user.id,
+                                                        target_type=get_user_tag_type()
+                                                        )
+            self.assertEqual(user_tag_noti.count(), 0)  # user_tag noti should not have been created
 
         # user tags another user in a private comment (where that user does not have permission to access)
         with self.login(username=user.username, password='password'):
-            num_notis_before = Notification.objects.count()
-            data = {'target_type': 'Article', 'target_id': article.id, 'content': 'can you see this @' + friend_user_2.username, 'is_private': True}
+            data = {
+                    'target_type': 'Article',
+                    'target_id': article.id,
+                    'content': 'can you see this @' + friend_user_2.username,
+                    'is_private': True
+                    }
             response = self.post('comment-create', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
 
-            num_notis_after = Notification.objects.count()
-            self.assertEqual(num_notis_before, num_notis_after - 1)  # user_tag noti should not have been created
+            user_tag_noti = Notification.objects.filter(
+                                                        user_id=friend_user_2.id,
+                                                        actor_id=user.id,
+                                                        origin_id=response.data['id'],
+                                                        target_type=get_user_tag_type()
+                                                        )
+            self.assertEqual(user_tag_noti.count(), 0)  # user_tag noti should not have been created
 
         # user tags author of target article in a comment
         with self.login(username=user.username, password='password'):
-            num_notis_before = Notification.objects.count()
-            data = {'target_type': 'Article', 'target_id': article.id, 'content': 'I am tagging the author @' + friend_user_1.username}
+            data = {
+                    'target_type': 'Article',
+                    'target_id': article.id,
+                    'content': 'I am tagging the author @' + friend_user_1.username
+                    }
             response = self.post('comment-create', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
 
-            num_notis_after = Notification.objects.count()
-            self.assertEqual(num_notis_before, num_notis_after - 1)  # user_tag noti should not have been created
+            user_tag_noti = Notification.objects.filter(
+                                                        user_id=friend_user_1.id,
+                                                        actor_id=user.id,
+                                                        origin_id=response.data['id'],
+                                                        target_type=get_user_tag_type()
+                                                        )
+            self.assertEqual(user_tag_noti.count(), 0)  # user_tag noti should not have been created
+
+        # user tags same user twice in a comment
+        with self.login(username=user.username, password='password'):
+            data = {
+                'target_type': 'Article',
+                'target_id': article.id,
+                'content': '@' + friend_user_2.username + ' @' + friend_user_2.username
+                }
+            response = self.post('comment-create', data=data, extra={'format': 'json'})
+            self.assertEqual(response.status_code, 201)
+
+            user_tag_noti = Notification.objects.filter(
+                                                        user_id=friend_user_2.id,
+                                                        actor_id=user.id,
+                                                        origin_id=response.data['id'],
+                                                        target_type=get_user_tag_type()
+                                                        )
+            self.assertEqual(user_tag_noti.count(), 1)  # user_tag noti should have been created only once

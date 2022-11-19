@@ -11,3 +11,4 @@ class BlockingUserTag(APIException):
     status_code = 400
     default_detail = "You cannot mention a user that blocked you."
     default_code = "blocking_user_tag"
+    

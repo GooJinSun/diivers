@@ -1,15 +1,10 @@
-from django.db import transaction, IntegrityError
 from rest_framework import generics
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import get_user_model
 from django.db.models import Case, Value, When, IntegerField
 
-from user_tag.models import UserTag
 from account.serializers import UserFriendshipStatusSerializer
 
-from adoorback.permissions import IsOwnerOrReadOnly
-from adoorback.content_types import get_generic_relation_type
 from adoorback.validators import adoor_exception_handler
 
 User = get_user_model()
@@ -39,7 +34,7 @@ class UserTagSearch(generics.ListAPIView):
                     if id_ not in qs_ids:
                         qs_ids.append(id_)
             # merge querysets while preserving order
-            cases = [When(id=x, then=Value(i)) for i,x in enumerate(qs_ids)] 
+            cases = [When(id=x, then=Value(i)) for i,x in enumerate(qs_ids)]
             case = Case(*cases, output_field=IntegerField())
             qs = User.objects.filter(id__in=qs_ids).annotate(my_order=case).order_by('my_order')
 
