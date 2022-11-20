@@ -66,11 +66,18 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// FIXME: ts 전환시 readonly로 대체
+const NOTIFICATION_TABS = {
+  ALL: { name: '전체', index: 0 },
+  FRIEND_REQUEST: { name: '친구 요청', index: 1 },
+  RESPONSE_REQUEST: { name: '받은 질문', index: 2 }
+};
+
 export default function NotificationPageNotificationPage() {
   const dispatch = useDispatch();
 
   const [target, setTarget] = useState(null);
-  const [tab, setTab] = useState(0);
+  const [tab, setTab] = useState(NOTIFICATION_TABS.ALL.index);
 
   const classes = useStyles();
 
@@ -96,13 +103,13 @@ export default function NotificationPageNotificationPage() {
 
   const fetchNotifications = useCallback(() => {
     switch (tab) {
-      case 0: // all
+      case NOTIFICATION_TABS.ALL.index:
         dispatch(getNotifications());
         break;
-      case 1: // friend requests
+      case NOTIFICATION_TABS.FRIEND_REQUEST.index:
         dispatch(getFriendRequests());
         break;
-      case 2: // response requests
+      case NOTIFICATION_TABS.RESPONSE_REQUEST.index:
         dispatch(getResponseRequests());
         break;
       default:
@@ -113,13 +120,13 @@ export default function NotificationPageNotificationPage() {
     ([entry]) => {
       if (entry.isIntersecting) {
         switch (tab) {
-          case 0: // all
+          case NOTIFICATION_TABS.ALL.index:
             dispatch(appendNotifications());
             break;
-          case 1: // friend requests
+          case NOTIFICATION_TABS.FRIEND_REQUEST.index:
             dispatch(appendFriendRequests());
             break;
-          case 2: // response requests
+          case NOTIFICATION_TABS.RESPONSE_REQUEST.index:
             dispatch(appendResponseRequests());
             break;
           default:
@@ -197,9 +204,13 @@ export default function NotificationPageNotificationPage() {
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label="전체" {...a11yProps(0)} />
-          <Tab label="친구 요청" {...a11yProps(1)} />
-          <Tab label="받은 질문" {...a11yProps(2)} />
+          {Object.values(NOTIFICATION_TABS).map((tabItem) => (
+            <Tab
+              key={tabItem.index}
+              label={tabItem.name}
+              {...a11yProps(tabItem.index)}
+            />
+          ))}
         </Tabs>
       </AppBar>
       <ButtonWrapper>
@@ -212,15 +223,27 @@ export default function NotificationPageNotificationPage() {
           모두 읽음
         </Button>
       </ButtonWrapper>
-      <TabPanel value={tab} index={0} className={classes.tabPanel}>
+      <TabPanel
+        value={tab}
+        index={NOTIFICATION_TABS.ALL.index}
+        className={classes.tabPanel}
+      >
         {notificationList}
         <div ref={setTarget} />
       </TabPanel>
-      <TabPanel value={tab} index={1} className={classes.tabPanel}>
+      <TabPanel
+        value={tab}
+        index={NOTIFICATION_TABS.FRIEND_REQUEST.index}
+        className={classes.tabPanel}
+      >
         {friendRequestList}
         <div ref={setTarget} />
       </TabPanel>
-      <TabPanel value={tab} index={2} className={classes.tabPanel}>
+      <TabPanel
+        value={tab}
+        index={NOTIFICATION_TABS.RESPONSE_REQUEST.index}
+        className={classes.tabPanel}
+      >
         {responseRequestList}
         <div ref={setTarget} />
       </TabPanel>
