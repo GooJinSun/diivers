@@ -43,15 +43,6 @@ describe('<NotificationDropdownList/>', () => {
     expect(mockFn).toHaveBeenCalled();
   });
 
-  it(`should call 'handleReadAllNotification' when click read all notification button`, () => {
-    const component = wrapper.find('NotificationDropdownList');
-    const allNotiButton = component.find('.read-all-notifications');
-
-    expect(allNotiButton.length).toBe(1);
-    allNotiButton.simulate('click', { stopPropagation: () => undefined });
-    expect(mockFn).toHaveBeenCalled();
-  });
-
   it('should not render buttons when notifications are empty', () => {
     const emptyNotiWrapper = mount(
       <Provider store={store}>
