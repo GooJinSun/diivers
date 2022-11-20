@@ -59,28 +59,6 @@ describe('notificationActions', () => {
     });
   });
 
-  it(`'readNotification' should get notification correctly`, (done) => {
-    jest.clearAllMocks();
-    jest.mock('axios');
-    const spy = jest.spyOn(axios, 'patch').mockImplementation(() => {
-      return new Promise((resolve) => {
-        const res = {
-          data: 'updatedNotification'
-        };
-        resolve(res);
-      });
-    });
-
-    store.dispatch(actionCreators.readNotification()).then(() => {
-      const newState = store.getState();
-      expect(spy).toHaveBeenCalled();
-      expect(newState.notiReducer.receivedNotifications).toEqual([
-        'updatedNotification'
-      ]);
-      done();
-    });
-  });
-
   it(`'readAllNotification' should get notification correctly`, (done) => {
     jest.mock('axios');
 
@@ -110,21 +88,6 @@ describe('notificationActions', () => {
     });
 
     store.dispatch(actionCreators.getNotifications()).then(() => {
-      const newState = store.getState();
-      expect(spy).toHaveBeenCalled();
-      expect(newState.notiReducer.receivedNotifications).toMatchObject(
-        mockNotifications
-      );
-    });
-  });
-
-  it(`should dispatch notification/READ_NOTIFICATION_FAILURE when api returns error`, async () => {
-    jest.mock('axios');
-    const spy = jest.spyOn(axios, 'patch').mockImplementation(() => {
-      return Promise.reject(new Error('error'));
-    });
-
-    store.dispatch(actionCreators.readNotification()).then(() => {
       const newState = store.getState();
       expect(spy).toHaveBeenCalled();
       expect(newState.notiReducer.receivedNotifications).toMatchObject(
