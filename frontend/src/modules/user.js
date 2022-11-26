@@ -151,6 +151,18 @@ export const requestLogin = (loginInfo) => {
       const { access, refresh } = res.data;
       setTokensInCookies(access, refresh);
 
+      if (window.ReactNativeWebView) {
+        window.ReactNativeWebView.postMessage(
+          JSON.stringify({
+            actionType: 'SET_TOKEN',
+            token: {
+              refresh,
+              access
+            }
+          })
+        );
+      }
+
       // set user info
       dispatch(getCurrentUser());
       dispatch({ type: 'user/LOGIN_SUCCESS' });
@@ -166,6 +178,14 @@ export const logout = () => async (dispatch) => {
   try {
     await axios.get('user/logout/');
     deleteTokens();
+
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({
+          actionType: 'REMOVE_TOKEN'
+        })
+      );
+    }
   } catch (error) {
     dispatch({ type: 'user/LOGOUT_FAILURE', error });
     return;
