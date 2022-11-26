@@ -101,6 +101,17 @@ export default function SignUp() {
     }
   };
 
+  const handleOnClickPrivacy = () => {
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({
+          actionType: 'OPEN_BROWSER',
+          url: `${window.origin}/privacy.html`
+        })
+      );
+    } else window.location.href = './privacy.html';
+  };
+
   return (
     <SignUpWrapper>
       {isSubmitted && isSignUpSuccess ? (
@@ -158,9 +169,7 @@ export default function SignUp() {
             <PrivacyButton
               type="button"
               id="privacy-button"
-              onClick={() => {
-                window.location.href = './privacy.html';
-              }}
+              onClick={handleOnClickPrivacy}
             >
               개인정보처리방침
             </PrivacyButton>
