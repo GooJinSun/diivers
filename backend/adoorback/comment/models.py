@@ -81,18 +81,11 @@ def create_noti(instance, **kwargs):
         message = f'{actor_name} 회원님의 {origin_target_name}에 댓글을 남겼습니다: "{content_preview}"'
         redirect_url = f'/{origin.type.lower()}s/{origin.id}?anonymous={instance.is_anonymous}'
 
-    notification = Notification.objects.filter(actor=actor,
-                                               user=user,
-                                               origin_id=origin.id,
-                                               origin_type=get_generic_relation_type(origin.type))
-    if notification.count() > 0:  # same notification exists --> update
-        notification[0].save()
-    else:
-        Notification.objects.create(actor=actor,
-                                    user=user,
-                                    origin_id=origin.id,
-                                    origin_type=get_generic_relation_type(origin.type),
-                                    target_id=target.id,
-                                    target_type=get_comment_type(),
-                                    message=message,
-                                    redirect_url=redirect_url)
+    Notification.objects.create(actor=actor,
+                                user=user,
+                                origin_id=origin.id,
+                                origin_type=get_generic_relation_type(origin.type),
+                                target_id=target.id,
+                                target_type=get_comment_type(),
+                                message=message,
+                                redirect_url=redirect_url)
