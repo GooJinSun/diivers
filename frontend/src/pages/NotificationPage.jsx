@@ -17,6 +17,8 @@ import {
   appendResponseRequests
 } from '../modules/notification';
 
+const READ_ALL_NOTI_DELAY = 300;
+
 Tabs.displayName = 'Tabs';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -132,7 +134,7 @@ export default function NotificationPageNotificationPage() {
   useEffect(() => {
     setTimeout(() => {
       dispatch(readAllNotification());
-    }, 300);
+    }, READ_ALL_NOTI_DELAY);
   }, []);
 
   useEffect(() => {

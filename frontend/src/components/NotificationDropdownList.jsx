@@ -12,6 +12,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { readAllNotification } from '../modules/notification';
 import NotificationItem from './NotificationItem';
 
+const READ_ALL_NOTI_DELAY = 300;
+
 const useStyles = makeStyles({
   notificationDropdown: {
     width: 300,
@@ -68,7 +70,7 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
   useEffect(() => {
     setTimeout(() => {
       dispatch(readAllNotification());
-    }, 300);
+    }, READ_ALL_NOTI_DELAY);
   }, []);
 
   return (
