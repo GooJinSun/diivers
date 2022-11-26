@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es2020": true,
-    "jest": true
+    "jest": true,
+    "es6": true
   },
   "extends": [
     "prettier",
@@ -22,7 +23,14 @@
       "presets": ["@babel/preset-react"]
     }
   },
-  "plugins": ["prettier"],
+  "plugins": [
+    "@typescript-eslint",
+    "react",
+    "react-native",
+    "react-hooks",
+    "prettier",
+    "import"
+  ],
   "rules": {
     "prettier/prettier": ["error"],
     "comma-dangle": ["error", "never"],
@@ -37,13 +45,29 @@
     "no-case-declarations": "off",
     "camelcase": "off",
     "consistent-return": "off",
-    "no-nested-ternary": "off", 
+    "no-nested-ternary": "off",
     "import/prefer-default-export": "off",
-    "react/jsx-wrap-multilines": ["error", {"declaration": false, "assignment": false}]
+    "react/jsx-wrap-multilines": [
+      "error",
+      { "declaration": false, "assignment": false }
+    ]
   },
   "globals": {
     "shallow": true,
     "render": true,
     "mount": true
+  },
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".tsx"]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
   }
 }
