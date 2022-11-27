@@ -32,6 +32,7 @@ import useIsMobile from './hooks/env/useIsMobile';
 import useLogOutIfRefreshTokenExpired from './hooks/auth/useLogOutIfRefreshTokenExpired';
 import LostPassword from './pages/LostPassword';
 import ResetPassword from './pages/ResetPassword';
+import useAppLogin from './hooks/auth/useAppLogin';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -50,6 +51,7 @@ const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
 
+  useAppLogin();
   useLoginWithToken();
   useLogOutIfRefreshTokenExpired();
 
