@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -11,7 +11,12 @@ import NotificationItem from '../components/NotificationItem';
 import FriendItem from '../components/friends/FriendItem';
 import {
   readAllNotification,
-  appendNotifications
+  appendNotifications,
+  getNotifications,
+  getResponseRequests,
+  getFriendRequests,
+  appendFriendRequests,
+  appendResponseRequests
 } from '../modules/notification';
 
 Tabs.displayName = 'Tabs';
@@ -61,38 +66,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function NotificationPage({ tabType }) {
+// FIXME: ts 전환시 readonly로 대체
+const NOTIFICATION_TABS = {
+  ALL: { name: '전체', index: 0 },
+  FRIEND_REQUEST: { name: '친구 요청', index: 1 },
+  RESPONSE_REQUEST: { name: '받은 질문', index: 2 }
+};
+
+export default function NotificationPageNotificationPage() {
   const dispatch = useDispatch();
-  const friendList = useSelector((state) => state.friendReducer.friendList);
-  const classes = useStyles();
+
   const [target, setTarget] = useState(null);
+  const [tab, setTab] = useState(NOTIFICATION_TABS.ALL.index);
 
-  useEffect(() => {
-    let observer;
-    if (target) {
-      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
-      observer.observe(target);
-    }
-    return () => observer && observer.disconnect();
-  }, [target]);
+  const classes = useStyles();
 
-  const onIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(appendNotifications());
-    }
-  };
-
-  let initialTab = 0;
-  if (tabType === 'FriendRequest') {
-    initialTab = 1;
-  } else if (tabType === 'ResponseRequest') {
-    initialTab = 2;
-  }
-
-  const [tab, setTab] = React.useState(initialTab);
   const notifications = useSelector(
     (state) => state.notiReducer.receivedNotifications
   );
+  const friendRequests = useSelector(
+    (state) => state.notiReducer.receivedFriendRequests
+  );
+  const responseRequests = useSelector(
+    (state) => state.notiReducer.receivedResponseRequests
+  );
+
+  const friendList = useSelector((state) => state.friendReducer.friendList);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -101,6 +100,54 @@ export default function NotificationPage({ tabType }) {
   const handleReadAllNotification = () => {
     dispatch(readAllNotification());
   };
+
+  const fetchNotifications = useCallback(() => {
+    switch (tab) {
+      case NOTIFICATION_TABS.ALL.index:
+        dispatch(getNotifications());
+        break;
+      case NOTIFICATION_TABS.FRIEND_REQUEST.index:
+        dispatch(getFriendRequests());
+        break;
+      case NOTIFICATION_TABS.RESPONSE_REQUEST.index:
+        dispatch(getResponseRequests());
+        break;
+      default:
+    }
+  }, [dispatch, tab]);
+
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        switch (tab) {
+          case NOTIFICATION_TABS.ALL.index:
+            dispatch(appendNotifications());
+            break;
+          case NOTIFICATION_TABS.FRIEND_REQUEST.index:
+            dispatch(appendFriendRequests());
+            break;
+          case NOTIFICATION_TABS.RESPONSE_REQUEST.index:
+            dispatch(appendResponseRequests());
+            break;
+          default:
+        }
+      }
+    },
+    [dispatch, tab]
+  );
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
+
+  useEffect(() => {
+    let observer;
+    if (target) {
+      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
+      observer.observe(target);
+    }
+    return () => observer && observer.disconnect();
+  }, [target, onIntersect]);
 
   const notificationList = notifications.map((noti) => {
     if (noti.is_friend_request) {
@@ -127,29 +174,25 @@ export default function NotificationPage({ tabType }) {
     );
   });
 
-  const friendRequestList = notifications
-    .filter((noti) => noti.is_friend_request)
-    .map((friendRequestNoti) => {
-      return (
-        <FriendItem
-          key={`friend-request-${friendRequestNoti?.id}`}
-          message={friendRequestNoti.message}
-          isPending
-          friendObj={friendRequestNoti?.actor_detail}
-          showFriendStatus
-        />
-      );
-    });
-
-  const responseRequestList = notifications
-    .filter((noti) => noti.is_response_request)
-    .map((responseRequest) => (
-      <NotificationItem
-        key={`response-request-${responseRequest?.id}`}
-        notiObj={responseRequest}
-        isNotificationPage
+  const friendRequestList = friendRequests.map((friendRequestNoti) => {
+    return (
+      <FriendItem
+        key={`friend-request-${friendRequestNoti?.id}`}
+        message={friendRequestNoti.message}
+        isPending
+        friendObj={friendRequestNoti?.actor_detail}
+        showFriendStatus
       />
-    ));
+    );
+  });
+
+  const responseRequestList = responseRequests.map((responseRequest) => (
+    <NotificationItem
+      key={`response-request-${responseRequest?.id}`}
+      notiObj={responseRequest}
+      isNotificationPage
+    />
+  ));
 
   return (
     <div className={classes.root}>
@@ -161,9 +204,13 @@ export default function NotificationPage({ tabType }) {
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label="전체" {...a11yProps(0)} />
-          <Tab label="친구 요청" {...a11yProps(1)} />
-          <Tab label="받은 질문" {...a11yProps(2)} />
+          {Object.values(NOTIFICATION_TABS).map((tabItem) => (
+            <Tab
+              key={tabItem.index}
+              label={tabItem.name}
+              {...a11yProps(tabItem.index)}
+            />
+          ))}
         </Tabs>
       </AppBar>
       <ButtonWrapper>
@@ -176,15 +223,27 @@ export default function NotificationPage({ tabType }) {
           모두 읽음
         </Button>
       </ButtonWrapper>
-      <TabPanel value={tab} index={0} className={classes.tabPanel}>
+      <TabPanel
+        value={tab}
+        index={NOTIFICATION_TABS.ALL.index}
+        className={classes.tabPanel}
+      >
         {notificationList}
         <div ref={setTarget} />
       </TabPanel>
-      <TabPanel value={tab} index={1} className={classes.tabPanel}>
+      <TabPanel
+        value={tab}
+        index={NOTIFICATION_TABS.FRIEND_REQUEST.index}
+        className={classes.tabPanel}
+      >
         {friendRequestList}
         <div ref={setTarget} />
       </TabPanel>
-      <TabPanel value={tab} index={2} className={classes.tabPanel}>
+      <TabPanel
+        value={tab}
+        index={NOTIFICATION_TABS.RESPONSE_REQUEST.index}
+        className={classes.tabPanel}
+      >
         {responseRequestList}
         <div ref={setTarget} />
       </TabPanel>

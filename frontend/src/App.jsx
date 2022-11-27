@@ -109,18 +109,6 @@ const App = () => {
             />
             <PrivateRoute
               exact
-              path="/notifications/friend-request"
-              component={NotificationPage}
-              tabType="FriendRequest"
-            />
-            <PrivateRoute
-              exact
-              path="/notifications/response-request"
-              component={NotificationPage}
-              tabType="ResponseRequest"
-            />
-            <PrivateRoute
-              exact
               path="/questions/:id"
               component={QuestionDetail}
             />
