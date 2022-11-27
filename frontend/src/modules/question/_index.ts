@@ -1,17 +1,19 @@
 import axios from '../../utils/api';
 
-export const getRecommendedQuestions = async () => {
-  let res = {
-    data: {
-      results: []
-    }
-  };
-  try {
-    res = await axios.get(`feed/questions/daily/recommended/`);
-  } catch (error) {
-    throw Error;
-  }
-  const { data } = res;
-
-  return data.results;
+type GetRecommmendedQuestionsResponse = {
+  results: string[];
 };
+
+export const getRecommendedQuestions =
+  async (): Promise<GetRecommmendedQuestionsResponse> => {
+    let data: GetRecommmendedQuestionsResponse = {
+      results: []
+    };
+    try {
+      const res = await axios.get(`feed/questions/daily/recommended/`);
+      data = res.data;
+    } catch (error) {
+      throw Error;
+    }
+    return data;
+  };

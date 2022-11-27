@@ -7,7 +7,7 @@ export const useRecommendedQuestionList = () => {
     getQueryKey('GET_RECOMMENDED_QUESTIONS'),
     getRecommendedQuestions,
     {
-      select: (res) => res || []
+      select: (res) => res.results
     }
   );
 };

@@ -16,7 +16,6 @@ import {
   FlexWrapper
 } from '@styles/wrappers';
 import {
-  // getRecommendedQuestions,
   getRandomQuestions,
   getDailyQuestions
 } from '../../../modules/question';
@@ -51,9 +50,6 @@ const QuestionListWidget = ({
     setCustomQuestionModalOpen(false);
   };
 
-  // const recommendedQuestions = useSelector(
-  //   (state) => state.questionReducer.recommendedQuestions
-  // );
   const randomQuestions = useSelector(
     (state) => state.questionReducer.randomQuestions
   );
