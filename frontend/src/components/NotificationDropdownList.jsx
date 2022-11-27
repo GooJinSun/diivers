@@ -71,7 +71,7 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
     setTimeout(() => {
       dispatch(readAllNotification());
     }, READ_ALL_NOTI_DELAY);
-  }, []);
+  }, [dispatch]);
 
   return (
     <Card variant="outlined" className={classes.notificationDropdown}>

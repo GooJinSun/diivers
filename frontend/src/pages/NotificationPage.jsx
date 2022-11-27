@@ -135,7 +135,7 @@ export default function NotificationPageNotificationPage() {
     setTimeout(() => {
       dispatch(readAllNotification());
     }, READ_ALL_NOTI_DELAY);
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     let observer;
