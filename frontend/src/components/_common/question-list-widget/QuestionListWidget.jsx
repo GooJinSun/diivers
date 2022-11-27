@@ -79,7 +79,6 @@ const QuestionListWidget = ({
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDailyQuestions());
-    // dispatch(getRecommendedQuestions());
   }, [dispatch]);
 
   const randomQuestionList = randomQuestions?.slice(0, 5).map((question) => (
