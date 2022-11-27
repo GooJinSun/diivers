@@ -36,6 +36,7 @@ node_modules
 /backend/adoorback/.coverage
 /backend/.DS_Store
 /backend/adoorback/.idea/
+/backend/adoorback/.config/uwsgi/env
 
 # pycache
 /backend/__pycache__/
