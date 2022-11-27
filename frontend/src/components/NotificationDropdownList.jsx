@@ -1,5 +1,5 @@
 /* eslint-disable react/button-has-type */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +11,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { readAllNotification } from '../modules/notification';
 import NotificationItem from './NotificationItem';
+
+const READ_ALL_NOTI_DELAY = 300;
 
 const useStyles = makeStyles({
   notificationDropdown: {
@@ -50,7 +52,6 @@ const ButtonWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 4px 16px 0px 16px;
-}
 `;
 
 const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
@@ -66,9 +67,12 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
     />
   ));
 
-  const handleReadAllNotification = () => {
-    dispatch(readAllNotification());
-  };
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(readAllNotification());
+    }, READ_ALL_NOTI_DELAY);
+  }, [dispatch]);
+
   return (
     <Card variant="outlined" className={classes.notificationDropdown}>
       <ButtonWrapper>
@@ -82,14 +86,6 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
         >
           알림 전체 보기
         </button>
-        {notifications?.length !== 0 && (
-          <button
-            className={`read-all-notifications ${classes.notiButtons}`}
-            onClick={handleReadAllNotification}
-          >
-            모두 읽음
-          </button>
-        )}
       </ButtonWrapper>
       {notifications?.length === 0 ? (
         <ListItem>

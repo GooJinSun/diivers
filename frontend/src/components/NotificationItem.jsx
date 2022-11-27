@@ -5,8 +5,6 @@ import ListItem from '@material-ui/core/ListItem';
 import { useHistory } from 'react-router-dom';
 import FaceIcon from '@material-ui/icons/Face';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { readNotification } from '../modules/notification';
 import { getCreatedTime } from '../utils/dateTimeHelpers';
 
 const useStyles = makeStyles((theme) => ({
@@ -64,11 +62,9 @@ const NotiCreatedAt = styled.div`
 // eslint-disable-next-line react/prop-types
 const NotificationItem = ({ notiObj, isNotificationPage }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const handleClickNotiItem = () => {
-    dispatch(readNotification(notiObj.id));
     history.push(notiObj.redirect_url);
   };
 
@@ -80,6 +76,7 @@ const NotificationItem = ({ notiObj, isNotificationPage }) => {
         !notiObj.is_read && classes.unread
       } ${classes.notiLink} ${classes.listItemWrapper}`}
       onClick={handleClickNotiItem}
+      style={{ transition: '.5s' }}
     >
       <MessageWrapper>
         {actor_detail?.id ? (

@@ -5,8 +5,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
-import styled from 'styled-components';
-import { Button } from '@material-ui/core';
 import NotificationItem from '../components/NotificationItem';
 import FriendItem from '../components/friends/FriendItem';
 import {
@@ -18,6 +16,8 @@ import {
   appendFriendRequests,
   appendResponseRequests
 } from '../modules/notification';
+
+const READ_ALL_NOTI_DELAY = 300;
 
 Tabs.displayName = 'Tabs';
 function TabPanel(props) {
@@ -42,11 +42,6 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`
   };
 }
-
-const ButtonWrapper = styled.div`
-  display: flex;
-  flex-direction: row-reverse;
-`;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,10 +92,6 @@ export default function NotificationPageNotificationPage() {
     setTab(newValue);
   };
 
-  const handleReadAllNotification = () => {
-    dispatch(readAllNotification());
-  };
-
   const fetchNotifications = useCallback(() => {
     switch (tab) {
       case NOTIFICATION_TABS.ALL.index:
@@ -139,6 +130,12 @@ export default function NotificationPageNotificationPage() {
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      dispatch(readAllNotification());
+    }, READ_ALL_NOTI_DELAY);
+  }, [dispatch]);
 
   useEffect(() => {
     let observer;
@@ -213,16 +210,6 @@ export default function NotificationPageNotificationPage() {
           ))}
         </Tabs>
       </AppBar>
-      <ButtonWrapper>
-        <Button
-          size="medium"
-          className={`read-all-notifications ${classes.readAllButton}`}
-          onClick={handleReadAllNotification}
-          color="primary"
-        >
-          모두 읽음
-        </Button>
-      </ButtonWrapper>
       <TabPanel
         value={tab}
         index={NOTIFICATION_TABS.ALL.index}
