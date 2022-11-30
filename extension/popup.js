@@ -16,7 +16,7 @@ window.onload = function () {
 };
 
 function getAdoorUrl() {
-  return "https://adoor.world";
+  return "https://diivers.world";
 }
 
 function isAdoorUrl(url) {
