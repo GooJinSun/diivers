@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@typescript-eslint/parser": "5.45.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.3.1",
     "autosize": "^4.0.2",
     "axios": "^0.21.0",
