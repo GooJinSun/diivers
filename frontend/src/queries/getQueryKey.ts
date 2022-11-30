@@ -2,7 +2,7 @@ interface QueryList {
   GET_RECOMMENDED_QUESTIONS: undefined;
 }
 
-export const getQueryKey = <T extends keyof QueryList>(
+const getQueryKey = <T extends keyof QueryList>(
   ...[key, params]: undefined extends QueryList[T]
     ? [T]
     : [T, QueryList[T] | 'KEY_ONLY']

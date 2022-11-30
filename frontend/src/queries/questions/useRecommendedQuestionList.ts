@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
-import getQueryKey from '../getQueryKey';
 import { getRecommendedQuestions } from '../../modules/question/_index';
+import getQueryKey from '../getQueryKey';
 
 export const useRecommendedQuestionList = () => {
   return useQuery(
