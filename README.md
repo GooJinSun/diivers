@@ -23,15 +23,18 @@ yarn test --coverage --watchAll=false
 ### Run
 ```
 cd backend/adoorback
-rm -f tmp.db adoorback/db.sqlite3
-rm -r */migrations
 pip install -r requirements.txt
-python manage.py makemigrations account feed comment like notification
+
+rm -f tmp.db adoorback/db.sqlite3
+python manage.py makemigrations account feed comment like notification user_report content_report
 python manage.py migrate
+
 # for seed data
 python manage.py shell
-from adoorback.utils.seed import set_seed
+from adoorback.test.seed import set_seed
 set_seed(20)
+exit()
+
 python manage.py runserver
 ```
 
@@ -46,11 +49,19 @@ psycopg2, mysqlclient, python-dev
 
 ```
 rm -f tmp.db db.sqlite3
-rm -r */migrations
+
 pylint **/*.py --load-plugins pylint_django
-python manage.py makemigrations account feed comment like notification
+
+python manage.py makemigrations account feed comment like notification user_report content_report
 python manage.py migrate
+
 coverage run --source='.' --omit='*/migrations/*','adoorback/*','feed/algorithms/*','feed/cron.py','account/cron.py','locustfile.py','manage.py','*/wsgi.py','*/asgi.py','*/utils/*' ./manage.py test
 coverage run --source='.' --branch --omit='*/migrations/*','adoorback/*','feed/algorithms/*','feed/cron.py','account/cron.py','locustfile.py','manage.py','*/wsgi.py','*/asgi.py','*/utils/*' ./manage.py test
+
+coverage report -m
+
+# 특정 모델만 테스트
+coverage run --source='.' --omit='*/migrations/*','adoorback/*','feed/algorithms/*','feed/cron.py','account/cron.py','locustfile.py','manage.py','*/wsgi.py','*/asgi.py','*/utils/*' ./manage.py test [model_name]
+coverage run --source='.' --branch --omit='*/migrations/*','adoorback/*','feed/algorithms/*','feed/cron.py','account/cron.py','locustfile.py','manage.py','*/wsgi.py','*/asgi.py','*/utils/*' ./manage.py test [model_name]
 coverage report -m
 ```
