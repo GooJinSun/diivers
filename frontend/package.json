@@ -20,6 +20,7 @@
     "date-fns": "^2.16.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
+    "firebase": "^9.10.0",
     "global": "^4.4.0",
     "history": "^5.0.0",
     "intersection-observer": "^0.11.0",
@@ -100,5 +101,5 @@
       "!src/apis/index.js"
     ]
   },
-  "proxy": "http://127.0.0.1:8000/"
+  "proxy": "http://localhost:8000/"
 }
