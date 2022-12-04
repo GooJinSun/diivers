@@ -19,7 +19,7 @@ class LikeSerializer(serializers.ModelSerializer):
         return {
             "id": user.id,
             "username": user.username,
-        } 
+        }
 
     def get_target_type(self, obj):
         return obj.target.type

@@ -10,16 +10,20 @@ from adoorback.utils.content_types import get_generic_relation_type
 from adoorback.utils.validators import adoor_exception_handler
 
 
-class LikeList(generics.CreateAPIView):
+class LikeList(generics.ListCreateAPIView):
     """
     List all likes, or create a new like.
     """
     queryset = Like.objects.all()
     serializer_class = LikeSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     def get_exception_handler(self):
         return adoor_exception_handler
+
+    def get_queryset(self):
+        return Like.objects.filter(user=self.request.user)
 
     @transaction.atomic
     def perform_create(self, serializer):
