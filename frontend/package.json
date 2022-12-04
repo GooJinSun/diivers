@@ -17,6 +17,7 @@
     "babel-plugin-styled-components": "^1.11.1",
     "connected-react-router": "^6.5.2",
     "coveralls": "^3.1.0",
+    "cra-append-sw": "^2.7.0",
     "date-fns": "^2.16.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
@@ -43,6 +44,8 @@
     "use-onclickoutside": "^0.3.1"
   },
   "scripts": {
+    "prestart": "cra-append-sw --mode dev --env ./.env ./firebase-messaging-sw.js",
+    "prebuild": "cra-append-sw --mode build --env ./.env ./firebase-messaging-sw.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
