@@ -5,10 +5,14 @@ from django.contrib.auth import get_user_model
 
 from adoorback.models import AdoorTimestampedModel
 
+from safedelete.models import SafeDeleteModel
+from safedelete.models import SOFT_DELETE_CASCADE
+from safedelete.managers import SafeDeleteManager
+
 User = get_user_model()
 
 
-class UserReport(AdoorTimestampedModel):
+class UserReport(AdoorTimestampedModel, SafeDeleteModel):
     """UserReport Model
     This model describes UserReport between users
     """
@@ -16,6 +20,8 @@ class UserReport(AdoorTimestampedModel):
         get_user_model(), related_name='filed_user_reports', on_delete=models.CASCADE)
     reported_user = models.ForeignKey(
         get_user_model(), related_name='received_user_report', on_delete=models.CASCADE)
+
+    _safedelete_policy = SOFT_DELETE_CASCADE
 
     class Meta:
         constraints = [
