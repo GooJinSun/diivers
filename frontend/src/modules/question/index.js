@@ -101,34 +101,6 @@ export const getSampleQuestionsSuccess = (sampleQuestions) => {
   };
 };
 
-// TODO
-// export const resetQuestions = () => {
-//   return {
-//     type: RESET_QUESTIONS
-//   };
-// };
-
-// TODO: recommendation api 개발 후 주석 제거 및 테스팅 코드 작성 필요
-// eslint-disable-next-line no-unused-vars
-export const getRecommendedQuestions = (userId) => async (dispatch) => {
-  let res;
-  dispatch({ type: 'question/GET_RECOMMENDED_QUESTIONS_REQUEST' });
-  try {
-    res = await axios.get(`feed/questions/daily/recommended/`);
-  } catch (error) {
-    dispatch({
-      type: 'question/GET_RECOMMENDED_QUESTIONS_FAILURE',
-      error
-    });
-    return;
-  }
-  const { data } = res;
-  dispatch({
-    type: 'question/GET_RECOMMENDED_QUESTIONS_SUCCESS',
-    res: data.results
-  });
-};
-
 export const getDailyQuestions = () => async (dispatch) => {
   let res;
   dispatch({ type: 'question/GET_DAILY_QUESTIONS_REQUEST' });

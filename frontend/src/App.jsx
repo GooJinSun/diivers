@@ -32,6 +32,7 @@ import useIsMobile from '@hooks/env/useIsMobile';
 import useLogOutIfRefreshTokenExpired from '@hooks/auth/useLogOutIfRefreshTokenExpired';
 import GlobalStyle from '@styles/globalStyle';
 import { MainWrapper, FeedWrapper } from '@styles/wrappers';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { initGA, trackPage } from './ga';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
@@ -44,6 +45,17 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: ['Noto Sans KR', 'sans-serif']
+  }
+});
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchOnMount: false,
+      retry: 1
+    }
   }
 });
 
@@ -73,88 +85,90 @@ const App = () => {
   }, [location, dispatch, currentUser]);
 
   return (
-    <MuiThemeProvider theme={theme}>
-      <GlobalStyle />
-      <Header isMobile={isMobile} />
-      <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
-        {showWidget && <QuestionListWidget />}
-        <FeedWrapper
-          style={{
-            left: !currentUser ? '275px' : '',
-            width: !currentUser ? '655px' : ''
-          }}
-        >
-          <Switch>
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={SignUp} />
-            <Route
-              exact
-              path="/activate/:id/:token"
-              component={AccountActivate}
-            />
-            <Route exact path="/lost-password" component={LostPassword} />
-            <Route
-              exact
-              path="/reset-password/:id/:token"
-              component={ResetPassword}
-            />
-            <Route
-              exact
-              path="/select-questions"
-              component={QuestionSelection}
-            />
-            <PrivateRoute exact path="/home" component={FriendFeed} />
-            <PrivateRoute exact path="/anonymous" component={AnonymousFeed} />
-            <PrivateRoute exact path="/questions" component={QuestionFeed} />
-            <PrivateRoute exact path="/users/:id" component={UserPage} />
-            <PrivateRoute
-              exact
-              path="/notifications"
-              component={NotificationPage}
-            />
-            <PrivateRoute
-              exact
-              path="/notifications/friend-request"
-              component={NotificationPage}
-              tabType="FriendRequest"
-            />
-            <PrivateRoute
-              exact
-              path="/notifications/response-request"
-              component={NotificationPage}
-              tabType="ResponseRequest"
-            />
-            <PrivateRoute
-              exact
-              path="/questions/:id"
-              component={QuestionDetail}
-            />
-            <PrivateRoute
-              exact
-              path="/:postType/:id/edit"
-              component={PostEdit}
-            />
-            <Route exact path="/search" component={SearchResults} />
+    <QueryClientProvider client={queryClient}>
+      <MuiThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Header isMobile={isMobile} />
+        <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
+          {showWidget && <QuestionListWidget />}
+          <FeedWrapper
+            style={{
+              left: !currentUser ? '275px' : '',
+              width: !currentUser ? '655px' : ''
+            }}
+          >
+            <Switch>
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/signup" component={SignUp} />
+              <Route
+                exact
+                path="/activate/:id/:token"
+                component={AccountActivate}
+              />
+              <Route exact path="/lost-password" component={LostPassword} />
+              <Route
+                exact
+                path="/reset-password/:id/:token"
+                component={ResetPassword}
+              />
+              <Route
+                exact
+                path="/select-questions"
+                component={QuestionSelection}
+              />
+              <PrivateRoute exact path="/home" component={FriendFeed} />
+              <PrivateRoute exact path="/anonymous" component={AnonymousFeed} />
+              <PrivateRoute exact path="/questions" component={QuestionFeed} />
+              <PrivateRoute exact path="/users/:id" component={UserPage} />
+              <PrivateRoute
+                exact
+                path="/notifications"
+                component={NotificationPage}
+              />
+              <PrivateRoute
+                exact
+                path="/notifications/friend-request"
+                component={NotificationPage}
+                tabType="FriendRequest"
+              />
+              <PrivateRoute
+                exact
+                path="/notifications/response-request"
+                component={NotificationPage}
+                tabType="ResponseRequest"
+              />
+              <PrivateRoute
+                exact
+                path="/questions/:id"
+                component={QuestionDetail}
+              />
+              <PrivateRoute
+                exact
+                path="/:postType/:id/edit"
+                component={PostEdit}
+              />
+              <Route exact path="/search" component={SearchResults} />
 
-            <PrivateRoute path="/:postType/:id" component={PostDetail} />
-            <PrivateRoute exact path="/my-friends" component={FriendsPage} />
-            <PrivateRoute
-              exact
-              path="/recommended-questions"
-              component={MobileQuestionPage}
-            />
-            <PrivateRoute
-              exact
-              path="/user-search"
-              component={MobileSearchPage}
-            />
-            <Redirect from="/my-page" to={`/users/${currentUser?.id}`} />
-            <Redirect exact path="/" to="/home" />
-          </Switch>
-        </FeedWrapper>
-        {showWidget && <FriendListWidget />}
-      </MainWrapper>
-    </MuiThemeProvider>
+              <PrivateRoute path="/:postType/:id" component={PostDetail} />
+              <PrivateRoute exact path="/my-friends" component={FriendsPage} />
+              <PrivateRoute
+                exact
+                path="/recommended-questions"
+                component={MobileQuestionPage}
+              />
+              <PrivateRoute
+                exact
+                path="/user-search"
+                component={MobileSearchPage}
+              />
+              <Redirect from="/my-page" to={`/users/${currentUser?.id}`} />
+              <Redirect exact path="/" to="/home" />
+            </Switch>
+          </FeedWrapper>
+          {showWidget && <FriendListWidget />}
+        </MainWrapper>
+      </MuiThemeProvider>
+    </QueryClientProvider>
   );
 };
 
