@@ -8,6 +8,7 @@ module.exports = function override(config) {
     '@constants': 'src/constants',
     '@hooks': 'src/hooks',
     '@modules': 'src/modules',
+    '@queries': 'src/queries',
     '@utils': 'src/utils',
     '@styles': 'src/styles'
   })(config);

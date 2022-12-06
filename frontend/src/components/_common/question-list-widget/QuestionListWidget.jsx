@@ -16,7 +16,6 @@ import {
   FlexWrapper
 } from '@styles/wrappers';
 import {
-  getRecommendedQuestions,
   getRandomQuestions,
   getDailyQuestions
 } from '../../../modules/question';
@@ -27,6 +26,7 @@ import {
   WidgetCard,
   QuestionListItemLink
 } from './QuestionListWidget.styles';
+import { useRecommendedQuestionList } from '@queries/questions';
 
 const QuestionListWidget = ({
   initialIsRandomQuestions = false,
@@ -40,6 +40,8 @@ const QuestionListWidget = ({
   const [isCustomQuestionModalOpen, setCustomQuestionModalOpen] =
     useState(false);
 
+  const { data: recommendedQuestions = [] } = useRecommendedQuestionList();
+
   const handleModalOpen = () => {
     setCustomQuestionModalOpen(true);
   };
@@ -48,9 +50,6 @@ const QuestionListWidget = ({
     setCustomQuestionModalOpen(false);
   };
 
-  const recommendedQuestions = useSelector(
-    (state) => state.questionReducer.recommendedQuestions
-  );
   const randomQuestions = useSelector(
     (state) => state.questionReducer.randomQuestions
   );
@@ -80,7 +79,6 @@ const QuestionListWidget = ({
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDailyQuestions());
-    dispatch(getRecommendedQuestions());
   }, [dispatch]);
 
   const randomQuestionList = randomQuestions?.slice(0, 5).map((question) => (

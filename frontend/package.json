@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@typescript-eslint/parser": "5.45.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.3.1",
     "autosize": "^4.0.2",
     "axios": "^0.21.0",
@@ -20,6 +21,7 @@
     "date-fns": "^2.16.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
+    "eslint-import-resolver-typescript": "3.5.2",
     "global": "^4.4.0",
     "history": "^5.0.0",
     "intersection-observer": "^0.11.0",
@@ -30,6 +32,7 @@
     "react-app-rewired": "^2.2.1",
     "react-dom": "^17.0.0",
     "react-ga": "^3.3.0",
+    "react-query": "^3.39.2",
     "react-redux": "^7.2.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -41,6 +44,7 @@
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
     "styled-components": "^5.2.0",
+    "typescript": "4.8.4",
     "use-onclickoutside": "^0.3.1"
   },
   "scripts": {
