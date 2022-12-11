@@ -18,6 +18,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import include, path
 
+from fcm_django.api.rest_framework import FCMDeviceAuthorizedViewSet
+
 
 urlpatterns = [
     path('api/content_reports/', include('content_report.urls')),
@@ -30,5 +32,6 @@ urlpatterns = [
     path('api/admin/', include('admin_honeypot.urls', namespace='admin_honeypot')),
     path('api/secret/', admin.site.urls),
     path('api/user/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/devices/', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_fcm_device'),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

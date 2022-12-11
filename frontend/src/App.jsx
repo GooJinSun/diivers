@@ -64,8 +64,13 @@ const App = () => {
 
   useEffect(() => {
     initGA();
-    initializeFirebase();
   }, []);
+
+  useEffect(() => {
+    if (currentUser) {
+      initializeFirebase();
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if (currentUser) {
