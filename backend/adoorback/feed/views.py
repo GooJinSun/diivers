@@ -17,6 +17,9 @@ import feed.serializers as fs
 from feed.algorithms.data_crawler import select_daily_questions
 from feed.models import Article, Response, Question, Post, ResponseRequest
 
+from firebase_admin.messaging import Message, Notification
+from fcm_django.models import FCMDevice
+
 User = get_user_model()
 
 
@@ -169,6 +172,22 @@ class QuestionList(generics.ListCreateAPIView):
         # cache.delete('friend-{}'.format(self.request.user.id))
         # cache.delete('anonymous')
         # cache.delete('questions')
+
+        # NOTE: fcm 동작 원리를 쉽게 이해하기 위한 테스트용 코드입니다
+        # registration_token에 브라우저에서 받은 등록키를 바꾸어 입력하면 테스트해 볼 수 있습니다
+        # 실제 구현 시에는, 적절한 상황에 적절한 유저의 registration token을 사용해 메시지를 생성해야 합니다
+        registration_token = 'faFoMpJdr13t0Gc4r8trou:APA91bGbNMFLLeCnt1GBix4eVc64-NhTIaLPyAL4Rynp2l11V2inLmcUwu7t1SdbyYWkVqpHH2KnPEHSHcQlDXxdgKEOJ5su9Oj15VsyA5e6nJ5P1ck1t4exkR3MSL7g8Tg-xTCdgy6H'
+        message = Message(
+          notification = Notification(
+            title = '새로운 질문이 생성되었습니다!',
+            body = self.request.data.get('content'),
+          )
+        )
+
+        try:
+          response = FCMDevice.objects.send_message(message, False, [registration_token])
+        except Exception as e:
+          print("error", e)
         serializer.save(author=self.request.user)
 
 

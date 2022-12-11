@@ -34,6 +34,7 @@ import GlobalStyle from '@styles/globalStyle';
 import { MainWrapper, FeedWrapper } from '@styles/wrappers';
 import useAppLogin from '@hooks/auth/useAppLogin';
 import { initGA, trackPage } from './ga';
+import { initializeFirebase } from './utils/initializeFirebase';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -64,6 +65,7 @@ const App = () => {
 
   useEffect(() => {
     initGA();
+    initializeFirebase();
   }, []);
 
   useEffect(() => {
