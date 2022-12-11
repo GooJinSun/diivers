@@ -5,7 +5,7 @@ setInterval(setAlarm, 1000 * 30);
 chrome.browserAction.onClicked.addListener(goToInbox);
 
 function getAdoorUrl() {
-  return "https://adoor.world";
+  return "https://diivers.world";
 }
 
 function isAdoorUrl(url) {
@@ -148,7 +148,7 @@ function setAlarm(event) {
   $.ajax({
     type: "GET",
     url:
-      "https://adoor.world/api/notifications/unread/?username=" +
+      "https://diivers.world/api/notifications/unread/?username=" +
       localStorage.getItem("name"),
     contentType: "application/json; charset=utf-8",
     success: function (data) {
