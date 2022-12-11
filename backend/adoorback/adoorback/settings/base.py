@@ -19,6 +19,8 @@ from datetime import timedelta
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import initialize_app
+from django.utils.translation import gettext_lazy as _
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -125,6 +127,7 @@ CACHES = {
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -177,6 +180,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko-KR'
 
+LANGUAGES = (
+   ('en', _('영어')),
+   ('ko-KR', _('한국어')),
+)
+
 TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
@@ -228,3 +236,6 @@ FCM_DJANGO_SETTINGS = {
   # default: False
   "UPDATE_ON_DUPLICATE_REG_ID": True,
 }
+LOCALE_PATHS = [
+   os.path.join(BASE_DIR, 'locale'),
+]

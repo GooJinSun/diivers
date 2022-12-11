@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext as _
 
 from notification.models import Notification
 from feed.models import Question
@@ -26,7 +27,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         return obj.target.type == 'FriendRequest'
 
     def get_actor_detail(self, obj):
-        if obj.message[:13] == '익명의 사용자가 회원님의':
+        if obj.message.startswith(_('익명의 사용자가 회원님의')):
             return AuthorAnonymousSerializer(obj.actor).data
         return AuthorFriendSerializer(obj.actor).data
 

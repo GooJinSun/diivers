@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model, authenticate, login
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.translation import gettext as _
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
@@ -61,7 +62,7 @@ class UserSignup(generics.CreateAPIView):
                                     actor=admin,
                                     target=admin,
                                     origin=admin,
-                                    message=f"{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?",
+                                    message=_(f"{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?"),
                                     redirect_url='/anonymous')
 
 
@@ -209,7 +210,7 @@ class CurrentUserProfile(generics.RetrieveUpdateAPIView):
                                         actor=admin,
                                         target=admin,
                                         origin=admin,
-                                        message=f"{obj.username}님, 질문 선택을 완료해주셨네요 :) 그럼 오늘의 질문들을 둘러보러 가볼까요?",
+                                        message=_(f"{obj.username}님, 질문 선택을 완료해주셨네요 :) 그럼 오늘의 질문들을 둘러보러 가볼까요?"),
                                         redirect_url='/questions')
 
 
