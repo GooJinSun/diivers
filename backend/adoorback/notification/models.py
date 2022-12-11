@@ -1,9 +1,15 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
-from django.db import models
+from django.db import models, transaction
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from adoorback.models import AdoorTimestampedModel
+
+from firebase_admin.messaging import Message
+from firebase_admin.messaging import Notification as FirebaseNotification
+from fcm_django.models import FCMDevice
 
 User = get_user_model()
 
@@ -64,3 +70,26 @@ class Notification(AdoorTimestampedModel):
 
     def __str__(self):
         return self.message
+
+
+@transaction.atomic
+@receiver(post_save, sender=Notification)
+def send_firebase_notification(created, instance, **kwargs):
+    if not created:
+        return
+
+    message = Message(
+        notification = FirebaseNotification(
+            title = 'Diivers',
+            body = instance.message,
+        ),
+        data = {
+            'url': instance.redirect_url
+        }
+    )
+
+    try:
+        FCMDevice.objects.filter(user_id = instance.user.id).send_message(message, False)
+    except Exception as e:
+        print("error while sending a firebase notification: ", e)
+    
