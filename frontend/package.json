@@ -17,9 +17,11 @@
     "babel-plugin-styled-components": "^1.11.1",
     "connected-react-router": "^6.5.2",
     "coveralls": "^3.1.0",
+    "cra-append-sw": "^2.7.0",
     "date-fns": "^2.16.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
+    "firebase": "^9.10.0",
     "global": "^4.4.0",
     "history": "^5.0.0",
     "intersection-observer": "^0.11.0",
@@ -42,6 +44,8 @@
     "use-onclickoutside": "^0.3.1"
   },
   "scripts": {
+    "prestart": "cra-append-sw --mode dev --env ./.env ./firebase-messaging-sw.js",
+    "prebuild": "cra-append-sw --mode build --env ./.env ./firebase-messaging-sw.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -100,5 +104,5 @@
       "!src/apis/index.js"
     ]
   },
-  "proxy": "http://127.0.0.1:8000/"
+  "proxy": "http://localhost:8000/"
 }

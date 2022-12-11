@@ -33,6 +33,7 @@ import useLogOutIfRefreshTokenExpired from './hooks/auth/useLogOutIfRefreshToken
 import LostPassword from './pages/LostPassword';
 import ResetPassword from './pages/ResetPassword';
 import useAppLogin from './hooks/auth/useAppLogin';
+import { initializeFirebase } from './utils/initializeFirebase';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -63,6 +64,7 @@ const App = () => {
 
   useEffect(() => {
     initGA();
+    initializeFirebase();
   }, []);
 
   useEffect(() => {
