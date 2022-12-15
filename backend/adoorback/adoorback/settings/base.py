@@ -178,11 +178,11 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'ko-KR'
+LANGUAGE_CODE = 'ko'
 
 LANGUAGES = (
    ('en', _('영어')),
-   ('ko-KR', _('한국어')),
+   ('ko', _('한국어')),
 )
 
 TIME_ZONE = 'Asia/Seoul'
