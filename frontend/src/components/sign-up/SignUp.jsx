@@ -36,7 +36,8 @@ export default function SignUp() {
   const [signUpInfo, setSignUpInfo] = useState({
     email: '',
     username: '',
-    password: ''
+    password: '',
+    profileImage: ''
   });
 
   const isFilled =
@@ -49,12 +50,29 @@ export default function SignUp() {
     setSignUpInfo((prev) => ({ ...prev, [name]: value }));
   };
 
+  const onImageChange = (e) => {
+    setSignUpInfo((prev) => ({ ...prev, profileImage: e.target.files[0] }));
+  };
+
+  const createFormData = () => {
+    const formData = new FormData();
+    const { email, username, password, profileImage } = signUpInfo;
+    if (profileImage) {
+      formData.append('profile_image', profileImage);
+    }
+    formData.append('email', email);
+    formData.append('username', username);
+    formData.append('password', password);
+
+    return formData;
+  };
+
   const onClickSubmitButton = () => {
     setIsSignUpSuccess(false);
     setIsSubmitted(true);
     setIsUsernameValid(true);
     setIsEmailValid(true);
-    dispatch(requestSignUp(signUpInfo));
+    dispatch(requestSignUp(createFormData()));
   };
 
   const onKeySubmit = (e) => {
@@ -111,6 +129,12 @@ export default function SignUp() {
             placeholder="비밀번호"
             onChange={onInputChange}
             onKeyDown={onKeySubmit}
+          />
+          <CommonInput
+            name="profile-image"
+            type="file"
+            accept="image/jpeg, image/png"
+            onChange={onImageChange}
           />
 
           <CommonButton
