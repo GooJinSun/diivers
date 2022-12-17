@@ -53,3 +53,6 @@ node_modules
 
 # firebase
 /backend/adoorback/adoorback/serviceAccountKey.json
+
+#media
+/backend/adoorback/adoorback/media
