@@ -66,7 +66,11 @@ export const requestSignUp = (signUpInfo) => {
   return async (dispatch) => {
     dispatch({ type: SIGN_UP_REQUEST });
     try {
-      const { data } = await axios.post('user/signup/', signUpInfo);
+      const { data } = await axios.post('user/signup/', signUpInfo, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       if (data.id) {
         dispatch({
           type: SIGN_UP_SUCCESS,
