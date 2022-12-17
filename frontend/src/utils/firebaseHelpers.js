@@ -18,8 +18,16 @@ export const initializeFirebase = () => {
   const messaging = getMessaging(app);
 
   requestPermission();
-  getFCMRegistrationToken(messaging);
+  getFCMRegistrationToken(messaging, 'web', true);
   addForegroundMessageEventListener(messaging);
+};
+
+export const deactivateFirebase = () => {
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+
+  requestPermission();
+  getFCMRegistrationToken(messaging, 'web', false);
 };
 
 const requestPermission = () => {
@@ -34,7 +42,7 @@ const requestPermission = () => {
   });
 };
 
-const getFCMRegistrationToken = (messaging) => {
+const getFCMRegistrationToken = (messaging, type = 'web', active = true) => {
   // Get registration token. Initially this makes a network call, once retrieved
   // subsequent calls to getToken will return from cache.
   if (!messaging) {
@@ -52,8 +60,9 @@ const getFCMRegistrationToken = (messaging) => {
         );
         // Send the token to your server and update the UI if necessary
         axios.post('/devices/', {
-          type: 'web',
-          registration_id: registrationToken
+          type,
+          registration_id: registrationToken,
+          active
         });
       } else {
         // Show permission request UI
