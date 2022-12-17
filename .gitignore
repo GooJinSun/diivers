@@ -51,3 +51,6 @@ node_modules
 /backend/adoorback/feed/algorithms/user_contents.csv
 /backend/adoorback/feed/algorithms/recommendations.csv
 /backend/adoorback/adoor_data_export.sql
+
+#media
+/backend/adoorback/adoorback/media
