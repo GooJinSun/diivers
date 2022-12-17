@@ -27,6 +27,17 @@ const HelloUsername = styled.div`
   margin-left: 12px;
   color: #777;
 `;
+
+const UserIcon = styled.span`
+  background-image: url(${(props) => props.url});
+  background-position: center;
+  background-size: contain;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  user-select: none;
+`;
+
 const useStyles = makeStyles((theme) => ({
   hide: {
     display: 'none'
@@ -290,7 +301,11 @@ const Header = ({ isMobile }) => {
           color="secondary"
         >
           <Link to={`/users/${currentUser?.username}`}>
-            <AccountCircle color="secondary" />
+            {currentUser?.profile_image ? (
+              <UserIcon url={currentUser.profile_image} />
+            ) : (
+              <AccountCircle color="secondary" />
+            )}
           </Link>
           <Link to={`/users/${currentUser?.username}`}>
             <HelloUsername className="hello-username">
