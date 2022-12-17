@@ -16,13 +16,12 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for auth and profile update
     """
-    url = serializers.HyperlinkedIdentityField(
-        view_name='user-detail', read_only=True, lookup_field='username')
+    profile_image = serializers.ImageField(required=False)
+    url = serializers.HyperlinkedIdentityField(view_name='user-detail', read_only=True, lookup_field='username')
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password',
-                  'profile_pic', 'question_history', 'url']
+        fields = ['id', 'username', 'email', 'password','profile_pic', 'question_history', 'url', 'profile_image']
         extra_kwargs = {'password': {'write_only': True}}
 
     @transaction.atomic

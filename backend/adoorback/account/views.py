@@ -20,6 +20,7 @@ from feed.models import Question
 from adoorback.utils.validators import adoor_exception_handler
 from.email import email_manager
 from adoorback.utils.permissions import IsNotBlocked
+from rest_framework.parsers import MultiPartParser, FormParser
 
 User = get_user_model()
 
@@ -34,6 +35,7 @@ def token_anonymous(request):
 
 class UserSignup(generics.CreateAPIView):
     serializer_class = UserProfileSerializer
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_exception_handler(self):
         return adoor_exception_handler
