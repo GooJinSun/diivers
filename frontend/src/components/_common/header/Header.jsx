@@ -16,6 +16,7 @@ import { fetchSearchResults } from '@modules/search';
 import MobileDrawer from '@mobile-components/mobile-drawer/MobileDrawer';
 import MobileFooter from '@mobile-components/mobile-footer/MobileFooter';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
+import useRouteChange from '@hooks/env/useRouteChange';
 import NotificationDropdownList from './notification-dropdown-list/NotificationDropdownList';
 import { useStyles, HelloUsername } from './Header.styles';
 
@@ -68,6 +69,7 @@ const Header = ({ isMobile }) => {
   }, []);
 
   useOnClickOutside(searchRef, handleSearchClose);
+  useRouteChange(handleSearchClose);
 
   const handleClickLogout = () => {
     dispatch(logout());
