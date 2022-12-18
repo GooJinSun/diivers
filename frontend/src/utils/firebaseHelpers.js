@@ -1,9 +1,8 @@
-import { initializeApp } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getToken, onMessage } from 'firebase/messaging';
 import axios from '../apis';
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
@@ -12,86 +11,68 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
-// Initialize Firebase
-export const initializeFirebase = () => {
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
-
-  requestPermission();
-  getFCMRegistrationToken(messaging, 'web', true);
-  addForegroundMessageEventListener(messaging);
+export const requestPermission = async () => {
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') return true;
+    return false;
+  } catch (e) {
+    return false;
+  }
 };
 
-export const deactivateFirebase = () => {
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
+export const getFCMRegistrationToken = async (messaging) => {
+  // Get registration token. Initially this makes a network call, once retrieved
+  // subsequent calls to getToken will return from cache.
+  if (!messaging) return;
 
-  requestPermission();
-  getFCMRegistrationToken(messaging, 'web', false);
+  try {
+    const registrationToken = await getToken(messaging, {
+      vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
+    });
+
+    if (!registrationToken) return;
+
+    activateDevice(registrationToken);
+    return registrationToken;
+  } catch (err) {
+    console.log('An error occurred while retrieving token. ', err);
+  }
 };
 
-const requestPermission = () => {
-  console.log('Request permission...');
+const activateDevice = (token) => {
+  if (!token) return;
 
-  Notification.requestPermission().then(async (permission) => {
-    if (permission === 'granted') {
-      console.log('Notification permission granted.');
-
-      getFCMRegistrationToken();
-    }
+  axios.post('/devices/', {
+    type: 'web',
+    registration_id: token,
+    active: true
   });
 };
 
-const getFCMRegistrationToken = (messaging, type = 'web', active = true) => {
-  // Get registration token. Initially this makes a network call, once retrieved
-  // subsequent calls to getToken will return from cache.
-  if (!messaging) {
-    return;
-  }
+export const deactivateFirebaseDevice = (token) => {
+  if (!token) return;
 
-  getToken(messaging, {
-    vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
-  })
-    .then((registrationToken) => {
-      if (registrationToken) {
-        console.log(
-          `%c테스트를 위해 다음의 등록키를 backend/adoorback/feed/views.py의 registration_token에 등록해보세요!: ${registrationToken}`,
-          'color: yellow'
-        );
-        // Send the token to your server and update the UI if necessary
-        axios.post('/devices/', {
-          type,
-          registration_id: registrationToken,
-          active
-        });
-      } else {
-        // Show permission request UI
-        console.log(
-          'No registration token available. Request permission to generate one.'
-        );
-      }
-    })
-    .catch((err) => {
-      console.log('An error occurred while retrieving token. ', err);
-    });
+  axios.post('/devices/', {
+    type: 'web',
+    registration_id: token,
+    active: false
+  });
 };
 
-const addForegroundMessageEventListener = (messaging) => {
+export const addForegroundMessageEventListener = (messaging, onClick) => {
   onMessage(messaging, (payload) => {
-    console.log('Received foreground message', payload);
-
-    // TODO: 노티의 내용 구성, 제목, 링크, 아이콘 등의 설정 필요
+    // TODO: 노티 아이콘 설정
     const {
       notification: { title, body },
       data: { url }
     } = payload;
 
     const noti = new Notification(title, { body });
+
     noti.onclick = () => {
-      // TODO: 노티를 클릭했을 때 동작 정의 필요 e.g. URL 이동 등
-      console.log(url);
+      onClick(url);
+      noti.close();
     };
   });
 };
-
-export default requestPermission;

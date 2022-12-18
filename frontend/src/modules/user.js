@@ -1,4 +1,5 @@
 import axios, { deleteTokens } from '../apis';
+import { deactivateFirebaseDevice } from '../utils/firebaseHelpers';
 import { setTokensInCookies } from '../utils/tokenCookiesHelpers';
 
 export const GET_CURRENT_USER_REQUEST = 'user/GET_CURRENT_USER_REQUEST';
@@ -48,12 +49,15 @@ export const REPORT_USER_FAILURE = 'user/REPORT_USER_FAILURE';
 
 export const REMOVE_ERROR = 'user/REMOVE_ERROR';
 
+export const SET_FCM_TOKEN = 'user/SET_FCM_TOKEN';
+
 const initialState = {
   loginError: false,
   signUpError: {},
   currentUser: null,
   selectedUser: null,
-  selectQuestion: true
+  selectQuestion: true,
+  fcmToken: null
 };
 
 export const skipOrCompleteSelectQuestions = () => {
@@ -227,6 +231,11 @@ export const getSelectedUser = (userName) => async (dispatch) => {
   });
 };
 
+export const setFcmToken = (fcmToken) => (dispatch) => {
+  if (!fcmToken) return;
+  dispatch({ type: SET_FCM_TOKEN, fcmToken });
+};
+
 export default function userReducer(state, action) {
   if (typeof state === 'undefined') {
     return initialState;
@@ -268,11 +277,13 @@ export default function userReducer(state, action) {
         loginError: action.error
       };
     case LOGOUT_REQUEST:
+      deactivateFirebaseDevice(state.fcmToken);
       return {
         ...state,
         currentUser: null,
         loginError: false,
-        selectQuestion: true
+        selectQuestion: true,
+        fcmToken: null
       };
     case SIGN_UP_SUCCESS:
       return {
@@ -317,6 +328,12 @@ export default function userReducer(state, action) {
       return {
         ...state,
         loginError: false
+      };
+    }
+    case SET_FCM_TOKEN: {
+      return {
+        ...state,
+        fcmToken: action.fcmToken
       };
     }
     default:

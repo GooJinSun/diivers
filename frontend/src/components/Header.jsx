@@ -20,7 +20,6 @@ import { logout } from '../modules/user';
 import { fetchSearchResults } from '../modules/search';
 import MobileDrawer from './posts/MobileDrawer';
 import MobileFooter from './MobileFooter';
-import { deactivateFirebase } from '../utils/firebaseHelpers';
 
 const HelloUsername = styled.div`
   font-size: 16px;
@@ -112,6 +111,7 @@ const Header = ({ isMobile }) => {
   const searchRef = useRef(null);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+
   const currentUserIsLoading =
     useSelector((state) => state.loadingReducer['user/GET_CURRENT_USER']) ===
     'REQUEST';
@@ -153,7 +153,6 @@ const Header = ({ isMobile }) => {
   const handleClickLogout = () => {
     dispatch(logout());
     history.push('/login');
-    deactivateFirebase();
   };
 
   const toggleNotiOpen = () => {

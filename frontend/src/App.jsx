@@ -33,7 +33,7 @@ import useLogOutIfRefreshTokenExpired from './hooks/auth/useLogOutIfRefreshToken
 import LostPassword from './pages/LostPassword';
 import ResetPassword from './pages/ResetPassword';
 import useAppLogin from './hooks/auth/useAppLogin';
-import { initializeFirebase } from './utils/firebaseHelpers';
+import useFcm from './hooks/useFcm';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -56,6 +56,8 @@ const App = () => {
   useLoginWithToken();
   useLogOutIfRefreshTokenExpired();
 
+  useFcm();
+
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
   const isMobile = useIsMobile();
@@ -65,12 +67,6 @@ const App = () => {
   useEffect(() => {
     initGA();
   }, []);
-
-  useEffect(() => {
-    if (currentUser) {
-      initializeFirebase();
-    }
-  }, [currentUser]);
 
   useEffect(() => {
     if (currentUser) {
