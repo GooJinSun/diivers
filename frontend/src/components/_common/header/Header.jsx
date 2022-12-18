@@ -272,10 +272,7 @@ const Header = ({ isMobile }) => {
       </div>
       <div ref={notiDropDownRef}>
         {isNotiOpen && (
-          <NotificationDropdownList
-            notifications={notifications}
-            setIsNotiOpen={setIsNotiOpen}
-          />
+          <NotificationDropdownList setIsNotiOpen={setIsNotiOpen} />
         )}
       </div>
       <div ref={searchRef}>{isSearchOpen && <SearchDropdownList />}</div>

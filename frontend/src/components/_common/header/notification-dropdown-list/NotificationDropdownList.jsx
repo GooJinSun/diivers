@@ -3,19 +3,39 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
 import { useHistory } from 'react-router';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { readAllNotification } from '@modules/notification';
+import {
+  readAllNotification,
+  appendNotifications,
+  getNotifications
+} from '@modules/notification';
 import NotificationItem from '@common-components/notification-item/NotificationItem';
+import useInfiniteScroll from '@hooks/useInfiniteScroll';
 import { useStyles, ButtonWrapper } from './NotificationDropdownList.styles';
 
 const READ_ALL_NOTI_DELAY = 300;
 
-const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
+const NotificationDropdownList = ({ setIsNotiOpen }) => {
   const classes = useStyles();
+
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const notifications = useSelector(
+    (state) => state.notiReducer.receivedNotifications
+  );
+
+  const onIntersect = () => {
+    if (notifications.length >= 90) return;
+    dispatch(appendNotifications());
+  };
+  const setTarget = useInfiniteScroll(onIntersect);
+
+  useEffect(() => {
+    dispatch(getNotifications());
+  }, [dispatch]);
 
   const notificationList = notifications?.map((noti) => (
     <NotificationItem
@@ -56,6 +76,7 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
       ) : (
         <CardContent className={classes.notificationDropdownContent}>
           <List>{notificationList}</List>
+          <div ref={setTarget} />
         </CardContent>
       )}
     </Card>
