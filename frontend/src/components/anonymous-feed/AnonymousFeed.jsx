@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPostsByType, appendPosts } from '@modules/post';
 import PostList from '@common-components/post-list/PostList';
+import { getPostsByType, appendPosts } from '@modules/post';
+import Message from '@common-components/message/Message';
 
 const AnonymousFeed = () => {
   const [target, setTarget] = useState(null);
@@ -40,12 +41,18 @@ const AnonymousFeed = () => {
 
   return (
     <>
-      <PostList
-        posts={anonymousPosts}
-        isAppending={isAppending}
-        isLoading={isLoading}
-      />
-      <div ref={setTarget} />
+      {anonymousPosts?.length === 0 && !isLoading ? (
+        <Message margin="16px 0" message="표시할 게시물이 없습니다 :(" />
+      ) : (
+        <>
+          <PostList
+            posts={anonymousPosts}
+            isAppending={isAppending}
+            isLoading={isLoading}
+          />
+          <div ref={setTarget} />
+        </>
+      )}
     </>
   );
 };

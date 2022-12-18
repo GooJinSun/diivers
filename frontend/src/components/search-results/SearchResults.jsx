@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FriendItem from '@common-components/friend-item/FriendItem';
+import Message from '@common-components/message/Message';
 import { fetchSearchResults } from '@modules/search';
 import PageNavigation from './page-navigation/PageNavigation';
 import { FriendListWrapper } from './SearchResults.styles';
@@ -60,7 +61,7 @@ export default function SearchResults() {
         </span>
       );
     }
-    return <h2>검색 결과 없음</h2>;
+    return <Message message="검색 결과 없음" />;
   };
 
   return (
