@@ -16,7 +16,6 @@ import { fetchSearchResults } from '@modules/search';
 import MobileDrawer from '@mobile-components/mobile-drawer/MobileDrawer';
 import MobileFooter from '@mobile-components/mobile-footer/MobileFooter';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
-import { deactivateFirebase } from '@utils/firebaseHelpers';
 import NotificationDropdownList from './notification-dropdown-list/NotificationDropdownList';
 import { useStyles, HelloUsername } from './Header.styles';
 
@@ -32,6 +31,7 @@ const Header = ({ isMobile }) => {
   const searchRef = useRef(null);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+
   const currentUserIsLoading =
     useSelector((state) => state.loadingReducer['user/GET_CURRENT_USER']) ===
     'REQUEST';
@@ -73,7 +73,6 @@ const Header = ({ isMobile }) => {
   const handleClickLogout = () => {
     dispatch(logout());
     history.push('/login');
-    deactivateFirebase();
   };
 
   const toggleNotiOpen = () => {
