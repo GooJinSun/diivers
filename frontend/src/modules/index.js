@@ -1,4 +1,11 @@
-import { combineReducers } from 'redux';
+import {
+  combineReducers,
+  legacy_createStore as createStore,
+  applyMiddleware
+} from 'redux';
+import logger from 'redux-logger';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
 import friendReducer from './friend';
 import notiReducer from './notification';
 import postReducer from './post';
@@ -18,5 +25,10 @@ const rootReducer = combineReducers({
   loadingReducer,
   searchReducer
 });
+
+export const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk, logger))
+);
 
 export default rootReducer;
