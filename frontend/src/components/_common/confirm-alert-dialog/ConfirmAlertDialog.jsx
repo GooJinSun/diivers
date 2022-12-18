@@ -13,7 +13,10 @@ export default function ConfirmAlertDialog({ onConfirm, message, isOpen }) {
       aria-describedby="alert-dialog-description"
     >
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText
+          id="alert-dialog-description"
+          style={{ whiteSpace: 'pre-line' }}
+        >
           {message}
         </DialogContentText>
       </DialogContent>
