@@ -193,7 +193,7 @@ export default function UserPage() {
                 </UserReportButtonWrapper>
               )}
               {selectedUser?.profile_image ? (
-                <UserIcon url={currentUser.profile_image} />
+                <UserIcon url={selectedUser.profile_image} />
               ) : (
                 <FaceIcon
                   style={{
