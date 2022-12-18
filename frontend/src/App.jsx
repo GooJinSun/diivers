@@ -108,7 +108,7 @@ const App = () => {
             <PrivateRoute exact path="/home" component={FriendFeed} />
             <PrivateRoute exact path="/anonymous" component={AnonymousFeed} />
             <PrivateRoute exact path="/questions" component={QuestionFeed} />
-            <PrivateRoute exact path="/users/:id" component={UserPage} />
+            <PrivateRoute exact path="/users/:username" component={UserPage} />
             <PrivateRoute
               exact
               path="/notifications"
@@ -150,7 +150,7 @@ const App = () => {
               path="/user-search"
               component={MobileSearchPage}
             />
-            <Redirect from="/my-page" to={`/users/${currentUser?.id}`} />
+            <Redirect from="/my-page" to={`/users/${currentUser?.username}`} />
             <Redirect exact path="/" to="/home" />
           </Switch>
         </FeedWrapper>
