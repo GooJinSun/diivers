@@ -1,6 +1,5 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -118,7 +117,11 @@ const QuestionDetail = (props) => {
   const renderTabComponent = useCallback(
     (tab) => {
       return (
-        <TabPanel value={0} index={0} className={classes.tabPanel}>
+        <TabPanel
+          value={tab.index}
+          index={tab.index}
+          className={classes.tabPanel}
+        >
           {isLoading ? <LoadingList /> : responseList}
         </TabPanel>
       );
