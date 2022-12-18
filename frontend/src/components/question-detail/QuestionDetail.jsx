@@ -1,7 +1,4 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react/jsx-wrap-multilines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
