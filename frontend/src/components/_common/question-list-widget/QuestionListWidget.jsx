@@ -15,10 +15,8 @@ import {
   WidgetTitleWrapper,
   FlexWrapper
 } from '@styles/wrappers';
-import {
-  getRandomQuestions,
-  getDailyQuestions
-} from '../../../modules/question';
+import { getRandomQuestions, getDailyQuestions } from '@modules/question';
+import { useRecommendedQuestionList } from '@queries/questions';
 import {
   useStyles,
   NewQuestionButton,
@@ -26,7 +24,6 @@ import {
   WidgetCard,
   QuestionListItemLink
 } from './QuestionListWidget.styles';
-import { useRecommendedQuestionList } from '@queries/questions';
 
 const QuestionListWidget = ({
   initialIsRandomQuestions = false,
@@ -41,6 +38,8 @@ const QuestionListWidget = ({
     useState(false);
 
   const { data: recommendedQuestions = [] } = useRecommendedQuestionList();
+
+  const dispatch = useDispatch();
 
   const handleModalOpen = () => {
     setCustomQuestionModalOpen(true);
@@ -74,9 +73,8 @@ const QuestionListWidget = ({
       dispatch(getRandomQuestions());
       setRandomQuestions(true);
     }
-  }, [recommendFailure, getDailyQuestionsSuccess]);
+  }, [recommendFailure, getDailyQuestionsSuccess, dispatch]);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDailyQuestions());
   }, [dispatch]);
