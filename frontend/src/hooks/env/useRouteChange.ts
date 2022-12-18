@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useHistory } from 'react-router';
 
-const useRouteChange = (onRouteChangeCallback) => {
+const useRouteChange = (onRouteChangeCallback: () => void) => {
   const history = useHistory();
 
   useEffect(() => {
