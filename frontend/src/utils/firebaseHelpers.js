@@ -71,7 +71,7 @@ export const addForegroundMessageEventListener = (messaging, onClick) => {
     const noti = new Notification(title, { body });
 
     noti.onclick = () => {
-      onClick(url);
+      if (url) onClick(url);
       noti.close();
     };
   });
