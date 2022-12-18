@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Container from '@material-ui/core/Container';
-import FaceIcon from '@material-ui/icons/Face';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
 import { getSelectedUser } from '@modules/user';
+import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
 import { getFriendList, deleteFriend } from '@modules/friend';
 import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
 import { getSelectedUserPosts, appendPosts } from '@modules/post';
@@ -24,16 +23,6 @@ import {
   useStyles
 } from './UserPage.styles';
 import { a11yProps } from './tab-panel/TabPanel';
-
-const UserIcon = styled.span`
-  background-image: url(${(props) => props.url});
-  background-position: center;
-  background-size: contain;
-  width: 1em;
-  height: 1em;
-  display: inline-block;
-  user-select: none;
-`;
 
 export default function UserPage() {
   const [target, setTarget] = useState(null);
@@ -192,15 +181,16 @@ export default function UserPage() {
                   />
                 </UserReportButtonWrapper>
               )}
-              {selectedUser?.profile_image ? (
-                <UserIcon url={selectedUser.profile_image} />
-              ) : (
-                <FaceIcon
-                  style={{
-                    color: selectedUser?.profile_pic
-                  }}
-                />
-              )}
+              <UserProfileItem
+                profileImageUrl={
+                  isMyPage
+                    ? currentUser?.profile_image
+                    : selectedUser?.profile_image
+                }
+                profileIconColor={selectedUser?.profile_pic}
+                width={24}
+                height={24}
+              />
               <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
               <div>
                 {selectedUser && (
