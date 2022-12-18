@@ -204,7 +204,6 @@ export default function notiReducer(state, action) {
     return initialState;
   }
   switch (action.type) {
-    case READ_ALL_NOTIFICATIONS_SUCCESS:
     case GET_NOTIFICATIONS_SUCCESS:
       return {
         ...state,
