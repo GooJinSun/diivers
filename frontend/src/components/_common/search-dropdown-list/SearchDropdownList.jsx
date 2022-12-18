@@ -10,14 +10,9 @@ const SearchDropdownList = () => {
 
   if (results.length === 0) return <></>;
 
-  // NOTE(Gina): 테스트 코드 복원 필요
-  const userList = [
-    ...results,
-    ...results,
-    ...results,
-    ...results,
-    ...results
-  ]?.map((user) => <FriendItem key={user.id} friendObj={user} />);
+  const userList = results?.map((user) => (
+    <FriendItem key={user.id} friendObj={user} />
+  ));
 
   return (
     <SearchCard
