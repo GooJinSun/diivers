@@ -14,7 +14,6 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 
@@ -26,7 +25,7 @@ from safedelete.models import SOFT_DELETE_CASCADE, HARD_DELETE
 from safedelete.managers import SafeDeleteManager
 
 from adoorback.models import AdoorTimestampedModel
-from adoorback.utils.validators import AdoorUsernameValidator
+from adoorback.validators import AdoorUsernameValidator
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):
