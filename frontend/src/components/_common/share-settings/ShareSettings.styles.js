@@ -10,7 +10,6 @@ export const ShareSettingsWrapper = styled.div`
 
 export const RespFormGroup = styled(FormGroup)`
   @media (max-width: 650px) {
-    // flex-direction: row-reverse;
     flex-direction: row;
     justify-content: flex-end;
     button {
