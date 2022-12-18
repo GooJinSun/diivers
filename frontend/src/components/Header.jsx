@@ -12,7 +12,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import useOnClickOutside from 'use-onclickoutside';
-import FaceIcon from '@material-ui/icons/Face';
 import { primaryColor, borderColor } from '../constants/colors';
 import NotificationDropdownList from './NotificationDropdownList';
 import SearchDropdownList from './SearchDropdownList';
@@ -20,22 +19,13 @@ import { logout } from '../modules/user';
 import { fetchSearchResults } from '../modules/search';
 import MobileDrawer from './posts/MobileDrawer';
 import MobileFooter from './MobileFooter';
+import UserProfileItem from './common/UserProfileItem';
 
 const HelloUsername = styled.div`
   font-size: 16px;
   margin-bottom: 7px;
   margin-left: 12px;
   color: #777;
-`;
-
-const UserIcon = styled.span`
-  background-image: url(${(props) => props.url});
-  background-position: center;
-  background-size: contain;
-  width: 1em;
-  height: 1em;
-  display: inline-block;
-  user-select: none;
 `;
 
 const useStyles = makeStyles((theme) => ({
@@ -301,15 +291,10 @@ const Header = ({ isMobile }) => {
           color="secondary"
         >
           <Link to={`/users/${currentUser?.username}`}>
-            {currentUser?.profile_image ? (
-              <UserIcon url={currentUser.profile_image} />
-            ) : (
-              <FaceIcon
-                style={{
-                  color: currentUser?.profile_pic
-                }}
-              />
-            )}
+            <UserProfileItem
+              profileImageUrl={currentUser?.profile_image}
+              profileIconColor={currentUser?.profile_pic}
+            />
           </Link>
           <Link to={`/users/${currentUser?.username}`}>
             <HelloUsername className="hello-username">
