@@ -7,6 +7,7 @@ from comment.models import Comment
 from adoorback.serializers import AdoorBaseSerializer
 from adoorback.settings.base import BASE_URL
 from account.serializers import AuthorFriendSerializer, AuthorAnonymousSerializer
+from user_tag.serializers import UserTagSerializer
 
 User = get_user_model()
 
@@ -20,6 +21,7 @@ class RecursiveReplyField(serializers.Serializer):
 class CommentBaseSerializer(AdoorBaseSerializer):
     is_reply = serializers.SerializerMethodField(read_only=True)
     target_id = serializers.SerializerMethodField()
+    user_tags = serializers.SerializerMethodField()
 
     def get_is_reply(self, obj):
         return obj.target.type == 'Comment'
@@ -27,10 +29,15 @@ class CommentBaseSerializer(AdoorBaseSerializer):
     def get_target_id(self, obj):
         return obj.object_id
 
+    def get_user_tags(self, obj):
+        user_tags = obj.comment_user_tags
+        return UserTagSerializer(user_tags, many=True, read_only=True, context=self.context).data
+
     class Meta(AdoorBaseSerializer.Meta):
         model = Comment
         fields = AdoorBaseSerializer.Meta.fields + ['is_reply', 'is_private',
-                                                    'is_anonymous', 'target_id']
+                                                    'is_anonymous', 'target_id', 
+                                                    'user_tags']
 
 
 class CommentFriendSerializer(CommentBaseSerializer):

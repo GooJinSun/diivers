@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     'comment.apps.CommentConfig',
     'notification.apps.NotificationConfig',
     'account.apps.AccountConfig',
+    'user_tag.apps.UserTagConfig',
     'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
