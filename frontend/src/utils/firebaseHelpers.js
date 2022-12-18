@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import axios from '@utils/api';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,8 +18,16 @@ export const initializeFirebase = () => {
   const messaging = getMessaging(app);
 
   requestPermission();
-  getFCMRegistrationToken(messaging);
+  getFCMRegistrationToken(messaging, 'web', true);
   addForegroundMessageEventListener(messaging);
+};
+
+export const deactivateFirebase = () => {
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+
+  requestPermission();
+  getFCMRegistrationToken(messaging, 'web', false);
 };
 
 const requestPermission = () => {
@@ -33,9 +42,13 @@ const requestPermission = () => {
   });
 };
 
-const getFCMRegistrationToken = (messaging) => {
+const getFCMRegistrationToken = (messaging, type = 'web', active = true) => {
   // Get registration token. Initially this makes a network call, once retrieved
   // subsequent calls to getToken will return from cache.
+  if (!messaging) {
+    return;
+  }
+
   getToken(messaging, {
     vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
   })
@@ -46,7 +59,11 @@ const getFCMRegistrationToken = (messaging) => {
           'color: yellow'
         );
         // Send the token to your server and update the UI if necessary
-        // TODO: registration key를 유저별로 서버에 저장할 수 있도록, 서버에 전송해야 함
+        axios.post('/devices/', {
+          type,
+          registration_id: registrationToken,
+          active
+        });
       } else {
         // Show permission request UI
         console.log(
@@ -65,13 +82,14 @@ const addForegroundMessageEventListener = (messaging) => {
 
     // TODO: 노티의 내용 구성, 제목, 링크, 아이콘 등의 설정 필요
     const {
-      notification: { title, body }
+      notification: { title, body },
+      data: { url }
     } = payload;
 
-    const noti = new Notification(`${title}: ${body}`);
+    const noti = new Notification(title, { body });
     noti.onclick = () => {
       // TODO: 노티를 클릭했을 때 동작 정의 필요 e.g. URL 이동 등
-      console.log('onclick foreground noti');
+      console.log(url);
     };
   });
 };

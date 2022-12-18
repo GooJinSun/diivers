@@ -226,5 +226,5 @@ FCM_DJANGO_SETTINGS = {
           # an update. See the section
   # "Update of device with duplicate registration ID" for more details.
   # default: False
-  "UPDATE_ON_DUPLICATE_REG_ID": False,
+  "UPDATE_ON_DUPLICATE_REG_ID": True,
 }
