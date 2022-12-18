@@ -34,6 +34,7 @@ import GlobalStyle from '@styles/globalStyle';
 import { MainWrapper, FeedWrapper } from '@styles/wrappers';
 import useAppLogin from '@hooks/auth/useAppLogin';
 import { initGA, trackPage } from './ga';
+import './i18n';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';

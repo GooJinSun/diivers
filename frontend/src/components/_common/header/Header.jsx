@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -29,6 +30,8 @@ const Header = ({ isMobile }) => {
   const history = useHistory();
   const notiDropDownRef = useRef(null);
   const searchRef = useRef(null);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'header' });
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
   const currentUserIsLoading =
@@ -148,7 +151,7 @@ const Header = ({ isMobile }) => {
         size="large"
         activeClassName={classes.tabActive}
       >
-        Home
+        {t('home')}
       </NavLink>
       <NavLink
         className={classes.tabButton}
@@ -156,7 +159,7 @@ const Header = ({ isMobile }) => {
         size="large"
         activeClassName={classes.tabActive}
       >
-        익명 글
+        {t('anonymous_feed')}
       </NavLink>
       <NavLink
         className={classes.tabButton}
@@ -164,7 +167,7 @@ const Header = ({ isMobile }) => {
         size="large"
         activeClassName={classes.tabActive}
       >
-        오늘의 질문
+        {t('today_question')}
       </NavLink>
       <div className={classes.grow} />
       <div className={classes.sectionDesktop}>
@@ -177,7 +180,7 @@ const Header = ({ isMobile }) => {
           }}
           size="small"
           value={query}
-          label="사용자 검색"
+          label={t('search_for_users')}
           type="search"
           variant="standard"
           placeholder={query}
@@ -235,7 +238,7 @@ const Header = ({ isMobile }) => {
             setQuery('');
           }}
         >
-          로그아웃
+          {t('logout')}
         </Button>
       </div>
     </>
@@ -263,7 +266,7 @@ const Header = ({ isMobile }) => {
                   size="medium"
                   className={classes.logoutButton}
                 >
-                  로그인
+                  {t('login')}
                 </Button>
               </>
             )}
