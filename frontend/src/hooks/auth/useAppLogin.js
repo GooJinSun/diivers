@@ -1,19 +1,22 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setTokensInCookies } from '../../utils/tokenCookiesHelpers';
 import { getCurrentUser } from '../../modules/user';
 
 const useAppLogin = () => {
   const dispatch = useDispatch();
-  const handleMessage = (e) => {
-    if (e.data) {
-      const data = JSON.parse(e.data);
-      const { key, access, refresh } = data;
-      if (key !== 'SET_TOKEN') return;
-      setTokensInCookies(access, refresh);
-      dispatch(getCurrentUser());
-    }
-  };
+  const handleMessage = useCallback(
+    (e) => {
+      if (e.data) {
+        const data = JSON.stringify(e.data);
+        const { key, access, refresh } = data;
+        if (key !== 'SET_TOKEN') return;
+        setTokensInCookies(access, refresh);
+        dispatch(getCurrentUser());
+      }
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     // ios
@@ -24,7 +27,7 @@ const useAppLogin = () => {
       window.removeEventListener('message', handleMessage);
       document.addEventListener('message', handleMessage);
     };
-  }, []);
+  }, [handleMessage]);
 };
 
 export default useAppLogin;
