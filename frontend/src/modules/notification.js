@@ -4,7 +4,9 @@ const initialState = {
   receivedNotifications: [],
   receivedFriendRequests: [],
   receivedResponseRequests: [],
-  next: null
+  nextNotificationUrl: null,
+  nextFriendRequestUrl: null,
+  nextResponseRequestUrl: null
 };
 
 export const GET_NOTIFICATIONS_REQUEST =
@@ -76,9 +78,9 @@ export const getNotifications = () => async (dispatch) => {
 };
 
 export const appendNotifications = () => async (dispatch, getState) => {
-  const { next } = getState().notiReducer;
-  if (!next) return;
-  const nextUrl = next.replace('http://localhost:8000/api/', '');
+  const { nextNotificationUrl } = getState().notiReducer;
+  if (!nextNotificationUrl) return;
+  const nextUrl = nextNotificationUrl.replace('http://localhost:8000/api/', '');
   let result;
   dispatch({ type: APPEND_NOTIFICATIONS_REQUEST });
   try {
@@ -115,9 +117,12 @@ export const getFriendRequests = () => async (dispatch) => {
 };
 
 export const appendFriendRequests = () => async (dispatch, getState) => {
-  const { next } = getState().notiReducer;
-  if (!next) return;
-  const nextUrl = next.replace('http://localhost:8000/api/', '');
+  const { nextFriendRequestUrl } = getState().notiReducer;
+  if (!nextFriendRequestUrl) return;
+  const nextUrl = nextFriendRequestUrl.replace(
+    'http://localhost:8000/api/',
+    ''
+  );
   let result;
   dispatch({ type: APPEND_FRIEND_REQUESTS_REQUEST });
   try {
@@ -154,9 +159,12 @@ export const getResponseRequests = () => async (dispatch) => {
 };
 
 export const appendResponseRequests = () => async (dispatch, getState) => {
-  const { next } = getState().notiReducer;
-  if (!next) return;
-  const nextUrl = next.replace('http://localhost:8000/api/', '');
+  const { nextResponseRequestUrl } = getState().notiReducer;
+  if (!nextResponseRequestUrl) return;
+  const nextUrl = nextResponseRequestUrl.replace(
+    'http://localhost:8000/api/',
+    ''
+  );
   let result;
   dispatch({ type: APPEND_RESPONSE_REQUESTS_REQUEST });
   try {
@@ -201,7 +209,7 @@ export default function notiReducer(state, action) {
       return {
         ...state,
         receivedNotifications: action.res,
-        next: action.next
+        nextNotificationUrl: action.next
       };
     case APPEND_NOTIFICATIONS_SUCCESS:
       return {
@@ -209,13 +217,13 @@ export default function notiReducer(state, action) {
         receivedNotifications: state.receivedNotifications
           ? [...state.receivedNotifications, ...action.results]
           : [...action.results],
-        next: action.next
+        nextNotificationUrl: action.next
       };
     case GET_FRIEND_REQUESTS_SUCCESS:
       return {
         ...state,
         receivedFriendRequests: action.res,
-        next: action.next
+        nextFriendRequestUrl: action.next
       };
     case APPEND_FRIEND_REQUESTS_SUCCESS:
       return {
@@ -223,13 +231,13 @@ export default function notiReducer(state, action) {
         receivedFriendRequests: state.receivedFriendRequests
           ? [...state.receivedFriendRequests, ...action.results]
           : [...action.results],
-        next: action.next
+        nextFriendRequestUrl: action.next
       };
     case GET_RESPONSE_REQUESTS_SUCCESS:
       return {
         ...state,
         receivedResponseRequests: action.res,
-        next: action.next
+        nextResponseRequestUrl: action.next
       };
     case APPEND_RESPONSE_REQUESTS_SUCCESS:
       return {
@@ -237,7 +245,7 @@ export default function notiReducer(state, action) {
         receivedResponseRequests: state.receivedResponseRequests
           ? [...state.receivedResponseRequests, ...action.results]
           : [...action.results],
-        next: action.next
+        nextResponseRequestUrl: action.next
       };
     default:
       return state;
