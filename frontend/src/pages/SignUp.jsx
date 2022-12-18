@@ -85,7 +85,6 @@ export default function SignUp() {
 
   const profileImageFileInput = React.useRef(null);
 
-  const signUpFormData = new FormData();
   const [profileImagePreview, setProfileImagePreview] = useState();
   const [isProfileImageAlert, setIsProfileImageAlert] = useState(false);
 
@@ -124,6 +123,7 @@ export default function SignUp() {
     signUpInfo.email.length;
 
   const onInputChange = (e) => {
+    if (isSubmitted) setIsSubmitted(false);
     const { name, value } = e.target;
     setSignUpInfo((prev) => ({ ...prev, [name]: value }));
   };
@@ -139,15 +139,16 @@ export default function SignUp() {
   };
 
   const createFormData = () => {
-    const { email, username, password, profileImage } = signUpFormData;
+    const formData = new FormData();
+    const { email, username, password, profileImage } = signUpInfo;
     if (profileImage) {
-      signUpFormData.append('profile_image', profileImage);
+      formData.append('profile_image', profileImage);
     }
-    signUpFormData.append('email', email);
-    signUpFormData.append('username', username);
-    signUpFormData.append('password', password);
+    formData.append('email', email);
+    formData.append('username', username);
+    formData.append('password', password);
 
-    return signUpFormData;
+    return formData;
   };
 
   const onClickSubmitButton = () => {
@@ -270,7 +271,9 @@ export default function SignUp() {
         </div>
       )}
       <ConfirmAlertDialog
-        message="이미지의 크기가 너무 큽니다. 400 * 400 이하 크기의 이미지를 사용해주세요 :)"
+        message={
+          '이미지의 크기가 너무 큽니다.\n400 * 400 이하 크기의 이미지를 사용해주세요'
+        }
         onConfirm={() => setIsProfileImageAlert(false)}
         onClose={setIsProfileImageAlert}
         isOpen={isProfileImageAlert}
