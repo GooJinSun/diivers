@@ -20,6 +20,7 @@ import { logout } from '../modules/user';
 import { fetchSearchResults } from '../modules/search';
 import MobileDrawer from './posts/MobileDrawer';
 import MobileFooter from './MobileFooter';
+import { deactivateFirebase } from '../utils/firebaseHelpers';
 
 const HelloUsername = styled.div`
   font-size: 16px;
@@ -152,6 +153,7 @@ const Header = ({ isMobile }) => {
   const handleClickLogout = () => {
     dispatch(logout());
     history.push('/login');
+    deactivateFirebase();
   };
 
   const toggleNotiOpen = () => {
