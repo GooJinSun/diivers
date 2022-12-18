@@ -11,7 +11,6 @@ urlpatterns = [
     path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),
 
     # Auth related
-    path('login/', views.user_login, name='user-login'),
     path('signup/', views.UserSignup.as_view(), name='user-signup'),
     path('activate/<int:pk>/<str:token>/', views.UserActivate.as_view(), name='user-activate'),
     path('select-questions/', views.SignupQuestions.as_view(),

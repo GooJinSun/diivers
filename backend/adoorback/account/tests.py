@@ -163,35 +163,6 @@ class AuthAPITestCase(APITestCase):
                                content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-    def test_user_login(self):
-        client = APIClient()
-        User.objects.create_user(
-            username="test_username", email="test@email.com", password="test_password")
-
-        response = client.get('/api/user/login/')
-        self.assertEqual(response.status_code, 405)  # Request not allowed
-
-        response = client.post('/api/user/login/', {},
-                               content_type='application/json')
-        self.assertEqual(response.status_code, 400)
-
-        response = client.post('/api/user/login/',
-                               json.dumps({'username': 'walalala',
-                                           'password': 'bahaahaha'}),
-                               content_type='application/json')
-        self.assertEqual(response.status_code, 401)
-
-        response = client.get('/api/user/')
-        self.assertEqual(response.status_code, 403)
-
-        login_data = {"username": "test_username", "password": "test_password"}
-        response = client.post(
-            '/api/user/login/', json.dumps(login_data), content_type='application/json')
-        self.assertEqual(response.status_code, 204)
-
-        response = client.get('/api/user/')
-        self.assertEqual(response.status_code, 200)
-
     def test_signup(self):
         client = Client()
 

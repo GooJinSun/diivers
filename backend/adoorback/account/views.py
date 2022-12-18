@@ -2,7 +2,7 @@ import json
 # import sentry_sdk
 
 from django.apps import apps
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -86,26 +86,6 @@ class UserActivate(generics.UpdateAPIView):
     def activate(self, user):
         user.is_active = True
         user.save()
-
-
-@transaction.atomic
-def user_login(request):
-    if request.method == "POST":
-        try:
-            req_data = json.loads(request.body)
-            username = str(req_data['username'])
-            password = str(req_data['password'])
-        except (KeyError, TypeError, json.JSONDecodeError) as e:
-            # sentry_sdk.capture_exception(e)
-            return HttpResponseBadRequest()
-
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return HttpResponse(status=204)
-        return HttpResponse(status=401)
-
-    return HttpResponseNotAllowed(['POST'])
 
 
 class SendResetPasswordEmail(generics.CreateAPIView):
