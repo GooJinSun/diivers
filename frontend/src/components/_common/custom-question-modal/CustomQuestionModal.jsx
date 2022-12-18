@@ -49,7 +49,7 @@ const CustomQuestionModal = ({ open, handleClose }) => {
           className={classes.textArea}
           aria-label="new custom question"
           placeholder="새로운 질문을 작성해 보세요."
-          rowsMin={3}
+          minRows={3}
           value={newCustomQuestion.content}
           onChange={handleInputChange}
         />

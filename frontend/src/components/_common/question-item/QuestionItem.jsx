@@ -164,7 +164,7 @@ export default function QuestionItem({
             id="content-input"
             placeholder="답변을 작성해주세요."
             value={newPost.content}
-            rowsMin={3}
+            minRows={3}
             onChange={handleContentChange}
           />
           <ShareSettings newPost={newPost} resetContent={resetContent} />
