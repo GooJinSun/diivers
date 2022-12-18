@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '../modules/user';
 import { CommonInput, CommonButton } from '../styles';
+import ConfirmAlertDialog from '../components/common/ConfirmAlertDialog';
 
 const SignUpWrapper = styled.div`
   width: 500px;
@@ -86,6 +87,7 @@ export default function SignUp() {
 
   const signUpFormData = new FormData();
   const [profileImagePreview, setProfileImagePreview] = useState();
+  const [isProfileImageAlert, setIsProfileImageAlert] = useState(false);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
@@ -128,6 +130,9 @@ export default function SignUp() {
 
   const onImageChange = (e) => {
     const profileImage = e.target.files[0];
+    if (profileImage.size > 400 * 400) {
+      return setIsProfileImageAlert(true);
+    }
     const objectUrl = URL.createObjectURL(profileImage);
     setProfileImagePreview(objectUrl);
     setSignUpInfo((prev) => ({ ...prev, profileImage }));
@@ -264,6 +269,12 @@ export default function SignUp() {
           </ButtonWrapper>
         </div>
       )}
+      <ConfirmAlertDialog
+        message="이미지의 크기가 너무 큽니다. 400 * 400 이하 크기의 이미지를 사용해주세요 :)"
+        onConfirm={() => setIsProfileImageAlert(false)}
+        onClose={setIsProfileImageAlert}
+        isOpen={isProfileImageAlert}
+      />
     </SignUpWrapper>
   );
 }
