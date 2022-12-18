@@ -78,6 +78,16 @@ const MobileWrapper = styled.div`
   }
 `;
 
+const UserIcon = styled.span`
+  background-image: url(${(props) => props.url});
+  background-position: center;
+  background-size: contain;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  user-select: none;
+`;
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -249,11 +259,15 @@ export default function UserPage() {
                   />
                 </UserReportButtonWrapper>
               )}
-              <FaceIcon
-                style={{
-                  color: selectedUser?.profile_pic
-                }}
-              />
+              {selectedUser?.profile_image ? (
+                <UserIcon url={currentUser.profile_image} />
+              ) : (
+                <FaceIcon
+                  style={{
+                    color: selectedUser?.profile_pic
+                  }}
+                />
+              )}
               <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
               <div>
                 {selectedUser && (
