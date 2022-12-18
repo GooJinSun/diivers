@@ -8,11 +8,11 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
-import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import TextField from '@material-ui/core/TextField';
 import styled from 'styled-components';
 import useOnClickOutside from 'use-onclickoutside';
+import FaceIcon from '@material-ui/icons/Face';
 import { primaryColor, borderColor } from '../constants/colors';
 import NotificationDropdownList from './NotificationDropdownList';
 import SearchDropdownList from './SearchDropdownList';
@@ -304,7 +304,11 @@ const Header = ({ isMobile }) => {
             {currentUser?.profile_image ? (
               <UserIcon url={currentUser.profile_image} />
             ) : (
-              <AccountCircle color="secondary" />
+              <FaceIcon
+                style={{
+                  color: currentUser?.profile_pic
+                }}
+              />
             )}
           </Link>
           <Link to={`/users/${currentUser?.username}`}>
