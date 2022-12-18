@@ -1,0 +1,10 @@
+{
+  "header": {
+    "home": "Home",
+    "anonymous_feed": "Anonymous Feed",
+    "today_question": "Today Questions",
+    "search_for_users": "Search for Users",
+    "logout": "Logout",
+    "login": "Login"
+  }
+}

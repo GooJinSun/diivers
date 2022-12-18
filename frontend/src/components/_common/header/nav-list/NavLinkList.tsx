@@ -1,8 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useStyles } from './NavLinkList.styles';
 
 const NavLinkList = () => {
+  const [t] = useTranslation('translation', { keyPrefix: 'header' });
+
   const classes = useStyles();
 
   return (
@@ -12,21 +15,21 @@ const NavLinkList = () => {
         to="/home"
         activeClassName={classes.tabActive}
       >
-        Home
+        {t('home')}
       </NavLink>
       <NavLink
         className={classes.tabButton}
         to="/anonymous"
         activeClassName={classes.tabActive}
       >
-        익명 글
+        {t('anonymous_feed')}
       </NavLink>
       <NavLink
         className={classes.tabButton}
         to="/questions"
         activeClassName={classes.tabActive}
       >
-        오늘의 질문
+        {t('today_question')}
       </NavLink>
     </>
   );

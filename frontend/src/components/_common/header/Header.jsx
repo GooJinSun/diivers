@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -32,6 +33,8 @@ const Header = () => {
   const history = useHistory();
   const notiDropDownRef = useRef(null);
   const searchRef = useRef(null);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'header' });
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
@@ -204,7 +207,7 @@ const Header = () => {
             }}
             size="small"
             value={query}
-            label="사용자 검색"
+            label={t('search_for_users')}
             type="search"
             variant="standard"
             placeholder={query}
@@ -265,7 +268,7 @@ const Header = () => {
               setQuery('');
             }}
           >
-            로그아웃
+            {t('logout')}
           </Button>
         </div>
       </>
@@ -294,7 +297,7 @@ const Header = () => {
                   size="medium"
                   className={classes.logoutButton}
                 >
-                  로그인
+                  {t('login')}
                 </Button>
               </>
             )}
