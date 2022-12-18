@@ -10,11 +10,14 @@ from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.views import TokenViewBase
 
 from account.models import FriendRequest
 from account.serializers import UserProfileSerializer, \
     UserFriendRequestCreateSerializer, UserFriendRequestUpdateSerializer, \
-    UserFriendshipStatusSerializer, AuthorFriendSerializer
+    UserFriendshipStatusSerializer, AuthorFriendSerializer, CustomTokenObtainPairSerializer
+
 from feed.serializers import QuestionAnonymousSerializer
 from feed.models import Question
 from adoorback.utils.validators import adoor_exception_handler
@@ -31,6 +34,23 @@ def token_anonymous(request):
         return HttpResponse(status=204)
     else:
         return HttpResponseNotAllowed(['GET'])
+
+
+class CustomTokenObtainPairView(TokenViewBase):
+    """
+    https://github.com/jazzband/djangorestframework-simplejwt/issues/368#issuecomment-778686307
+    Takes a set of user credentials and returns an access and refresh JSON web
+    token pair to prove the authentication of those credentials.
+
+    Returns HTTP 406 when user is inactive and HTTP 401 when login credentials are invalid.
+    """
+    serializer_class = CustomTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
 
 
 class UserSignup(generics.CreateAPIView):
