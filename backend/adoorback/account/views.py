@@ -7,7 +7,7 @@ from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import generics
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -24,6 +24,7 @@ from adoorback.utils.validators import adoor_exception_handler
 from.email import email_manager
 from adoorback.utils.permissions import IsNotBlocked
 from rest_framework.parsers import MultiPartParser, FormParser
+from adoorback.utils.exceptions import ExistingUsername, LongUsername, InvalidUsername, ExistingEmail, InvalidEmail, InActiveUser
 
 User = get_user_model()
 
@@ -62,7 +63,27 @@ class UserSignup(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            if 'username' in e.detail:
+                if 'unique' in e.get_codes()['username']:
+                    user = User.objects.get(username=request.data['username'])
+                    if not user.is_active:
+                        raise InActiveUser()
+                    raise ExistingUsername()
+                if 'invalid' in e.get_codes()['username']:
+                    raise InvalidUsername()
+                if 'max_length' in e.get_codes()['username']:
+                    raise LongUsername()
+            if 'email' in e:
+                if 'unique' in e.get_codes()['email']:
+                    raise ExistingEmail()
+                if 'invalid' in e.get_codes()['email']:
+                    raise InvalidEmail()
+            raise e
+
         self.perform_create(serializer)
 
         user = User.objects.get(username=request.data.get('username'))
