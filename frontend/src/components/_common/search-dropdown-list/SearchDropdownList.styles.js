@@ -25,7 +25,7 @@ export const useStyles = makeStyles({
     zIndex: 1
   },
   searchDropdownContent: {
-    padding: 0,
+    padding: '0px 4px',
     '&:last-child': {
       paddingBottom: '0 !important'
     }

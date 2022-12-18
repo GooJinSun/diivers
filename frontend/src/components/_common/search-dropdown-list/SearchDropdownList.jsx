@@ -10,12 +10,24 @@ const SearchDropdownList = () => {
 
   if (results.length === 0) return <></>;
 
-  const userList = results?.map((user) => (
-    <FriendItem key={user.id} friendObj={user} />
-  ));
+  // NOTE(Gina): 테스트 코드 복원 필요
+  const userList = [
+    ...results,
+    ...results,
+    ...results,
+    ...results,
+    ...results
+  ]?.map((user) => <FriendItem key={user.id} friendObj={user} />);
 
   return (
-    <SearchCard variant="outlined" px={2} py={1}>
+    <SearchCard
+      variant="outlined"
+      px={2}
+      py={1}
+      style={{
+        overflowY: 'scroll'
+      }}
+    >
       <CardContent className={classes.searchDropdownContent}>
         {userList}
       </CardContent>
