@@ -1,0 +1,10 @@
+{
+  "header": {
+    "home": "Home",
+    "anonymous_feed": "익명 글",
+    "today_question": "오늘의 질문",
+    "search_for_users": "사용자 검색",
+    "logout": "로그아웃",
+    "login": "로그인"
+  }
+}
