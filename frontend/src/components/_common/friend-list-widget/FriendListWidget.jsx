@@ -25,7 +25,7 @@ const FriendListWidget = () => {
   });
 
   return (
-    <WidgetWrapper id="friend-list-widget">
+    <WidgetWrapper>
       <Card className={classes.card} variant="outlined">
         <CardContent className={classes.cardContent}>
           <WidgetTitleWrapper>

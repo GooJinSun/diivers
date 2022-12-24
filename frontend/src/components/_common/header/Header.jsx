@@ -16,10 +16,11 @@ import { fetchSearchResults } from '@modules/search';
 import MobileDrawer from '@mobile-components/mobile-drawer/MobileDrawer';
 import MobileFooter from '@mobile-components/mobile-footer/MobileFooter';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
+import useWindowWidth from '@hooks/env/useWindowWidth';
 import NotificationDropdownList from './notification-dropdown-list/NotificationDropdownList';
 import { useStyles, HelloUsername } from './Header.styles';
 
-const Header = ({ isMobile }) => {
+const Header = () => {
   const classes = useStyles();
   const [isNotiOpen, setIsNotiOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -107,127 +108,181 @@ const Header = ({ isMobile }) => {
     setIsDrawerOpen(false);
   };
 
-  const renderHeaderSignedInItems = isMobile ? (
-    <>
-      <IconButton
-        id="drawer-open-button"
-        color="secondary"
-        aria-label="open drawer"
-        edge="end"
-        onClick={() => {
-          setIsDrawerOpen(true);
-        }}
-        style={{ display: isDrawerOpen && 'none' }}
-        className={classes.right}
-      >
-        <MenuIcon />
-      </IconButton>
-      <MobileDrawer
-        open={isDrawerOpen}
-        handleDrawerClose={handleDrawerClose}
-        onLogout={handleClickLogout}
-      />
-    </>
-  ) : (
-    <>
-      <NavLink
-        className={classes.tabButton}
-        to="/home"
-        size="large"
-        activeClassName={classes.tabActive}
-      >
-        Home
-      </NavLink>
-      <NavLink
-        className={classes.tabButton}
-        to="/anonymous"
-        size="large"
-        activeClassName={classes.tabActive}
-      >
-        익명 글
-      </NavLink>
-      <NavLink
-        className={classes.tabButton}
-        to="/questions"
-        size="large"
-        activeClassName={classes.tabActive}
-      >
-        오늘의 질문
-      </NavLink>
-      <div className={classes.grow} />
-      <div className={classes.sectionDesktop}>
-        <TextField
-          required
-          id="input-search-field"
-          className={classes.textField}
-          InputProps={{
-            autoComplete: 'off'
-          }}
-          size="small"
-          value={query}
-          label="사용자 검색"
-          type="search"
-          variant="standard"
-          placeholder={query}
-          onChange={handleChange}
-          onKeyDown={onKeySubmit}
-        />
-        <IconButton
-          aria-label="show new notifications"
-          className={`${classes.iconButton} noti-button`}
-          onClick={(e) => {
-            e.stopPropagation();
-            toggleNotiOpen();
-          }}
-          disableRipple
-          color="secondary"
-        >
-          <Badge
-            variant="dot"
-            invisible={notiBadgeInvisible}
-            color="primary"
-            overlap="rectangular"
+  const { isMobile, isDesktopMin } = useWindowWidth();
+
+  const renderHeaderSignedInItems = () => {
+    // 데스크톱 최소 화면 width 대응
+    if (!isMobile && isDesktopMin) {
+      return (
+        <div className={classes.right}>
+          <IconButton
+            aria-label="show new notifications"
+            className={`${classes.iconButton} noti-button`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleNotiOpen();
+            }}
+            disableRipple
+            color="secondary"
           >
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <IconButton
-          aria-label="account of current user"
-          className={classes.iconButton}
-          style={{ marginTop: '4px' }}
-          disableRipple
-          color="secondary"
+            <Badge
+              variant="dot"
+              invisible={notiBadgeInvisible}
+              color="primary"
+              overlap="rectangular"
+            >
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton
+            id="drawer-open-button"
+            color="secondary"
+            aria-label="open drawer"
+            edge="end"
+            onClick={() => {
+              setIsDrawerOpen(true);
+            }}
+            style={{ display: isDrawerOpen && 'none' }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <MobileDrawer
+            open={isDrawerOpen}
+            handleDrawerClose={handleDrawerClose}
+            onLogout={handleClickLogout}
+          />
+        </div>
+      );
+    }
+
+    // 모바일 width 대응
+    if (isMobile) {
+      return (
+        <>
+          <IconButton
+            id="drawer-open-button"
+            color="secondary"
+            aria-label="open drawer"
+            edge="end"
+            onClick={() => {
+              setIsDrawerOpen(true);
+            }}
+            style={{ display: isDrawerOpen && 'none' }}
+            className={classes.right}
+          >
+            <MenuIcon />
+          </IconButton>
+          <MobileDrawer
+            open={isDrawerOpen}
+            handleDrawerClose={handleDrawerClose}
+            onLogout={handleClickLogout}
+          />
+        </>
+      );
+    }
+
+    // 기타 화면 케이스 대응 (일반 데스크톱)
+    return (
+      <>
+        <NavLink
+          className={classes.tabButton}
+          to="/home"
+          size="large"
+          activeClassName={classes.tabActive}
         >
-          <Link to={`/users/${currentUser?.username}`}>
-            <AccountCircle color="secondary" />
-          </Link>
-          <Link to={`/users/${currentUser?.username}`}>
-            <HelloUsername className="hello-username">
-              {currentUser?.username}
-            </HelloUsername>
-          </Link>
-        </IconButton>
-        <Button
-          variant="outlined"
-          size="medium"
-          className={classes.logoutButton}
-          style={{
-            marginTop: '10px',
-            height: '40px',
-            marginLeft: '8px'
-          }}
-          id="logout-button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleClickLogout();
-            setQuery('');
-          }}
+          Home
+        </NavLink>
+        <NavLink
+          className={classes.tabButton}
+          to="/anonymous"
+          size="large"
+          activeClassName={classes.tabActive}
         >
-          로그아웃
-        </Button>
-      </div>
-    </>
-  );
+          익명 글
+        </NavLink>
+        <NavLink
+          className={classes.tabButton}
+          to="/questions"
+          size="large"
+          activeClassName={classes.tabActive}
+        >
+          오늘의 질문
+        </NavLink>
+        <div className={classes.grow} />
+        <div className={classes.sectionDesktop}>
+          <TextField
+            required
+            id="input-search-field"
+            className={classes.textField}
+            InputProps={{
+              autoComplete: 'off'
+            }}
+            size="small"
+            value={query}
+            label="사용자 검색"
+            type="search"
+            variant="standard"
+            placeholder={query}
+            onChange={handleChange}
+            onKeyDown={onKeySubmit}
+          />
+          <IconButton
+            aria-label="show new notifications"
+            className={`${classes.iconButton} noti-button`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleNotiOpen();
+            }}
+            disableRipple
+            color="secondary"
+          >
+            <Badge
+              variant="dot"
+              invisible={notiBadgeInvisible}
+              color="primary"
+              overlap="rectangular"
+            >
+              <NotificationsIcon />
+            </Badge>
+          </IconButton>
+          <IconButton
+            aria-label="account of current user"
+            className={classes.iconButton}
+            style={{ marginTop: '4px' }}
+            disableRipple
+            color="secondary"
+          >
+            <Link to={`/users/${currentUser?.username}`}>
+              <AccountCircle color="secondary" />
+            </Link>
+            <Link to={`/users/${currentUser?.username}`}>
+              <HelloUsername className="hello-username">
+                {currentUser?.username}
+              </HelloUsername>
+            </Link>
+          </IconButton>
+          <Button
+            variant="outlined"
+            size="medium"
+            className={classes.logoutButton}
+            style={{
+              marginTop: '10px',
+              height: '40px',
+              marginLeft: '8px'
+            }}
+            id="logout-button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClickLogout();
+              setQuery('');
+            }}
+          >
+            로그아웃
+          </Button>
+        </div>
+      </>
+    );
+  };
 
   return (
     <>
@@ -239,7 +294,7 @@ const Header = ({ isMobile }) => {
           <Toolbar>
             <Link to="/" className={classes.logo} />
             {currentUserIsLoading ? null : currentUser ? (
-              renderHeaderSignedInItems
+              renderHeaderSignedInItems()
             ) : (
               <>
                 <div className={classes.grow} />
