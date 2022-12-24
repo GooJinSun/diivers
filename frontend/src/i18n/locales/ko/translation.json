@@ -6,5 +6,13 @@
     "search_for_users": "사용자 검색",
     "logout": "로그아웃",
     "login": "로그인"
+  },
+  "mobile": {
+    "drawer": {
+      "friends": "친구",
+      "recommended_questions": "추천 질문",
+      "search_for_users": "사용자 검색", 
+      "logout": "로그아웃"
+    }
   }
 }

@@ -11,11 +11,14 @@ import SearchIcon from '@material-ui/icons/Search';
 import ContactSupportIcon from '@material-ui/icons/ContactSupport';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useHistory } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { useStyles, MarginListItem, Mask } from './MobileDrawer.styles';
 
 export default function MobileDrawer({ open, handleDrawerClose, onLogout }) {
   const history = useHistory();
   const classes = useStyles();
+
+  const [t] = useTranslation('translation', { keyPrefix: 'mobile.drawer' });
   return (
     <div id="drawer-wrapper">
       {open && (
@@ -49,7 +52,7 @@ export default function MobileDrawer({ open, handleDrawerClose, onLogout }) {
               <PeopleAltIcon />
             </ListItemIcon>
             <ListItemText
-              primary="친구"
+              primary={t('friends')}
               id="friend"
               onClick={() => {
                 history.push('/my-friends');
@@ -62,7 +65,7 @@ export default function MobileDrawer({ open, handleDrawerClose, onLogout }) {
               <ContactSupportIcon />
             </ListItemIcon>
             <ListItemText
-              primary="추천 질문"
+              primary={t('recommended_questions')}
               id="question"
               onClick={() => {
                 history.push('/recommended-questions');
@@ -76,7 +79,7 @@ export default function MobileDrawer({ open, handleDrawerClose, onLogout }) {
             </ListItemIcon>
             <ListItemText
               id="search"
-              primary="사용자 검색"
+              primary={t('search_for_users')}
               onClick={() => {
                 history.push('/user-search');
                 handleDrawerClose();
@@ -94,7 +97,7 @@ export default function MobileDrawer({ open, handleDrawerClose, onLogout }) {
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>
-            <ListItemText primary="로그아웃" />
+            <ListItemText primary={t('logout')} />
           </MarginListItem>
         </List>
       </Drawer>
