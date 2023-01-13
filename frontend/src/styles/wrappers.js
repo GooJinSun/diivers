@@ -20,12 +20,13 @@ export const AuthentiCationWrapper = styled.div`
 `;
 
 export const FeedWrapper = styled.div`
-  width: calc(100vw - 2 * ${WIDGET_WIDTH}px);
+  width: calc(100% - 2 * ${WIDGET_WIDTH}px);
   @media (max-width: ${DESKTOP_MIN_WIDTH}px) {
     width: calc(100vw - 2 * ${DEFAULT_MARGIN}px);
   }
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export const WidgetWrapper = styled.div`
@@ -73,6 +74,10 @@ export const PostItemWrapper = styled.div`
   margin: 16px 0;
   position: relative;
   border-radius: 4px;
+`;
+
+export const PostListWrapper = styled.div`
+  width: 100%;
 `;
 
 export const FlexWrapper = styled.div`

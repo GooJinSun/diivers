@@ -81,12 +81,7 @@ const App = () => {
       <Header />
       <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
         {showWidget && <QuestionListWidget />}
-        <FeedWrapper
-          style={{
-            left: !currentUser ? '275px' : '',
-            width: !currentUser ? '655px' : ''
-          }}
-        >
+        <FeedWrapper>
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />
