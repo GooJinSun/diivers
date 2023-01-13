@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { appendDailyQuestions, getDailyQuestions } from '@modules/question';
 import CustomQuestionModal from '@common-components/custom-question-modal/CustomQuestionModal';
+import { PostListWrapper } from '@styles/wrappers';
 import QuestionList from './question-list/QuestionList';
 import { NewQuestionButton } from './QuestionFeed.styles';
 
@@ -69,14 +70,14 @@ export default function QuestionFeed() {
           />
         )}
       </>
-      <div style={{ marginTop: '45px' }}>
+      <PostListWrapper style={{ marginTop: '45px' }}>
         <QuestionList
           questions={dailyQuestions}
           isAppending={isAppending}
           isLoading={isLoading}
         />
         <div ref={setTarget} />
-      </div>
+      </PostListWrapper>
     </>
   );
 }
