@@ -141,9 +141,9 @@ const QuestionDetail = (props) => {
             textColor="primary"
             className={classes.header}
           >
-            <Tab label="전체" {...a11yProps(0)} />
-            <Tab label="친구" {...a11yProps(1)} />
-            <Tab label="익명" {...a11yProps(2)} />
+            <Tab label={t('question_detail.all')} {...a11yProps(0)} />
+            <Tab label={t('question_detail.friends')} {...a11yProps(1)} />
+            <Tab label={t('question_detail.anonymous')} {...a11yProps(2)} />
           </Tabs>
           {responses?.length !== 0 ? (
             <>
@@ -165,7 +165,7 @@ const QuestionDetail = (props) => {
           )}
         </>
       ) : (
-        <Message message="존재하지 않는 질문입니다" />
+        <Message message={t('question_detail.this_question_do_not_exit')} />
       )}
     </PostListWrapper>
   );

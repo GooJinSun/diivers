@@ -122,5 +122,11 @@
     "this_feature_is_available_only_when_you_add_friends": "This feature is available only when you add friends.",
     "send": "send",
     "cancel_send": "cancel send"
+  },
+  "question_detail": {
+    "all": "ALL",
+    "friends": "Friends",
+    "anonymous": "Anonymous",
+    "this_question_do_not_exit": "This question doesn't exist."
   }
 }
