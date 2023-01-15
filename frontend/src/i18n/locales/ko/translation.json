@@ -84,7 +84,7 @@
     "share_anonymously": "익명으로 공유하기",
     "post": "게시",
     "posts_excluding_questions_and_answers_are_only_open_to_friends": "질문, 답변을 제외한 게시글은 친구들에게만 공개됩니다.",
-    "please_enter_the_content":"내용을 입력해주세요!",
+    "please_enter_the_content": "내용을 입력해주세요!",
     "ok": "확인",
     "cancel": "취소",
     "scope_of_disclosure": "공개범위",
@@ -159,6 +159,7 @@
   },
   "search_user_page": {
     "user_search_results": "사용자 검색 결과",
-    "no_results": "검색 결과 없음"
+    "no_results": "검색 결과 없음",
+    "please_enter_a_search_keyword": "검색어(닉네임)를 입력하세요."
   }
 }

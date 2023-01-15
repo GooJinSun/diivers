@@ -3,11 +3,14 @@ import { TextareaAutosize } from '@material-ui/core';
 import QuestionBox from '@common-components/question-box/QuestionBox';
 import ShareSettings from '@common-components/share-settings/ShareSettings';
 import { PostItemWrapper } from '@styles/wrappers';
+import { useTranslation } from 'react-i18next';
 import { useStyles } from './PostEditItem.styles';
 
 const PostEditItem = ({ postObj }) => {
   const classes = useStyles();
   const [editPost, setEditPost] = useState(postObj);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   const onInputChange = (e) => {
     setEditPost({
@@ -25,8 +28,8 @@ const PostEditItem = ({ postObj }) => {
         name="content"
         placeholder={
           postObj?.type === 'Article'
-            ? '떠오르는 생각을 공유해주세요.'
-            : '답변을 작성해주세요'
+            ? t('please_share_your_thoughts')
+            : t('please_fill_out_the_answer')
         }
         value={editPost?.content}
         onChange={onInputChange}
