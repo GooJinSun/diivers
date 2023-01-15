@@ -9,6 +9,7 @@ import {
   Typography
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { useTranslation } from 'react-i18next';
 import { useStyles, PostAuthorWrapper } from './PostAuthorButtons.styles';
 
 const ItemText = ({ text }) => (
@@ -22,6 +23,9 @@ export default function PostAuthorButtons({
 }) {
   const classes = useStyles();
   const [showButtons, setShowButtons] = useState(false);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
+
   return (
     <PostAuthorWrapper>
       <IconButton
@@ -40,7 +44,7 @@ export default function PostAuthorButtons({
               <ListItem button>
                 <ListItemText
                   id="post-edit-button"
-                  primary={<ItemText text="수정하기" />}
+                  primary={<ItemText text={t('edit')} />}
                   onClick={onClickEdit}
                 />
               </ListItem>
@@ -48,7 +52,7 @@ export default function PostAuthorButtons({
             <ListItem button>
               <ListItemText
                 id="post-delete-button"
-                primary={<ItemText text="삭제하기" />}
+                primary={<ItemText text={t('delete')} />}
                 onClick={onClickDelete}
               />
             </ListItem>

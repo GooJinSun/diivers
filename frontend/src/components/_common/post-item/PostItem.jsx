@@ -20,6 +20,7 @@ import {
   PostItemWrapper,
   PostItemButtonsWrapper
 } from '@styles/wrappers';
+import { useTranslation } from 'react-i18next';
 import {
   ContentWrapper,
   CommentWrapper,
@@ -49,6 +50,8 @@ export default function PostItem({
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   useEffect(() => {
     if (postObj) {
@@ -140,18 +143,23 @@ export default function PostItem({
           {isAuthor && (
             <>
               {(postObj.share_with_friends || postObj.share_anonymously) && (
-                <ShareSettingInfo id="share-title">공개범위:</ShareSettingInfo>
+                <ShareSettingInfo id="share-title">
+                  {t('scope_of_disclosure')}
+                  <span>: </span>
+                </ShareSettingInfo>
               )}
               {postObj.share_with_friends && (
                 <ShareSettingInfo id="share-with-friends">
-                  친구
+                  {t('friends')}
                 </ShareSettingInfo>
               )}
               {postObj.share_with_friends && postObj.share_anonymously && (
                 <ShareSettingInfo>|</ShareSettingInfo>
               )}
               {postObj.share_anonymously && (
-                <ShareSettingInfo id="share-with-anon">익명</ShareSettingInfo>
+                <ShareSettingInfo id="share-with-anon">
+                  {t('anonymous')}
+                </ShareSettingInfo>
               )}
             </>
           )}
@@ -179,13 +187,13 @@ export default function PostItem({
         <CommentWrapper>{commentList}</CommentWrapper>
         <NewComment isAnon={isAnon} onSubmit={handleSubmit} />
         <CommentInfo>
-          작성된 댓글은
-          {isAnon || onlyAnonPost ? ' 익명피드에만  ' : ' 친구들에게만 '}
-          공개됩니다.
+          {isAnon || onlyAnonPost
+            ? t('comments_are_only_visible_to_anonymous_feed')
+            : t('comments_are_only_visible_to_your_friends')}
         </CommentInfo>
       </>
       <AlertDialog
-        message="정말 삭제하시겠습니까?"
+        message={t('are_you_sure_you_want_to_delete_it')}
         onConfirm={handleDelete}
         onClose={onCancelDelete}
         isOpen={isDeleteDialogOpen}

@@ -4,6 +4,7 @@ import LoadingList from '@common-components/loading-list/LoadingList';
 import PostItem from '@common-components/post-item/PostItem';
 import QuestionItem from '@common-components/question-item/QuestionItem';
 import Message from '@common-components/message/Message';
+import { useTranslation } from 'react-i18next';
 
 export default function UserPostList({
   posts,
@@ -11,6 +12,8 @@ export default function UserPostList({
   isLoading,
   isFriendOrMyPage
 }) {
+  const [t] = useTranslation('translation');
+
   const postList = posts.map((post) => {
     const postKey = `${post.type}-${post.id}`;
     if (post['content-type'] === 'Question' || post.type === 'Question')
@@ -36,7 +39,12 @@ export default function UserPostList({
   }
 
   if (posts.length === 0 && !isLoading) {
-    return <Message message="표시할 게시물이 없습니다 :(" noBorder />;
+    return (
+      <Message
+        message={t('feed_common.there_is_no_posts_to_display')}
+        noBorder
+      />
+    );
   }
 
   return (

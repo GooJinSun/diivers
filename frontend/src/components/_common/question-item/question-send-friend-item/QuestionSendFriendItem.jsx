@@ -8,6 +8,7 @@ import {
   createResponseRequest,
   deleteResponseRequest
 } from '@modules/question';
+import { useTranslation } from 'react-i18next';
 import { useStyles, SendButton } from './QuestionSendFriendItem.styles';
 
 const QuestionSendFriendItem = ({ questionObj, friendObj, sended }) => {
@@ -15,6 +16,10 @@ const QuestionSendFriendItem = ({ questionObj, friendObj, sended }) => {
   const { username } = friendObj;
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+
+  const [t] = useTranslation('translation', {
+    keyPrefix: 'question_send_modal'
+  });
 
   const handleSendResponseRequest = (questionId, requesteeId) => {
     const responseRequestObj = {
@@ -45,7 +50,7 @@ const QuestionSendFriendItem = ({ questionObj, friendObj, sended }) => {
             handleDeleteResponseRequest(questionObj.id, friendObj.id);
           }}
         >
-          보내기 취소
+          {t('cancel_send')}
         </Button>
       ) : (
         <SendButton
@@ -57,7 +62,7 @@ const QuestionSendFriendItem = ({ questionObj, friendObj, sended }) => {
             handleSendResponseRequest(questionObj.id, friendObj.id);
           }}
         >
-          보내기
+          {t('send')}
         </SendButton>
       )}
     </FriendItemWrapper>

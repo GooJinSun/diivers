@@ -5,6 +5,7 @@ import { getFriendList } from '@modules/friend';
 import NewPost from '@common-components/new-post/NewPost';
 import PostList from '@common-components/post-list/PostList';
 import Message from '@common-components/message/Message';
+import { useTranslation } from 'react-i18next';
 
 const FriendFeed = () => {
   const [target, setTarget] = useState(false);
@@ -16,6 +17,8 @@ const FriendFeed = () => {
   const isLoading =
     useSelector((state) => state.loadingReducer['post/GET_FRIEND_POSTS']) ===
     'REQUEST';
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   const onIntersect = useCallback(
     ([entry]) => {
@@ -46,8 +49,8 @@ const FriendFeed = () => {
       {friendPosts?.length === 0 && !isLoading ? (
         <Message
           margin="16px 0"
-          message="표시할 게시물이 없습니다 :("
-          messageDetail="다른 사용자들과 친구를 맺어보세요!"
+          message={t('there_is_no_posts_to_display')}
+          messageDetail={t('make_friends_with_other_users')}
         />
       ) : (
         <PostList
