@@ -161,5 +161,9 @@
     "no_questions_received": "받은 질문이 없습니다.",
     "why_dont_you_send_a_question_to_your_friend_first": "친구에게 먼저 질문을 보내보면 어떨까요? :)",
     "looking_around_the_question_feed": "질문 피드 둘러보기"
+  },
+  "search_user_page": {
+    "user_search_results": "사용자 검색 결과",
+    "no_results": "검색 결과 없음"
   }
 }

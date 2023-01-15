@@ -161,5 +161,9 @@
     "no_questions_received": "No questions have been received.",
     "why_dont_you_send_a_question_to_your_friend_first": "Why don't you send a question to your friend first?",
     "looking_around_the_question_feed": "Looking around the question feed"
+  },
+  "search_user_page": {
+    "user_search_results": "User search results",
+    "no_results": "No results"
   }
 }
