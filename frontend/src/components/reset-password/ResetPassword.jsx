@@ -6,6 +6,7 @@ import { requestResetPassword } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
+import { useTranslation } from 'react-i18next';
 
 export default function ResetPassword() {
   const history = useHistory();
@@ -14,13 +15,16 @@ export default function ResetPassword() {
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
-  useEffect(() => {
-    if (currentUser) history.push('/');
-  }, [currentUser]);
-
   const [passwordInfo, setPasswordInfo] = useState({ password: '' });
   const [isResetPasswordSuccess, setIsResetPasswordSuccess] = useState(false);
   const [isResetPasswordFail, setIsResetPasswordFail] = useState(false);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'reset_password' });
+
+  useEffect(() => {
+    if (!currentUser) return;
+    history.push('/');
+  }, [currentUser, history]);
 
   const resetPasswordStatus = useSelector(
     (state) => state.loadingReducer['user/RESET_PASSWORD']
@@ -50,17 +54,17 @@ export default function ResetPassword() {
   return (
     <AuthentiCationWrapper>
       {isResetPasswordSuccess ? (
-        <div>비밀번호 변경이 완료되었습니다.</div>
+        <div>{t('password_initialization_is_complete')}</div>
       ) : isResetPasswordFail ? (
-        <div>유효하지 않은 링크입니다.</div>
+        <div>{t('invalid_link')}</div>
       ) : (
         <div>
-          <h1>비밀번호 변경</h1>
+          <h1>{t('change_password')}</h1>
           <CommonInput
             id="password-input"
             name="password"
             value={passwordInfo.password}
-            placeholder="비밀번호"
+            placeholder={t('password')}
             type="password"
             onChange={handleChange}
             onKeyDown={onKeySubmit}
@@ -71,14 +75,14 @@ export default function ResetPassword() {
             margin="20px 0"
             onClick={onClickSubmitButton}
           >
-            비밀번호 변경
+            {t('change_password')}
           </CommonButton>
           <AuthSubButton
             type="button"
             id="login-button"
             onClick={() => history.push('/login')}
           >
-            로그인
+            {t('login')}
           </AuthSubButton>
         </div>
       )}
