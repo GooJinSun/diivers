@@ -6,7 +6,7 @@
     "search_for_users": "Search for Users",
     "logout": "Logout",
     "login": "Login",
-    "view_all_notifications" : "View all notifications"
+    "view_all_notifications": "View all notifications"
   },
   "mobile": {
     "drawer": {
@@ -36,5 +36,17 @@
     "sign_up": "Sign Up",
     "forgot_password": "Forgot password",
     "invalid_authentication": "Email authentication not completed or invalid membership information."
+  },
+  "sign_up": {
+    "nickname": "nickname",
+    "email": "email",
+    "password": "password",
+    "sign_up": "Sign Up",
+    "login": "Login",
+    "personal_information_processing_policy": "Personal information processing policy",
+    "please_complete_the_email_verification": "Please complete the email verification.",
+    "nickname_is_not_valid": "Nickname is not valid :(",
+    "email_is_not_valid": "Email is not valid :(",
+    "upload_profile_image": "Upload a profile image"
   }
 }
