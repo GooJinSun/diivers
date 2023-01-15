@@ -53,5 +53,12 @@
     "authenticating": "인증 중 ...",
     "email_authentication_is_completed": "이메일 인증이 완료되었습니다.",
     "invalid_link": "유효하지 않은 링크입니다."
+  },
+  "lost_password": {
+    "email_has_been_sent_successfully_completed": "이메일 전송이 완료되었습니다.",
+    "password_initialization": "비밀번호 초기화",
+    "email": "이메일",
+    "send_an_email": "이메일 전송",
+    "login": "로그인"
   }
 }
