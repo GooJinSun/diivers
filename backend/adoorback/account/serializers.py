@@ -42,7 +42,7 @@ class AuthorFriendSerializer(serializers.ModelSerializer):
         return BASE_URL + reverse('user-detail', kwargs={'username': obj.username})
     class Meta:
         model = User
-        fields = ['id', 'username', 'profile_pic', 'url']
+        fields = ['id', 'username', 'profile_pic', 'url', 'profile_image']
 
 
 class AuthorAnonymousSerializer(serializers.ModelSerializer):
