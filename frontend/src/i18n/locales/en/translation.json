@@ -22,5 +22,11 @@
       "notifications": "Notifications",
       "my_page": "MY"
     }
+  },
+  "widget": {
+    "recommended_questions": "Recommended Questions",
+    "create_a_question": "Create a question",
+    "friends": "Friends",
+    "manage_friends": "Manage Friends"
   }
 }
