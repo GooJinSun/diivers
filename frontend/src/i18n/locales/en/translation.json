@@ -59,5 +59,12 @@
     "email": "email",
     "send_an_email": "Send an email",
     "login": "Login"
+  },
+  "reset_password": {
+    "password_initialization_is_complete": "Password change is complete.",
+    "invalid_link": "Invalid link.",
+    "change_password": "Change Password",
+    "password": "password",
+    "login": "Login"
   }
 }

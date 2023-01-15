@@ -59,6 +59,12 @@
     "email": "이메일",
     "send_an_email": "이메일 전송",
     "login": "로그인"
+  },
+  "reset_password": {
+    "password_initialization_is_complete": "비밀번호 변경이 완료되었습니다.",
+    "invalid_link": "유효하지 않은 링크입니다.",
+    "change_password": "비밀번호 변경",
+    "password": "비밀번호",
+    "login": "로그인"
   }
-
 }
