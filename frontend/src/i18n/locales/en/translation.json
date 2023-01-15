@@ -84,7 +84,7 @@
     "share_anonymously": "Share anonymously",
     "post": "Post",
     "posts_excluding_questions_and_answers_are_only_open_to_friends": "Posts excluding questions and answers are only open to friends.",
-    "please_enter_the_content":"Please enter the content!",
+    "please_enter_the_content": "Please enter the content!",
     "ok": "OK",
     "cancel": "Cancel",
     "scope_of_disclosure": "Scope of Disclosure",
@@ -128,5 +128,28 @@
     "friends": "Friends",
     "anonymous": "Anonymous",
     "this_question_do_not_exit": "This question doesn't exist."
+  },
+  "user_page": {
+    "this_user_do_not_exist": "This user doesn't exist :(",
+    "are_you_sure_you_want_to_delete_this_friend": "Are you sure you want to delete the friend?",
+    "do_you_want_to_block_this_user": "Do you want to block this user?",
+    "do_you_want_to_report_this_user": "Do you want to report this user?",
+    "all": "ALL",
+    "my_q&a": "My Q&A",
+    "tmi": "TMI",
+    "written_questions": "Written Questions",
+    "report_this_user": "Report this user",
+    "block_this_user": "Block this user",
+    "break_friends": "Break Friends",
+    "profile_image_is_too_big": "The size of the image is too large.\nPlease use images smaller than 400*400."
+  },
+  "friend_page": {
+    "friend_list": "Friend List",
+    "request_a_friend": "Request a friend",
+    "friend": "Friend",
+    "accept": "Accept",
+    "reject": "Reject",
+    "requested": "Requested",
+    "cancel": "Cancel"
   }
 }
