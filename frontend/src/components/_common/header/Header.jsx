@@ -54,19 +54,7 @@ const Header = ({ isMobile }) => {
     setIsSearchOpen(false);
   };
 
-  const handleClickOutside = ({ target }) => {
-    if (isNotiOpen || !notiDropDownRef.current.contains(target)) {
-      handleNotiClose();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('click', handleClickOutside);
-    return () => {
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
+  useOnClickOutside(notiDropDownRef, handleNotiClose);
   useOnClickOutside(searchRef, handleSearchClose);
 
   const handleClickLogout = () => {
@@ -275,7 +263,11 @@ const Header = ({ isMobile }) => {
           <NotificationDropdownList setIsNotiOpen={setIsNotiOpen} />
         )}
       </div>
-      <div ref={searchRef}>{isSearchOpen && <SearchDropdownList />}</div>
+      <div ref={searchRef}>
+        {isSearchOpen && (
+          <SearchDropdownList setIsSearchOpen={setIsSearchOpen} />
+        )}
+      </div>
     </>
   );
 };
