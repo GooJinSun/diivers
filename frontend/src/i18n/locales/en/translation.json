@@ -48,5 +48,10 @@
     "nickname_is_not_valid": "Nickname is not valid :(",
     "email_is_not_valid": "Email is not valid :(",
     "upload_profile_image": "Upload a profile image"
+  },
+  "account_activate": {
+    "authenticating": "Authenticating...",
+    "email_authentication_is_completed": "Email authentication is complete.",
+    "invalid_link": "Invalid link."
   }
 }
