@@ -22,5 +22,11 @@
       "notifications": "알림",
       "my_page": "MY"
     }
+  },
+  "widget": {
+    "recommended_questions": "추천 질문",
+    "create_a_question": "새로운 질문 만들기",
+    "friends": "친구",
+    "manage_friends": "친구 관리"
   }
 }

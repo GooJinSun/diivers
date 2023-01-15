@@ -9,12 +9,15 @@ import List from '@material-ui/core/List';
 import { getFriendList } from '@modules/friend';
 import FriendItem from '@common-components/friend-item/FriendItem';
 import { WidgetWrapper, WidgetTitleWrapper } from '@styles/wrappers';
+import { useTranslation } from 'react-i18next';
 import { useStyles } from './FriendListWidget.styles';
 
 const FriendListWidget = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const friendList = useSelector((state) => state.friendReducer.friendList);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'widget' });
 
   useEffect(() => {
     dispatch(getFriendList());
@@ -30,11 +33,11 @@ const FriendListWidget = () => {
         <CardContent className={classes.cardContent}>
           <WidgetTitleWrapper>
             <Typography variant="h6" className={classes.title}>
-              친구
+              {t('friends')}
             </Typography>
             <Link to="/my-friends">
               <Button variant="outlined" size="small">
-                친구 관리
+                {t('manage_friends')}
               </Button>
             </Link>
           </WidgetTitleWrapper>
