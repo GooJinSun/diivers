@@ -5,7 +5,8 @@
     "today_question": "오늘의 질드",
     "search_for_users": "사용자 검색",
     "logout": "로그아웃",
-    "login": "로그인"
+    "login": "로그인",
+    "view_all_notifications": "알림 전체 보기"
   },
   "mobile": {
     "drawer": {
