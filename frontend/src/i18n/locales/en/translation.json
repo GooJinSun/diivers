@@ -151,5 +151,10 @@
     "reject": "Reject",
     "requested": "Requested",
     "cancel": "Cancel"
+  },
+  "notification_page": {
+    "all": "All",
+    "friend_requests": "Friend Requests",
+    "received_questions": "Received Questions"
   }
 }
