@@ -7,6 +7,7 @@ import {
   skipOrCompleteSelectQuestions
 } from '@modules/user';
 import { CommonButton } from '@styles/buttons';
+import { useTranslation } from 'react-i18next';
 import {
   QuestionsWrapper,
   TitleWrapper,
@@ -23,6 +24,10 @@ export default function QuestionSelection() {
   );
 
   const dispatch = useDispatch();
+
+  const [t] = useTranslation('translation', {
+    keyPrefix: 'question_selection'
+  });
 
   useEffect(() => {
     dispatch(getSampleQuestions());
@@ -63,16 +68,11 @@ export default function QuestionSelection() {
   return (
     <QuestionsWrapper>
       <TitleWrapper id="question-selection-title">
-        adoor는 매일 새로운 질문을 추천해드립니다!
+        {t('diivers_recommends_new_questions_every_day')}
         <br />
         <div style={{ fontSize: '18px', fontWeight: 500 }}>
-          질문 추천을 위해 마음에 드는 질문을
-          <span
-            style={{ margin: '0 4px', fontWeight: 'bold', color: '#F12C56' }}
-          >
-            3개 이상
-          </span>
-          골라주세요 &#128522;
+          {t('please_pick_at_list_3_questions_that_you_like')}
+          &#128522;
         </div>
       </TitleWrapper>
       <div>{sampleQuestionList}</div>
@@ -82,9 +82,9 @@ export default function QuestionSelection() {
         onClick={onClickSubmitButton}
         id="complete-button"
       >
-        완료!
+        {t('completed')}
       </CommonButton>
-      <CustomLink onClick={onClickSkipButton}>건너뛰기</CustomLink>
+      <CustomLink onClick={onClickSkipButton}>{t('skip')}</CustomLink>
     </QuestionsWrapper>
   );
 }
