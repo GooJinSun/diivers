@@ -20,6 +20,7 @@ import {
   PostItemHeaderWrapper,
   PostItemButtonsWrapper
 } from '@styles/wrappers';
+import { useTranslation } from 'react-i18next';
 import QuestionSendModal from './question-send-modal/QuestionSendModal';
 import {
   useStyles,
@@ -55,6 +56,8 @@ export default function QuestionItem({
     type: 'Response'
   });
   const [isQuestionSendModalOpen, setQuestionSendModalOpen] = useState(false);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   useEffect(() => {
     setNewPost({
@@ -114,7 +117,7 @@ export default function QuestionItem({
   return (
     <QuestionItemWrapper>
       <AlertDialog
-        message="정말 삭제하시겠습니까?"
+        message={t('are_you_sure_you_want_to_delete_it')}
         onConfirm={handleDelete}
         onClose={() => setIsDeleteDialogOpen(false)}
         isOpen={isDeleteDialogOpen}
@@ -162,7 +165,7 @@ export default function QuestionItem({
             className={classes.textArea}
             aria-label="new response"
             id="content-input"
-            placeholder="답변을 작성해주세요."
+            placeholder={t('please_fill_out_the_answer')}
             value={newPost.content}
             rowsMin={3}
             onChange={handleContentChange}

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Checkbox, Button, TextareaAutosize } from '@material-ui/core';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import LockIcon from '@material-ui/icons/Lock';
+import { useTranslation } from 'react-i18next';
 import {
   NewCommentWrapper,
   PrivateWrapper,
@@ -13,9 +14,14 @@ export default function NewComment({
   onSubmit,
   forcePrivate = false
 }) {
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
+
   const [content, setContent] = useState('');
   const [isPrivate, setIsPrivate] = useState(forcePrivate);
-  const placeholder = isReply ? '답글을 입력하세요.' : '댓글을 입력하세요.';
+  const placeholder = isReply
+    ? t('please_enter_a_reply')
+    : t('please_enter_a_comment');
+
   const classes = useStyles();
 
   const handleContentChange = (e) => {
@@ -73,7 +79,7 @@ export default function NewComment({
             marginRight: '4px'
           }}
         />
-        비밀 댓글
+        {t('secret_comment')}
       </PrivateWrapper>
       <Button
         onClick={handleSubmit}
@@ -90,7 +96,7 @@ export default function NewComment({
         }}
         color="secondary"
       >
-        작성
+        {t('post')}
       </Button>
     </NewCommentWrapper>
   );
