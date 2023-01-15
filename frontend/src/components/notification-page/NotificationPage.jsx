@@ -18,15 +18,23 @@ import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
 import Message from '@common-components/message/Message';
 import { CommonButton } from '@styles/buttons';
 import { useHistory } from 'react-router';
+import i18n from '@i18n';
+import { t } from 'i18next';
 import { useStyles } from './NotificationPage.styles';
 
 const READ_ALL_NOTI_DELAY = 300;
 
 // FIXME: ts 전환시 readonly로 대체
 const NOTIFICATION_TABS = {
-  ALL: { name: '전체', index: 0 },
-  FRIEND_REQUEST: { name: '친구 요청', index: 1 },
-  RESPONSE_REQUEST: { name: '받은 질문', index: 2 }
+  ALL: { name: i18n.t('notification_page.all'), index: 0 },
+  FRIEND_REQUEST: {
+    name: i18n.t('notification_page.friend_requests'),
+    index: 1
+  },
+  RESPONSE_REQUEST: {
+    name: t('notification_page.received_questions'),
+    index: 2
+  }
 };
 
 export default function NotificationPageNotificationPage() {
