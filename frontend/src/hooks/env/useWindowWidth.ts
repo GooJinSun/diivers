@@ -6,12 +6,12 @@ const useWindowWidth = () => {
     window?.innerWidth < MOBILE_MIN_WIDTH
   );
   const [isDesktopMin, setIsDesktopMin] = useState(
-    window?.innerWidth < DESKTOP_MIN_WIDTH
+    window?.innerWidth <= DESKTOP_MIN_WIDTH
   );
 
   const handleResize = () => {
     setIsMobile(window.innerWidth < MOBILE_MIN_WIDTH);
-    setIsDesktopMin(window.innerWidth < DESKTOP_MIN_WIDTH);
+    setIsDesktopMin(window.innerWidth <= DESKTOP_MIN_WIDTH);
   };
 
   useEffect(() => {

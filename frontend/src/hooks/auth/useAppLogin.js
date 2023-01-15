@@ -6,13 +6,12 @@ import { getCurrentUser } from '../../modules/user';
 const useAppLogin = () => {
   const dispatch = useDispatch();
   const handleMessage = (e) => {
-    if (e.data) {
-      const data = JSON.parse(e.data);
-      const { key, access, refresh } = data;
-      if (key !== 'SET_TOKEN') return;
-      setTokensInCookies(access, refresh);
-      dispatch(getCurrentUser());
-    }
+    if (!e.data) return;
+    const data = JSON.parse(e.data);
+    const { key, access, refresh } = data;
+    if (key !== 'SET_TOKEN') return;
+    setTokensInCookies(access, refresh);
+    dispatch(getCurrentUser());
   };
 
   useEffect(() => {

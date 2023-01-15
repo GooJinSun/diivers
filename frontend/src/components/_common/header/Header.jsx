@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink, Link, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -18,6 +18,8 @@ import MobileFooter from '@mobile-components/mobile-footer/MobileFooter';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import NotificationDropdownList from './notification-dropdown-list/NotificationDropdownList';
+import NavLinkList from './nav-list/NavLinkList';
+
 import { useStyles, HelloUsername } from './Header.styles';
 
 const Header = () => {
@@ -114,44 +116,49 @@ const Header = () => {
     // 데스크톱 최소 화면 width 대응
     if (!isMobile && isDesktopMin) {
       return (
-        <div className={classes.right}>
-          <IconButton
-            aria-label="show new notifications"
-            className={`${classes.iconButton} noti-button`}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleNotiOpen();
-            }}
-            disableRipple
-            color="secondary"
-          >
-            <Badge
-              variant="dot"
-              invisible={notiBadgeInvisible}
-              color="primary"
-              overlap="rectangular"
+        <>
+          <div className={classes.left}>
+            <NavLinkList />
+          </div>
+          <div className={classes.right}>
+            <IconButton
+              aria-label="show new notifications"
+              className={`${classes.iconButton} noti-button`}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleNotiOpen();
+              }}
+              disableRipple
+              color="secondary"
             >
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <IconButton
-            id="drawer-open-button"
-            color="secondary"
-            aria-label="open drawer"
-            edge="end"
-            onClick={() => {
-              setIsDrawerOpen(true);
-            }}
-            style={{ display: isDrawerOpen && 'none' }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <MobileDrawer
-            open={isDrawerOpen}
-            handleDrawerClose={handleDrawerClose}
-            onLogout={handleClickLogout}
-          />
-        </div>
+              <Badge
+                variant="dot"
+                invisible={notiBadgeInvisible}
+                color="primary"
+                overlap="rectangular"
+              >
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              id="drawer-open-button"
+              color="secondary"
+              aria-label="open drawer"
+              edge="end"
+              onClick={() => {
+                setIsDrawerOpen(true);
+              }}
+              style={{ display: isDrawerOpen && 'none' }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <MobileDrawer
+              open={isDrawerOpen}
+              handleDrawerClose={handleDrawerClose}
+              onLogout={handleClickLogout}
+            />
+          </div>
+        </>
       );
     }
 
@@ -184,30 +191,7 @@ const Header = () => {
     // 기타 화면 케이스 대응 (일반 데스크톱)
     return (
       <>
-        <NavLink
-          className={classes.tabButton}
-          to="/home"
-          size="large"
-          activeClassName={classes.tabActive}
-        >
-          Home
-        </NavLink>
-        <NavLink
-          className={classes.tabButton}
-          to="/anonymous"
-          size="large"
-          activeClassName={classes.tabActive}
-        >
-          익명 글
-        </NavLink>
-        <NavLink
-          className={classes.tabButton}
-          to="/questions"
-          size="large"
-          activeClassName={classes.tabActive}
-        >
-          오늘의 질문
-        </NavLink>
+        <NavLinkList />
         <div className={classes.grow} />
         <div className={classes.sectionDesktop}>
           <TextField
