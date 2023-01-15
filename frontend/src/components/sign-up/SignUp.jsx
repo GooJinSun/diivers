@@ -130,7 +130,7 @@ export default function SignUp() {
               id="login-button"
               onClick={() => history.push('/login')}
             >
-              {t('sign_up')}
+              {t('login')}
             </AuthSubButton>
             <AuthSubButton
               type="button"
