@@ -27,6 +27,7 @@ export const FeedWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 1000px;
 `;
 
 export const WidgetWrapper = styled.div`
