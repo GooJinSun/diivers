@@ -7,6 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import { getResponseRequestsByQuestion } from '@modules/question';
+import { useTranslation } from 'react-i18next';
 import QuestionSendFriendItem from '../question-send-friend-item/QuestionSendFriendItem';
 import { useStyles, Question, NoFriend } from './QuestionSendModal.styles';
 
@@ -17,6 +18,10 @@ const QuestionSendModal = ({ questionObj, open, handleClose }) => {
   const selectedQuestionResponseRequests = useSelector(
     (state) => state.questionReducer.selectedQuestionResponseRequests
   );
+
+  const [t] = useTranslation('translation', {
+    keyPrefix: 'question_send_modal'
+  });
 
   useEffect(() => {
     dispatch(getResponseRequestsByQuestion(questionObj.id));
@@ -44,7 +49,7 @@ const QuestionSendModal = ({ questionObj, open, handleClose }) => {
       className="question-send"
     >
       <DialogTitle className={classes.modalTitle} onClose={handleClose}>
-        질문 보내기
+        {t('send_a_question')}
         <IconButton
           aria-label="close"
           className={classes.closeButton}
@@ -59,7 +64,9 @@ const QuestionSendModal = ({ questionObj, open, handleClose }) => {
           {friendList.length ? (
             friendItemList
           ) : (
-            <NoFriend>친구를 추가해야 사용 가능한 기능입니다.</NoFriend>
+            <NoFriend>
+              {t('this_feature_is_available_only_when_you_add_friends')}
+            </NoFriend>
           )}
         </List>
       </DialogContent>

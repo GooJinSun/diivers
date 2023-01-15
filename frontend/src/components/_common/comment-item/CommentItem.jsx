@@ -10,6 +10,7 @@ import { likePost, unlikePost } from '@modules/like';
 import AuthorProfile from '@common-components/author-profile/AuthorProfile';
 import CreateTime from '@common-components/create-time/CreateTime';
 import NewComment from '@common-components/new-comment/NewComment';
+import { useTranslation } from 'react-i18next';
 import {
   CommentItemWrapper,
   ReplyIcon,
@@ -34,6 +35,8 @@ export default function CommentItem({
   const [likeCount, setLikeCount] = useState(commentObj.like_count || 0);
   const dispatch = useDispatch();
   const { id: targetId } = useParams();
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   const replyItems = commentObj?.replies?.map((reply) => {
     const isReplyAuthor = currentUser?.id === reply.author_detail?.id;
@@ -121,14 +124,16 @@ export default function CommentItem({
           >
             <CreateTime createdTime={commentObj.created_at} />
             {!isReply && (
-              <ReplyWrapper onClick={toggleReplyInputOpen}>답글</ReplyWrapper>
+              <ReplyWrapper onClick={toggleReplyInputOpen}>
+                {t('reply')}
+              </ReplyWrapper>
             )}
             {isCommentAuthor && (
               <DeleteWrapper
                 onClick={() => setIsDeleteDialogOpen(true)}
                 id="delete-comment"
               >
-                삭제
+                {t('delete')}
               </DeleteWrapper>
             )}
           </div>
@@ -164,7 +169,7 @@ export default function CommentItem({
           />
         )}
         <AlertDialog
-          message="정말 삭제하시겠습니까?"
+          message={t('are_you_sure_you_want_to_delete_it')}
           onConfirm={handleDeleteComment}
           onClose={onCancelDelete}
           isOpen={isDeleteDialogOpen}

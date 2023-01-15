@@ -12,6 +12,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
 import axios from '@utils/api';
+import { useTranslation } from 'react-i18next';
 import { useStyles, ReportButtonWrapper } from './PostReportButton.styles';
 
 export default function PostReportButton({ postObj }) {
@@ -21,6 +22,8 @@ export default function PostReportButton({ postObj }) {
   const [isReportPostConfirm, setIsReportPostConfirm] = useState(false);
   const [isReportUser, setIsReportUser] = useState(false);
   const [isReportUserConfirm, setIsReportUserConfirm] = useState(false);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   const ItemText = ({ text }) => (
     <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
@@ -71,14 +74,14 @@ export default function PostReportButton({ postObj }) {
             <ListItem button>
               <ListItemText
                 id="report-post-button"
-                primary={<ItemText text="게시글 신고" />}
+                primary={<ItemText text={t('report_this_post')} />}
                 onClick={onClickReportPost}
               />
             </ListItem>
             <ListItem button>
               <ListItemText
                 id="report-user-button"
-                primary={<ItemText text="사용자 신고" />}
+                primary={<ItemText text={t('report_this_user')} />}
                 onClick={onClickReportUser}
               />
             </ListItem>
@@ -88,7 +91,7 @@ export default function PostReportButton({ postObj }) {
       {/* 신고 완료 팝업 */}
       <ConfirmAlertDialog
         onConfirm={refreshPage}
-        message="신고가 완료되었습니다."
+        message={t('report_completed')}
         isOpen={isReportPostConfirm || isReportUserConfirm}
       />
       {/* 게시글 신고 모달 팝업 */}
@@ -96,14 +99,14 @@ export default function PostReportButton({ postObj }) {
         onConfirm={onClickConfirmReportPost}
         onClose={() => setIsReportPost(false)}
         isOpen={isReportPost}
-        message="게시글을 신고하시겠습니까?"
+        message={t('are_you_sure_you_want_to_report_this_post')}
       />
       {/* 사용자 신고 모달 팝업 */}
       <AlertDialog
         onConfirm={onClickConfirmReportUser}
         onClose={() => setIsReportUser(false)}
         isOpen={isReportUser}
-        message="글쓴이를 신고하시겠습니까?"
+        message={t('are_you_sure_you_want_to_report_this_user')}
       />
     </ReportButtonWrapper>
   );

@@ -7,11 +7,17 @@ import { useDispatch } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { createPost } from '@modules/post';
+import { useTranslation } from 'react-i18next';
 import { useStyles, SubmitButtonWrapper } from './CustomQuestionModal.styles';
 
 const CustomQuestionModal = ({ open, handleClose }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
+
+  const [t] = useTranslation('translation', {
+    keyPrefix: 'custom_question_modal'
+  });
+
   const [newCustomQuestion, setNewCustomQuestion] = useState({
     content: '',
     type: 'Question',
@@ -34,7 +40,7 @@ const CustomQuestionModal = ({ open, handleClose }) => {
   return (
     <Dialog fullWidth onClose={handleClose} maxWidth="sm" open={open}>
       <DialogTitle className={classes.modalTitle}>
-        새로운 질문
+        {t('new_question')}
         <IconButton
           aria-label="close"
           className={classes.closeButton}
@@ -48,7 +54,7 @@ const CustomQuestionModal = ({ open, handleClose }) => {
           id="new-custom-question"
           className={classes.textArea}
           aria-label="new custom question"
-          placeholder="새로운 질문을 작성해 보세요."
+          placeholder={t('create_a_new_question')}
           rowsMin={3}
           value={newCustomQuestion.content}
           onChange={handleInputChange}
@@ -61,10 +67,10 @@ const CustomQuestionModal = ({ open, handleClose }) => {
             className={classes.submitButton}
             onClick={onClickSubmitButton}
           >
-            게시
+            {t('post')}
           </Button>
           <div className={classes.submitDetail}>
-            질문은 모든 피드에 공개됩니다.
+            {t('questions_are_posted_in_all_feeds')}
           </div>
         </SubmitButtonWrapper>
       </DialogContent>

@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import i18n from '@i18n';
 
 export const formatDate = (
   date,
@@ -27,15 +28,23 @@ export const getCreatedTime = (createdTime) => {
     (now.getTime() - writeTime.getTime()) / 1000 / 60
   );
   if (betweenTime < 1) {
-    return betweenSeconds < 1 ? '방금 전' : `${betweenSeconds}초 전`;
+    return betweenSeconds < 1
+      ? i18n.t('feed_common.just_a_moment_ago')
+      : betweenSeconds > 1
+      ? i18n.t('feed_common.second_ago_other', { second: betweenSeconds })
+      : i18n.t('feed_common.second_ago_one', { second: betweenSeconds });
   }
   if (betweenTime < 60) {
-    return `${betweenTime}분 전`;
+    return betweenTime > 1
+      ? i18n.t('feed_common.minute_ago_other', { minute: betweenTime })
+      : i18n.t('feed_common.minute_ago_one', { minute: betweenTime });
   }
 
   const betweenTimeHour = Math.floor(betweenTime / 60);
   if (betweenTimeHour < 24) {
-    return `${betweenTimeHour}시간 전`;
+    return betweenTimeHour > 1
+      ? i18n.t('feed_common.hour_ago_other', { hour: betweenTimeHour })
+      : i18n.t('feed_common.hour_ago_one', { hour: betweenTimeHour });
   }
 
   return formatDate(createdTime);
