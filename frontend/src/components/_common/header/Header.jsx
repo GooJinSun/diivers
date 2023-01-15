@@ -16,7 +16,6 @@ import { fetchSearchResults } from '@modules/search';
 import MobileDrawer from '@mobile-components/mobile-drawer/MobileDrawer';
 import MobileFooter from '@mobile-components/mobile-footer/MobileFooter';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
-import useRouteChange from '@hooks/env/useRouteChange';
 import NotificationDropdownList from './notification-dropdown-list/NotificationDropdownList';
 import { useStyles, HelloUsername } from './Header.styles';
 
@@ -55,21 +54,8 @@ const Header = ({ isMobile }) => {
     setIsSearchOpen(false);
   };
 
-  const handleClickOutside = ({ target }) => {
-    if (isNotiOpen || !notiDropDownRef.current.contains(target)) {
-      handleNotiClose();
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener('click', handleClickOutside);
-    return () => {
-      window.removeEventListener('click', handleClickOutside);
-    };
-  }, []);
-
+  useOnClickOutside(notiDropDownRef, handleNotiClose);
   useOnClickOutside(searchRef, handleSearchClose);
-  useRouteChange(handleSearchClose);
 
   const handleClickLogout = () => {
     dispatch(logout());
@@ -277,7 +263,11 @@ const Header = ({ isMobile }) => {
           <NotificationDropdownList setIsNotiOpen={setIsNotiOpen} />
         )}
       </div>
-      <div ref={searchRef}>{isSearchOpen && <SearchDropdownList />}</div>
+      <div ref={searchRef}>
+        {isSearchOpen && (
+          <SearchDropdownList setIsSearchOpen={setIsSearchOpen} />
+        )}
+      </div>
     </>
   );
 };
