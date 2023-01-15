@@ -67,5 +67,11 @@
     "change_password": "Change Password",
     "password": "password",
     "login": "Login"
+  },
+  "question_selection": {
+    "diivers_recommends_new_questions_every_day": "Diivers recommends new questions every day!",
+    "please_pick_at_list_3_questions_that_you_like": "Please pick at least 3 questions that you like",
+    "completed": "Completed!",
+    "skip": "Skip"
   }
 }

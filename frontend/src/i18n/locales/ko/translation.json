@@ -67,5 +67,11 @@
     "change_password": "비밀번호 변경",
     "password": "비밀번호",
     "login": "로그인"
+  },
+  "question_selection": {
+    "diivers_recommends_new_questions_every_day": "Diivers는 매일 새로운 질문을 추천해드립니다!",
+    "please_pick_at_list_3_questions_that_you_like": "질문 추천을 위해 마음에 드는 질문을 3개 이상 골라주세요",
+    "completed": "완료!",
+    "skip": "건너뛰기"
   }
 }
