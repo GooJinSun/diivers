@@ -34,6 +34,7 @@ const Header = () => {
   const searchRef = useRef(null);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+
   const currentUserIsLoading =
     useSelector((state) => state.loadingReducer['user/GET_CURRENT_USER']) ===
     'REQUEST';

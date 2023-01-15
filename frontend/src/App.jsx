@@ -34,6 +34,7 @@ import { MainWrapper, FeedWrapper } from '@styles/wrappers';
 import useAppLogin from '@hooks/auth/useAppLogin';
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import { initGA, trackPage } from './ga';
+import useFcm from './hooks/useFcm';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -55,6 +56,8 @@ const App = () => {
   useAppLogin();
   useLoginWithToken();
   useLogOutIfRefreshTokenExpired();
+
+  useFcm();
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
