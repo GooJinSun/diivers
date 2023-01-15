@@ -154,5 +154,9 @@
     "all": "All",
     "friend_requests": "Friend Requests",
     "received_questions": "Received Questions"
+  },
+  "search_user_page": {
+    "user_search_results": "User search results",
+    "no_results": "No results"
   }
 }
