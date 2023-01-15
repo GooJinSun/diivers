@@ -7,6 +7,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import useOnClickOutside from 'use-onclickoutside';
 import { fetchSearchResults } from '@modules/search';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
+import { useTranslation } from 'react-i18next';
 import { SearchTitle, SearchTextField } from './MobileSearchPage.styles';
 
 export default function MobileSearchPage() {
@@ -21,6 +22,8 @@ export default function MobileSearchPage() {
   const totalPages = useSelector(
     (state) => state.searchReducer.searchObj?.totalPages
   );
+
+  const [t] = useTranslation('translation');
 
   useEffect(() => {
     dispatch(fetchSearchResults(1, ''));
@@ -61,12 +64,12 @@ export default function MobileSearchPage() {
 
   return (
     <div>
-      <SearchTitle>사용자 검색</SearchTitle>
+      <SearchTitle>{t('header.search_for_users')}</SearchTitle>
       <SearchTextField
         required
         id="input-search-field"
         value={query}
-        label="검색어(닉네임)를 입력하세요."
+        label={t('search_user_page.please_enter_a_search_keyword')}
         type="search"
         variant="outlined"
         placeholder={query}

@@ -157,6 +157,7 @@
   },
   "search_user_page": {
     "user_search_results": "User search results",
-    "no_results": "No results"
+    "no_results": "No results",
+    "please_enter_a_search_keyword": "Please enter a search keyword(nickname)" 
   }
 }

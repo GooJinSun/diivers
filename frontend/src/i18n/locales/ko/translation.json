@@ -157,6 +157,7 @@
   },
   "search_user_page": {
     "user_search_results": "사용자 검색 결과",
-    "no_results": "검색 결과 없음"
+    "no_results": "검색 결과 없음",
+    "please_enter_a_search_keyword": "검색어(닉네임)를 입력하세요." 
   }
 }
