@@ -13,11 +13,13 @@ import {
 } from '@modules/notification';
 import NotificationItem from '@common-components/notification-item/NotificationItem';
 import useInfiniteScroll from '@hooks/useInfiniteScroll';
+import { useTranslation } from 'react-i18next';
 import { useStyles, ButtonWrapper } from './NotificationDropdownList.styles';
 
 const READ_ALL_NOTI_DELAY = 300;
 
 const NotificationDropdownList = ({ setIsNotiOpen }) => {
+  const [t] = useTranslation('translation', { keyPrefix: 'header' });
   const classes = useStyles();
 
   const history = useHistory();
@@ -63,7 +65,7 @@ const NotificationDropdownList = ({ setIsNotiOpen }) => {
             history.push('/notifications');
           }}
         >
-          알림 전체 보기
+          {t('view_all_notifications')}
         </button>
       </ButtonWrapper>
       {notifications?.length === 0 ? (

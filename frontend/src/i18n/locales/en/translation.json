@@ -5,7 +5,8 @@
     "today_question": "Today Questions",
     "search_for_users": "Search for Users",
     "logout": "Logout",
-    "login": "Login"
+    "login": "Login",
+    "view_all_notifications" : "View all notifications"
   },
   "mobile": {
     "drawer": {
