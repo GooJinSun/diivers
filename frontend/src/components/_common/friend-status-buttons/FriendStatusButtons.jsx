@@ -6,6 +6,7 @@ import {
   requestFriend,
   rejectFriendRequest
 } from '@modules/friend';
+import { useTranslation } from 'react-i18next';
 import { FriendButton, ButtonsWrapper } from './FriendStatusButtons.styles';
 
 // isFriend: 이미 친구
@@ -25,6 +26,8 @@ export default function FriendStatusButtons({
   const [isRequestResetted, setIsRequestResetted] = useState(false);
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'friend_page' });
 
   const onClickRejectRequestButton = () => {
     dispatch(rejectFriendRequest(friendObj.id));
@@ -57,7 +60,7 @@ export default function FriendStatusButtons({
           id="request-friend-button"
           onClick={onClickRequestFriendButton}
         >
-          친구 요청
+          {t('request_a_friend')}
         </FriendButton>
       </ButtonsWrapper>
     );
@@ -69,7 +72,8 @@ export default function FriendStatusButtons({
           color="primary"
           id="friend-status-button"
         >
-          친구 ✓
+          {t('friend')}
+          <span> ✓</span>
         </FriendButton>
       </ButtonsWrapper>
     );
@@ -82,7 +86,7 @@ export default function FriendStatusButtons({
           id="request-accept-button"
           onClick={onClickAcceptRequestButton}
         >
-          수락
+          {t('accept')}
         </FriendButton>
         <FriendButton
           variant="outlined"
@@ -90,7 +94,7 @@ export default function FriendStatusButtons({
           id="request-delete-button"
           onClick={onClickRejectRequestButton}
         >
-          거절
+          {t('reject')}
         </FriendButton>
       </ButtonsWrapper>
     );
@@ -103,7 +107,7 @@ export default function FriendStatusButtons({
           color="primary"
           id="has-sent-request-button"
         >
-          요청됨
+          {t('requested')}
         </FriendButton>
         <FriendButton
           variant="outlined"
@@ -111,7 +115,7 @@ export default function FriendStatusButtons({
           id="sent-request-delete-button"
           onClick={onClickDeleteRequestButton}
         >
-          취소
+          {t('cancel')}
         </FriendButton>
       </ButtonsWrapper>
     );
@@ -124,7 +128,7 @@ export default function FriendStatusButtons({
         id="request-friend-button"
         onClick={onClickRequestFriendButton}
       >
-        친구 요청
+        {t('request_a_friend')}
       </FriendButton>
     </ButtonsWrapper>
   );
