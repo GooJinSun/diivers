@@ -149,5 +149,10 @@
     "reject": "거절",
     "requested": "요청됨",
     "cancel": "취소"
+  },
+  "notification_page": {
+    "all": "전체",
+    "friend_requests": "친구 요청",
+    "received_questions": "받은 질문"
   }
 }
