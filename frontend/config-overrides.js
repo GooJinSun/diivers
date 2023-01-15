@@ -10,7 +10,8 @@ module.exports = function override(config) {
     '@modules': 'src/modules',
     '@queries': 'src/queries',
     '@utils': 'src/utils',
-    '@styles': 'src/styles'
+    '@styles': 'src/styles',
+    '@i18n': 'src/i18n'
   })(config);
 
   return config;

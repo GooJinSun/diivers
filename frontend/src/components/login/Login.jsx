@@ -6,6 +6,7 @@ import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
 import { WarningMessage } from '@styles/messages';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
   const history = useHistory();
@@ -17,6 +18,8 @@ export default function Login() {
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
+  const [t] = useTranslation('translation', { keyPrefix: 'login' });
+
   useEffect(() => {
     if (loginError) {
       setLoginWarning(true);
@@ -27,7 +30,7 @@ export default function Login() {
     if (!currentUser) return;
     if (!currentUser.question_history) history.push('/select-questions');
     else history.push('/');
-  }, [currentUser]);
+  }, [currentUser, history]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,12 +57,12 @@ export default function Login() {
 
   return (
     <AuthentiCationWrapper>
-      <h1>로그인</h1>
+      <h1>{t('login')}</h1>
       <CommonInput
         id="username-input"
         name="username"
         value={loginInfo.username}
-        placeholder="닉네임"
+        placeholder={t('nickname')}
         onChange={handleChange}
         onKeyDown={onKeySubmit}
       />
@@ -67,14 +70,14 @@ export default function Login() {
         id="password-input"
         name="password"
         value={loginInfo.password}
-        placeholder="비밀번호"
+        placeholder={t('password')}
         type="password"
         onChange={handleChange}
         onKeyDown={onKeySubmit}
       />
       {loginWarning && (
         <WarningMessage id="login-error-message">
-          이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다.
+          {t('invalid_authentication')}
         </WarningMessage>
       )}
       <CommonButton
@@ -83,7 +86,7 @@ export default function Login() {
         margin="20px 0"
         onClick={onClickSubmitButton}
       >
-        로그인
+        {t('login')}
       </CommonButton>
       <AuthSubButton
         type="button"
@@ -91,7 +94,7 @@ export default function Login() {
         margin="5px 0"
         onClick={onClickLostPassword}
       >
-        비밀번호를 잊어버렸어요
+        {t('forgot_password')}
       </AuthSubButton>
       <AuthSubButton
         type="button"
@@ -99,7 +102,7 @@ export default function Login() {
         margin="40px 0"
         onClick={onClickSignupButton}
       >
-        회원가입
+        {t('sign_up')}
       </AuthSubButton>
     </AuthentiCationWrapper>
   );

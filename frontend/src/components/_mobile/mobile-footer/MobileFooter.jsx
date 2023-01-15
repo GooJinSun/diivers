@@ -8,6 +8,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useHistory } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { useStyles, SmallFontBottomNavAction } from './MobileFooter.styles';
 
 export default function MobileFooter({ notiBadgeInvisible }) {
@@ -15,6 +16,8 @@ export default function MobileFooter({ notiBadgeInvisible }) {
   const history = useHistory();
   const [value, setValue] = React.useState('/home');
   const { pathname } = window.location;
+
+  const [t] = useTranslation('translation', { keyPrefix: 'mobile.footer' });
 
   useEffect(() => {
     if (
@@ -45,26 +48,26 @@ export default function MobileFooter({ notiBadgeInvisible }) {
     >
       <BottomNavigationAction
         value="/home"
-        label="Home"
+        label={t('home')}
         icon={<HomeIcon />}
         className={`${classes.icon} link`}
       />
       <BottomNavigationAction
         value="/anonymous"
-        label="익명피드"
+        label={t('anonymous_feed')}
         icon={<SupervisorAccountIcon />}
         className={`${classes.icon} link`}
       />
       <SmallFontBottomNavAction
         value="/questions"
-        label="오늘의 질문"
+        label={t('today_question')}
         icon={<LiveHelpIcon />}
         className={`${classes.icon} link`}
         style={{ padding: '6px 4px', fontSize: '0.7rem' }}
       />
       <BottomNavigationAction
         value="/notifications"
-        label="알림"
+        label={t('notifications')}
         icon={
           <Badge
             variant="dot"
@@ -79,7 +82,7 @@ export default function MobileFooter({ notiBadgeInvisible }) {
       />
       <BottomNavigationAction
         value="/my-page"
-        label="MY"
+        label={t('my_page')}
         icon={<AccountCircleIcon />}
         className={`${classes.icon} link`}
       />

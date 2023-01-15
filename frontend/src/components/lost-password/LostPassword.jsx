@@ -5,6 +5,7 @@ import { requestResetPasswordEmail } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
+import { useTranslation } from 'react-i18next';
 
 export default function LostPassword() {
   const history = useHistory();
@@ -12,9 +13,12 @@ export default function LostPassword() {
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
+  const [t] = useTranslation('translation', { keyPrefix: 'lost_password' });
+
   useEffect(() => {
-    if (currentUser) history.push('/');
-  }, [currentUser]);
+    if (!currentUser) return;
+    history.push('/');
+  }, [currentUser, history]);
 
   const [emailInfo, setEmailInfo] = useState({ email: '' });
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -37,15 +41,15 @@ export default function LostPassword() {
   return (
     <AuthentiCationWrapper>
       {isSubmitted ? (
-        <div>이메일 전송이 완료되었습니다.</div>
+        <div>{t('email_has_been_sent_successfully_completed')}</div>
       ) : (
         <div>
-          <h1>비밀번호 초기화</h1>
+          <h1>{t('password_initialization')}</h1>
           <CommonInput
             id="username-input"
             name="username"
             value={emailInfo.email}
-            placeholder="이메일"
+            placeholder={t('email')}
             onChange={handleChange}
             onKeyDown={onKeySubmit}
           />
@@ -55,14 +59,14 @@ export default function LostPassword() {
             margin="20px 0"
             onClick={onClickSubmitButton}
           >
-            이메일 전송
+            {t('send_an_email')}
           </CommonButton>
           <AuthSubButton
             type="button"
             id="login-button"
             onClick={() => history.push('/login')}
           >
-            로그인
+            {t('login')}
           </AuthSubButton>
         </div>
       )}

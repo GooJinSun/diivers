@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FriendItem from '@common-components/friend-item/FriendItem';
 import Message from '@common-components/message/Message';
 import { fetchSearchResults } from '@modules/search';
+import { useTranslation } from 'react-i18next';
 import PageNavigation from './page-navigation/PageNavigation';
 import { FriendListWrapper } from './SearchResults.styles';
 
@@ -12,6 +13,8 @@ export default function SearchResults() {
 
   const showPrevLink = searchObj.currentPageNo > 1;
   const showNextLink = searchObj.totalPages > searchObj.currentPageNo;
+
+  const [t] = useTranslation('translation', { keyPrefix: 'search_user_page' });
 
   const handlePageClick = (type, event) => {
     event.preventDefault();
@@ -47,21 +50,16 @@ export default function SearchResults() {
           ) : (
             <FriendListWrapper>
               <h3>
-                친구 목록
+                {t('user_search_results')}
                 {`(${searchObj.numResults})`}
               </h3>
-              {/* {searchObj.loading && searchObj.numResults > 0 ? ( */}
-              {/*  <LinearProgress /> */}
-              {/* ) : ( */}
-              {/*  <span /> */}
-              {/* )} */}
               {userItemList}
             </FriendListWrapper>
           )}
         </span>
       );
     }
-    return <Message message="검색 결과 없음" />;
+    return <Message message={t('no_results')} />;
   };
 
   return (

@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { readAllNotification } from '@modules/notification';
 import NotificationItem from '@common-components/notification-item/NotificationItem';
+import { useTranslation } from 'react-i18next';
 import { useStyles, ButtonWrapper } from './NotificationDropdownList.styles';
 
 const READ_ALL_NOTI_DELAY = 300;
@@ -16,6 +17,8 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const [t] = useTranslation('translation', { keyPrefix: 'header' });
 
   const notificationList = notifications?.map((noti) => (
     <NotificationItem
@@ -43,7 +46,7 @@ const NotificationDropdownList = ({ notifications, setIsNotiOpen }) => {
             history.push('/notifications');
           }}
         >
-          알림 전체 보기
+          {t('view_all_notifications')}
         </button>
       </ButtonWrapper>
       {notifications?.length === 0 ? (
