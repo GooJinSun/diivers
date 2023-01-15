@@ -30,7 +30,7 @@ export default function Login() {
     if (!currentUser) return;
     if (!currentUser.question_history) history.push('/select-questions');
     else history.push('/');
-  }, [currentUser]);
+  }, [currentUser, history]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
