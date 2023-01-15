@@ -9,6 +9,7 @@ import {
   Typography
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { useTranslation } from 'react-i18next';
 import { useStyles, ReportButtonWrapper } from './UserReportButton.styles';
 
 export default function UserReportButton({
@@ -19,6 +20,8 @@ export default function UserReportButton({
 }) {
   const classes = useStyles();
   const [showButtons, setShowButtons] = useState(false);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'user_page' });
 
   const ItemText = ({ text }) => (
     <Typography style={{ color: '#777', fontSize: 12 }}>{text}</Typography>
@@ -45,14 +48,14 @@ export default function UserReportButton({
             <ListItem button>
               <ListItemText
                 id="report-user-button"
-                primary={<ItemText text="사용자 신고" />}
+                primary={<ItemText text={t('report_this_user')} />}
                 onClick={() => handleOnClick(onClickReportUser)}
               />
             </ListItem>
             <ListItem button>
               <ListItemText
                 id="block-user-button"
-                primary={<ItemText text="사용자 차단" />}
+                primary={<ItemText text={t('block_this_user')} />}
                 onClick={() => handleOnClick(onClickBlockUser)}
               />
             </ListItem>
@@ -60,7 +63,7 @@ export default function UserReportButton({
               <ListItem button>
                 <ListItemText
                   id="block-user-button"
-                  primary={<ItemText text="친구 끊기" />}
+                  primary={<ItemText text={t('break_friends')} />}
                   onClick={() => handleOnClick(onClickDeleteFriend)}
                 />
               </ListItem>

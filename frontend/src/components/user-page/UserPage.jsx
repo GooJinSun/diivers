@@ -13,6 +13,7 @@ import FriendStatusButtons from '@common-components/friend-status-buttons/Friend
 import { getSelectedUserPosts, appendPosts } from '@modules/post';
 import Message from '@common-components/message/Message';
 import axios from '@utils/api';
+import { useTranslation } from 'react-i18next';
 import UserPostList from './user-post-list/UserPostList';
 import UserReportButton from './user-report-button/UserReportButton';
 import {
@@ -64,6 +65,8 @@ export default function UserPage() {
     },
     [dispatch]
   );
+
+  const [t] = useTranslation('translation', { keyPrefix: 'user_page' });
 
   useEffect(() => {
     dispatch(getSelectedUser(username));
@@ -142,7 +145,7 @@ export default function UserPage() {
   return (
     <MobileWrapper className={classes.root}>
       {getUserFailure ? (
-        <Message message="존재하지 않는 사용자입니다 :(" />
+        <Message message={t('this_user_do_not_exist')} />
       ) : (
         <>
           <Container fixed>
@@ -160,7 +163,7 @@ export default function UserPage() {
                     onClickDeleteFriend={onClickDeleteFriendButton}
                   />
                   <AlertDialog
-                    message="친구를 삭제하시겠습니까?"
+                    message={t('are_you_sure_you_want_to_delete_this_friend')}
                     onConfirm={onConfirmDeleteFriend}
                     onClose={onCancelDeleteFriend}
                     isOpen={isDeleteDialogOpen}
@@ -170,14 +173,14 @@ export default function UserPage() {
                     onConfirm={onClickConfirmBlockUser}
                     onClose={() => setIsBlock(false)}
                     isOpen={isBlock}
-                    message="차단하시겠습니까?"
+                    message={t('do_you_want_to_block_this_user')}
                   />
                   {/* 사용자 신고 모달 팝업 */}
                   <AlertDialog
                     onConfirm={onClickConfirmReportUser}
                     onClose={() => setIsReport(false)}
                     isOpen={isReport}
-                    message="신고하시겠습니까?"
+                    message={t('do_you_want_to_report_this_user')}
                   />
                 </UserReportButtonWrapper>
               )}
@@ -208,15 +211,15 @@ export default function UserPage() {
               onChange={handleChange}
               aria-label="user tabs"
             >
-              <Tab label="전체" value="All" {...a11yProps('All')} />
-              <Tab label="나의 Q&A" value="Q&A" {...a11yProps('Q&A')} />
+              <Tab label={t('all')} value="All" {...a11yProps('All')} />
+              <Tab label={t('my_q&a')} value="Q&A" {...a11yProps('Q&A')} />
               <Tab
-                label="아무말 대잔치"
+                label={t('tmi')}
                 value="Articles"
                 {...a11yProps('Articles')}
               />
               <Tab
-                label="작성한 질문"
+                label={t('written_questions')}
                 value="CustomQuestions"
                 {...a11yProps('CustomQuestions')}
               />
