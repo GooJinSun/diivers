@@ -262,6 +262,7 @@ export const createComment =
       result: result.data,
       postKey
     });
+    // NOTE(Gina): 의심가는 부분
     const { selectedQuestion } = getState().questionReducer;
     if (+selectedQuestion?.id === +targetId) {
       dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));

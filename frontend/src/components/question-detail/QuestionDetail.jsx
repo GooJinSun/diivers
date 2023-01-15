@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -17,15 +16,21 @@ import Message from '@common-components/message/Message';
 import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
 import { useStyles } from './QuestionDetail.styles';
 
+const tabInfos = [
+  { index: 0, name: 'all' },
+  { index: 1, name: 'friend' },
+  { index: 2, name: 'anonymous' }
+];
+
 const QuestionDetail = (props) => {
   const classes = useStyles();
 
   const { match } = props;
   const questionId = match.params.id;
 
-  const [tab, setTab] = React.useState(0);
-  const [tabName, setTabName] = React.useState('all');
+  const [currentTab, setCurrentTab] = React.useState(tabInfos[0]);
   const [target, setTarget] = useState(null);
+  const type = currentTab.name.toUpperCase();
 
   const dispatch = useDispatch();
   const question = useSelector(
@@ -35,21 +40,7 @@ const QuestionDetail = (props) => {
   const isLoading =
     useSelector(
       (state) =>
-        state.loadingReducer['question/GET_SELECTED_QUESTION_ALL_RESPONSES']
-    ) === 'REQUEST';
-
-  const friendTabisLoading =
-    useSelector(
-      (state) =>
-        state.loadingReducer['question/GET_SELECTED_QUESTION_FRIEND_RESPONSES']
-    ) === 'REQUEST';
-
-  const anonymousTabisLoading =
-    useSelector(
-      (state) =>
-        state.loadingReducer[
-          'question/GET_SELECTED_QUESTION_ANONYMOUS_RESPONSES'
-        ]
+        state.loadingReducer[`question/GET_SELECTED_QUESTION_${type}_RESPONSES`]
     ) === 'REQUEST';
 
   const isAppending =
@@ -62,33 +53,50 @@ const QuestionDetail = (props) => {
     (state) => state.questionReducer.selectedQuestionResponses
   );
 
-  const handleTabChange = (event, newValue) => {
-    setTab(newValue);
-    if (newValue === 0) setTabName('all');
-    if (newValue === 1) setTabName('friend');
-    if (newValue === 2) setTabName('anonymous');
+  const handleTabChange = (_event, newValue) => {
+    setCurrentTab(tabInfos[newValue]);
   };
 
-  const onIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(appendResponsesByQuestionWithType(questionId, tabName));
-    }
-  };
-
-  useEffect(() => {
-    dispatch(getResponsesByQuestionWithType(questionId, tabName));
-  }, [dispatch, questionId, tab]);
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        dispatch(
+          appendResponsesByQuestionWithType(questionId, currentTab.name)
+        );
+      }
+    },
+    [dispatch, questionId, currentTab]
+  );
 
   const resetTabs = () => {
-    setTab(0);
-    setTabName('all');
+    setCurrentTab(tabInfos[0]);
   };
+
+  const responseList = useMemo(() => {
+    return (
+      <>
+        {responses.map((post) => (
+          <PostItem
+            postKey={`${post.type}-${post.id}`}
+            key={`${post.type}-${post.id}`}
+            postObj={post}
+            resetAfterComment={resetTabs}
+          />
+        ))}
+        <div ref={setTarget} />
+        <div style={{ margin: '8px', textAlign: 'center' }}>
+          {isAppending && <CircularProgress id="spinner" color="primary" />}
+        </div>
+      </>
+    );
+  }, [isAppending, responses]);
+
   useEffect(() => {
     return () => {
       resetTabs();
       dispatch(resetSelectedQuestion());
     };
-  }, [questionId]);
+  }, [dispatch]);
 
   useEffect(() => {
     let observer;
@@ -97,39 +105,40 @@ const QuestionDetail = (props) => {
       observer.observe(target);
     }
     return () => observer && observer.disconnect();
-  }, [target]);
+  }, [onIntersect, target]);
 
-  const responseList = (
-    <>
-      {responses.map((post) => (
-        <PostItem
-          postKey={`${post.type}-${post.id}`}
-          key={`${post.type}-${post.id}`}
-          postObj={post}
-          resetAfterComment={resetTabs}
-        />
-      ))}
-      <div ref={setTarget} />
-      <div style={{ margin: '8px', textAlign: 'center' }}>
-        {isAppending && <CircularProgress id="spinner" color="primary" />}
-      </div>
-    </>
+  useEffect(() => {
+    dispatch(getResponsesByQuestionWithType(questionId, currentTab.name));
+  }, [dispatch, questionId, currentTab]);
+
+  const renderTabComponent = useCallback(
+    (tab) => {
+      return (
+        <TabPanel
+          value={tab.index}
+          index={tab.index}
+          className={classes.tabPanel}
+        >
+          {isLoading ? <LoadingList /> : responseList}
+        </TabPanel>
+      );
+    },
+    [classes.tabPanel, isLoading, responseList]
   );
 
+  if (!question) return <></>;
   return (
     <div>
-      {isLoading ? (
-        <LoadingList />
-      ) : question ? (
+      {question ? (
         <>
           <QuestionItem
             questionObj={question}
             questionId={questionId}
-            onResetContent={() => resetTabs()}
+            onResetContent={resetTabs}
           />
           <AppBar position="static" className={classes.header}>
             <Tabs
-              value={tab}
+              value={currentTab.index}
               onChange={handleTabChange}
               aria-label="notification-tabs"
               indicatorColor="primary"
@@ -141,17 +150,9 @@ const QuestionDetail = (props) => {
             </Tabs>
           </AppBar>
           {responses?.length !== 0 ? (
-            <>
-              <TabPanel value={tab} index={0} className={classes.tabPanel}>
-                {isLoading ? <LoadingList /> : responseList}
-              </TabPanel>
-              <TabPanel value={tab} index={1} className={classes.tabPanel}>
-                {friendTabisLoading ? <LoadingList /> : responseList}
-              </TabPanel>
-              <TabPanel value={tab} index={2} className={classes.tabPanel}>
-                {anonymousTabisLoading ? <LoadingList /> : responseList}
-              </TabPanel>
-            </>
+            tabInfos.map((tab) => {
+              return renderTabComponent(tab);
+            })
           ) : (
             <Message margin="16px 0" message="표시할 게시물이 없습니다 :(" />
           )}
@@ -163,4 +164,4 @@ const QuestionDetail = (props) => {
   );
 };
 
-export default withRouter(QuestionDetail);
+export default React.memo(QuestionDetail);
