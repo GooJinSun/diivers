@@ -52,5 +52,12 @@
     "authenticating": "Authenticating...",
     "email_authentication_is_completed": "Email authentication is complete.",
     "invalid_link":"Invalid link."
+  },
+  "lost_password": {
+    "email_has_been_sent_successfully_completed": "Email has been sent successfully completed.",
+    "password_initialization": "Password initialization",
+    "email": "email",
+    "send_an_email": "Send an email",
+    "login": "Login"
   }
 }
