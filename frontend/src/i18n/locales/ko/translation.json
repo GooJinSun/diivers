@@ -122,5 +122,11 @@
     "this_feature_is_available_only_when_you_add_friends": "친구를 추가해야 사용 가능한 기능입니다.",
     "send": "보내기",
     "cancel_send": "보내기 취소"
+  },
+  "question_detail": {
+    "all": "전체",
+    "friends": "친구",
+    "anonymous": "익명",
+    "this_question_do_not_exit": "존재하지 않는 질문입니다."
   }
 }
