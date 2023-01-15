@@ -45,7 +45,8 @@ const theme = createTheme({
     secondary: { light: '#eee', main: '#777' }
   },
   typography: {
-    fontFamily: ['Noto Sans KR', 'sans-serif']
+    fontFamily: ['Noto Sans KR', 'sans-serif'],
+    button: { textTransform: 'none' }
   }
 });
 
