@@ -28,11 +28,11 @@ import QuestionListWidget from '@common-components/question-list-widget/Question
 import FriendListWidget from '@common-components/friend-list-widget/FriendListWidget';
 import PrivateRoute from '@common-components/private-route/PrivateRoute';
 import useLoginWithToken from '@hooks/auth/useLoginWithToken';
-import useIsMobile from '@hooks/env/useIsMobile';
 import useLogOutIfRefreshTokenExpired from '@hooks/auth/useLogOutIfRefreshTokenExpired';
 import GlobalStyle from '@styles/globalStyle';
 import { MainWrapper, FeedWrapper } from '@styles/wrappers';
 import useAppLogin from '@hooks/auth/useAppLogin';
+import useWindowWidth from '@hooks/env/useWindowWidth';
 import { initGA, trackPage } from './ga';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
@@ -58,9 +58,10 @@ const App = () => {
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
-  const isMobile = useIsMobile();
+  const { isDesktopMin } = useWindowWidth();
+
   const isSelectQuestionPage = location.pathname === '/select-questions';
-  const showWidget = !isMobile && !isSelectQuestionPage && currentUser;
+  const showWidget = !isDesktopMin && !isSelectQuestionPage && currentUser;
 
   useEffect(() => {
     initGA();
@@ -77,15 +78,10 @@ const App = () => {
   return (
     <MuiThemeProvider theme={theme}>
       <GlobalStyle />
-      <Header isMobile={isMobile} />
+      <Header />
       <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
         {showWidget && <QuestionListWidget />}
-        <FeedWrapper
-          style={{
-            left: !currentUser ? '275px' : '',
-            width: !currentUser ? '655px' : ''
-          }}
-        >
+        <FeedWrapper>
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />

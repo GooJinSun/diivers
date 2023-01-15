@@ -32,7 +32,11 @@ export default function MobileDrawer({ open, handleDrawerClose, onLogout }) {
       >
         <div className={classes.drawerHeader}>
           <IconButton
-            style={{ width: '40vw', paddingLeft: '30vw' }}
+            style={{
+              width: '40vw',
+              paddingLeft: '30vw',
+              backgroundColor: 'transparent'
+            }}
             onClick={handleDrawerClose}
           >
             <ChevronRightIcon />

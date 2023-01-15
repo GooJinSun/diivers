@@ -15,7 +15,6 @@ export default function QuestionList({ questions, isAppending, isLoading }) {
   return (
     <div id="question-list">
       {isLoading ? <LoadingList /> : dailyQuestionList}
-
       <div style={{ margin: '8px', textAlign: 'center' }}>
         {isAppending && <CircularProgress id="spinner" color="primary" />}
       </div>

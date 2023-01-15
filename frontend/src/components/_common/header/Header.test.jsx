@@ -41,7 +41,7 @@ describe('<Header/>', () => {
     mount(
       <Provider store={store}>
         <Router history={history}>
-          <Header isMobile={false} setRefreshToken={setRefreshToken} />
+          <Header setRefreshToken={setRefreshToken} />
         </Router>
       </Provider>
     );
@@ -50,7 +50,7 @@ describe('<Header/>', () => {
     mount(
       <Provider store={store}>
         <Router history={history}>
-          <Header isMobile />
+          <Header />
         </Router>
       </Provider>
     );
