@@ -47,5 +47,11 @@
     "Please complete the email verification.": "이메일 인증 완료해주세요.",
     "nickname_is_not_valid": "닉네임이 유효하지 않습니다 :(",
     "email_is_not_valid": "이메일이 유효하지 않습니다 :("
+  },
+  "account_activate": {
+    "authenticating": "인증 중 ...",
+    "email_authentication_is_completed": "이메일 인증이 완료되었습니다.",
+    "invalid_link": "유효하지 않은 링크입니다."
   }
+
 }
