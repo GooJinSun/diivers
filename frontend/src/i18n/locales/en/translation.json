@@ -28,5 +28,13 @@
     "create_a_question": "Create a question",
     "friends": "Friends",
     "manage_friends": "Manage Friends"
+  },
+  "login": {
+    "login": "Login",
+    "nickname": "nickname",
+    "password": "password",
+    "sign_up": "Sign Up",
+    "forgot_password": "Forgot password",
+    "invalid_authentication": "Email authentication not completed or invalid membership information."
   }
 }

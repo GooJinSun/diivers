@@ -28,5 +28,13 @@
     "create_a_question": "새로운 질문 만들기",
     "friends": "친구",
     "manage_friends": "친구 관리"
+  },
+  "login": {
+    "login": "로그인",
+    "nickname": "닉네임",
+    "password": "비밀번호",
+    "sign_up": "회원가입",
+    "forgot_password": "비밀번호를 잊어버렸어요",
+    "invalid_authentication": "이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다."
   }
 }
