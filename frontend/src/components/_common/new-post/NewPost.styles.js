@@ -8,12 +8,12 @@ export const NewPostWrapper = styled.div`
       0 5px 5px rgba(166, 173, 201, 0.1);
   }
   width: 100%;
-  margin: 0 auto;
   border: 1px solid #eee;
   padding: 10px;
   border-radius: 4px;
   box-sizing: border-box;
   background: #fff;
+  margin-bottom: 16px;
 `;
 
 export const useStyles = makeStyles({
