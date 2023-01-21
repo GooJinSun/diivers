@@ -1,12 +1,11 @@
 import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
+
+export const QuestionDetailWrapper = styled.div`
+  width: 100%;
+`;
 
 export const useStyles = makeStyles((theme) => ({
-  switch: {
-    marginRight: theme.spacing(1)
-  },
-  switchLabel: {
-    marginTop: '-4px'
-  },
   header: {
     backgroundColor: 'white',
     boxShadow:

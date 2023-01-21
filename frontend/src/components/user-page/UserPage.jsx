@@ -1,8 +1,8 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Container from '@material-ui/core/Container';
 import FaceIcon from '@material-ui/icons/Face';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
@@ -13,14 +13,16 @@ import FriendStatusButtons from '@common-components/friend-status-buttons/Friend
 import { getSelectedUserPosts, appendPosts } from '@modules/post';
 import Message from '@common-components/message/Message';
 import axios from '@utils/api';
+// import { PostListWrapper } from '@styles/wrappers';
 import UserPostList from './user-post-list/UserPostList';
 import UserReportButton from './user-report-button/UserReportButton';
 import {
   MobileTabPanel,
-  UserPageWrapper,
   UserReportButtonWrapper,
   MobileWrapper,
-  useStyles
+  useStyles,
+  UserPageContainer,
+  UserPageWrapper
 } from './UserPage.styles';
 import { a11yProps } from './tab-panel/TabPanel';
 
@@ -144,69 +146,70 @@ export default function UserPage() {
       {getUserFailure ? (
         <Message message="존재하지 않는 사용자입니다 :(" />
       ) : (
-        <>
-          <Container fixed>
-            <UserPageWrapper
+        <UserPageWrapper>
+          <UserPageContainer
+            style={{
+              paddingTop: isMyPage ? 50 : 20
+            }}
+          >
+            {!isMyPage && (
+              <UserReportButtonWrapper>
+                <UserReportButton
+                  onClickBlockUser={onClickBlockUser}
+                  onClickReportUser={onClickReportUser}
+                  isFriend={isFriend}
+                  onClickDeleteFriend={onClickDeleteFriendButton}
+                />
+                <AlertDialog
+                  message="친구를 삭제하시겠습니까?"
+                  onConfirm={onConfirmDeleteFriend}
+                  onClose={onCancelDeleteFriend}
+                  isOpen={isDeleteDialogOpen}
+                />
+                {/* 사용자 차단 모달 팝업 */}
+                <AlertDialog
+                  onConfirm={onClickConfirmBlockUser}
+                  onClose={() => setIsBlock(false)}
+                  isOpen={isBlock}
+                  message="차단하시겠습니까?"
+                />
+                {/* 사용자 신고 모달 팝업 */}
+                <AlertDialog
+                  onConfirm={onClickConfirmReportUser}
+                  onClose={() => setIsReport(false)}
+                  isOpen={isReport}
+                  message="신고하시겠습니까?"
+                />
+              </UserReportButtonWrapper>
+            )}
+            <FaceIcon
               style={{
-                paddingTop: isMyPage ? 50 : 20
+                color: selectedUser?.profile_pic
               }}
-            >
-              {!isMyPage && (
-                <UserReportButtonWrapper>
-                  <UserReportButton
-                    onClickBlockUser={onClickBlockUser}
-                    onClickReportUser={onClickReportUser}
-                    isFriend={isFriend}
-                    onClickDeleteFriend={onClickDeleteFriendButton}
-                  />
-                  <AlertDialog
-                    message="친구를 삭제하시겠습니까?"
-                    onConfirm={onConfirmDeleteFriend}
-                    onClose={onCancelDeleteFriend}
-                    isOpen={isDeleteDialogOpen}
-                  />
-                  {/* 사용자 차단 모달 팝업 */}
-                  <AlertDialog
-                    onConfirm={onClickConfirmBlockUser}
-                    onClose={() => setIsBlock(false)}
-                    isOpen={isBlock}
-                    message="차단하시겠습니까?"
-                  />
-                  {/* 사용자 신고 모달 팝업 */}
-                  <AlertDialog
-                    onConfirm={onClickConfirmReportUser}
-                    onClose={() => setIsReport(false)}
-                    isOpen={isReport}
-                    message="신고하시겠습니까?"
-                  />
-                </UserReportButtonWrapper>
+            />
+            <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
+            <div>
+              {selectedUser && (
+                <FriendStatusButtons
+                  isUserPage
+                  friendObj={selectedUser}
+                  isFriend={selectedUser.are_friends}
+                  isPending={selectedUser.received_friend_request_from}
+                  hasSentRequest={selectedUser.sent_friend_request_to}
+                />
               )}
-              <FaceIcon
-                style={{
-                  color: selectedUser?.profile_pic
-                }}
-              />
-              <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
-              <div>
-                {selectedUser && (
-                  <FriendStatusButtons
-                    isUserPage
-                    friendObj={selectedUser}
-                    isFriend={selectedUser.are_friends}
-                    isPending={selectedUser.received_friend_request_from}
-                    hasSentRequest={selectedUser.sent_friend_request_to}
-                  />
-                )}
-              </div>
-            </UserPageWrapper>
-          </Container>
+            </div>
+          </UserPageContainer>
           <AppBar position="static" className={classes.header}>
             <Tabs
               value={value}
               indicatorColor="primary"
               textColor="primary"
               onChange={handleChange}
-              aria-label="user tabs"
+              variant="fullWidth"
+              style={{
+                width: '100%'
+              }}
             >
               <Tab label="전체" value="All" {...a11yProps('All')} />
               <Tab label="나의 Q&A" value="Q&A" {...a11yProps('Q&A')} />
@@ -222,6 +225,7 @@ export default function UserPage() {
               />
             </Tabs>
           </AppBar>
+
           <MobileTabPanel value={value} index="All">
             <UserPostList
               posts={selectedUserPosts}
@@ -258,7 +262,7 @@ export default function UserPage() {
             />
             <div ref={setTarget} />
           </MobileTabPanel>
-        </>
+        </UserPageWrapper>
       )}
     </MobileWrapper>
   );
