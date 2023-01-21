@@ -23,9 +23,6 @@ export const FeedWrapper = styled.div`
   @media (max-width: ${DESKTOP_MIN_WIDTH}px) {
     width: calc(100% - 2 * ${DEFAULT_MARGIN}px);
   }
-  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
-    width: 100%;
-  }
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -6,6 +6,7 @@ export const FriendListWrapper = styled.div`
   padding-top: 0;
   border-radius: 4px;
   background: whitesmoke;
+  width: 100%;
 `;
 
 FriendListWrapper.displayName = 'FriendListWrapper';
