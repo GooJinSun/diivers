@@ -26,7 +26,7 @@ export const FeedWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1000px;
+  max-width: 800px;
 `;
 
 export const WidgetWrapper = styled.div`
@@ -78,6 +78,7 @@ export const PostItemWrapper = styled.div`
 
 export const PostListWrapper = styled.div`
   width: 100%;
+  max-width: 800px;
 `;
 
 export const FlexWrapper = styled.div`
