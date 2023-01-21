@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFriendList } from '@modules/friend';
 import FriendItem from '@common-components/friend-item/FriendItem';
-import { FriendListWrapper } from './FriendsPage.styles';
+import { FriendListWrapper, FriendListContainer } from './FriendsPage.styles';
 
 export default function FriendsPage() {
   const dispatch = useDispatch();
@@ -24,11 +24,13 @@ export default function FriendsPage() {
   });
   return (
     <FriendListWrapper>
-      <h3>
-        친구 목록
-        {`(${friendList?.length})`}
-      </h3>
-      {friendItemList}
+      <FriendListContainer>
+        <h3>
+          친구 목록
+          {`(${friendList?.length})`}
+        </h3>
+        {friendItemList}
+      </FriendListContainer>
     </FriendListWrapper>
   );
 }
