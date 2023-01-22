@@ -14,6 +14,7 @@ import userReducer from './user';
 import loadingReducer from './loading';
 import searchReducer from './search';
 import likeReducer from './like';
+import scrollReducer from './scroll';
 
 const rootReducer = combineReducers({
   friendReducer,
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
   questionReducer,
   userReducer,
   loadingReducer,
-  searchReducer
+  searchReducer,
+  scrollReducer
 });
 
 export const store = createStore(
@@ -32,3 +34,6 @@ export const store = createStore(
 );
 
 export default rootReducer;
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
