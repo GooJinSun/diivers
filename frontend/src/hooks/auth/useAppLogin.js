@@ -7,13 +7,13 @@ const useAppLogin = () => {
   const dispatch = useDispatch();
   const handleMessage = useCallback(
     (e) => {
-      if (e.data) {
-        const data = JSON.stringify(e.data);
-        const { key, access, refresh } = data;
-        if (key !== 'SET_TOKEN') return;
-        setTokensInCookies(access, refresh);
-        dispatch(getCurrentUser());
-      }
+      if (!e.data) return;
+      if (e.data.type === 'webpackWarnings') return;
+      const parsedData = JSON.parse(e.data);
+      const { key, access, refresh } = parsedData;
+      if (key !== 'SET_TOKEN') return;
+      setTokensInCookies(access, refresh);
+      dispatch(getCurrentUser());
     },
     [dispatch]
   );

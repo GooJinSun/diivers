@@ -3,12 +3,10 @@ export const SET_IS_BACK = 'scroll/SET_IS_BACK';
 
 type ScrollState = {
   scrollY: number;
-  isBack: boolean;
 };
 
 const initialState: ScrollState = {
-  scrollY: 0,
-  isBack: false
+  scrollY: 0
 };
 
 export const setScrollY = (y: number) => ({
@@ -16,14 +14,7 @@ export const setScrollY = (y: number) => ({
   payload: y
 });
 
-export const setIsBack = (isBack: boolean) => ({
-  type: SET_IS_BACK,
-  payload: isBack
-});
-
-type ScrollAction =
-  | ReturnType<typeof setScrollY>
-  | ReturnType<typeof setIsBack>;
+type ScrollAction = ReturnType<typeof setScrollY>;
 
 export default function scrollReducer(
   state: ScrollState = initialState,
@@ -37,11 +28,6 @@ export default function scrollReducer(
       return {
         ...state,
         scrollY: action.payload
-      };
-    case SET_IS_BACK:
-      return {
-        ...state,
-        isBack: action.payload
       };
     default:
       return state;

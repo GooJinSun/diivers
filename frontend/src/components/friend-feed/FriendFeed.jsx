@@ -6,6 +6,8 @@ import NewPost from '@common-components/new-post/NewPost';
 import PostList from '@common-components/post-list/PostList';
 import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
+import useRouteChange from '@hooks/env/useRouteChange';
+import { setScrollY } from '@modules/scroll';
 import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
 
 const FriendFeed = () => {
@@ -43,6 +45,12 @@ const FriendFeed = () => {
     dispatch(getPostsByType('friend'));
     dispatch(getFriendList());
   }, [dispatch]);
+
+  const handleStoreScroll = useCallback(() => {
+    setScrollY(window.scrollY);
+  }, []);
+
+  useRouteChange(handleStoreScroll);
 
   return (
     <>
