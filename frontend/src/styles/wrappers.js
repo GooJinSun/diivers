@@ -10,12 +10,14 @@ export const MainWrapper = styled.main`
   margin: 80px ${DEFAULT_MARGIN}px 100px ${DEFAULT_MARGIN}px;
   display: flex;
   justify-content: center;
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
+    margin: 80px 0px 100px 0px;
+  }
 `;
 
 export const AuthentiCationWrapper = styled.div`
-  width: 500px;
-  margin: 0 auto;
   margin-top: 120px;
+  width: 100%;
 `;
 
 export const FeedWrapper = styled.div`
