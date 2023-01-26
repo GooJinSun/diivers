@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import IconButton from '@material-ui/core/IconButton';
@@ -46,17 +46,9 @@ export default function PostItem({
     search?.includes('anonymous=True');
   const onlyAnonPost =
     postObj?.share_anonymously && !postObj?.share_with_friends;
-  const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(0);
+  const [liked, setLiked] = useState(postObj.current_user_liked || false);
+  const [likeCount, setLikeCount] = useState(postObj.like_count || 0);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-  useEffect(() => {
-    if (postObj) {
-      const count = postObj.like_count;
-      setLikeCount(+count);
-      setLiked(postObj.current_user_liked);
-    }
-  }, [postObj]);
 
   const commentList = postObj?.comments?.map((comment) => {
     if (!comment) return null;
