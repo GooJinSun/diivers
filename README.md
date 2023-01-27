@@ -6,6 +6,10 @@
 
 ## Frontend
 
+### 환경변수 세팅
+- `frontend/.env`에 FCM 관련 환경변수를 세팅해줍니다
+
+
 ### Run
 ```
 cd frontend
@@ -19,6 +23,10 @@ yarn test --coverage --watchAll=false
 ```
 
 ## Backend
+### 환경변수 세팅
+- 파이썬 환경변수: `SECRET_KEY`, `DB_PASSWORD`, `EMAIL_HOST_PASSWORD`를 포함한 환경변수를 `.zshrc` `.bashrc` 혹은 `.bash_profile`에 세팅
+- fcm 관련 환경변수: `backend/adoorback/adoorback/serviceAccountKey.json`
+
 
 ### Run
 ```
@@ -44,6 +52,7 @@ django-mysql==3.9.0
 ```
 psycopg2, mysqlclient, python-dev
 이 세 가지는 requirements.txt에서 제거하고 설치해도 됩니당
+
 
 ### Test
 
