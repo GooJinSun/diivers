@@ -77,7 +77,7 @@ class UserSignup(generics.CreateAPIView):
                     raise InvalidUsername()
                 if 'max_length' in e.get_codes()['username']:
                     raise LongUsername()
-            if 'email' in e:
+            if 'email' in e.detail:
                 if 'unique' in e.get_codes()['email']:
                     raise ExistingEmail()
                 if 'invalid' in e.get_codes()['email']:
