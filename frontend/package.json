@@ -52,8 +52,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "prestart": "cra-append-sw --mode dev --env ./.env ./firebase-messaging-sw.js",
-    "prebuild": "cra-append-sw --mode build --env ./.env ./firebase-messaging-sw.js",
-    "build": "react-scripts build",
+    "build": "react-app-rewired build && cra-append-sw --mode build --env ./.env ./firebase-messaging-sw.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
