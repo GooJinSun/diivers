@@ -185,6 +185,7 @@ class CurrentUserFriendList(generics.ListAPIView):
 class CurrentUserProfile(generics.RetrieveUpdateAPIView):
     serializer_class = UserProfileSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = (MultiPartParser, FormParser)
 
     def get_exception_handler(self):
         return adoor_exception_handler

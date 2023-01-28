@@ -47,6 +47,10 @@ export const REPORT_USER_REQUEST = 'user/REPORT_USER_REQUEST';
 export const REPORT_USER_SUCCESS = 'user/REPORT_USER_SUCCESS';
 export const REPORT_USER_FAILURE = 'user/REPORT_USER_FAILURE';
 
+export const UPDATE_PROFILE_IMAGE_REQUEST = 'user/UPDATE_PROFILE_IMAGE_REQUEST';
+export const UPDATE_PROFILE_IMAGE_SUCCESS = 'user/UPDATE_PROFILE_IMAGE_SUCCESS';
+export const UPDATE_PROFILE_IMAGE_FAILURE = 'user/UPDATE_PROFILE_IMAGE_FAILURE';
+
 export const REMOVE_ERROR = 'user/REMOVE_ERROR';
 
 export const SET_FCM_TOKEN = 'user/SET_FCM_TOKEN';
@@ -92,6 +96,26 @@ export const requestSignUp = (signUpInfo) => {
         error: error.response?.data
       });
     }
+  };
+};
+
+export const changeProfileImage = (profileInfo) => {
+  return async (dispatch) => {
+    dispatch({ type: UPDATE_PROFILE_IMAGE_REQUEST });
+    try {
+      await axios.patch(`user/me/`, profileInfo, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      dispatch({ type: UPDATE_PROFILE_IMAGE_FAILURE, error });
+      return;
+    }
+    dispatch({
+      type: UPDATE_PROFILE_IMAGE_SUCCESS
+    });
+    dispatch(getCurrentUser());
   };
 };
 
