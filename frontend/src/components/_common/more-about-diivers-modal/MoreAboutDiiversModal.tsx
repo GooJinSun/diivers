@@ -17,6 +17,7 @@ import {
 } from '@material-ui/pickers';
 import { CommonButton } from '@styles/buttons';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
+import { formatDate } from '@utils/dateTimeHelpers';
 import { useStyles } from './MoreAboutDiivers.styles';
 
 interface AdditionalInfo {
@@ -47,9 +48,8 @@ const MoreAboutDiiversModal = ({
   };
 
   const onChangeBirthDate = (date: MaterialUiPickersDate) => {
-    // TODO: 타입 확인 필요
     if (!date) return;
-    setBirthDate(date.toDateString());
+    setBirthDate(formatDate(date, 'yyyy-MM-dd'));
   };
 
   const onChangeEthnicity = (e: ChangeEvent<{ value: unknown }>) => {
@@ -102,14 +102,14 @@ const MoreAboutDiiversModal = ({
           연구에 동의하시는 분은 아래 추가사항을 입력 해주세요. 다시한번,
           개인정보는 암호화되며 연구 외의 목적으로 이용되지 않음을 안내드립니다.
         </div>
-        {/* 나이 */}
+        {/* 성 */}
         <FormControl fullWidth margin="normal">
-          <InputLabel shrink id="age">
-            나이
+          <InputLabel shrink id="gender">
+            성별
           </InputLabel>
           <Select
-            labelId="age"
-            id="age-select"
+            labelId="gender"
+            id="gender-select"
             value={gender ?? ''}
             onChange={(e) => onChangeGender(e)}
           >
