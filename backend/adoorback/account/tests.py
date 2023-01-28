@@ -25,7 +25,6 @@ class UserTestCase(TestCase):
 
 
 class UserFriendshipCase(TestCase):
-
     def setUp(self):
         set_seed(N)
 
@@ -91,7 +90,6 @@ class APITestCase(TestCase):
 
 
 class UserAPITestCase(APITestCase):
-
     def setUp(self):
         set_seed(N)
 
@@ -138,7 +136,6 @@ class UserAPITestCase(APITestCase):
 
 
 class AuthAPITestCase(APITestCase):
-
     def setUp(self):
         set_seed(N)
 
@@ -166,37 +163,108 @@ class AuthAPITestCase(APITestCase):
     def test_signup(self):
         client = Client()
 
+        # GET request
+        response = client.get('/api/user/signup/')
+        self.assertEqual(response.status_code, 405)  # Request not allowed
+
+        # empty json
         response = client.post('/api/user/signup/', {},
                                content_type='application/json')
         self.assertEqual(response.status_code, 400)
 
+        # normal signup
         signup_data = {
             'username': 'test_username',
             'password': 'test_password',
             'email': 'test@email.com',
         }
-
-        response = client.get('/api/user/signup/')
-        self.assertEqual(response.status_code, 405)  # Request not allowed
-
         response = client.post('/api/user/signup/',
                                signup_data, content_type='application/json')
         self.assertEqual(response.status_code, 201)
 
-        # duplicate user
+        # inactive user
         response = client.post('/api/user/signup/',
                                signup_data, content_type='application/json')
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.data['detail'].code, 'user_is_inactive')
 
-        # invalid json
-        invalid_signup_data = {
-            "username": "test_username",
-            "password": "abc",
-            "email": "wa@"
+        # existing username
+        test_user = User.objects.get(username='test_username')
+        test_user.is_active = True
+        test_user.save()
+        signup_data = {
+            'username': 'test_username',
+            'password': 'test_existing_username',
+            'email': 'test_existing_username@email.com',
+        }
+        response = client.post('/api/user/signup/',
+                               signup_data, content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.data['detail'].code, 'username_exists')
+
+        # existing email
+        signup_data = {
+            "username": "test_existing_email",
+            "password": "test_existing_email",
+            "email": "test@email.com"
         }
         response = client.post(
-            '/api/user/signup/', invalid_signup_data, content_type='application/json')
-        self.assertEqual(response.status_code, 400)
+            '/api/user/signup/', signup_data, content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.data['detail'].code, 'email_exists')
+
+        # invalid email
+        signup_data = {
+            "username": "test_invalid_email",
+            "password": "test_invalid_email",
+            "email": "test_invalid_email@"
+        }
+        response = client.post(
+            '/api/user/signup/', signup_data, content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.data['detail'].code, 'email_invalid')
+
+    def test_login(self):
+        # GET request
+        response = self.client.get('/api/user/token/')
+        self.assertEqual(response.status_code, 405)  # Request not allowed
+
+        # empty json
+        response = self.client.post('/api/token/', {},
+                               content_type='application/json')
+        self.assertEqual(response.status_code, 404)
+
+        # normal login
+        User.objects.create_user(
+            username="test_username", email="test@email.com", password="test_password")
+        login_data = {"username": "test_username", "password": "test_password"}
+        response = self.client.post(
+            '/api/user/token/', json.dumps(login_data), content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+        # no username
+        login_data = {'username': 'test_no_username', 'password': 'test_no_username'}
+        response = self.client.post(
+            '/api/user/token/', json.dumps(login_data), content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.data['detail'].code, 'username_does_not_exist')
+
+        # wrong password
+        login_data = {'username': 'test_username', 'password': 'test_wrong_password'}
+        response = self.client.post(
+            '/api/user/token/', json.dumps(login_data), content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.data['detail'].code, 'wrong_password')
+
+        # inactive user
+        test_user = User.objects.get(username='test_username')
+        test_user.is_active = False
+        test_user.save()
+        login_data = {'username': 'test_username', 'password': 'test_password'}
+        response = self.client.post(
+            '/api/user/token/', json.dumps(login_data), content_type='application/json')
+        self.assertEqual(response.status_code, 406)
+        self.assertEqual(response.data['detail'].code, 'user_is_inactive')
 
     def test_user_list(self):
         current_user = self.make_user(username='current_user')
@@ -238,7 +306,6 @@ class AuthAPITestCase(APITestCase):
 
 
 class FriendRequestAPITestCase(APITestCase):
-
     def setUp(self):
         set_seed(N)
 
@@ -345,7 +412,6 @@ class FriendRequestAPITestCase(APITestCase):
 
 
 class UserNotisAPITestCase(APITestCase):
-
     def setUp(self):
         set_seed(N)
 
@@ -359,9 +425,12 @@ class UserNotisAPITestCase(APITestCase):
         num_admin_notis_before = Notification.objects.admin_only().count()
         response = self.post('user-signup', data=signup_data, extra={'format': 'json'})
         self.assertEqual(response.status_code, 201)
-
         self.assertEqual(Notification.objects.first().message,
                          'test_username님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?')
+
+        test_user = User.objects.get(username='test_username')
+        test_user.is_active = True
+        test_user.save()
 
         data = {"my_bad": '1, 2, 3'}
         with self.login(username='test_username', password='test_password'):
@@ -384,7 +453,6 @@ class UserNotisAPITestCase(APITestCase):
 
 
 class FriendshipNotisAPITestCase(APITestCase):
-
     def test_friend_request_noti(self):
         current_user = self.make_user(username='current_user')
         friend_user = self.make_user(username='friend_user')
@@ -480,26 +548,24 @@ class FriendshipNotisAPITestCase(APITestCase):
 
 
 class ExceptionHandlerAPITestCase(APITestCase):
-
     def setUp(self):
         set_seed(N)
 
     def test_exception_raised(self):
-
         response = self.get('signup-questions')
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
         response = self.get('current_user_friends')
         self.assertEqual(response.status_code, 404)
 
         response = self.get(self.reverse('user-detail', username=User.objects.get(id=1).username))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
         response = self.delete(self.reverse('user-friend-destroy', pk=1))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
         response = self.delete(self.reverse('user-friend-request-destroy', pk=1))
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
 
         response = self.get('user-search', data={'query': 'haha'})
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
