@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Button from '@material-ui/core/Button';
 import Badge from '@material-ui/core/Badge';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import TextField from '@material-ui/core/TextField';
 import useOnClickOutside from 'use-onclickoutside';
@@ -238,7 +238,7 @@ const Header = () => {
             color="secondary"
           >
             <Link to={`/users/${currentUser?.username}`}>
-              <AccountCircle color="secondary" />
+              <UserProfileItem profileImageUrl={currentUser?.profile_image} />
             </Link>
             <Link to={`/users/${currentUser?.username}`}>
               <HelloUsername className="hello-username">

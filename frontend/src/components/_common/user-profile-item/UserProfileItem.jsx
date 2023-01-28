@@ -16,7 +16,13 @@ const UserIcon = styled.span`
 `;
 
 const UserProfileItem = (props) => {
-  const { profileImageUrl, width, height, profileIconColor, ...styles } = props;
+  const {
+    profileImageUrl,
+    width = 24,
+    height = 24,
+    profileIconColor,
+    ...styles
+  } = props;
 
   return profileImageUrl ? (
     <UserIcon

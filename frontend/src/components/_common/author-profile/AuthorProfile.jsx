@@ -1,6 +1,6 @@
 import React from 'react';
-import FaceIcon from '@material-ui/icons/Face';
 import { useHistory, useLocation } from 'react-router-dom';
+import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
 import { AuthorProfileWrapper, AnonIcon } from './AuthorProfile.styles';
 
 export default function AuthorProfile({
@@ -13,7 +13,13 @@ export default function AuthorProfile({
   const isAnonFeed = location?.pathname === '/anonymous';
 
   if (!author) return null;
-  const { id, username, profile_pic: picHex, color_hex: hex } = author;
+  const {
+    id,
+    username,
+    profile_pic: picHex,
+    color_hex: hex,
+    profile_image: profileImageUrl
+  } = author;
 
   const onClickProfile = () => {
     history.push(`/users/${username}`);
@@ -22,16 +28,18 @@ export default function AuthorProfile({
   return (
     <AuthorProfileWrapper onClick={onClickProfile}>
       {id && (!isAnonFeed || isAuthor) ? (
-        <FaceIcon
+        <div
           style={{
-            color: picHex,
             marginRight: '4px',
-            width: isComment && '20px',
-            opacity: 0.8,
-            top: '2px',
-            position: 'relative'
+            display: 'flex',
+            alignItems: 'center'
           }}
-        />
+        >
+          <UserProfileItem
+            profileImageUrl={profileImageUrl}
+            profileIconColor={picHex}
+          />
+        </div>
       ) : (
         <AnonIcon
           style={{
