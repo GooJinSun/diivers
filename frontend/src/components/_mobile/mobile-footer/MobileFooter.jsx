@@ -6,8 +6,9 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import HomeIcon from '@material-ui/icons/Home';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import Badge from '@material-ui/core/Badge';
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { useHistory } from 'react-router';
+import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
+import { useSelector } from 'react-redux';
 import { useStyles, SmallFontBottomNavAction } from './MobileFooter.styles';
 
 export default function MobileFooter({ notiBadgeInvisible }) {
@@ -15,6 +16,7 @@ export default function MobileFooter({ notiBadgeInvisible }) {
   const history = useHistory();
   const [value, setValue] = React.useState('/home');
   const { pathname } = window.location;
+  const currentUser = useSelector((state) => state.userReducer.currentUser);
 
   useEffect(() => {
     if (
@@ -80,7 +82,13 @@ export default function MobileFooter({ notiBadgeInvisible }) {
       <BottomNavigationAction
         value="/my-page"
         label="MY"
-        icon={<AccountCircleIcon />}
+        icon={
+          <UserProfileItem
+            profileImageUrl={currentUser?.profile_image}
+            width={20}
+            height={20}
+          />
+        }
         className={`${classes.icon} link`}
       />
     </BottomNavigation>

@@ -16,13 +16,11 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for auth and profile update
     """
-    url = serializers.HyperlinkedIdentityField(
-        view_name='user-detail', read_only=True, lookup_field='username')
+    url = serializers.HyperlinkedIdentityField(view_name='user-detail', read_only=True, lookup_field='username')
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password',
-                  'profile_pic', 'question_history', 'url']
+        fields = ['id', 'username', 'email', 'password','profile_pic', 'question_history', 'url', 'profile_image']
         extra_kwargs = {'password': {'write_only': True}}
 
     @transaction.atomic
@@ -43,7 +41,7 @@ class AuthorFriendSerializer(serializers.ModelSerializer):
         return BASE_URL + reverse('user-detail', kwargs={'username': obj.username})
     class Meta:
         model = User
-        fields = ['id', 'username', 'profile_pic', 'url']
+        fields = ['id', 'username', 'profile_pic', 'url', 'profile_image']
 
 
 class AuthorAnonymousSerializer(serializers.ModelSerializer):

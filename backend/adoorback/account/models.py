@@ -14,6 +14,9 @@ from django.dispatch import receiver
 from adoorback.models import AdoorTimestampedModel
 
 
+def to_profile_images(instance, filename):
+    return 'profile_images/{filename}'.format(filename=filename)
+
 def random_profile_color():
     # use random int so that initial users get different colors
     return '#{0:06X}'.format(secrets.randbelow(16777216))
@@ -26,6 +29,7 @@ class User(AbstractUser, AdoorTimestampedModel):
     email = models.EmailField(unique=True)
     question_history = models.CharField(null=True, max_length=500)
     profile_pic = models.CharField(default=random_profile_color, max_length=7)
+    profile_image = models.ImageField(upload_to=to_profile_images, blank=True, null=True)
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
 
     friendship_targetted_notis = GenericRelation("notification.Notification",

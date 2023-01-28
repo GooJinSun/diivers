@@ -2,17 +2,19 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import FaceIcon from '@material-ui/icons/Face';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
-import { getSelectedUser } from '@modules/user';
+import { getSelectedUser, changeProfileImage } from '@modules/user';
+import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
 import { getFriendList, deleteFriend } from '@modules/friend';
 import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
 import { getSelectedUserPosts, appendPosts } from '@modules/post';
 import Message from '@common-components/message/Message';
+import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import axios from '@utils/api';
 import { PostListWrapper } from '@styles/wrappers';
+import EditIcon from '@material-ui/icons/Edit';
 import UserPostList from './user-post-list/UserPostList';
 import UserReportButton from './user-report-button/UserReportButton';
 import {
@@ -139,6 +141,28 @@ export default function UserPage() {
     setIsDeleteDialogOpen(false);
   };
 
+  const [isProfileImageAlert, setIsProfileImageAlert] = useState(false);
+  const [profileImage, setProfileImage] = useState(undefined);
+
+  const onImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
+  };
+
+  useEffect(() => {
+    if (!profileImage) {
+      return;
+    }
+
+    if (profileImage.size > 400 * 400) {
+      return setIsProfileImageAlert(true);
+    }
+
+    const formData = new FormData();
+    formData.append('profile_image', profileImage);
+
+    dispatch(changeProfileImage(formData));
+  }, [profileImage, dispatch]);
+
   return (
     <MobileWrapper className={classes.root}>
       {getUserFailure ? (
@@ -180,11 +204,38 @@ export default function UserPage() {
                 />
               </UserReportButtonWrapper>
             )}
-            <FaceIcon
+            <div
               style={{
-                color: selectedUser?.profile_pic
+                display: 'flex'
               }}
-            />
+            >
+              <UserProfileItem
+                profileImageUrl={
+                  isMyPage
+                    ? currentUser?.profile_image
+                    : selectedUser?.profile_image
+                }
+                profileIconColor={selectedUser?.profile_pic}
+              />
+              <label
+                htmlFor="profile-image"
+                style={{
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  fontSize: 15
+                }}
+              >
+                <input
+                  id="profile-image"
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  onChange={onImageChange}
+                  style={{ display: 'none' }}
+                />
+                <EditIcon fontSize="inherit" color="secondary" />
+              </label>
+            </div>
             <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
             <div>
               {selectedUser && (
@@ -262,6 +313,14 @@ export default function UserPage() {
           </MobileTabPanel>
         </PostListWrapper>
       )}
+      <ConfirmAlertDialog
+        message={
+          '이미지의 크기가 너무 큽니다.\n400 * 400 이하 크기의 이미지를 사용해주세요'
+        }
+        onConfirm={() => setIsProfileImageAlert(false)}
+        onClose={setIsProfileImageAlert}
+        isOpen={isProfileImageAlert}
+      />
     </MobileWrapper>
   );
 }
