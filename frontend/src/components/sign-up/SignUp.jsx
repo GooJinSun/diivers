@@ -63,8 +63,8 @@ export default function SignUp() {
   useEffect(() => {
     if (!isSubmitted || !signUpError) return;
 
-    if (signUpError.username) setIsUsernameValid(false);
-    if (signUpError.email) setIsEmailValid(false);
+    if (signUpError.detail.includes('Username')) setIsUsernameValid(false);
+    if (signUpError.detail.includes('Email')) setIsEmailValid(false);
   }, [isSubmitted, signUpError]);
 
   const [signUpInfo, setSignUpInfo] = useState({
@@ -153,7 +153,8 @@ export default function SignUp() {
           invalid={isSubmitted && !isUsernameValid}
         />
         {isSubmitted && !isUsernameValid && (
-          <WarningMessage>닉네임이 유효하지 않습니다 :(</WarningMessage>
+          // TODO: translation
+          <WarningMessage>{signUpError}</WarningMessage>
         )}
         <CommonInput
           id="email-input"
@@ -164,7 +165,8 @@ export default function SignUp() {
           invalid={isSubmitted && !isEmailValid}
         />
         {isSubmitted && !isEmailValid && (
-          <WarningMessage>이메일이 유효하지 않습니다 :(</WarningMessage>
+          // TODO: translation
+          <WarningMessage>{signUpError}</WarningMessage>
         )}
         <CommonInput
           name="password"
