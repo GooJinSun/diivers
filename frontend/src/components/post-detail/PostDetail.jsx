@@ -5,6 +5,7 @@ import { getSelectedPost } from '@modules/post';
 import PostItem from '@common-components/post-item/PostItem';
 import QuestionItem from '@common-components/question-item/QuestionItem';
 import Message from '@common-components/message/Message';
+import { PostListWrapper } from '@styles/wrappers';
 import LoadingItem from './loading-item/LoadingItem';
 
 export default function PostDetail() {
@@ -38,7 +39,7 @@ export default function PostDetail() {
     );
 
   return (
-    <div id="post-detail-not-question">
+    <PostListWrapper id="post-detail-not-question">
       {isLoading ? (
         <LoadingItem />
       ) : (
@@ -52,6 +53,6 @@ export default function PostDetail() {
           )}
         </>
       )}
-    </div>
+    </PostListWrapper>
   );
 }
