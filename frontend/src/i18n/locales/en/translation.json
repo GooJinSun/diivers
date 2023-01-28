@@ -2,8 +2,8 @@
   "header": {
     "home": "Home",
     "anonymous_feed": "Anonymous Feed",
-    "today_question": "Today Questions",
-    "search_for_users": "Search for Users",
+    "today_question": "Daily Questions",
+    "search_for_users": "Search User",
     "logout": "Logout",
     "login": "Login",
     "view_all_notifications": "View all notifications"
@@ -55,7 +55,7 @@
     "invalid_link": "Invalid link."
   },
   "lost_password": {
-    "email_has_been_sent_successfully_completed": "Email has been sent successfully completed.",
+    "email_has_been_sent_successfully_completed": "An Email has been sent.",
     "password_initialization": "Password initialization",
     "email": "email",
     "send_an_email": "Send an email",
@@ -131,7 +131,7 @@
   },
   "user_page": {
     "this_user_do_not_exist": "This user doesn't exist :(",
-    "are_you_sure_you_want_to_delete_this_friend": "Are you sure you want to delete the friend?",
+    "are_you_sure_you_want_to_delete_this_friend": "Are you sure you want to delete this friend?",
     "do_you_want_to_block_this_user": "Do you want to block this user?",
     "do_you_want_to_report_this_user": "Do you want to report this user?",
     "all": "ALL",
@@ -145,7 +145,7 @@
   },
   "friend_page": {
     "friend_list": "Friend List",
-    "request_a_friend": "Request a friend",
+    "request_a_friend": "Send a friend request",
     "friend": "Friend",
     "accept": "Accept",
     "reject": "Reject",
