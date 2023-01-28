@@ -20,7 +20,7 @@ const FriendItem = ({
 
   const onClickItem = () => {
     history.push(`/users/${username}`);
-    if (onClickCallback) onClickCallback();
+    onClickCallback?.();
   };
 
   return (
