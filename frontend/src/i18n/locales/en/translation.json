@@ -2,7 +2,7 @@
   "header": {
     "home": "Home",
     "anonymous_feed": "Anonymous Feed",
-    "today_question": "Daily Questions",
+    "daily_questions": "Daily Questions",
     "search_for_users": "Search User",
     "logout": "Logout",
     "login": "Login",
@@ -18,7 +18,7 @@
     "footer": {
       "home": "Home",
       "anonymous_feed": "Anonymous Feed",
-      "today_question": "Today Questions",
+      "daily_questions": "Daily Questions",
       "notifications": "Notifications",
       "my_page": "MY"
     }

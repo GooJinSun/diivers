@@ -29,7 +29,7 @@ const NavLinkList = () => {
         to="/questions"
         activeClassName={classes.tabActive}
       >
-        {t('today_question')}
+        {t('daily_questions')}
       </NavLink>
     </>
   );
