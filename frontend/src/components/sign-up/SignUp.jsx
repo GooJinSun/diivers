@@ -5,6 +5,7 @@ import { requestSignUp } from '@modules/user';
 import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import { CommonButton } from '@styles/buttons';
 import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
+import MoreAboutDiiversModal from '@common-components/more-about-diivers-modal/MoreAboutDiiversModal';
 import { openHTML } from '@utils/openHTML';
 import { CommonInput } from '@styles/inputs';
 import { WarningMessage } from '@styles/messages';
@@ -55,6 +56,9 @@ export default function SignUp() {
   const isSignUpSuccess =
     useSelector((state) => state.loadingReducer['user/SIGN_UP']) === 'SUCCESS';
   const { signUpError } = useSelector((state) => state.userReducer);
+
+  const [moreAboutDiiversModalOpen, setMoreAboutDiiversModalOpen] =
+    useState(false);
 
   useEffect(() => {
     if (!isSubmitted || !signUpError) return;
@@ -225,7 +229,10 @@ export default function SignUp() {
           에 동의합니다.
         </TermsCheckLabel>
         <SignUpButtonWrapper>
-          <MoreAboutDiiversButton type="button">
+          <MoreAboutDiiversButton
+            type="button"
+            onClick={() => setMoreAboutDiiversModalOpen(true)}
+          >
             다이버스에 대해 더 알아보기
           </MoreAboutDiiversButton>
           {isSignUpLoading ? (
@@ -252,6 +259,10 @@ export default function SignUp() {
         onConfirm={() => setIsProfileImageAlert(false)}
         onClose={setIsProfileImageAlert}
         isOpen={isProfileImageAlert}
+      />
+      <MoreAboutDiiversModal
+        open={moreAboutDiiversModalOpen}
+        handleClose={() => setMoreAboutDiiversModalOpen(false)}
       />
     </AuthenticationWithDescWrapper>
   );
