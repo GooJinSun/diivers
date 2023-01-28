@@ -16,7 +16,6 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
     """
     Serializer for auth and profile update
     """
-    profile_image = serializers.ImageField(required=False)
     url = serializers.HyperlinkedIdentityField(view_name='user-detail', read_only=True, lookup_field='username')
 
     class Meta:
