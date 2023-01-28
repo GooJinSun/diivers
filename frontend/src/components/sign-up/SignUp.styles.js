@@ -1,11 +1,25 @@
 import styled from 'styled-components';
 
-export const ButtonWrapper = styled.div`
-  width: 100%;
+export const TermsCheckLabel = styled.label`
+  display: block;
+`;
+
+export const MoreAboutDiiversButton = styled.button`
+  color: #f12c56;
+  background: none;
+  border: none;
+`;
+
+export const SignUpButtonWrapper = styled.div`
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
   align-items: center;
-  margin-top: -16px;
+  margin: 40px 0px 20px 0px;
+`;
+
+export const TermsAndPrivacyAnchor = styled.a`
+  cursor: pointer;
+  color: #f12c56;
 `;
 
 export const ProfileImageUploadWrapper = styled.div`

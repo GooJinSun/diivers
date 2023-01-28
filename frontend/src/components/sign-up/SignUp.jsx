@@ -3,22 +3,27 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
 import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
-import { CommonButton, AuthSubButton } from '@styles/buttons';
+import { CommonButton } from '@styles/buttons';
+import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
+import { openHTML } from '@utils/openHTML';
 import { CommonInput } from '@styles/inputs';
 import { WarningMessage } from '@styles/messages';
 import RemoveIcon from '@material-ui/icons/RemoveCircle';
-import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
+import { CircularProgress } from '@material-ui/core';
 import {
   AuthenticationWithDescWrapper,
   AuthenticationFormWrapper
 } from '@styles/wrappers';
 import {
-  ButtonWrapper,
   ProfileImageUploadWrapper,
   ProfileImageUploadButton,
   SelectedProfileWrapper,
   SelectedProfileImage,
-  DeleteButton
+  DeleteButton,
+  TermsCheckLabel,
+  MoreAboutDiiversButton,
+  SignUpButtonWrapper,
+  TermsAndPrivacyAnchor
 } from './SignUp.styles';
 
 export default function SignUp() {
@@ -36,21 +41,27 @@ export default function SignUp() {
     if (currentUser) history.push('/');
   }, [currentUser, history]);
 
-  const { signUpError } = useSelector((state) => state.userReducer);
+  const [termsCheckState, setTermsCheckState] = useState(false);
+  const [privacyCheckState, setPrivacyCheckState] = useState(false);
 
   const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [isUsernameValid, setIsUsernameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
-  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
 
-  const signUpSuccess =
+  const isSignUpLoading =
+    useSelector((state) => state.loadingReducer['user/SIGN_UP']) === 'REQUEST';
+
+  const isSignUpSuccess =
     useSelector((state) => state.loadingReducer['user/SIGN_UP']) === 'SUCCESS';
+  const { signUpError } = useSelector((state) => state.userReducer);
 
   useEffect(() => {
-    setIsSignUpSuccess(signUpSuccess);
-    if (signUpError && signUpError.username) setIsUsernameValid(false);
-    if (signUpError && signUpError.email) setIsEmailValid(false);
-  }, [signUpSuccess, signUpError]);
+    if (!isSubmitted || !signUpError) return;
+
+    if (signUpError.username) setIsUsernameValid(false);
+    if (signUpError.email) setIsEmailValid(false);
+  }, [isSubmitted, signUpError]);
 
   const [signUpInfo, setSignUpInfo] = useState({
     email: '',
@@ -62,10 +73,15 @@ export default function SignUp() {
   const isFilled =
     signUpInfo.username.length &&
     signUpInfo.password.length &&
-    signUpInfo.email.length;
+    signUpInfo.email.length &&
+    termsCheckState &&
+    privacyCheckState;
 
   const onInputChange = (e) => {
-    if (isSubmitted) setIsSubmitted(false);
+    setIsSubmitted(false);
+    setIsUsernameValid(true);
+    setIsEmailValid(true);
+
     const { name, value } = e.target;
     setSignUpInfo((prev) => ({ ...prev, [name]: value }));
   };
@@ -94,10 +110,7 @@ export default function SignUp() {
   };
 
   const onClickSubmitButton = () => {
-    setIsSignUpSuccess(false);
     setIsSubmitted(true);
-    setIsUsernameValid(true);
-    setIsEmailValid(true);
     dispatch(requestSignUp(createFormData()));
   };
 
@@ -107,17 +120,6 @@ export default function SignUp() {
     }
   };
 
-  const handleOnClickPrivacy = () => {
-    if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({
-          actionType: 'OPEN_BROWSER',
-          url: `${window.origin}/privacy.html`
-        })
-      );
-    } else window.location.href = './privacy.html';
-  };
-
   const handleClick = () => {
     profileImageFileInput.current.click();
   };
@@ -125,105 +127,124 @@ export default function SignUp() {
   return (
     <AuthenticationWithDescWrapper>
       <AuthenticationDesc />
-      {isSubmitted && isSignUpSuccess ? (
-        <div>이메일 인증 완료해주세요.</div>
-      ) : (
-        <AuthenticationFormWrapper>
-          <h1 id="signup-title">회원가입</h1>
-          <CommonInput
-            name="username"
-            id="username-input"
-            value={signUpInfo.username}
-            placeholder="닉네임"
-            onChange={onInputChange}
-            invalid={isSubmitted && !isUsernameValid}
+      <AuthenticationFormWrapper>
+        <h1 id="signup-title">회원가입</h1>
+        <CommonInput
+          name="username"
+          id="username-input"
+          value={signUpInfo.username}
+          placeholder="닉네임"
+          onChange={onInputChange}
+          invalid={isSubmitted && !isUsernameValid}
+        />
+        {isSubmitted && !isUsernameValid && (
+          <WarningMessage>닉네임이 유효하지 않습니다 :(</WarningMessage>
+        )}
+        <CommonInput
+          id="email-input"
+          name="email"
+          value={signUpInfo.email}
+          placeholder="이메일"
+          onChange={onInputChange}
+          invalid={isSubmitted && !isEmailValid}
+        />
+        {isSubmitted && !isEmailValid && (
+          <WarningMessage>이메일이 유효하지 않습니다 :(</WarningMessage>
+        )}
+        <CommonInput
+          name="password"
+          type="password"
+          id="password-input"
+          value={signUpInfo.password}
+          placeholder="비밀번호"
+          onChange={onInputChange}
+          onKeyDown={onKeySubmit}
+        />
+        <ProfileImageUploadWrapper>
+          <ProfileImageUploadButton onClick={handleClick}>
+            프로필 이미지 업로드
+          </ProfileImageUploadButton>
+          <input
+            type="file"
+            style={{ display: 'none' }}
+            name="profile-image"
+            accept="image/jpeg, image/png"
+            onChange={onImageChange}
+            ref={profileImageFileInput}
+            multiple={false}
           />
-          {isSubmitted && !isUsernameValid && (
-            <WarningMessage>닉네임이 유효하지 않습니다 :(</WarningMessage>
+          {!!profileImagePreview && (
+            <SelectedProfileWrapper>
+              미리보기
+              <SelectedProfileImage>
+                <img
+                  src={profileImagePreview}
+                  width={30}
+                  height={30}
+                  alt="profile"
+                />
+              </SelectedProfileImage>
+              <DeleteButton
+                onClick={() => {
+                  setSignUpInfo({
+                    ...signUpInfo,
+                    profileImage: ''
+                  });
+                  setProfileImagePreview(null);
+                }}
+              >
+                <RemoveIcon fontSize="small" />
+              </DeleteButton>
+            </SelectedProfileWrapper>
           )}
-          <CommonInput
-            id="email-input"
-            name="email"
-            value={signUpInfo.email}
-            placeholder="이메일"
-            onChange={onInputChange}
-            invalid={isSubmitted && !isEmailValid}
+        </ProfileImageUploadWrapper>
+        <TermsCheckLabel htmlFor="terms">
+          <input
+            type="checkbox"
+            checked={termsCheckState}
+            onChange={() => setTermsCheckState((prev) => !prev)}
+            id="terms"
           />
-          {isSubmitted && !isEmailValid && (
-            <WarningMessage>이메일이 유효하지 않습니다 :(</WarningMessage>
+          (필수){' '}
+          <TermsAndPrivacyAnchor onClick={() => openHTML('terms.html')}>
+            이용약관
+          </TermsAndPrivacyAnchor>
+          에 동의합니다.
+        </TermsCheckLabel>
+        <TermsCheckLabel htmlFor="privacy">
+          <input
+            type="checkbox"
+            checked={privacyCheckState}
+            onChange={() => setPrivacyCheckState((prev) => !prev)}
+            id="privacy"
+          />
+          (필수){' '}
+          <TermsAndPrivacyAnchor onClick={() => openHTML('privacy.html')}>
+            개인정보 수집 및 이용
+          </TermsAndPrivacyAnchor>
+          에 동의합니다.
+        </TermsCheckLabel>
+        <SignUpButtonWrapper>
+          <MoreAboutDiiversButton type="button">
+            다이버스에 대해 더 알아보기
+          </MoreAboutDiiversButton>
+          {isSignUpLoading ? (
+            <CircularProgress />
+          ) : (
+            <CommonButton
+              disabled={isSubmitted || !isFilled}
+              onClick={onClickSubmitButton}
+            >
+              회원가입
+            </CommonButton>
           )}
-          <CommonInput
-            name="password"
-            type="password"
-            id="password-input"
-            value={signUpInfo.password}
-            placeholder="비밀번호"
-            onChange={onInputChange}
-            onKeyDown={onKeySubmit}
-          />
-          <ProfileImageUploadWrapper>
-            <ProfileImageUploadButton onClick={handleClick}>
-              프로필 이미지 업로드
-            </ProfileImageUploadButton>
-            <input
-              type="file"
-              style={{ display: 'none' }}
-              name="profile-image"
-              accept="image/jpeg, image/png"
-              onChange={onImageChange}
-              ref={profileImageFileInput}
-              multiple={false}
-            />
-            {!!profileImagePreview && (
-              <SelectedProfileWrapper>
-                미리보기
-                <SelectedProfileImage>
-                  <img
-                    src={profileImagePreview}
-                    width={30}
-                    height={30}
-                    alt="profile"
-                  />
-                </SelectedProfileImage>
-                <DeleteButton
-                  onClick={() => {
-                    setSignUpInfo({
-                      ...signUpInfo,
-                      profileImage: ''
-                    });
-                    setProfileImagePreview(null);
-                  }}
-                >
-                  <RemoveIcon fontSize="small" />
-                </DeleteButton>
-              </SelectedProfileWrapper>
-            )}
-          </ProfileImageUploadWrapper>
-          <CommonButton
-            disabled={isSubmitted || !isFilled}
-            margin="40px 0"
-            onClick={onClickSubmitButton}
-          >
-            회원가입
-          </CommonButton>
-          <ButtonWrapper>
-            <AuthSubButton
-              type="button"
-              id="login-button"
-              onClick={() => history.push('/login')}
-            >
-              로그인
-            </AuthSubButton>
-            <AuthSubButton
-              type="button"
-              id="privacy-button"
-              onClick={handleOnClickPrivacy}
-            >
-              개인정보처리방침
-            </AuthSubButton>
-          </ButtonWrapper>
-        </AuthenticationFormWrapper>
-      )}
+          {isSubmitted && isSignUpSuccess && (
+            <WarningMessage>
+              * 이메일이 전송되었습니다. 인증 완료해 주세요!
+            </WarningMessage>
+          )}
+        </SignUpButtonWrapper>
+      </AuthenticationFormWrapper>
       <ConfirmAlertDialog
         message={
           '이미지의 크기가 너무 큽니다.\n400 * 400 이하 크기의 이미지를 사용해주세요'
