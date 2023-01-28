@@ -12,10 +12,6 @@ export const MobileTabPanel = styled(TabPanel)`
   }
 `;
 
-export const UserPageWrapper = styled.div`
-  width: 100%;
-`;
-
 export const UserPageContainer = styled.div`
   background: #ffffff;
   text-align: center;

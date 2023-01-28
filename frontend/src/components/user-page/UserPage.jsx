@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Tabs from '@material-ui/core/Tabs';
@@ -13,7 +12,7 @@ import FriendStatusButtons from '@common-components/friend-status-buttons/Friend
 import { getSelectedUserPosts, appendPosts } from '@modules/post';
 import Message from '@common-components/message/Message';
 import axios from '@utils/api';
-// import { PostListWrapper } from '@styles/wrappers';
+import { PostListWrapper } from '@styles/wrappers';
 import UserPostList from './user-post-list/UserPostList';
 import UserReportButton from './user-report-button/UserReportButton';
 import {
@@ -21,8 +20,7 @@ import {
   UserReportButtonWrapper,
   MobileWrapper,
   useStyles,
-  UserPageContainer,
-  UserPageWrapper
+  UserPageContainer
 } from './UserPage.styles';
 import { a11yProps } from './tab-panel/TabPanel';
 
@@ -146,7 +144,7 @@ export default function UserPage() {
       {getUserFailure ? (
         <Message message="존재하지 않는 사용자입니다 :(" />
       ) : (
-        <UserPageWrapper>
+        <PostListWrapper>
           <UserPageContainer
             style={{
               paddingTop: isMyPage ? 50 : 20
@@ -262,7 +260,7 @@ export default function UserPage() {
             />
             <div ref={setTarget} />
           </MobileTabPanel>
-        </UserPageWrapper>
+        </PostListWrapper>
       )}
     </MobileWrapper>
   );
