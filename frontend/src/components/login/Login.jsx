@@ -2,10 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestLogin } from '@modules/user';
-import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
 import { WarningMessage } from '@styles/messages';
+import {
+  AuthenticationWithDescWrapper,
+  AuthenticationFormWrapper
+} from '@styles/wrappers';
+import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
 
 export default function Login() {
   const history = useHistory();
@@ -27,7 +31,7 @@ export default function Login() {
     if (!currentUser) return;
     if (!currentUser.question_history) history.push('/select-questions');
     else history.push('/');
-  }, [currentUser]);
+  }, [currentUser, history]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,54 +57,57 @@ export default function Login() {
   };
 
   return (
-    <AuthentiCationWrapper>
-      <h1>로그인</h1>
-      <CommonInput
-        id="username-input"
-        name="username"
-        value={loginInfo.username}
-        placeholder="닉네임"
-        onChange={handleChange}
-        onKeyDown={onKeySubmit}
-      />
-      <CommonInput
-        id="password-input"
-        name="password"
-        value={loginInfo.password}
-        placeholder="비밀번호"
-        type="password"
-        onChange={handleChange}
-        onKeyDown={onKeySubmit}
-      />
-      {loginWarning && (
-        <WarningMessage id="login-error-message">
-          이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다.
-        </WarningMessage>
-      )}
-      <CommonButton
-        id="submit-button"
-        disabled={loginInfo.username === '' || loginInfo.password === ''}
-        margin="20px 0"
-        onClick={onClickSubmitButton}
-      >
-        로그인
-      </CommonButton>
-      <AuthSubButton
-        type="button"
-        id="signup-button"
-        margin="5px 0"
-        onClick={onClickLostPassword}
-      >
-        비밀번호를 잊어버렸어요
-      </AuthSubButton>
-      <AuthSubButton
-        type="button"
-        id="signup-button"
-        margin="40px 0"
-        onClick={onClickSignupButton}
-      >
-        회원가입
-      </AuthSubButton>
-    </AuthentiCationWrapper>
+    <AuthenticationWithDescWrapper>
+      <AuthenticationDesc />
+      <AuthenticationFormWrapper>
+        <h1>로그인</h1>
+        <CommonInput
+          id="username-input"
+          name="username"
+          value={loginInfo.username}
+          placeholder="닉네임"
+          onChange={handleChange}
+          onKeyDown={onKeySubmit}
+        />
+        <CommonInput
+          id="password-input"
+          name="password"
+          value={loginInfo.password}
+          placeholder="비밀번호"
+          type="password"
+          onChange={handleChange}
+          onKeyDown={onKeySubmit}
+        />
+        {loginWarning && (
+          <WarningMessage id="login-error-message">
+            이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다.
+          </WarningMessage>
+        )}
+        <CommonButton
+          id="submit-button"
+          disabled={loginInfo.username === '' || loginInfo.password === ''}
+          margin="20px 0"
+          onClick={onClickSubmitButton}
+        >
+          로그인
+        </CommonButton>
+        <AuthSubButton
+          type="button"
+          id="signup-button"
+          margin="5px 0"
+          onClick={onClickLostPassword}
+        >
+          비밀번호를 잊어버렸어요
+        </AuthSubButton>
+        <AuthSubButton
+          type="button"
+          id="signup-button"
+          margin="40px 0"
+          onClick={onClickSignupButton}
+        >
+          회원가입
+        </AuthSubButton>
+      </AuthenticationFormWrapper>
+    </AuthenticationWithDescWrapper>
   );
 }

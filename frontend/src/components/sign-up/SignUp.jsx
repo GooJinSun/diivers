@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
@@ -8,45 +7,19 @@ import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
 import { WarningMessage } from '@styles/messages';
 import RemoveIcon from '@material-ui/icons/RemoveCircle';
-import { SignUpWrapper, ButtonWrapper } from './SignUp.styles';
-
-const ProfileImageUploadWrapper = styled.div`
-  display: flex;
-  font-size: 16px;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 8px;
-`;
-
-const ProfileImageUploadButton = styled.button`
-  padding: 12px 11px;
-  border-radius: 4px;
-  color: #f12c56;
-  font-size: 16px;
-  border: 1px solid #f12c56;
-  background-color: #ffffff;
-`;
-
-const SelectedProfileWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #ddd;
-`;
-
-const SelectedProfileImage = styled.div`
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  border: 1px solid #ddd;
-  margin-left: 8px;
-  overflow: hidden;
-  margin-right: 4px;
-`;
-
-const DeleteButton = styled.div`
-  display: flex;
-`;
+import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
+import {
+  AuthenticationWithDescWrapper,
+  AuthenticationFormWrapper
+} from '@styles/wrappers';
+import {
+  ButtonWrapper,
+  ProfileImageUploadWrapper,
+  ProfileImageUploadButton,
+  SelectedProfileWrapper,
+  SelectedProfileImage,
+  DeleteButton
+} from './SignUp.styles';
 
 export default function SignUp() {
   const dispatch = useDispatch();
@@ -150,11 +123,12 @@ export default function SignUp() {
   };
 
   return (
-    <SignUpWrapper>
+    <AuthenticationWithDescWrapper>
+      <AuthenticationDesc />
       {isSubmitted && isSignUpSuccess ? (
         <div>이메일 인증 완료해주세요.</div>
       ) : (
-        <div>
+        <AuthenticationFormWrapper>
           <h1 id="signup-title">회원가입</h1>
           <CommonInput
             name="username"
@@ -248,7 +222,7 @@ export default function SignUp() {
               개인정보처리방침
             </AuthSubButton>
           </ButtonWrapper>
-        </div>
+        </AuthenticationFormWrapper>
       )}
       <ConfirmAlertDialog
         message={
@@ -258,6 +232,6 @@ export default function SignUp() {
         onClose={setIsProfileImageAlert}
         isOpen={isProfileImageAlert}
       />
-    </SignUpWrapper>
+    </AuthenticationWithDescWrapper>
   );
 }

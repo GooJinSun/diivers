@@ -3,7 +3,8 @@ import {
   MOBILE_MIN_WIDTH,
   DESKTOP_MIN_WIDTH,
   DEFAULT_MARGIN,
-  WIDGET_WIDTH
+  WIDGET_WIDTH,
+  AUTHENTICATION_MIN_WIDTH
 } from '@constants/layout';
 
 export const MainWrapper = styled.main`
@@ -12,6 +13,27 @@ export const MainWrapper = styled.main`
   justify-content: center;
   @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     margin: 80px 0px 100px 0px;
+  }
+`;
+
+export const AuthenticationFormWrapper = styled.div`
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 130px;
+
+  @media (max-width: ${AUTHENTICATION_MIN_WIDTH}px) {
+    width: 90%;
+    margin-top: 50px;
+  }
+`;
+
+export const AuthenticationWithDescWrapper = styled.div`
+  display: flex;
+  width: ${AUTHENTICATION_MIN_WIDTH}px;
+
+  @media (max-width: ${AUTHENTICATION_MIN_WIDTH}px) {
+    width: 100%;
+    flex-direction: column;
   }
 `;
 
