@@ -16,16 +16,9 @@ export default function Login() {
   const dispatch = useDispatch();
 
   const [loginInfo, setLoginInfo] = useState({ username: '', password: '' });
+
   const loginError = useSelector((state) => state.userReducer.loginError);
-  const [loginWarning, setLoginWarning] = useState(false);
-
   const currentUser = useSelector((state) => state.userReducer.currentUser);
-
-  useEffect(() => {
-    if (loginError) {
-      setLoginWarning(true);
-    }
-  }, [loginError]);
 
   useEffect(() => {
     if (!currentUser) return;
@@ -78,9 +71,10 @@ export default function Login() {
           onChange={handleChange}
           onKeyDown={onKeySubmit}
         />
-        {loginWarning && (
+        {loginError && (
           <WarningMessage id="login-error-message">
-            이메일 인증이 완료되지 않았거나 잘못된 회원 정보입니다.
+            {/* TODO: translation */}
+            {loginError.detail}
           </WarningMessage>
         )}
         <CommonButton
