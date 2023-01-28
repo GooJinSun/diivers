@@ -2,6 +2,7 @@ import React from 'react';
 import ListItemText from '@material-ui/core/ListItemText';
 import FaceIcon from '@material-ui/icons/Face';
 import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
+import { useHistory } from 'react-router';
 import { useStyles, FriendItemWrapper, FriendLink } from './FriendItem.styles';
 
 const FriendItem = ({
@@ -11,10 +12,16 @@ const FriendItem = ({
   isFriend,
   hasSentRequest,
   isPending,
-  onClickItem
+  onClickCallback
 }) => {
   const classes = useStyles();
   const { username } = friendObj;
+  const history = useHistory();
+
+  const onClickItem = () => {
+    history.push(`/users/${username}`);
+    onClickCallback?.();
+  };
 
   return (
     <FriendItemWrapper onClick={onClickItem}>
