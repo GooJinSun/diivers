@@ -70,7 +70,7 @@ export default function QuestionFeed() {
           />
         )}
       </>
-      <PostListWrapper style={{ marginTop: '45px' }}>
+      <PostListWrapper>
         <QuestionList
           questions={dailyQuestions}
           isAppending={isAppending}

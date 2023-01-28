@@ -65,7 +65,12 @@ export default function QuestionSelection() {
       <TitleWrapper id="question-selection-title">
         adoor는 매일 새로운 질문을 추천해드립니다!
         <br />
-        <div style={{ fontSize: '18px', fontWeight: 500 }}>
+        <div
+          style={{
+            fontSize: '18px',
+            fontWeight: 500
+          }}
+        >
           질문 추천을 위해 마음에 드는 질문을
           <span
             style={{ margin: '0 4px', fontWeight: 'bold', color: '#F12C56' }}

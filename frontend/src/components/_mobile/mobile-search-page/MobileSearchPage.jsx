@@ -7,7 +7,11 @@ import SearchIcon from '@material-ui/icons/Search';
 import useOnClickOutside from 'use-onclickoutside';
 import { fetchSearchResults } from '@modules/search';
 import SearchDropdownList from '@common-components/search-dropdown-list/SearchDropdownList';
-import { SearchTitle, SearchTextField } from './MobileSearchPage.styles';
+import {
+  SearchTitle,
+  SearchTextField,
+  MobileSearchWrapper
+} from './MobileSearchPage.styles';
 
 export default function MobileSearchPage() {
   const searchRef = useRef(null);
@@ -60,7 +64,7 @@ export default function MobileSearchPage() {
   };
 
   return (
-    <div>
+    <MobileSearchWrapper>
       <SearchTitle>사용자 검색</SearchTitle>
       <SearchTextField
         required
@@ -91,6 +95,6 @@ export default function MobileSearchPage() {
       <div ref={searchRef} style={{ marginTop: '12px' }}>
         {isSearchOpen && totalPages > 0 && <SearchDropdownList />}
       </div>
-    </div>
+    </MobileSearchWrapper>
   );
 }

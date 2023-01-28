@@ -2,32 +2,33 @@ import styled from 'styled-components';
 import {
   MOBILE_MIN_WIDTH,
   DESKTOP_MIN_WIDTH,
-  DEFAULT_MARGIN
+  DEFAULT_MARGIN,
+  WIDGET_WIDTH
 } from '@constants/layout';
 
-const WIDGET_WIDTH = 300;
-
 export const MainWrapper = styled.main`
-  margin: 80px 20px 100px 20px;
+  margin: 80px ${DEFAULT_MARGIN}px 100px ${DEFAULT_MARGIN}px;
   display: flex;
   justify-content: center;
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
+    margin: 80px 0px 100px 0px;
+  }
 `;
 
 export const AuthentiCationWrapper = styled.div`
-  width: 500px;
-  margin: 0 auto;
   margin-top: 120px;
+  width: 100%;
 `;
 
 export const FeedWrapper = styled.div`
   width: calc(100% - 2 * ${WIDGET_WIDTH}px);
   @media (max-width: ${DESKTOP_MIN_WIDTH}px) {
-    width: calc(100vw - 2 * ${DEFAULT_MARGIN}px);
+    width: calc(100% - 2 * ${DEFAULT_MARGIN}px);
   }
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 1000px;
+  max-width: 800px;
 `;
 
 export const WidgetWrapper = styled.div`
@@ -72,13 +73,14 @@ export const PostItemWrapper = styled.div`
   padding: 16px;
   font-size: 14px;
   border: 1px solid #eee;
-  margin: 16px 0;
+  margin-bottom: 16px;
   position: relative;
   border-radius: 4px;
 `;
 
 export const PostListWrapper = styled.div`
   width: 100%;
+  max-width: 800px;
 `;
 
 export const FlexWrapper = styled.div`

@@ -1,12 +1,6 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles((theme) => ({
-  switch: {
-    marginRight: theme.spacing(1)
-  },
-  switchLabel: {
-    marginTop: '-4px'
-  },
   header: {
     backgroundColor: 'white',
     boxShadow:

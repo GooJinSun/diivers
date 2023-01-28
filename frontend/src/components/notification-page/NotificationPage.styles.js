@@ -9,7 +9,8 @@ export const ButtonWrapper = styled.div`
 export const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
+    width: '100%'
   },
   header: {
     backgroundColor: 'white',

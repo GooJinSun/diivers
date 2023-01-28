@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { MOBILE_MIN_WIDTH } from '@constants/layout';
 
 export const NewQuestionButton = styled.button`
-  @media (min-width: 650px) {
+  @media (min-width: ${MOBILE_MIN_WIDTH}px) {
     display: none;
   }
   border: 1px solid #f12c56;
@@ -12,4 +13,5 @@ export const NewQuestionButton = styled.button`
   font-weight: bold;
   background: white;
   float: right;
+  margin-bottom: 16px;
 `;

@@ -12,13 +12,14 @@ export const MobileTabPanel = styled(TabPanel)`
   }
 `;
 
-export const UserPageWrapper = styled.div`
+export const UserPageContainer = styled.div`
   background: #ffffff;
   text-align: center;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 export const UserReportButtonWrapper = styled.div`
@@ -31,11 +32,11 @@ export const MobileWrapper = styled.div`
   @media (max-width: 650px) {
     border: none !important;
   }
+  width: 100%;
 `;
 
 export const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     border: '1px solid #e7e7e7',
     borderRadius: '4px'

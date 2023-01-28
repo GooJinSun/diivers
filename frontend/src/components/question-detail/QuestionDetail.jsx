@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -15,6 +14,7 @@ import PostItem from '@common-components/post-item/PostItem';
 import QuestionItem from '@common-components/question-item/QuestionItem';
 import Message from '@common-components/message/Message';
 import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
+import { PostListWrapper } from '@styles/wrappers';
 import { useStyles } from './QuestionDetail.styles';
 
 const QuestionDetail = (props) => {
@@ -117,7 +117,7 @@ const QuestionDetail = (props) => {
   );
 
   return (
-    <div>
+    <PostListWrapper>
       {isLoading ? (
         <LoadingList />
       ) : question ? (
@@ -127,19 +127,18 @@ const QuestionDetail = (props) => {
             questionId={questionId}
             onResetContent={() => resetTabs()}
           />
-          <AppBar position="static" className={classes.header}>
-            <Tabs
-              value={tab}
-              onChange={handleTabChange}
-              aria-label="notification-tabs"
-              indicatorColor="primary"
-              textColor="primary"
-            >
-              <Tab label="전체" {...a11yProps(0)} />
-              <Tab label="친구" {...a11yProps(1)} />
-              <Tab label="익명" {...a11yProps(2)} />
-            </Tabs>
-          </AppBar>
+          <Tabs
+            value={tab}
+            onChange={handleTabChange}
+            aria-label="notification-tabs"
+            indicatorColor="primary"
+            textColor="primary"
+            className={classes.header}
+          >
+            <Tab label="전체" {...a11yProps(0)} />
+            <Tab label="친구" {...a11yProps(1)} />
+            <Tab label="익명" {...a11yProps(2)} />
+          </Tabs>
           {responses?.length !== 0 ? (
             <>
               <TabPanel value={tab} index={0} className={classes.tabPanel}>
@@ -159,7 +158,7 @@ const QuestionDetail = (props) => {
       ) : (
         <Message message="존재하지 않는 질문입니다" />
       )}
-    </div>
+    </PostListWrapper>
   );
 };
 
