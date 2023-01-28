@@ -74,6 +74,8 @@ export default function SignUp() {
     profileImage: ''
   });
 
+  const [additionalUserInfo, setAdditionalUserInfo] = useState();
+
   const isFilled =
     signUpInfo.username.length &&
     signUpInfo.password.length &&
@@ -110,12 +112,21 @@ export default function SignUp() {
     formData.append('username', username);
     formData.append('password', password);
 
+    if (!additionalUserInfo) return;
+    const { gender, date_of_birth, ethnicity, research_agreement } =
+      additionalUserInfo;
+    if (gender) formData.append('gender', gender);
+    if (date_of_birth) formData.append('date_of_birth', date_of_birth);
+    if (ethnicity) formData.append('ethnicity', ethnicity);
+    if (research_agreement)
+      formData.append('research_agreement', research_agreement);
     return formData;
   };
 
   const onClickSubmitButton = () => {
     setIsSubmitted(true);
     dispatch(requestSignUp(createFormData()));
+    dispatch(requestSignUp({ ...signUpInfo, ...additionalUserInfo }));
   };
 
   const onKeySubmit = (e) => {
@@ -234,6 +245,9 @@ export default function SignUp() {
             onClick={() => setMoreAboutDiiversModalOpen(true)}
           >
             다이버스에 대해 더 알아보기
+            {additionalUserInfo?.research_agreement && (
+              <WarningMessage>(연구 참여 동의 완료)</WarningMessage>
+            )}
           </MoreAboutDiiversButton>
           {isSignUpLoading ? (
             <CircularProgress />
@@ -263,6 +277,7 @@ export default function SignUp() {
       <MoreAboutDiiversModal
         open={moreAboutDiiversModalOpen}
         handleClose={() => setMoreAboutDiiversModalOpen(false)}
+        setAdditionalUserInfo={setAdditionalUserInfo}
       />
     </AuthenticationWithDescWrapper>
   );
