@@ -154,7 +154,7 @@ export default function SignUp() {
         />
         {isSubmitted && !isUsernameValid && (
           // TODO: translation
-          <WarningMessage>{signUpError}</WarningMessage>
+          <WarningMessage>{signUpError.detail}</WarningMessage>
         )}
         <CommonInput
           id="email-input"
@@ -166,7 +166,7 @@ export default function SignUp() {
         />
         {isSubmitted && !isEmailValid && (
           // TODO: translation
-          <WarningMessage>{signUpError}</WarningMessage>
+          <WarningMessage>{signUpError.detail}</WarningMessage>
         )}
         <CommonInput
           name="password"
