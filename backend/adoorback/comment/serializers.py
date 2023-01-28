@@ -43,7 +43,9 @@ class CommentFriendSerializer(CommentBaseSerializer):
 
     def get_replies(self, obj):
         current_user = self.context.get('request', None).user
-        if obj.target.type != 'Comment' and obj.target.author == current_user:
+        if obj.target.type == 'Comment':
+            replies = Comment.objects.none()
+        elif obj.target.author == current_user or obj.author == current_user:
             replies = obj.replies.order_by('id')
         else:
             replies = obj.replies.filter(is_anonymous=False, is_private=False) | \
