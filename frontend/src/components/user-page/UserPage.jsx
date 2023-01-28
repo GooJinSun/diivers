@@ -14,6 +14,7 @@ import Message from '@common-components/message/Message';
 import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import axios from '@utils/api';
 import { PostListWrapper } from '@styles/wrappers';
+import EditIcon from '@material-ui/icons/Edit';
 import UserPostList from './user-post-list/UserPostList';
 import UserReportButton from './user-report-button/UserReportButton';
 import {
@@ -203,14 +204,11 @@ export default function UserPage() {
                 />
               </UserReportButtonWrapper>
             )}
-            <label htmlFor="profile-image" style={{ cursor: 'pointer' }}>
-              <input
-                id="profile-image"
-                type="file"
-                accept="image/jpeg, image/png"
-                onChange={onImageChange}
-                style={{ display: 'none' }}
-              />
+            <div
+              style={{
+                display: 'flex'
+              }}
+            >
               <UserProfileItem
                 profileImageUrl={
                   isMyPage
@@ -218,10 +216,26 @@ export default function UserPage() {
                     : selectedUser?.profile_image
                 }
                 profileIconColor={selectedUser?.profile_pic}
-                width={24}
-                height={24}
               />
-            </label>
+              <label
+                htmlFor="profile-image"
+                style={{
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'flex-end',
+                  fontSize: 15
+                }}
+              >
+                <input
+                  id="profile-image"
+                  type="file"
+                  accept="image/jpeg, image/png"
+                  onChange={onImageChange}
+                  style={{ display: 'none' }}
+                />
+                <EditIcon fontSize="inherit" color="secondary" />
+              </label>
+            </div>
             <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
             <div>
               {selectedUser && (

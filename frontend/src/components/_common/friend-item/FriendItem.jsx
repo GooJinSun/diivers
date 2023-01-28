@@ -1,8 +1,8 @@
 import React from 'react';
 import ListItemText from '@material-ui/core/ListItemText';
-import FaceIcon from '@material-ui/icons/Face';
 import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
 import { useHistory } from 'react-router';
+import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
 import { useStyles, FriendItemWrapper, FriendLink } from './FriendItem.styles';
 
 const FriendItem = ({
@@ -15,7 +15,7 @@ const FriendItem = ({
   onClickCallback
 }) => {
   const classes = useStyles();
-  const { username } = friendObj;
+  const { username, profile_image, profile_pic } = friendObj;
   const history = useHistory();
 
   const onClickItem = () => {
@@ -26,7 +26,10 @@ const FriendItem = ({
   return (
     <FriendItemWrapper onClick={onClickItem}>
       <FriendLink onClick={onClickItem}>
-        <FaceIcon />
+        <UserProfileItem
+          profileImageUrl={profile_image}
+          profileIconColor={profile_pic}
+        />
         <ListItemText
           classes={{ primary: classes.username }}
           primary={message || username}

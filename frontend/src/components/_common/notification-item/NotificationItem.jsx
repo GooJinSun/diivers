@@ -2,8 +2,8 @@ import React from 'react';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItem from '@material-ui/core/ListItem';
 import { useHistory } from 'react-router-dom';
-import FaceIcon from '@material-ui/icons/Face';
 import { getCreatedTime } from '@utils/dateTimeHelpers';
+import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
 import {
   useStyles,
   MessageWrapper,
@@ -31,14 +31,9 @@ const NotificationItem = ({ notiObj, isNotificationPage }) => {
     >
       <MessageWrapper>
         {actor_detail?.id ? (
-          <FaceIcon
-            style={{
-              color: actor_detail.profile_pic,
-              marginRight: '4px',
-              opacity: 0.8,
-              top: '2px',
-              position: 'relative'
-            }}
+          <UserProfileItem
+            profileImageUrl={actor_detail.profile_image}
+            profileIconColor={actor_detail.profile_pic}
           />
         ) : (
           <AnonIcon hex={actor_detail?.color_hex} />

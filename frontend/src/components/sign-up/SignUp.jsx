@@ -7,6 +7,7 @@ import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmA
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
 import { WarningMessage } from '@styles/messages';
+import RemoveIcon from '@material-ui/icons/RemoveCircle';
 import { SignUpWrapper, ButtonWrapper } from './SignUp.styles';
 
 const ProfileImageUploadWrapper = styled.div`
@@ -40,6 +41,11 @@ const SelectedProfileImage = styled.div`
   border: 1px solid #ddd;
   margin-left: 8px;
   overflow: hidden;
+  margin-right: 4px;
+`;
+
+const DeleteButton = styled.div`
+  display: flex;
 `;
 
 export default function SignUp() {
@@ -205,6 +211,17 @@ export default function SignUp() {
                     alt="profile"
                   />
                 </SelectedProfileImage>
+                <DeleteButton
+                  onClick={() => {
+                    setSignUpInfo({
+                      ...signUpInfo,
+                      profileImage: ''
+                    });
+                    setProfileImagePreview(null);
+                  }}
+                >
+                  <RemoveIcon fontSize="small" />
+                </DeleteButton>
               </SelectedProfileWrapper>
             )}
           </ProfileImageUploadWrapper>
