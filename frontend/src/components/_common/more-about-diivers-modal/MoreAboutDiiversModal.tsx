@@ -18,6 +18,7 @@ import {
 import { CommonButton } from '@styles/buttons';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { formatDate } from '@utils/dateTimeHelpers';
+import useWindowWidth from '@hooks/env/useWindowWidth';
 import { useStyles } from './MoreAboutDiivers.styles';
 
 interface AdditionalInfo {
@@ -76,8 +77,15 @@ const MoreAboutDiiversModal = ({
     handleClose();
   };
 
+  const { isMobile } = useWindowWidth();
+
   return (
-    <Dialog fullWidth open={open} onClose={handleClose}>
+    <Dialog
+      fullWidth={!isMobile}
+      fullScreen={isMobile}
+      open={open}
+      onClose={handleClose}
+    >
       <DialogTitle>
         다이버스에 대해 더 알아보기
         <IconButton
