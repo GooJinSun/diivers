@@ -255,20 +255,6 @@ def create_request_answered_noti(instance, created, **kwargs):
 
 
 @transaction.atomic
-@receiver(post_save, sender=Response)
-def delete_response_request(instance, created, **kwargs):
-    if not created:
-        return
-
-    try:
-        response_requests = ResponseRequest.objects.filter(requestee_id=instance.author.id,
-                                                           question=instance.question)
-    except ResponseRequest.DoesNotExist:
-        return
-    response_requests.delete()
-
-
-@transaction.atomic
 @receiver(pre_delete, sender=Question)
 def protect_question_noti(instance, **kwargs):
     # response request에 대한 response 보냈을 때 발생하는 노티, like/comment로 발생하는 노티 모두 보호
