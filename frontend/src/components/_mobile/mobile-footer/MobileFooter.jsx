@@ -62,7 +62,7 @@ export default function MobileFooter({ notiBadgeInvisible }) {
       />
       <SmallFontBottomNavAction
         value="/questions"
-        label={t('today_question')}
+        label={t('daily_questions')}
         icon={<LiveHelpIcon />}
         className={`${classes.icon} link`}
         style={{ padding: '6px 4px', fontSize: '0.7rem' }}
