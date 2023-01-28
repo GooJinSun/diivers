@@ -26,11 +26,11 @@ GENDER_CHOICES = (
 )
 
 ETHNICITY_CHOICES = (
-    (0, _('미국 원주민/알래스카 원주민 (American Indian/Alaska Native')),
+    (0, _('미국 원주민/알래스카 원주민 (American Indian/Alaska Native)')),
     (1, _('아시아인 (Asian)')),
     (2, _('흑인/아프리카계 미국인 (Black/African American)')),
     (3, _('히스패닉/라틴계 미국인 (Hispanic/Latino)')),
-    (4, _('하와이 원주민/다른 태평양 섬 주민 (Native Hawaiian/Other Pacific Islander')),
+    (4, _('하와이 원주민/다른 태평양 섬 주민 (Native Hawaiian/Other Pacific Islander)')),
     (5, _('백인 (White)')),
 )
 
