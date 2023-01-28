@@ -1,11 +1,7 @@
 import styled from 'styled-components';
-import { DESKTOP_MIN_WIDTH } from '@constants/layout';
 
 export const QuestionsWrapper = styled.div`
   margin: 30px auto;
-  @media (min-width: ${DESKTOP_MIN_WIDTH}px) {
-    width: 600px;
-  }
 `;
 
 export const TitleWrapper = styled.div`
