@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +32,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const notiDropDownRef = useRef(null);
+  const notiIconRef = useRef(null);
   const searchRef = useRef(null);
 
   const [t] = useTranslation('translation', { keyPrefix: 'header' });
@@ -61,7 +62,7 @@ const Header = () => {
     setIsSearchOpen(false);
   };
 
-  useOnClickOutside(notiDropDownRef, handleNotiClose);
+  useOnClickOutside(notiDropDownRef && notiIconRef, handleNotiClose);
   useOnClickOutside(searchRef, handleSearchClose);
 
   const handleClickLogout = () => {
@@ -116,7 +117,7 @@ const Header = () => {
 
   const { isMobile, isDesktopMin } = useWindowWidth();
 
-  const renderHeaderSignedInItems = () => {
+  const renderHeaderSignedInItems = useCallback(() => {
     // 데스크톱 최소 화면 width 대응
     if (!isMobile && isDesktopMin) {
       return (
@@ -127,6 +128,7 @@ const Header = () => {
           <div className={classes.right}>
             <IconButton
               aria-label="show new notifications"
+              ref={notiIconRef}
               className={`${classes.iconButton} noti-button`}
               onClick={(e) => {
                 e.stopPropagation();
@@ -217,6 +219,7 @@ const Header = () => {
           <IconButton
             aria-label="show new notifications"
             className={`${classes.iconButton} noti-button`}
+            ref={notiIconRef}
             onClick={(e) => {
               e.stopPropagation();
               toggleNotiOpen();
@@ -273,7 +276,17 @@ const Header = () => {
         </div>
       </>
     );
-  };
+  }, [
+    currentUser,
+    handleClickLogout,
+    isDesktopMin,
+    isDrawerOpen,
+    isMobile,
+    notiBadgeInvisible,
+    onKeySubmit,
+    query,
+    toggleNotiOpen
+  ]);
 
   return (
     <>
@@ -304,11 +317,12 @@ const Header = () => {
           </Toolbar>
         </AppBar>
       </div>
-      <div ref={notiDropDownRef}>
-        {isNotiOpen && (
-          <NotificationDropdownList setIsNotiOpen={setIsNotiOpen} />
-        )}
-      </div>
+      {isNotiOpen && (
+        <NotificationDropdownList
+          setIsNotiOpen={setIsNotiOpen}
+          ref={notiDropDownRef}
+        />
+      )}
       <div ref={searchRef}>
         {isSearchOpen && (
           <SearchDropdownList setIsSearchOpen={setIsSearchOpen} />
@@ -317,4 +331,5 @@ const Header = () => {
     </>
   );
 };
+
 export default Header;
