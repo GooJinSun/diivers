@@ -63,6 +63,10 @@ class UserSignup(generics.CreateAPIView):
         return adoor_exception_handler
 
     def create(self, request, *args, **kwargs):
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
+
         serializer = self.get_serializer(data=request.data)
 
         try:
