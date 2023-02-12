@@ -1,17 +1,16 @@
 from django.urls import path
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 
 from account import views
 
 urlpatterns = [
     # Token related
-    path('token/', ensure_csrf_cookie(TokenObtainPairView.as_view()), name='token-obtain-pair'),
+    path('token/', ensure_csrf_cookie(views.CustomTokenObtainPairView.as_view()), name='token-obtain-pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token-verify'),
 
     # Auth related
-    path('login/', views.user_login, name='user-login'),
     path('signup/', views.UserSignup.as_view(), name='user-signup'),
     path('activate/<int:pk>/<str:token>/', views.UserActivate.as_view(), name='user-activate'),
     path('select-questions/', views.SignupQuestions.as_view(),
