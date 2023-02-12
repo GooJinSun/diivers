@@ -6,5 +6,5 @@ export const openHTML = (html: string) => {
         url: `${window.origin}/${html}`
       })
     );
-  } else window.location.href = `./${html}`;
+  } else window.open(`./${html}`);
 };
