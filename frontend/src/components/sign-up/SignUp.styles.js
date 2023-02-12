@@ -4,12 +4,6 @@ export const TermsCheckLabel = styled.label`
   display: block;
 `;
 
-export const MoreAboutDiiversButton = styled.button`
-  color: #f12c56;
-  background: none;
-  border: none;
-`;
-
 export const SignUpButtonWrapper = styled.div`
   display: flex;
   flex-direction: column;

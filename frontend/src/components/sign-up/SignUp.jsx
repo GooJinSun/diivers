@@ -22,7 +22,6 @@ import {
   SelectedProfileImage,
   DeleteButton,
   TermsCheckLabel,
-  MoreAboutDiiversButton,
   SignUpButtonWrapper,
   TermsAndPrivacyAnchor
 } from './SignUp.styles';
@@ -249,7 +248,7 @@ export default function SignUp() {
           에 동의합니다.
         </TermsCheckLabel>
         <SignUpButtonWrapper>
-          <MoreAboutDiiversButton
+          <CommonButton
             type="button"
             onClick={() => setMoreAboutDiiversModalOpen(true)}
           >
@@ -257,7 +256,7 @@ export default function SignUp() {
             {additionalUserInfo?.research_agreement && (
               <WarningMessage>(연구 참여 동의 완료)</WarningMessage>
             )}
-          </MoreAboutDiiversButton>
+          </CommonButton>
           {isSignUpLoading ? (
             <CircularProgress />
           ) : (
