@@ -5,7 +5,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
-from django.utils.translation import gettext as _
 
 from adoorback.utils.content_types import get_comment_type
 from adoorback.models import AdoorTimestampedModel
@@ -69,21 +68,25 @@ def create_like_noti(instance, **kwargs):
 
     if actor.id in user.user_report_blocked_ids: # do not create notification from/for blocked user
         return
-    actor_name = _('익명의 사용자가') if instance.is_anonymous else _(f'{actor.username}님이')
+    actor_name_ko = '익명의 사용자가' if instance.is_anonymous else f'{actor.username}님이'
+    actor_name_en = 'An anonymous user' if instance.is_anonymous else f'{actor.username}'
     content_preview = wrap_content(origin)
 
     if origin.type == 'Comment' and origin.target.type == 'Comment':  # if is reply
-        message = _(f'{actor_name} 회원님의 댓글을 좋아합니다: "{content_preview}"')
+        message_ko = f'{actor_name_ko} 회원님의 댓글을 좋아합니다: "{content_preview}"'
+        message_en = f'{actor_name_en} likes your comment: "{content_preview}"'
         redirect_url = f'/{origin.target.target.type.lower()}s/' \
                        f'{origin.target.target.id}?anonymous={instance.is_anonymous}'
     elif origin.type == 'Comment':  # if is comment
-        message = _(f'{actor_name} 회원님의 댓글을 좋아합니다: "{content_preview}"')
+        message_ko = f'{actor_name_ko} 회원님의 댓글을 좋아합니다: "{content_preview}"'
+        message_en = f'{actor_name_en} likes your comment: "{content_preview}"'
         redirect_url = f'/{origin.target.type.lower()}s/' \
                        f'{origin.target.id}?anonymous={instance.is_anonymous}'
     else:  # if is post
-        message = _(f'{actor_name} 회원님의 게시글을 좋아합니다: "{content_preview}"')
+        message_ko = f'{actor_name_ko} 회원님의 게시글을 좋아합니다: "{content_preview}"'
+        message_en = f'{actor_name_en} liked your post: "{content_preview}"'
         redirect_url = f'/{origin.type.lower()}s/{origin.id}?anonymous={instance.is_anonymous}'
 
     Notification.objects.create(actor=actor, user=user,
                                 origin=origin, target=target,
-                                message=message, redirect_url=redirect_url)
+                                message_ko=message_ko, message_en=message_en, redirect_url=redirect_url)

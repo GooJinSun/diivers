@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     'comment.apps.CommentConfig',
     'notification.apps.NotificationConfig',
     'account.apps.AccountConfig',
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -180,9 +181,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ko'
 
+gettext = lambda s: s
 LANGUAGES = (
-   ('en', _('영어')),
-   ('ko', _('한국어')),
+   ('ko', gettext('한국어')),  # default language
+   ('en', gettext('영어')),
 )
 
 TIME_ZONE = 'Asia/Seoul'

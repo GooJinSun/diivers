@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-11 22:25+0900\n"
+"POT-Creation-Date: 2023-02-12 17:00+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,90 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: account/models.py:135
-#, python-brace-format
-msgid "{requester.username}님이 친구 요청을 보냈습니다."
-msgstr "{requester.username} has requested to be your friend."
-
-#: account/models.py:141
-#, python-brace-format
-msgid "{requester.username}님과 친구가 되었습니다."
-msgstr "You are now friends with {requester.username}."
-
-#: account/models.py:145
-#, python-brace-format
-msgid "{requestee.username}님과 친구가 되었습니다."
-msgstr "You are now friends with {requestee.username}."
-
-#: account/views.py:63
-#, python-brace-format
-msgid "{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?"
-msgstr ""
-"Welcome {obj.username}! :) Start with looking around the anonymous feed."
-
-#: account/views.py:210
-#, python-brace-format
-msgid ""
-"{obj.username}님, 질문 선택을 완료해주셨네요 :) 그럼 오늘의 질문들을 둘러보"
-"러 가볼까요?"
-msgstr ""
-"Nice job selecting your questions {obj.username} :) How about looking around "
-"today's questions?"
-
 #: adoorback/settings/base.py:180
-msgid "영어"
-msgstr "English"
-
-#: adoorback/settings/base.py:181
 msgid "한국어"
 msgstr "Korean"
 
-#: adoorback/utils/validators.py:16
-#, python-format
-msgid "%(message)s is not a valid message"
-msgstr "%(message)s는 유효한 메시지가 아닙니다"
-
-#: comment/models.py:74 like/models.py:72
-msgid "익명의 사용자가"
-msgstr "An anonymous user"
-
-#: comment/models.py:78
-#, python-brace-format
-msgid "{actor_name} 회원님의 댓글에 답글을 남겼습니다: \"{content_preview}\""
-msgstr "{actor_name} has replied to your comment: \"{content_preview}\""
-
-#: comment/models.py:82
-#, python-brace-format
-msgid ""
-"{actor_name} 회원님의 {origin_target_name}에 댓글을 남겼습니다: "
-"\"{content_preview}\""
-msgstr "{actor_name} has commented on your {origin_target_name}: \"{content_preview}\""
-
-#: feed/models.py:226
-#, python-brace-format
-msgid "똑똑똑~ {requester.username}님으로부터 질문이 왔어요!"
-msgstr "Knock knock~ {requester.username} has sent you a question!"
-
-#: feed/models.py:252
-#, python-brace-format
-msgid "{actor.username}님이 회원님이 보낸 질문에 답했습니다."
-msgstr "{actor.username} has responded to your question."
-
-#: like/models.py:72
-#, python-brace-format
-msgid "{actor.username}님이"
-msgstr "{actor.username}"
-
-#: like/models.py:76 like/models.py:80
-#, python-brace-format
-msgid "{actor_name} 회원님의 댓글을 좋아합니다: \"{content_preview}\""
-msgstr "{actor_name} likes your comment: \"{content_preview}\""
-
-#: like/models.py:84
-#, python-brace-format
-msgid "{actor_name} 회원님의 게시글을 좋아합니다: \"{content_preview}\""
-msgstr "{actor_name} liked your post: \"{content_preview}\""
-
-#: notification/serializers.py:30
-msgid "익명의 사용자가 회원님의"
-msgstr "An anonymous user"
+#: adoorback/settings/base.py:181
+msgid "영어"
+msgstr "English"
