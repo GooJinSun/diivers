@@ -40,9 +40,9 @@ const MoreAboutDiiversModal = ({
 }: MoreAboutDiiversModalProps) => {
   const classes = useStyles();
 
-  const [gender, setGender] = useState<number>();
-  const [birthDate, setBirthDate] = useState<string>();
-  const [ethnicity, setEthnicity] = useState<number>();
+  const [gender, setGender] = useState<AdditionalInfo['gender']>();
+  const [birthDate, setBirthDate] = useState<AdditionalInfo['date_of_birth']>();
+  const [ethnicity, setEthnicity] = useState<AdditionalInfo['ethnicity']>();
 
   const onChangeGender = (e: ChangeEvent<{ value: unknown }>) => {
     setGender(Number(e.target.value));
