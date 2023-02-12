@@ -313,7 +313,7 @@ class NotificationAPITestCase(APITestCase):
         message_en = f'{actor} commented on your {origin.type}'
 
         for _ in range(5):
-            Notification.objects.create(actor=actor, user=current_user, message_ko=message_ko, message_en=message_en
+            Notification.objects.create(actor=actor, user=current_user, message_ko=message_ko, message_en=message_en,
                                         origin=origin, target=target, is_read=False, is_visible=True)
 
         # update single notification - wrong body
