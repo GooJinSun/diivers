@@ -62,7 +62,7 @@
     "email_authentication_is_completed": "Email authentication is complete.",
     "invalid_link": "Invalid link.",
     "go_to_login": "Go to Login",
-    "login": "Login",
+    "login_and_tour_diivers": "Log in and tour the Divers",
     "sign_up":"Sign Up"
   },
   "lost_password": {

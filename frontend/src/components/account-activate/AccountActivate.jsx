@@ -44,7 +44,7 @@ export default function AccountActivate() {
               {t('email_authentication_is_completed')}
             </ActivateDesc>
             <CommonButton width={800} onClick={onClickLogin}>
-              {t('go_to_login')}
+              {t('login_and_tour_diivers')}
             </CommonButton>
           </>
         ) : (
