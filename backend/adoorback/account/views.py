@@ -2,26 +2,30 @@ import json
 # import sentry_sdk
 
 from django.apps import apps
-from django.contrib.auth import get_user_model, authenticate, login
+from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.utils import translation
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import generics
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework import status
+from rest_framework_simplejwt.views import TokenViewBase
 
 from account.models import FriendRequest
 from account.serializers import UserProfileSerializer, \
     UserFriendRequestCreateSerializer, UserFriendRequestUpdateSerializer, \
-    UserFriendshipStatusSerializer, AuthorFriendSerializer
+    UserFriendshipStatusSerializer, AuthorFriendSerializer, CustomTokenObtainPairSerializer
+
 from feed.serializers import QuestionAnonymousSerializer
 from feed.models import Question
 from adoorback.utils.validators import adoor_exception_handler
 from.email import email_manager
 from adoorback.utils.permissions import IsNotBlocked
 from rest_framework.parsers import MultiPartParser, FormParser
+from adoorback.utils.exceptions import ExistingUsername, LongUsername, InvalidUsername, ExistingEmail, InvalidEmail, InActiveUser
 
 User = get_user_model()
 
@@ -34,6 +38,23 @@ def token_anonymous(request):
         return HttpResponseNotAllowed(['GET'])
 
 
+class CustomTokenObtainPairView(TokenViewBase):
+    """
+    https://github.com/jazzband/djangorestframework-simplejwt/issues/368#issuecomment-778686307
+    Takes a set of user credentials and returns an access and refresh JSON web
+    token pair to prove the authentication of those credentials.
+
+    Returns HTTP 406 when user is inactive and HTTP 401 when login credentials are invalid.
+    """
+    serializer_class = CustomTokenObtainPairSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)
+
+
 class UserSignup(generics.CreateAPIView):
     serializer_class = UserProfileSerializer
     parser_classes = (MultiPartParser, FormParser)
@@ -43,7 +64,27 @@ class UserSignup(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except ValidationError as e:
+            if 'username' in e.detail:
+                if 'unique' in e.get_codes()['username']:
+                    user = User.objects.get(username=request.data['username'])
+                    if not user.is_active:
+                        raise InActiveUser()
+                    raise ExistingUsername()
+                if 'invalid' in e.get_codes()['username']:
+                    raise InvalidUsername()
+                if 'max_length' in e.get_codes()['username']:
+                    raise LongUsername()
+            if 'email' in e.detail:
+                if 'unique' in e.get_codes()['email']:
+                    raise ExistingEmail()
+                if 'invalid' in e.get_codes()['email']:
+                    raise InvalidEmail()
+            raise e
+
         self.perform_create(serializer)
 
         if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
@@ -91,26 +132,6 @@ class UserActivate(generics.UpdateAPIView):
     def activate(self, user):
         user.is_active = True
         user.save()
-
-
-@transaction.atomic
-def user_login(request):
-    if request.method == "POST":
-        try:
-            req_data = json.loads(request.body)
-            username = str(req_data['username'])
-            password = str(req_data['password'])
-        except (KeyError, TypeError, json.JSONDecodeError) as e:
-            # sentry_sdk.capture_exception(e)
-            return HttpResponseBadRequest()
-
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return HttpResponse(status=204)
-        return HttpResponse(status=401)
-
-    return HttpResponseNotAllowed(['POST'])
 
 
 class SendResetPasswordEmail(generics.CreateAPIView):
