@@ -2,6 +2,7 @@
 Define Models for account APIs
 """
 import secrets
+import os
 
 from django.apps import apps
 from django.contrib.auth import get_user_model
@@ -10,12 +11,20 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models, transaction
 from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
 
 from adoorback.models import AdoorTimestampedModel
 
+class OverwriteStorage(FileSystemStorage):
+    def get_available_name(self, name, max_length=None):
+        if self.exists(name):
+            os.remove(os.path.join(settings.MEDIA_ROOT, name))
+        return name
+
 
 def to_profile_images(instance, filename):
-    return 'profile_images/{filename}'.format(filename=filename)
+    return 'profile_images/{username}.png'.format(username=instance)
 
 def random_profile_color():
     # use random int so that initial users get different colors
@@ -29,7 +38,7 @@ class User(AbstractUser, AdoorTimestampedModel):
     email = models.EmailField(unique=True)
     question_history = models.CharField(null=True, max_length=500)
     profile_pic = models.CharField(default=random_profile_color, max_length=7)
-    profile_image = models.ImageField(upload_to=to_profile_images, blank=True, null=True)
+    profile_image = models.ImageField(storage=OverwriteStorage(), upload_to=to_profile_images, blank=True, null=True)
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
 
     friendship_targetted_notis = GenericRelation("notification.Notification",
