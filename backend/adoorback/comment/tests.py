@@ -159,8 +159,8 @@ class CommentNotiAPITestCase(APITestCase):
             num_notis_after = Notification.objects.count()
             self.assertEqual(num_notis_before, num_notis_after - 1)
             comment_noti = Notification.objects.first()  # notification is order_by '-updated_at'
-            self.assertIn("current_user님이 회원님의 게시글에 댓글을 남겼습니다", comment_noti.message)
-            self.assertIn(data["content"].split()[0], comment_noti.message)
+            self.assertIn("current_user님이 회원님의 게시글에 댓글을 남겼습니다", comment_noti.message_ko)
+            self.assertIn(data["content"].split()[0], comment_noti.message_ko)
             self.assertEqual(comment_noti.user, Article.objects.get(id=1).author)
 
         # create comment (current_user -> author of Response with id=1)
@@ -169,8 +169,8 @@ class CommentNotiAPITestCase(APITestCase):
             response = self.post('comment-create', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
             comment_noti = Notification.objects.first()
-            self.assertIn("current_user님이 회원님의 답변에 댓글을 남겼습니다", comment_noti.message)
-            self.assertIn(data["content"].split()[0], comment_noti.message)
+            self.assertIn("current_user님이 회원님의 답변에 댓글을 남겼습니다", comment_noti.message_ko)
+            self.assertIn(data["content"].split()[0], comment_noti.message_ko)
 
         # create comment (current_user -> current_user): no new notification
         with self.login(username=current_user.username, password='password'):
@@ -196,8 +196,8 @@ class CommentNotiAPITestCase(APITestCase):
             num_notis_after = Notification.objects.count()
             self.assertEqual(num_notis_before, num_notis_after - 1)
             reply_noti = Notification.objects.first()  # notification is order_by '-updated_at'
-            self.assertIn("current_user님이 회원님의 댓글에 답글을 남겼습니다", reply_noti.message)
-            self.assertIn(data["content"].split()[0], reply_noti.message)
+            self.assertIn("current_user님이 회원님의 댓글에 답글을 남겼습니다", reply_noti.message_ko)
+            self.assertIn(data["content"].split()[0], reply_noti.message_ko)
 
         # create reply (current_user -> current_user): no new notification
         with self.login(username=current_user.username, password='password'):

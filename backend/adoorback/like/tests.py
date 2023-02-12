@@ -124,8 +124,8 @@ class LikeNotiAPITestCase(APITestCase):
             self.assertEqual(num_notis_before, num_notis_after - 1)
             first_article = Article.objects.get(id=1)
             like_noti = Notification.objects.first()  # notification is order_by '-updated_at'
-            self.assertIn("익명의 사용자가 회원님의 게시글을 좋아합니다", like_noti.message)
-            self.assertIn(first_article.content.split()[0], like_noti.message)
+            self.assertIn("익명의 사용자가 회원님의 게시글을 좋아합니다", like_noti.message_ko)
+            self.assertIn(first_article.content.split()[0], like_noti.message_ko)
             self.assertEqual(like_noti.user, first_article.author)
             self.assertEqual(Notification.objects.first().redirect_url, "/articles/1?anonymous=True")
 
@@ -167,8 +167,8 @@ class LikeNotiAPITestCase(APITestCase):
             self.assertEqual(num_notis_before, num_notis_after - 1)
             first_comment = Comment.objects.get(id=1)
             like_noti = Notification.objects.first()  # notification is order_by '-updated_at'
-            self.assertIn("익명의 사용자가 회원님의 댓글을 좋아합니다", like_noti.message)
-            self.assertIn(first_comment.content.split()[0], like_noti.message)
+            self.assertIn("익명의 사용자가 회원님의 댓글을 좋아합니다", like_noti.message_ko)
+            self.assertIn(first_comment.content.split()[0], like_noti.message_ko)
             self.assertEqual(like_noti.user, first_comment.author)
 
         # create like (current_user -> current_user): no new notification
@@ -192,5 +192,5 @@ class LikeNotiAPITestCase(APITestCase):
             response = self.post('like-list', data=data, extra={'format': 'json'})
             self.assertEqual(response.status_code, 201)
             like_noti = Notification.objects.first()
-            self.assertIn("friend_user님이 회원님의 댓글을 좋아합니다", like_noti.message)
-            self.assertIn(last_comment.content.split()[0], like_noti.message)
+            self.assertIn("friend_user님이 회원님의 댓글을 좋아합니다", like_noti.message_ko)
+            self.assertIn(last_comment.content.split()[0], like_noti.message_ko)

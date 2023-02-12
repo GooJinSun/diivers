@@ -202,12 +202,14 @@ class NotificationAPITestCase(APITestCase):
 
         like = Like.objects.first()
         target = like
-        friend_message = "특정 사용자가 회원님의 뭔가를 좋아해요"
-        anonymous_message = '익명의 사용자가 회원님의 뭔가를 좋아해요'
-        Notification.objects.create(actor=current_user, user=current_user, message=friend_message,
-                                    origin=target, target=target)
-        Notification.objects.create(actor=current_user, user=spy_user, message=anonymous_message,
-                                    origin=target, target=target)
+        friend_message_ko = "특정 사용자가 회원님의 뭔가를 좋아해요"
+        friend_message_en = "A particular user likes your something"
+        anonymous_message_ko = '익명의 사용자가 회원님의 뭔가를 좋아해요'
+        anonymous_message_en = 'An anonymous user likes your something'
+        Notification.objects.create(actor=current_user, user=current_user, message_ko=friend_message_ko,
+                                    message_en=friend_message_en, origin=target, target=target)
+        Notification.objects.create(actor=current_user, user=spy_user, message_ko=anonymous_message_ko,
+                                    message_en=anonymous_message_en, origin=target, target=target)
 
         # not authenticated
         response = self.get('notification-list')
@@ -251,7 +253,7 @@ class NotificationAPITestCase(APITestCase):
 
             response = self.get('notification-list')
             self.assertEqual(response.data['count'], 1)  # friend request noti is not visible
-            self.assertEqual(response.data['results'][0]['message'], 'current_user님과 친구가 되었습니다.')
+            self.assertEqual(response.data['results'][0]['message_ko'], 'current_user님과 친구가 되었습니다.')
 
     def test_noti_type_boolean(self):
         current_user = self.make_user(username='current_user')
@@ -307,10 +309,11 @@ class NotificationAPITestCase(APITestCase):
         actor = comment.author
         origin = comment.target
         target = comment
-        message = f'{actor} commented on your {origin.type}'
+        message_ko = f'{actor}이 당신의 {origin.type}에 댓글을 남겼습니다.'
+        message_en = f'{actor} commented on your {origin.type}'
 
         for _ in range(5):
-            Notification.objects.create(actor=actor, user=current_user, message=message,
+            Notification.objects.create(actor=actor, user=current_user, message_ko=message_ko, message_en=message_en
                                         origin=origin, target=target, is_read=False, is_visible=True)
 
         # update single notification - wrong body
