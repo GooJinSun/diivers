@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-12 17:00+0900\n"
+"POT-Creation-Date: 2023-02-12 17:27+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: account/models.py:23
+msgid "여성"
+msgstr "Female"
+
+#: account/models.py:24
+msgid "남성"
+msgstr "Male"
+
+#: account/models.py:25
+msgid "트랜스젠더 (transgender)"
+msgstr "Transgender"
+
+#: account/models.py:26
+msgid "논바이너리 (non-binary/non-conforming)"
+msgstr "Non-binary/Non-conforming"
+
+#: account/models.py:27
+msgid "응답하고 싶지 않음"
+msgstr "Do not want to reply"
+
+#: account/models.py:31
+msgid "미국 원주민/알래스카 원주민 (American Indian/Alaska Native)"
+msgstr "American Indian/Alaska Native"
+
+#: account/models.py:32
+msgid "아시아인 (Asian)"
+msgstr "Asian"
+
+#: account/models.py:33
+msgid "흑인/아프리카계 미국인 (Black/African American)"
+msgstr "Black/African American"
+
+#: account/models.py:34
+msgid "히스패닉/라틴계 미국인 (Hispanic/Latino)"
+msgstr "Hispanic/Latino"
+
+#: account/models.py:35
+msgid ""
+"하와이 원주민/다른 태평양 섬 주민 (Native Hawaiian/Other Pacific Islander)"
+msgstr "Native Hawaiian/Other Pacific Islander"
+
+#: account/models.py:36
+msgid "백인 (White)"
+msgstr "White"
 
 #: adoorback/settings/base.py:180
 msgid "한국어"
