@@ -5,6 +5,7 @@ import secrets
 import os
 
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.fields import GenericRelation
@@ -41,6 +42,9 @@ class User(AbstractUser, AdoorTimestampedModel):
     profile_pic = models.CharField(default=random_profile_color, max_length=7)
     profile_image = models.ImageField(storage=OverwriteStorage(), upload_to=to_profile_images, blank=True, null=True)
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
+    language = models.CharField(max_length=10,
+                                choices=settings.LANGUAGES,
+                                default=settings.LANGUAGE_CODE)
 
     friendship_targetted_notis = GenericRelation("notification.Notification",
                                                  content_type_field='target_type',
