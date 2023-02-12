@@ -248,15 +248,16 @@ export default function SignUp() {
           에 동의합니다.
         </TermsCheckLabel>
         <SignUpButtonWrapper>
+          {additionalUserInfo?.research_agreement && (
+            <WarningMessage>(연구 참여 동의 완료)</WarningMessage>
+          )}
           <CommonButton
             type="button"
             onClick={() => setMoreAboutDiiversModalOpen(true)}
           >
             다이버스에 대해 더 알아보기
-            {additionalUserInfo?.research_agreement && (
-              <WarningMessage>(연구 참여 동의 완료)</WarningMessage>
-            )}
           </CommonButton>
+
           {isSignUpLoading ? (
             <CircularProgress />
           ) : (

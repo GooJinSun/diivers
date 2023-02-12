@@ -19,7 +19,7 @@ import { CommonButton } from '@styles/buttons';
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { formatDate } from '@utils/dateTimeHelpers';
 import useWindowWidth from '@hooks/env/useWindowWidth';
-import { useStyles } from './MoreAboutDiivers.styles';
+import { ButtonWrapper, useStyles } from './MoreAboutDiivers.styles';
 
 interface AdditionalInfo {
   gender?: number;
@@ -57,7 +57,12 @@ const MoreAboutDiiversModal = ({
     setEthnicity(Number(e.target.value));
   };
 
+  const isAdditionalInfoFilled =
+    gender !== undefined && birthDate !== undefined && ethnicity !== undefined;
+
   const onApprove = () => {
+    if (!isAdditionalInfoFilled) return;
+
     setAdditionalUserInfo({
       gender,
       date_of_birth: birthDate,
@@ -112,13 +117,13 @@ const MoreAboutDiiversModal = ({
         </div>
         {/* 성 */}
         <FormControl fullWidth margin="normal">
-          <InputLabel shrink id="gender">
+          <InputLabel variant="standard" htmlFor="gender-select">
             성별
           </InputLabel>
           <Select
             labelId="gender"
             id="gender-select"
-            value={gender ?? ''}
+            value={gender}
             onChange={(e) => onChangeGender(e)}
           >
             <MenuItem value={0}>여성</MenuItem>
@@ -145,13 +150,13 @@ const MoreAboutDiiversModal = ({
         </FormControl>
         {/* 인종 */}
         <FormControl fullWidth margin="normal">
-          <InputLabel id="ethnicity" shrink>
+          <InputLabel variant="standard" htmlFor="ethnicity-select">
             인종
           </InputLabel>
           <Select
             labelId="ethnicity"
             id="ethnicity-select"
-            value={ethnicity ?? ''}
+            value={ethnicity}
             onChange={(e) => onChangeEthnicity(e)}
           >
             <MenuItem value={0}>
@@ -171,8 +176,18 @@ const MoreAboutDiiversModal = ({
             <MenuItem value={5}>백인 (White)</MenuItem>
           </Select>
         </FormControl>
-        <CommonButton onClick={onRefuse}>동의안함</CommonButton>
-        <CommonButton onClick={onApprove}>동의함</CommonButton>
+        <ButtonWrapper>
+          <CommonButton onClick={onRefuse} sub margin="0 20px">
+            동의안함
+          </CommonButton>
+          <CommonButton
+            margin="0 20px"
+            onClick={onApprove}
+            disabled={!isAdditionalInfoFilled}
+          >
+            동의함
+          </CommonButton>
+        </ButtonWrapper>
       </DialogContent>
     </Dialog>
   );
