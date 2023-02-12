@@ -26,7 +26,7 @@ const UserProfileItem = (props) => {
 
   return profileImageUrl ? (
     <UserIcon
-      url={profileImageUrl}
+      url={profileImageUrl.replace('http://localhost:8000', '')}
       width={width}
       height={height}
       style={styles}
