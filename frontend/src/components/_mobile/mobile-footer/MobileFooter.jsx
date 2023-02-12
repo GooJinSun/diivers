@@ -84,6 +84,7 @@ export default function MobileFooter({ notiBadgeInvisible }) {
         label="MY"
         icon={
           <UserProfileItem
+            userName={currentUser?.username}
             profileImageUrl={currentUser?.profile_image}
             width={20}
             height={20}

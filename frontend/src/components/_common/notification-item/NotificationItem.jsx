@@ -32,6 +32,7 @@ const NotificationItem = ({ notiObj, isNotificationPage }) => {
       <MessageWrapper>
         {actor_detail?.id ? (
           <UserProfileItem
+            userName={actor_detail.username}
             profileImageUrl={actor_detail.profile_image}
             profileIconColor={actor_detail.profile_pic}
           />

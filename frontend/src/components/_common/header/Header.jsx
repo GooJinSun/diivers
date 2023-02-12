@@ -238,7 +238,10 @@ const Header = () => {
             color="secondary"
           >
             <Link to={`/users/${currentUser?.username}`}>
-              <UserProfileItem profileImageUrl={currentUser?.profile_image} />
+              <UserProfileItem
+                userName={currentUser?.username}
+                profileImageUrl={currentUser?.profile_image}
+              />
             </Link>
             <Link to={`/users/${currentUser?.username}`}>
               <HelloUsername className="hello-username">

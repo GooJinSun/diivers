@@ -55,13 +55,16 @@ export const REMOVE_ERROR = 'user/REMOVE_ERROR';
 
 export const SET_FCM_TOKEN = 'user/SET_FCM_TOKEN';
 
+export const REFRESH_PROFILE_IMAGE = 'user/REFRESH_PROFILE_IMAGE';
+
 const initialState = {
   loginError: false,
   signUpError: {},
   currentUser: null,
   selectedUser: null,
   selectQuestion: true,
-  fcmToken: null
+  fcmToken: null,
+  refreshProfileImage: 0
 };
 
 export const skipOrCompleteSelectQuestions = () => {
@@ -116,6 +119,7 @@ export const changeProfileImage = (profileInfo) => {
       type: UPDATE_PROFILE_IMAGE_SUCCESS
     });
     dispatch(getCurrentUser());
+    dispatch({ type: REFRESH_PROFILE_IMAGE, refreshProfileImage: Date.now() });
   };
 };
 
@@ -311,7 +315,8 @@ export default function userReducer(state, action) {
         currentUser: null,
         loginError: false,
         selectQuestion: true,
-        fcmToken: null
+        fcmToken: null,
+        refreshProfileImage: 0
       };
     case SIGN_UP_SUCCESS:
       return {
@@ -362,6 +367,12 @@ export default function userReducer(state, action) {
       return {
         ...state,
         fcmToken: action.fcmToken
+      };
+    }
+    case REFRESH_PROFILE_IMAGE: {
+      return {
+        ...state,
+        refreshProfileImage: action.refreshProfileImage
       };
     }
     default:

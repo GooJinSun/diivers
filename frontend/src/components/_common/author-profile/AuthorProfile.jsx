@@ -36,6 +36,7 @@ export default function AuthorProfile({
           }}
         >
           <UserProfileItem
+            userName={username}
             profileImageUrl={profileImageUrl}
             profileIconColor={picHex}
           />

@@ -210,6 +210,9 @@ export default function UserPage() {
               }}
             >
               <UserProfileItem
+                userName={
+                  isMyPage ? currentUser?.username : selectedUser?.username
+                }
                 profileImageUrl={
                   isMyPage
                     ? currentUser?.profile_image
