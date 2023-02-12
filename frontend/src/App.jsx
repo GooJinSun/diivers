@@ -84,22 +84,26 @@ const App = () => {
       <Header />
       <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
         {showWidget && <QuestionListWidget />}
-        <Switch>
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={SignUp} />
-          <Route
-            exact
-            path="/activate/:id/:token"
-            component={AccountActivate}
-          />
-          <Route exact path="/lost-password" component={LostPassword} />
-          <Route
-            exact
-            path="/reset-password/:id/:token"
-            component={ResetPassword}
-          />
-          <Route exact path="/select-questions" component={QuestionSelection} />
-          <FeedWrapper>
+        <FeedWrapper>
+          <Switch>
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route
+              exact
+              path="/activate/:id/:token"
+              component={AccountActivate}
+            />
+            <Route exact path="/lost-password" component={LostPassword} />
+            <Route
+              exact
+              path="/reset-password/:id/:token"
+              component={ResetPassword}
+            />
+            <Route
+              exact
+              path="/select-questions"
+              component={QuestionSelection}
+            />
             <PrivateRoute exact path="/home" component={FriendFeed} />
             <PrivateRoute exact path="/anonymous" component={AnonymousFeed} />
             <PrivateRoute exact path="/questions" component={QuestionFeed} />
@@ -147,8 +151,8 @@ const App = () => {
             />
             <Redirect from="/my-page" to={`/users/${currentUser?.username}`} />
             <Redirect exact path="/" to="/home" />
-          </FeedWrapper>
-        </Switch>
+          </Switch>
+        </FeedWrapper>
         {showWidget && <FriendListWidget />}
       </MainWrapper>
     </MuiThemeProvider>
