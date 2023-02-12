@@ -1,7 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
+import { modalStyles } from '@styles/modal';
 
 export const useStyles = makeStyles((theme) => ({
+  ...modalStyles(theme),
   paper: {
     position: 'absolute',
     width: 550,
@@ -15,9 +17,6 @@ export const useStyles = makeStyles((theme) => ({
     transform: 'translate(-50%,-50%)',
     outline: 0
   },
-  content: {
-    padding: theme.spacing(1, 2, 2, 2)
-  },
   textArea: {
     background: 'white',
     width: '100%',
@@ -29,18 +28,6 @@ export const useStyles = makeStyles((theme) => ({
     margin: '8px 0',
     fontFamily: 'Noto Sans KR',
     fontsize: '14px'
-  },
-  modalTitle: {
-    fontSize: '24px',
-    fontWeight: 'bold',
-    margin: 0,
-    paddingBottom: 0
-  },
-  closeButton: {
-    position: 'absolute',
-    right: theme.spacing(1),
-    top: theme.spacing(1),
-    color: theme.palette.grey[500]
   },
   submitButton: {
     boxShadow: 'none',

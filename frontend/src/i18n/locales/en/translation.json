@@ -29,13 +29,15 @@
     "friends": "Friends",
     "manage_friends": "Manage Friends"
   },
+  "auth_desc": {
+    "welcome": "Welcome to Diivers,\na place to share who you are today."
+  },
   "login": {
     "login": "Login",
     "nickname": "nickname",
     "password": "password",
     "sign_up": "Sign Up",
-    "forgot_password": "Forgot password",
-    "invalid_authentication": "Email authentication not completed or invalid membership information."
+    "forgot_password": "Forgot password"
   },
   "sign_up": {
     "nickname": "nickname",
@@ -43,11 +45,17 @@
     "password": "password",
     "sign_up": "Sign Up",
     "login": "Login",
-    "personal_information_processing_policy": "Personal information processing policy",
     "please_complete_the_email_verification": "Please complete the email verification.",
-    "nickname_is_not_valid": "Nickname is not valid :(",
-    "email_is_not_valid": "Email is not valid :(",
-    "upload_profile_image": "Upload a profile image"
+    "upload_profile_image": "Upload a profile image",
+    "preview": "Preview",
+    "mandatory": "(Mandatory)",
+    "i_agree_to_the_terms_and_conditions": "I agree to the terms and conditions",
+    "terms_and_conditions": "Terms and Conditions",
+    "i_agree_to_the_terms_and_privacy": "I agree to the terms and privacy",
+    "terms_and_privacy": "Terms and Privacy",
+    "consent_to_participate_in_the study": "Consent to participate in the study",
+    "learn_more_about_Diivers": "Learn more about Divers",
+    "image_size_is_too_large":"Image size is too large.\nPlease use an image of 400 * 400 or less."
   },
   "account_activate": {
     "authenticating": "Authenticating...",
