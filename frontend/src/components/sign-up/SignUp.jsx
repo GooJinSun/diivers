@@ -47,8 +47,9 @@ export default function SignUp() {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const [isUsernameValid, setIsUsernameValid] = useState(true);
-  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
+  const [isEmailInvalid, setIsEmailInvalid] = useState(false);
+  const [isInactiveUser, setIsInactiveUser] = useState(false);
 
   const isSignUpLoading =
     useSelector((state) => state.loadingReducer['user/SIGN_UP']) === 'REQUEST';
@@ -63,8 +64,9 @@ export default function SignUp() {
   useEffect(() => {
     if (!isSubmitted || !signUpError) return;
 
-    if (signUpError.detail.includes('Username')) setIsUsernameValid(false);
-    if (signUpError.detail.includes('Email')) setIsEmailValid(false);
+    if (signUpError.detail.includes('Username')) setIsUsernameInvalid(true);
+    if (signUpError.detail.includes('Email')) setIsEmailInvalid(true);
+    if (signUpError.detail.includes('active')) setIsInactiveUser(true);
   }, [isSubmitted, signUpError]);
 
   const [signUpInfo, setSignUpInfo] = useState({
@@ -83,16 +85,23 @@ export default function SignUp() {
     termsCheckState &&
     privacyCheckState;
 
-  const onInputChange = (e) => {
+  const resetSignUpStatus = () => {
     setIsSubmitted(false);
-    setIsUsernameValid(true);
-    setIsEmailValid(true);
+    setIsUsernameInvalid(false);
+    setIsEmailInvalid(false);
+    setIsInactiveUser(false);
+  };
+
+  const onInputChange = (e) => {
+    resetSignUpStatus();
 
     const { name, value } = e.target;
     setSignUpInfo((prev) => ({ ...prev, [name]: value }));
   };
 
   const onImageChange = (e) => {
+    resetSignUpStatus();
+
     const profileImage = e.target.files[0];
     if (profileImage.size > 400 * 400) {
       return setIsProfileImageAlert(true);
@@ -112,7 +121,8 @@ export default function SignUp() {
     formData.append('username', username);
     formData.append('password', password);
 
-    if (!additionalUserInfo) return;
+    if (!additionalUserInfo) return formData;
+
     const { gender, date_of_birth, ethnicity, research_agreement } =
       additionalUserInfo;
     if (gender) formData.append('gender', gender);
@@ -126,7 +136,6 @@ export default function SignUp() {
   const onClickSubmitButton = () => {
     setIsSubmitted(true);
     dispatch(requestSignUp(createFormData()));
-    dispatch(requestSignUp({ ...signUpInfo, ...additionalUserInfo }));
   };
 
   const onKeySubmit = (e) => {
@@ -150,10 +159,9 @@ export default function SignUp() {
           value={signUpInfo.username}
           placeholder="닉네임"
           onChange={onInputChange}
-          invalid={isSubmitted && !isUsernameValid}
+          invalid={isSubmitted && isUsernameInvalid}
         />
-        {isSubmitted && !isUsernameValid && (
-          // TODO: translation
+        {isSubmitted && isUsernameInvalid && (
           <WarningMessage>{signUpError.detail}</WarningMessage>
         )}
         <CommonInput
@@ -162,10 +170,9 @@ export default function SignUp() {
           value={signUpInfo.email}
           placeholder="이메일"
           onChange={onInputChange}
-          invalid={isSubmitted && !isEmailValid}
+          invalid={isSubmitted && isEmailInvalid}
         />
-        {isSubmitted && !isEmailValid && (
-          // TODO: translation
+        {isSubmitted && isEmailInvalid && (
           <WarningMessage>{signUpError.detail}</WarningMessage>
         )}
         <CommonInput
@@ -265,6 +272,9 @@ export default function SignUp() {
             <WarningMessage>
               * 이메일이 전송되었습니다. 인증 완료해 주세요!
             </WarningMessage>
+          )}
+          {isSubmitted && isInactiveUser && (
+            <WarningMessage>{signUpError.detail}</WarningMessage>
           )}
         </SignUpButtonWrapper>
       </AuthenticationFormWrapper>
