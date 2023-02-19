@@ -64,7 +64,7 @@ const initialState = {
   selectedUser: null,
   selectQuestion: true,
   fcmToken: null,
-  refreshProfileImage: 0
+  profileImageUpdatedAt: Date.now()
 };
 
 export const skipOrCompleteSelectQuestions = () => {
@@ -119,7 +119,10 @@ export const changeProfileImage = (profileInfo) => {
       type: UPDATE_PROFILE_IMAGE_SUCCESS
     });
     dispatch(getCurrentUser());
-    dispatch({ type: REFRESH_PROFILE_IMAGE, refreshProfileImage: Date.now() });
+    dispatch({
+      type: REFRESH_PROFILE_IMAGE,
+      profileImageUpdatedAt: Date.now()
+    });
   };
 };
 
@@ -315,8 +318,7 @@ export default function userReducer(state, action) {
         currentUser: null,
         loginError: false,
         selectQuestion: true,
-        fcmToken: null,
-        refreshProfileImage: 0
+        fcmToken: null
       };
     case SIGN_UP_SUCCESS:
       return {
@@ -372,7 +374,7 @@ export default function userReducer(state, action) {
     case REFRESH_PROFILE_IMAGE: {
       return {
         ...state,
-        refreshProfileImage: action.refreshProfileImage
+        profileImageUpdatedAt: action.profileImageUpdatedAt
       };
     }
     default:

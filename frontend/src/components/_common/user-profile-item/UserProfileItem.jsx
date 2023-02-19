@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import FaceIcon from '@material-ui/icons/Face';
@@ -26,17 +26,22 @@ const UserProfileItem = (props) => {
     ...styles
   } = props;
 
-  const currentUser = useSelector((state) => state.userReducer.currentUser);
-  const refreshProfileImage = useSelector(
-    (state) => state.userReducer.refreshProfileImage
+  const currentUserName = useSelector(
+    (state) => state.userReducer.currentUser?.username
   );
-  const isMyProfileImageUpdated = useMemo(() => {
-    return currentUser?.username === userName && refreshProfileImage !== 0;
-  }, [currentUser, refreshProfileImage, userName]);
+  const currentUserProfileImage = useSelector(
+    (state) => state.userReducer.currentUser?.profile_image
+  );
+  const profileImageUpdatedAt = useSelector(
+    (state) => state.userReducer.profileImageUpdatedAt
+  );
+
+  const isMyProfileImageUpdated =
+    currentUserName === userName && currentUserProfileImage;
 
   return profileImageUrl || isMyProfileImageUpdated ? (
     <UserIcon
-      url={`/media/profile_images/${userName}.png?t=${refreshProfileImage}`}
+      url={`/media/profile_images/${userName}.png?t=${profileImageUpdatedAt}`}
       width={width}
       height={height}
       style={styles}
