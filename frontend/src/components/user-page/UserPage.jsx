@@ -210,6 +210,9 @@ export default function UserPage() {
               }}
             >
               <UserProfileItem
+                userName={
+                  isMyPage ? currentUser?.username : selectedUser?.username
+                }
                 profileImageUrl={
                   isMyPage
                     ? currentUser?.profile_image
@@ -217,24 +220,26 @@ export default function UserPage() {
                 }
                 profileIconColor={selectedUser?.profile_pic}
               />
-              <label
-                htmlFor="profile-image"
-                style={{
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                  fontSize: 15
-                }}
-              >
-                <input
-                  id="profile-image"
-                  type="file"
-                  accept="image/jpeg, image/png"
-                  onChange={onImageChange}
-                  style={{ display: 'none' }}
-                />
-                <EditIcon fontSize="inherit" color="secondary" />
-              </label>
+              {isMyPage && (
+                <label
+                  htmlFor="profile-image"
+                  style={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    fontSize: 15
+                  }}
+                >
+                  <input
+                    id="profile-image"
+                    type="file"
+                    accept="image/jpeg, image/png"
+                    onChange={onImageChange}
+                    style={{ display: 'none' }}
+                  />
+                  <EditIcon fontSize="inherit" color="secondary" />
+                </label>
+              )}
             </div>
             <h3 style={{ marginBottom: '10px' }}>{selectedUser?.username}</h3>
             <div>
@@ -313,14 +318,16 @@ export default function UserPage() {
           </MobileTabPanel>
         </PostListWrapper>
       )}
-      <ConfirmAlertDialog
-        message={
-          '이미지의 크기가 너무 큽니다.\n400 * 400 이하 크기의 이미지를 사용해주세요'
-        }
-        onConfirm={() => setIsProfileImageAlert(false)}
-        onClose={setIsProfileImageAlert}
-        isOpen={isProfileImageAlert}
-      />
+      {isMyPage && (
+        <ConfirmAlertDialog
+          message={
+            '이미지의 크기가 너무 큽니다.\n400 * 400 이하 크기의 이미지를 사용해주세요'
+          }
+          onConfirm={() => setIsProfileImageAlert(false)}
+          onClose={setIsProfileImageAlert}
+          isOpen={isProfileImageAlert}
+        />
+      )}
     </MobileWrapper>
   );
 }

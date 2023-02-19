@@ -31,6 +31,7 @@ const QuestionSendFriendItem = ({ questionObj, friendObj, sended }) => {
   return (
     <FriendItemWrapper>
       <UserProfileItem
+        userName={username}
         profileImageUrl={profile_image}
         profileIconColor={profile_pic}
       />

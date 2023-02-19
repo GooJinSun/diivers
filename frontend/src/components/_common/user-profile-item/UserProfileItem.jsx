@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import FaceIcon from '@material-ui/icons/Face';
 
@@ -18,15 +19,29 @@ const UserIcon = styled.span`
 const UserProfileItem = (props) => {
   const {
     profileImageUrl,
+    userName,
     width = 24,
     height = 24,
     profileIconColor,
     ...styles
   } = props;
 
-  return profileImageUrl ? (
+  const currentUserName = useSelector(
+    (state) => state.userReducer.currentUser?.username
+  );
+  const currentUserProfileImage = useSelector(
+    (state) => state.userReducer.currentUser?.profile_image
+  );
+  const profileImageUpdatedAt = useSelector(
+    (state) => state.userReducer.profileImageUpdatedAt
+  );
+
+  const isMyProfileImageUpdated =
+    currentUserName === userName && currentUserProfileImage;
+
+  return profileImageUrl || isMyProfileImageUpdated ? (
     <UserIcon
-      url={profileImageUrl}
+      url={`/media/profile_images/${userName}.png?t=${profileImageUpdatedAt}`}
       width={width}
       height={height}
       style={styles}

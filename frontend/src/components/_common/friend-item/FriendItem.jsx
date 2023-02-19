@@ -27,6 +27,7 @@ const FriendItem = ({
     <FriendItemWrapper onClick={onClickItem}>
       <FriendLink onClick={onClickItem}>
         <UserProfileItem
+          userName={username}
           profileImageUrl={profile_image}
           profileIconColor={profile_pic}
         />
