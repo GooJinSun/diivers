@@ -158,9 +158,13 @@ export const requestActivate = (id, token) => {
 export const postSelectedQuestions = (selectedQuestions) => {
   return async (dispatch) => {
     dispatch({ type: UPDATE_QUESTION_SELECT_REQUEST });
+    const formData = new FormData();
+    formData.append('question_history', selectedQuestions.join(','));
     try {
-      await axios.patch(`user/me/`, {
-        question_history: selectedQuestions.join(',')
+      await axios.patch(`user/me/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       });
     } catch (error) {
       dispatch({ type: UPDATE_QUESTION_SELECT_FAILURE, error });
