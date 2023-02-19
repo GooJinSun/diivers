@@ -1,13 +1,14 @@
 import axios from 'axios';
-import Cookies from 'js.cookie';
+import { getCookie } from '@utils/cookies';
 import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../../constants/cookies';
 import {
   deleteTokensFromCookies,
   setTokensInCookies
 } from '../tokenCookiesHelpers';
 
-const csrf_token = Cookies.get('csrftoken');
-const access_token = Cookies.get(JWT_ACCESS_TOKEN);
+const csrf_token = getCookie('csrftoken');
+const access_token = getCookie(JWT_ACCESS_TOKEN);
+
 export const getBearerToken = (token) => `Bearer ${token}`;
 
 const instance = axios.create({
@@ -54,7 +55,7 @@ instance.interceptors.response.use(
     // access token이 만료된 경우 refresh 토큰 refresh 요청
     try {
       const res = await axios.post('api/user/token/refresh/', {
-        refresh: Cookies.get(JWT_REFRESH_TOKEN)
+        refresh: getCookie(JWT_REFRESH_TOKEN)
       });
       const { access, refresh } = res.data;
 
@@ -87,7 +88,7 @@ instance.interceptors.request.use((config) => {
   }
 
   // eslint-disable-next-line no-param-reassign
-  config.headers.Authorization = getBearerToken(Cookies.get(JWT_ACCESS_TOKEN));
+  config.headers.Authorization = getBearerToken(getCookie(JWT_ACCESS_TOKEN));
   return config;
 });
 
