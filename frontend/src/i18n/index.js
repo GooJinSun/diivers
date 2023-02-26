@@ -18,6 +18,9 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
+    detection: {
+      order: ['navigator']
+    },
     fallbackLng: 'en',
     debug: true,
     ns: 'translation',
