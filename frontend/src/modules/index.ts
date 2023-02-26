@@ -1,9 +1,10 @@
 import {
   combineReducers,
   legacy_createStore as createStore,
-  applyMiddleware
+  applyMiddleware,
+  Middleware
 } from 'redux';
-// import logger from 'redux-logger';
+import logger from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import friendReducer from './friend';
@@ -28,9 +29,18 @@ const rootReducer = combineReducers({
   scrollReducer
 });
 
+const isProduction = process.env.NODE_ENV !== 'development';
+
+let middleware: Middleware[] = [];
+if (!isProduction) {
+  middleware = [...middleware, thunk, logger];
+} else {
+  middleware = [...middleware, thunk];
+}
+
 export const store = createStore(
   rootReducer,
-  composeWithDevTools(applyMiddleware(thunk))
+  composeWithDevTools(applyMiddleware(...middleware))
 );
 
 export default rootReducer;
