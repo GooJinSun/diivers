@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { DEFAULT_MARGIN, BOTTOM_TAB_HEIGHT } from '@constants/layout';
-// import { primaryColor } from '@constants/colors';
 
 export const ButtonWrapper = styled.div`
   position: fixed;
