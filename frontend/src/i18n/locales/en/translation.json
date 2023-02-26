@@ -155,6 +155,11 @@
   "notification_page": {
     "all": "All",
     "friend_requests": "Friend Requests",
-    "received_questions": "Received Questions"
+    "received_questions": "Received Questions",
+    "no_friend_request": "No Friend request.",
+    "search_for_a_friend": "Search for a friend and send a request first!",
+    "no_questions_received": "No questions have been received.",
+    "why_dont_you_send_a_question_to_your_friend_first": "Why don't you send a question to your friend first?",
+    "looking_around_the_question_feed": "Looking around the question feed"
   }
 }

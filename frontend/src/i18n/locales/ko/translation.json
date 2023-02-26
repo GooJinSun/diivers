@@ -155,6 +155,11 @@
   "notification_page": {
     "all": "전체",
     "friend_requests": "친구 요청",
-    "received_questions": "받은 질문"
+    "received_questions": "받은 질문",
+    "no_friend_request": "친구 요청이 없습니다.",
+    "search_for_a_friend": "친구를 검색해서 먼저 요청을 보내보세요!",
+    "no_questions_received": "받은 질문이 없습니다.",
+    "why_dont_you_send_a_question_to_your_friend_first": "친구에게 먼저 질문을 보내보면 어떨까요? :)",
+    "looking_around_the_question_feed": "질문 피드 둘러보기"
   }
 }
