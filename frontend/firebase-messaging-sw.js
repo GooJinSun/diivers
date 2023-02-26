@@ -32,9 +32,7 @@ const firebaseApp = firebase.initializeApp({
 // NOTE: Most importantly, in your service worker add a 'notificationclick' event listener before calling firebase.messaging()
 self.addEventListener('notificationclick', (e) => {
   e.stopImmediatePropagation();
-  e.waitUntil(
-    clients.openWindow(`${self.origin}${e.notification.data.FCM_MSG.data.url}`)
-  );
+  e.waitUntil(clients.openWindow(`${self.origin}${e.notification.data.url}`));
   e.notification.close();
 });
 
@@ -43,5 +41,29 @@ self.addEventListener('notificationclick', (e) => {
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  console.log('Received background message ', payload);
+  const { body, tag, url, type } = payload.data;
+  const title = 'Diivers';
+  const options = {
+    body,
+    tag,
+    icon: 'https://diivers.world/assets/logo/full-logo.svg',
+    data: {
+      url
+    }
+  };
+
+  if (type === 'new') {
+    self.registration.showNotification(title, options);
+    return;
+  }
+
+  self.registration.getNotifications().then((notifications) => {
+    const prev = notifications.filter(
+      (notification) => notification.tag === payload.data.tag
+    );
+
+    if (prev.length > 0) {
+      self.registration.showNotification(title, options);
+    }
+  });
 });
