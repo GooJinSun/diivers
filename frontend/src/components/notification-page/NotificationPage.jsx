@@ -15,6 +15,9 @@ import {
   appendResponseRequests
 } from '@modules/notification';
 import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
+import Message from '@common-components/message/Message';
+import { CommonButton } from '@styles/buttons';
+import { useHistory } from 'react-router';
 import { useStyles } from './NotificationPage.styles';
 
 const READ_ALL_NOTI_DELAY = 300;
@@ -28,7 +31,7 @@ const NOTIFICATION_TABS = {
 
 export default function NotificationPageNotificationPage() {
   const dispatch = useDispatch();
-
+  const history = useHistory();
   const [target, setTarget] = useState(null);
   const [tab, setTab] = useState(NOTIFICATION_TABS.ALL.index);
 
@@ -85,6 +88,10 @@ export default function NotificationPageNotificationPage() {
     [dispatch, tab]
   );
 
+  const onClickGoQuestionFeed = () => {
+    history.push('/questions');
+  };
+
   useEffect(() => {
     fetchNotifications();
   }, [fetchNotifications]);
@@ -129,25 +136,58 @@ export default function NotificationPageNotificationPage() {
     );
   });
 
-  const friendRequestList = friendRequests.map((friendRequestNoti) => {
-    return (
-      <FriendItem
-        key={`friend-request-${friendRequestNoti?.id}`}
-        message={friendRequestNoti.message}
-        isPending
-        friendObj={friendRequestNoti?.actor_detail}
-        showFriendStatus
+  const friendRequestList =
+    friendRequests.length === 0 ? (
+      <Message
+        message="친구 요청이 없습니다."
+        messageDetail="친구를 검색해서 먼저 요청을 보내보세요!"
       />
+    ) : (
+      friendRequests.map((friendRequestNoti) => {
+        return (
+          <FriendItem
+            key={`friend-request-${friendRequestNoti?.id}`}
+            message={friendRequestNoti.message}
+            isPending
+            friendObj={friendRequestNoti?.actor_detail}
+            showFriendStatus
+          />
+        );
+      })
     );
-  });
 
-  const responseRequestList = responseRequests.map((responseRequest) => (
-    <NotificationItem
-      key={`response-request-${responseRequest?.id}`}
-      notiObj={responseRequest}
-      isNotificationPage
-    />
-  ));
+  const responseRequestList =
+    responseRequests.length === 0 ? (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
+        <Message
+          message="받은 질문이 없습니다."
+          messageDetail="친구에게 먼저 질문을 보내보면 어떨까요? :)"
+          noBorder
+        />
+        <CommonButton
+          id="question-redirect-button"
+          margin="20px 0"
+          onClick={onClickGoQuestionFeed}
+          width="50%"
+        >
+          질문 피드 둘러보기
+        </CommonButton>
+      </div>
+    ) : (
+      responseRequests.map((responseRequest) => (
+        <NotificationItem
+          key={`response-request-${responseRequest?.id}`}
+          notiObj={responseRequest}
+          isNotificationPage
+        />
+      ))
+    );
 
   return (
     <div className={classes.root}>
