@@ -6,14 +6,15 @@ import NewPost from '@common-components/new-post/NewPost';
 import PostList from '@common-components/post-list/PostList';
 import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
-import useRouteChange from '@hooks/env/useRouteChange';
 import ScrollTopButton from '@common-components/scroll-top-button/ScrollTopButton';
-import { setScrollY } from '@modules/scroll';
+import useRestoreScroll from '@hooks/useRestoreScroll';
 import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
 
 const FriendFeed = () => {
   const [target, setTarget] = useState(false);
   const dispatch = useDispatch();
+
+  useRestoreScroll();
 
   const friendPosts = useSelector((state) => state.postReducer.friendPosts);
   const isAppending =
@@ -47,19 +48,6 @@ const FriendFeed = () => {
     dispatch(getPostsByType('friend'));
     dispatch(getFriendList());
   }, [dispatch]);
-
-  useEffect(() => {
-    // if (!scrollPosition.current) return;
-    console.log('-----mount');
-    console.log(window.location.pathname);
-    console.log(window.scrollY);
-    return () => {
-      // TODO(Gina): 여기서 window.location.pathname이 home이었으면 좋겠다
-      console.log('-----unmount');
-      console.log(window.location.pathname);
-      dispatch(setScrollY(100, '/home'));
-    };
-  }, []);
 
   return (
     <>

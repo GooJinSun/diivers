@@ -2,22 +2,37 @@ import { RootState } from '@modules/index';
 import { setScrollY } from '@modules/scroll';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useLocation } from 'react-router';
 
 const useRestoreScroll = () => {
-  console.log('useRestoreScroll');
-  console.log(window.scrollY, window.location.pathname);
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
   const scrollState = useSelector((state: RootState) => state.scrollReducer);
 
+  // 해당 페이지에서 스크롤 위치 기억
   useEffect(() => {
-    console.log(scrollState);
-    if (scrollState[window.location.pathname]) {
-      window.scrollTo({ top: scrollState[window.location.pathname] });
+    const prevLocation = location.pathname;
+    const unlisten = history.listen(() => {
+      dispatch(setScrollY(window.scrollY, prevLocation));
+    });
+
+    return unlisten;
+  }, [history, location, dispatch]);
+
+  // 그 페이지에 맞는 위치로 스크롤
+  useEffect(() => {
+    const scrollY = scrollState[location.pathname];
+    if (scrollY !== 0) {
+      setTimeout(() => {
+        window.scroll({
+          top: scrollY,
+          left: 0,
+          behavior: 'auto'
+        });
+      }, 300);
     }
-    return () => {
-      dispatch(setScrollY(window.scrollY, window.location.pathname));
-    };
-  }, [dispatch, scrollState]);
+  }, [scrollState, location]);
 };
 
 export default useRestoreScroll;
