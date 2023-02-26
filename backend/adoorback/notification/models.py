@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 from adoorback.models import AdoorTimestampedModel
 
-from firebase_admin.messaging import Message
+from firebase_admin.messaging import Message, AndroidConfig, AndroidNotification
 from firebase_admin.messaging import Notification as FirebaseNotification
 from fcm_django.models import FCMDevice
 
@@ -83,7 +83,14 @@ def send_firebase_notification(created, instance, **kwargs):
             'url': instance.redirect_url,
             'tag': str(instance.id),
             'type': 'new',
-        }
+        },
+        android = AndroidConfig(
+            notification= AndroidNotification(
+                title='Diivers',
+                body=instance.message,
+                tag=str(instance.id)
+            )
+        )
     )
 
     try:
