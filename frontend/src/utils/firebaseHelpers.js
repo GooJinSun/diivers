@@ -60,19 +60,38 @@ export const deactivateFirebaseDevice = (token) => {
   });
 };
 
-export const addForegroundMessageEventListener = (messaging, onClick) => {
+export const addForegroundMessageEventListener = (messaging) => {
   onMessage(messaging, (payload) => {
-    // TODO: 노티 아이콘 설정
-    const {
-      notification: { title, body },
-      data: { url }
-    } = payload;
-
-    const noti = new Notification(title, { body });
-
-    noti.onclick = () => {
-      if (url) onClick(url);
-      noti.close();
+    const { body, url, tag, type } = payload.data;
+    const title = 'Diivers';
+    const options = {
+      body,
+      tag,
+      icon: 'https://diivers.world/assets/logo/full-logo.svg',
+      data: {
+        url
+      }
     };
+
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      const registration = registrations.filter((item) =>
+        item.scope.includes('firebase')
+      )[0];
+
+      if (type === 'new') {
+        registration.showNotification(title, options);
+        return;
+      }
+
+      registration.getNotifications().then((notifications) => {
+        const prev = notifications.filter(
+          (notification) => notification.tag === payload.data.tag
+        );
+
+        if (prev.length > 0) {
+          registration.showNotification(title, options);
+        }
+      });
+    });
   });
 };
