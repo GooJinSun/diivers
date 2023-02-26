@@ -14,6 +14,7 @@ const UserIcon = styled.span`
   overflow: hidden;
   border-radius: 50%;
   border: 1px solid #ddd;
+  flex-shrink: 0;
 `;
 
 const UserProfileItem = (props) => {
