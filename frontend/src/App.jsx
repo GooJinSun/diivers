@@ -64,6 +64,7 @@ const App = () => {
   useFcm();
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
+  const scrollState = useSelector((state) => state.scrollReducer);
 
   const { isDesktopMin } = useWindowWidth();
 
@@ -84,6 +85,14 @@ const App = () => {
     window.scrollTo(0, 0);
     trackPage(location.pathname);
   }, [location, dispatch, currentUser]);
+
+  // 그 페이지에 맞는 위치로 스크롤
+  useEffect(() => {
+    console.log(scrollState);
+    if (scrollState[window.location.pathname]) {
+      window.scrollTo({ top: scrollState[window.location.pathname] });
+    }
+  }, [scrollState]);
 
   return (
     <MuiThemeProvider theme={theme}>

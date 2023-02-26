@@ -7,12 +7,14 @@ import PostList from '@common-components/post-list/PostList';
 import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
 import useRouteChange from '@hooks/env/useRouteChange';
+import ScrollTopButton from '@common-components/scroll-top-button/ScrollTopButton';
 import { setScrollY } from '@modules/scroll';
 import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
 
 const FriendFeed = () => {
   const [target, setTarget] = useState(false);
   const dispatch = useDispatch();
+
   const friendPosts = useSelector((state) => state.postReducer.friendPosts);
   const isAppending =
     useSelector((state) => state.loadingReducer['post/APPEND_POSTS']) ===
@@ -46,11 +48,18 @@ const FriendFeed = () => {
     dispatch(getFriendList());
   }, [dispatch]);
 
-  const handleStoreScroll = useCallback(() => {
-    setScrollY(window.scrollY);
+  useEffect(() => {
+    // if (!scrollPosition.current) return;
+    console.log('-----mount');
+    console.log(window.location.pathname);
+    console.log(window.scrollY);
+    return () => {
+      // TODO(Gina): 여기서 window.location.pathname이 home이었으면 좋겠다
+      console.log('-----unmount');
+      console.log(window.location.pathname);
+      dispatch(setScrollY(100, '/home'));
+    };
   }, []);
-
-  useRouteChange(handleStoreScroll);
 
   return (
     <>
@@ -70,6 +79,7 @@ const FriendFeed = () => {
         />
       )}
       <div ref={setTarget} />
+      <ScrollTopButton />
     </>
   );
 };

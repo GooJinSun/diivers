@@ -1,24 +1,21 @@
 export const SET_SCROLL_Y = 'scroll/SET_SCROLL_Y';
-export const SET_IS_BACK = 'scroll/SET_IS_BACK';
 
-type ScrollState = {
-  scrollY: number;
+export type PathnameType = '/home' | '/anonymous' | '/questions';
+
+type ScrollState = Record<string, number>;
+
+const initialState: ScrollState = {};
+
+export const setScrollY = (y: number, location: string) => {
+  return {
+    type: SET_SCROLL_Y,
+    payload: { y, location }
+  };
 };
-
-const initialState: ScrollState = {
-  scrollY: 0
-};
-
-export const setScrollY = (y: number) => ({
-  type: SET_SCROLL_Y,
-  payload: y
-});
-
-type ScrollAction = ReturnType<typeof setScrollY>;
 
 export default function scrollReducer(
   state: ScrollState = initialState,
-  action: ScrollAction
+  action: any
 ) {
   if (typeof state === 'undefined') {
     return initialState;
@@ -27,7 +24,7 @@ export default function scrollReducer(
     case SET_SCROLL_Y:
       return {
         ...state,
-        scrollY: action.payload
+        [action.payload.location]: action.payload.y
       };
     default:
       return state;

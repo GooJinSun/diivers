@@ -11,6 +11,7 @@ const AnonymousFeed = () => {
   const anonymousPosts = useSelector(
     (state) => state.postReducer.anonymousPosts
   );
+
   const isAppending =
     useSelector((state) => state.loadingReducer['post/APPEND_POSTS']) ===
     'REQUEST';
