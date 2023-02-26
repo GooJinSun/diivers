@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { getCookie } from '@utils/cookies';
+import i18n from '@i18n';
 import { JWT_ACCESS_TOKEN, JWT_REFRESH_TOKEN } from '../../constants/cookies';
 import {
   deleteTokensFromCookies,
@@ -17,6 +18,7 @@ const instance = axios.create({
   headers: {
     ...(csrf_token ? { 'X-CSRFToken': csrf_token } : {}),
     'Content-Type': 'application/json',
+    'Accept-Language': i18n.language,
     ...(access_token
       ? { Authorization: `${getBearerToken(access_token)}` }
       : {})
