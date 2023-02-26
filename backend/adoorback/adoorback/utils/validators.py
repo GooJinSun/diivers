@@ -1,7 +1,6 @@
 # import sentry_sdk
 
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
 
 # from rest_framework import status
 from rest_framework.views import exception_handler
@@ -13,7 +12,7 @@ def validate_notification_message(message):
                        'refused friend request of',
                        'accepted friend request of']:
         raise ValidationError(
-            _('%(message)s is not a valid message'),
+            '%(message)s is not a valid message',
             params={'message': message},
         )
 

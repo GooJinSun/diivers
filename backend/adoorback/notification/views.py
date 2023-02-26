@@ -1,5 +1,6 @@
 from django.db import transaction
 from django.http import JsonResponse
+from django.utils import translation
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
@@ -22,6 +23,10 @@ class NotificationList(generics.ListAPIView, generics.UpdateAPIView):
 
     @transaction.atomic
     def get_queryset(self):
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
+
         return Notification.objects.visible_only().filter(user=self.request.user)
 
     @transaction.atomic
@@ -41,6 +46,9 @@ class FriendRequestNotiList(generics.ListAPIView):
 
     @transaction.atomic
     def get_queryset(self):
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
         return Notification.objects.visible_only().filter(target_type=get_friend_request_type(), user=self.request.user)
 
 
@@ -53,6 +61,9 @@ class ResponseRequestNotiList(generics.ListAPIView):
 
     @transaction.atomic
     def get_queryset(self):
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
         return Notification.objects.visible_only().filter(target_type=get_response_request_type(), user=self.request.user)
 
 

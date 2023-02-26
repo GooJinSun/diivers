@@ -61,7 +61,8 @@ class UserSignup(generics.CreateAPIView):
                                     actor=admin,
                                     target=admin,
                                     origin=admin,
-                                    message=f"{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?",
+                                    message_ko=f"{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?",
+                                    message_en=f"Welcome {obj.username}! :) Start with looking around the anonymous feed.",
                                     redirect_url='/anonymous')
 
 
@@ -209,7 +210,8 @@ class CurrentUserProfile(generics.RetrieveUpdateAPIView):
                                         actor=admin,
                                         target=admin,
                                         origin=admin,
-                                        message=f"{obj.username}님, 질문 선택을 완료해주셨네요 :) 그럼 오늘의 질문들을 둘러보러 가볼까요?",
+                                        message_ko=f"{obj.username}님, 질문 선택을 완료해주셨네요 :) 그럼 오늘의 질문들을 둘러보러 가볼까요?",
+                                        message_en=f"Nice job selecting your questions {obj.username} :) How about looking around today's questions?",
                                         redirect_url='/questions')
 
 
