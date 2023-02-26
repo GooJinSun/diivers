@@ -9,10 +9,15 @@ const ScrollTopButton = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   };
 
+  const handleVisible = () => {
+    setIsVisible(window.scrollY > 0);
+  };
+
   useEffect(() => {
-    window.addEventListener('scroll', () => {
-      setIsVisible(window.scrollY > 0);
-    });
+    window.addEventListener('scroll', handleVisible);
+    return () => {
+      window.removeEventListener('scroll', handleVisible);
+    };
   }, []);
 
   if (!isVisible) return <></>;
