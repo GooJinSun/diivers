@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { appendDailyQuestions, getDailyQuestions } from '@modules/question';
 import CustomQuestionModal from '@common-components/custom-question-modal/CustomQuestionModal';
 import { PostListWrapper } from '@styles/wrappers';
-import useRestoreScroll from '@hooks/useRestoreScroll';
 import QuestionList from './question-list/QuestionList';
 import { NewQuestionButton } from './QuestionFeed.styles';
 
@@ -12,8 +11,6 @@ export default function QuestionFeed() {
     (state) => state.questionReducer.dailyQuestions
   );
   const dispatch = useDispatch();
-
-  useRestoreScroll();
 
   useEffect(() => {
     dispatch(getDailyQuestions());

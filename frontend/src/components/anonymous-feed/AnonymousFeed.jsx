@@ -4,7 +4,6 @@ import PostList from '@common-components/post-list/PostList';
 import { getPostsByType, appendPosts } from '@modules/post';
 import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
-import useRestoreScroll from '@hooks/useRestoreScroll';
 
 const AnonymousFeed = () => {
   const [target, setTarget] = useState(null);
@@ -12,8 +11,6 @@ const AnonymousFeed = () => {
   const anonymousPosts = useSelector(
     (state) => state.postReducer.anonymousPosts
   );
-
-  useRestoreScroll();
 
   const isAppending =
     useSelector((state) => state.loadingReducer['post/APPEND_POSTS']) ===
