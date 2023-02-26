@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { IconButton } from '@material-ui/core';
-import ArrowUpward from '@material-ui/icons/ArrowUpward';
+import VerticalAlignTop from '@material-ui/icons/VerticalAlignTop';
 import useWindowWidth from '@hooks/env/useWindowWidth';
-import { ButtonWrapper, ButtonText } from './ScrollTopButton.styles';
+import { ButtonWrapper } from './ScrollTopButton.styles';
 
 const ScrollTopButton = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -26,21 +26,12 @@ const ScrollTopButton = () => {
   return (
     <ButtonWrapper isMobile={isMobile}>
       <IconButton
-        color="primary"
         id="scroll-top-button"
         size="small"
+        style={{ color: '#f12c56' }}
         onClick={onClick}
       >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center'
-          }}
-        >
-          <ArrowUpward fontSize="small" />
-          <ButtonText>맨위로</ButtonText>
-        </div>
+        <VerticalAlignTop fontSize="medium" />
       </IconButton>
     </ButtonWrapper>
   );
