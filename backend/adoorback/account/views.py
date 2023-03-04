@@ -5,6 +5,7 @@ from django.apps import apps
 from django.contrib.auth import get_user_model, authenticate, login
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
+from django.utils import translation
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
@@ -45,6 +46,9 @@ class UserSignup(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
         user = User.objects.get(username=request.data.get('username'))
         email_manager.send_verification_email(user)
 
@@ -120,6 +124,9 @@ class SendResetPasswordEmail(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
         if user and user.is_active:
             email_manager.send_reset_password_email(user)
             
