@@ -91,9 +91,6 @@ class UserSignup(generics.CreateAPIView):
 
         self.perform_create(serializer)
 
-        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
-            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
-            translation.activate(lang)
         user = User.objects.get(username=request.data.get('username'))
         email_manager.send_verification_email(user)
 

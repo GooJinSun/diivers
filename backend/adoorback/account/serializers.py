@@ -48,8 +48,8 @@ class CustomTokenObtainPairSerializer(TokenObtainSerializer):
         return RefreshToken.for_user(user)
 
     def validate(self, attrs):
-        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
-            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+        if 'HTTP_ACCEPT_LANGUAGE' in self.context['request'].META:
+            lang = self.context['request'].META['HTTP_ACCEPT_LANGUAGE']
             translation.activate(lang)
             
         authenticate_kwargs = {
