@@ -58,7 +58,7 @@ export const SET_FCM_TOKEN = 'user/SET_FCM_TOKEN';
 export const REFRESH_PROFILE_IMAGE = 'user/REFRESH_PROFILE_IMAGE';
 
 const initialState = {
-  loginError: false,
+  loginError: null,
   signUpError: {},
   currentUser: null,
   selectedUser: null,
@@ -210,8 +210,7 @@ export const requestLogin = (loginInfo) => {
       dispatch(getCurrentUser());
       dispatch({ type: 'user/LOGIN_SUCCESS' });
     } catch (error) {
-      dispatch({ type: 'user/LOGIN_FAILURE', error });
-      dispatch({ type: 'user/REMOVE_ERROR' });
+      dispatch({ type: 'user/LOGIN_FAILURE', error: error.response.data });
     }
   };
 };
@@ -361,12 +360,6 @@ export default function userReducer(state, action) {
       return {
         ...state,
         currentUser: null
-      };
-    }
-    case REMOVE_ERROR: {
-      return {
-        ...state,
-        loginError: false
       };
     }
     case SET_FCM_TOKEN: {

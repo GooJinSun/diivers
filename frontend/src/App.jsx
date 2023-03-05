@@ -65,6 +65,7 @@ const App = () => {
   const { isDesktopMin } = useWindowWidth();
 
   const isSelectQuestionPage = location.pathname === '/select-questions';
+  const isAuthPage = location.pathname === '/login' || '/signup';
   const showWidget = !isDesktopMin && !isSelectQuestionPage && currentUser;
 
   useEffect(() => {
@@ -85,7 +86,7 @@ const App = () => {
       <Header />
       <MainWrapper isSelectQuestionPage={isSelectQuestionPage}>
         {showWidget && <QuestionListWidget />}
-        <FeedWrapper>
+        <FeedWrapper isAuthPage={isAuthPage}>
           <Switch>
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={SignUp} />

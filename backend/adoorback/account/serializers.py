@@ -1,13 +1,19 @@
 import secrets
 
 from django.db import transaction
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 from django.urls import reverse
+from django.utils import translation
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.settings import api_settings
+from django.contrib.auth.models import update_last_login
 
 from account.models import FriendRequest
 from adoorback.settings.base import BASE_URL
+from adoorback.utils.exceptions import InActiveUser, NoUsername, WrongPassword
 
 User = get_user_model()
 
@@ -20,7 +26,10 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'password','profile_pic', 'question_history', 'url', 'profile_image']
+        fields = ['id', 'username', 'email', 'password',
+                  'profile_pic', 'question_history', 'url',
+                  'profile_image', 'gender', 'date_of_birth',
+                  'ethnicity', 'research_agreement']
         extra_kwargs = {'password': {'write_only': True}}
 
     @transaction.atomic
@@ -32,6 +41,48 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
         user.save()
         return user
 
+
+class CustomTokenObtainPairSerializer(TokenObtainSerializer):
+    @classmethod
+    def get_token(cls, user):
+        return RefreshToken.for_user(user)
+
+    def validate(self, attrs):
+        if 'HTTP_ACCEPT_LANGUAGE' in self.context['request'].META:
+            lang = self.context['request'].META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
+            
+        authenticate_kwargs = {
+            self.username_field: attrs[self.username_field],
+            "password": attrs["password"],
+        }
+        try:
+            authenticate_kwargs["request"] = self.context["request"]
+        except KeyError:
+            pass
+
+        self.user = authenticate(**authenticate_kwargs)
+
+        if not api_settings.USER_AUTHENTICATION_RULE(self.user):
+            try:
+                user = User.objects.get(username=authenticate_kwargs["username"])
+            except:
+                raise NoUsername()
+            if not user.is_active:
+                raise InActiveUser()
+            raise WrongPassword()
+
+        data = {}
+            
+        refresh = self.get_token(self.user)
+
+        data['refresh'] = str(refresh)
+        data['access'] = str(refresh.access_token)
+
+        if api_settings.UPDATE_LAST_LOGIN:
+            update_last_login(None, self.user)
+
+        return data
 
 
 class AuthorFriendSerializer(serializers.ModelSerializer):

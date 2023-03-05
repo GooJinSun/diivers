@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import { requestActivate } from '@modules/user';
 import { AuthentiCationWrapper } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
+import { CommonButton } from '@styles/buttons';
+import { AccountActivateWrapper, ActivateDesc } from './AccountActivate.styles';
 
 export default function AccountActivate() {
   const dispatch = useDispatch();
   const { id, token } = useParams();
+  const history = useHistory();
 
   const [t] = useTranslation('translation', { keyPrefix: 'account_activate' });
 
@@ -22,6 +25,9 @@ export default function AccountActivate() {
     (state) => state.loadingReducer['user/ACTIVATE']
   );
 
+  const onClickLogin = () => history.push('/login');
+  const onClickSignUp = () => history.push('/signup');
+
   useEffect(() => {
     setIsActivatePending(activateStatus === 'REQUEST');
     setIsActivateSuccess(activateStatus === 'SUCCESS');
@@ -29,13 +35,30 @@ export default function AccountActivate() {
 
   return (
     <AuthentiCationWrapper>
-      {isActivatePending ? (
-        <div>{t('authenticating')}</div>
-      ) : isActivateSuccess ? (
-        <div>{t('email_authentication_is_completed')}</div>
-      ) : (
-        <div>{t('invalid_link')}</div>
-      )}
+      <AccountActivateWrapper>
+        {isActivatePending ? (
+          <ActivateDesc>{t('authenticating')}</ActivateDesc>
+        ) : isActivateSuccess ? (
+          <>
+            <ActivateDesc>
+              {t('email_authentication_is_completed')}
+            </ActivateDesc>
+            <CommonButton width={800} onClick={onClickLogin}>
+              {t('login_and_tour_diivers')}
+            </CommonButton>
+          </>
+        ) : (
+          <>
+            <ActivateDesc>{t('invalid_link')}</ActivateDesc>
+            <CommonButton width={800} onClick={onClickLogin}>
+              {t('login')}
+            </CommonButton>
+            <CommonButton width={800} onClick={onClickSignUp} sub>
+              {t('signup')}
+            </CommonButton>
+          </>
+        )}
+      </AccountActivateWrapper>
     </AuthentiCationWrapper>
   );
 }

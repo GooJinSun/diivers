@@ -3,7 +3,8 @@ import {
   MOBILE_MIN_WIDTH,
   DESKTOP_MIN_WIDTH,
   DEFAULT_MARGIN,
-  WIDGET_WIDTH
+  WIDGET_WIDTH,
+  AUTHENTICATION_MIN_WIDTH
 } from '@constants/layout';
 
 export const MainWrapper = styled.main`
@@ -15,16 +16,43 @@ export const MainWrapper = styled.main`
   }
 `;
 
+export const AuthenticationFormWrapper = styled.div`
+  width: 500px;
+  margin: 0 auto;
+  margin-top: 130px;
+
+  @media (max-width: ${AUTHENTICATION_MIN_WIDTH}px) {
+    width: 90%;
+    margin-top: 50px;
+  }
+`;
+
+export const AuthenticationWithDescWrapper = styled.div`
+  display: flex;
+  width: ${AUTHENTICATION_MIN_WIDTH}px;
+
+  @media (max-width: ${AUTHENTICATION_MIN_WIDTH}px) {
+    width: 100%;
+    flex-direction: column;
+  }
+`;
+
 export const AuthentiCationWrapper = styled.div`
   margin-top: 120px;
   width: 100%;
 `;
 
-export const FeedWrapper = styled.div`
-  width: calc(100% - 2 * ${WIDGET_WIDTH}px);
-  @media (max-width: ${DESKTOP_MIN_WIDTH}px) {
-    width: calc(100% - 2 * ${DEFAULT_MARGIN}px);
-  }
+interface FeedWrapperProps {
+  isAuthPage: boolean;
+}
+
+export const FeedWrapper = styled.div<FeedWrapperProps>`
+  ${(props) =>
+    !props.isAuthPage &&
+    `width: calc(100% - 2 * ${WIDGET_WIDTH}px);
+    @media (max-width: ${DESKTOP_MIN_WIDTH}px) {
+      width: calc(100% - 2 * ${DEFAULT_MARGIN}px);
+    }`}
   display: flex;
   flex-direction: column;
   align-items: center;
