@@ -1,8 +1,6 @@
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 
 from content_report.models import ContentReport
-from adoorback.serializers import AdoorBaseSerializer
 
 
 class ContentReportSerializer(serializers.ModelSerializer):

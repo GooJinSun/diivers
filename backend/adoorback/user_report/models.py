@@ -2,6 +2,7 @@ from django.db import models, transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from adoorback.models import AdoorTimestampedModel
 
@@ -25,7 +26,7 @@ class UserReport(AdoorTimestampedModel, SafeDeleteModel):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'reported_user'], name='unique_user_report'),
+            models.UniqueConstraint(fields=['user', 'reported_user'], condition=Q(deleted__isnull=True), name='unique_user_report'),
         ]
         indexes = [
             models.Index(fields=['-created_at']),
@@ -51,7 +52,7 @@ def delete_blocked_user_friendship(instance, **kwargs):
     
     from account.models import FriendRequest
     from feed.models import ResponseRequest
-    FriendRequest.objects.filter(requester=user, requestee=reported_user).delete()
-    FriendRequest.objects.filter(requester=reported_user, requestee=user).delete()
-    ResponseRequest.objects.filter(requester=user, requestee=reported_user).delete()
-    ResponseRequest.objects.filter(requester=reported_user, requestee=user).delete()
+    FriendRequest.objects.filter(requester=user, requestee=reported_user).delete(force_policy=SOFT_DELETE_CASCADE)
+    FriendRequest.objects.filter(requester=reported_user, requestee=user).delete(force_policy=SOFT_DELETE_CASCADE)
+    ResponseRequest.objects.filter(requester=user, requestee=reported_user).delete(force_policy=SOFT_DELETE_CASCADE)
+    ResponseRequest.objects.filter(requester=reported_user, requestee=user).delete(force_policy=SOFT_DELETE_CASCADE)

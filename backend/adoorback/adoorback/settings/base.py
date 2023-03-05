@@ -90,6 +90,7 @@ INSTALLED_APPS = [
     'import_export',
     'trackstats',
     'fcm_django',
+    'safedelete',
 ]
 
 SITE_ID = 1

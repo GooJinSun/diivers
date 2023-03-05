@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from adoorback.utils.content_types import get_comment_type
 from adoorback.models import AdoorTimestampedModel
@@ -49,7 +50,7 @@ class Like(AdoorTimestampedModel, SafeDeleteModel):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'content_type', 'object_id'], name='unique_like'),
+            models.UniqueConstraint(fields=['user', 'content_type', 'object_id'], condition=Q(deleted__isnull=True), name='unique_like'),
         ]
         ordering = ['id']
 

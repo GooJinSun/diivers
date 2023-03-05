@@ -343,6 +343,10 @@ def protect_article_noti(instance, **kwargs):
         noti.save()
 ###
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> e653298 (feat: #102 set unique constraint & cascade delete)
 ### notification protection for soft deletion
 @transaction.atomic
 @receiver(pre_save, sender=Question)
@@ -373,4 +377,8 @@ def protect_article_noti_soft(instance, **kwargs):
         noti.target_type = None
         noti.origin_type = None
         noti.save()
+<<<<<<< HEAD
 ###
+=======
+###
+>>>>>>> e653298 (feat: #102 set unique constraint & cascade delete)

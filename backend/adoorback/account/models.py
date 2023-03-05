@@ -16,6 +16,10 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
+
+from adoorback.models import AdoorTimestampedModel
+
 from safedelete import DELETED_INVISIBLE
 from safedelete.models import SafeDeleteModel
 from safedelete.models import SOFT_DELETE_CASCADE, HARD_DELETE
@@ -69,6 +73,10 @@ ETHNICITY_CHOICES = (
     (4, _('하와이 원주민/다른 태평양 섬 주민 (Native Hawaiian/Other Pacific Islander)')),
     (5, _('백인 (White)')),
 )
+
+
+class UserCustomManager(UserManager, SafeDeleteManager):
+    _safedelete_visibility = DELETED_INVISIBLE
 
 
 class UserCustomManager(UserManager, SafeDeleteManager):
@@ -160,7 +168,7 @@ class FriendRequest(AdoorTimestampedModel, SafeDeleteModel):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['requester', 'requestee', ], name='unique_friend_request'),
+                fields=['requester', 'requestee', ], condition=Q(deleted__isnull=True), name='unique_friend_request'),
         ]
         indexes = [
             models.Index(fields=['-updated_at']),
@@ -192,7 +200,7 @@ def delete_friend_noti(action, pk_set, instance, **kwargs):
 def create_friend_noti(created, instance, **kwargs):
     if instance.deleted:
         return
-        
+
     accepted = instance.accepted
     Notification = apps.get_model('notification', 'Notification')
     requester = instance.requester
