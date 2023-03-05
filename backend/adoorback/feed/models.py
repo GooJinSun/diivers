@@ -222,11 +222,12 @@ def create_response_request_noti(instance, **kwargs):
     requestee = instance.requestee
     if requester.id in requestee.user_report_blocked_ids: # do not create notification from/for blocked user
         return
-    message = f'똑똑똑~ {requester.username}님으로부터 질문이 왔어요!'
+    message_ko = f'똑똑똑~ {requester.username}님으로부터 질문이 왔어요!'
+    message_en = f'Knock knock~ {requester.username} has sent you a question!'
     redirect_url = f'/questions/{origin.id}'
     Notification.objects.create(actor=requester, user=requestee,
                                 origin=origin, target=target,
-                                message=message, redirect_url=redirect_url)
+                                message_ko=message_ko, message_en=message_en, redirect_url=redirect_url)
 
 
 @transaction.atomic
@@ -248,10 +249,11 @@ def create_request_answered_noti(instance, created, **kwargs):
         user = request.requester
         if actor.id in user.user_report_blocked_ids: # do not create notification from/for blocked user
             return
-        message = f'{actor.username}님이 회원님이 보낸 질문에 답했습니다.'
+        message_ko = f'{actor.username}님이 회원님이 보낸 질문에 답했습니다.'
+        message_en = f'{actor.username} has responded to your question.'
         Notification.objects.create(actor=actor, user=user,
                                     origin=origin, target=target,
-                                    message=message, redirect_url=redirect_url)
+                                    message_ko=message_ko, message_en=message_en, redirect_url=redirect_url)
 
 
 @transaction.atomic

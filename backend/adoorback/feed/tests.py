@@ -519,7 +519,7 @@ class ResponseRequestNotiAPITestCase(APITestCase):
             response_request_noti = Notification.objects.first()
             self.assertEqual(response_request_noti.user, friend_user)
             self.assertEqual(response_request_noti.actor, current_user)
-            self.assertEqual(response_request_noti.message, "똑똑똑~ current_user님으로부터 질문이 왔어요!")
+            self.assertEqual(response_request_noti.message_ko, "똑똑똑~ current_user님으로부터 질문이 왔어요!")
             self.assertEqual(response_request_noti.redirect_url, f'/questions/{question.id}')
 
         # mutliple response requests to a user on a question
@@ -556,7 +556,7 @@ class ResponseRequestNotiAPITestCase(APITestCase):
 
             self.assertEqual(Response.objects.first().response_targetted_notis.count(), 4)  # 요청자 각각에게
             self.assertEqual(Notification.objects.first().user, random_user_3)
-            self.assertEqual(Notification.objects.first().message, 'friend_user님이 회원님이 보낸 질문에 답했습니다.')
+            self.assertEqual(Notification.objects.first().message_ko, 'friend_user님이 회원님이 보낸 질문에 답했습니다.')
 
         # PATCH - modifying response should not create a new notification
         response_id = Response.objects.first().id

@@ -8,6 +8,7 @@ import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
 import { WarningMessage } from '@styles/messages';
 import RemoveIcon from '@material-ui/icons/RemoveCircle';
+import { useTranslation } from 'react-i18next';
 import { SignUpWrapper, ButtonWrapper } from './SignUp.styles';
 
 const ProfileImageUploadWrapper = styled.div`
@@ -59,12 +60,6 @@ export default function SignUp() {
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
-  useEffect(() => {
-    if (currentUser) history.push('/');
-  }, [currentUser, history]);
-
-  const { signUpError } = useSelector((state) => state.userReducer);
-
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isUsernameValid, setIsUsernameValid] = useState(true);
   const [isEmailValid, setIsEmailValid] = useState(true);
@@ -72,6 +67,15 @@ export default function SignUp() {
 
   const signUpSuccess =
     useSelector((state) => state.loadingReducer['user/SIGN_UP']) === 'SUCCESS';
+
+  const [t] = useTranslation('translation', { keyPrefix: 'sign_up' });
+
+  useEffect(() => {
+    if (!currentUser) return;
+    history.push('/');
+  }, [currentUser, history]);
+
+  const { signUpError } = useSelector((state) => state.userReducer);
 
   useEffect(() => {
     setIsSignUpSuccess(signUpSuccess);
@@ -152,44 +156,44 @@ export default function SignUp() {
   return (
     <SignUpWrapper>
       {isSubmitted && isSignUpSuccess ? (
-        <div>이메일 인증 완료해주세요.</div>
+        <div>{t('please_complete_the_email_verification')}</div>
       ) : (
         <div>
-          <h1 id="signup-title">회원가입</h1>
+          <h1 id="signup-title">{t('sign_up')}</h1>
           <CommonInput
             name="username"
             id="username-input"
             value={signUpInfo.username}
-            placeholder="닉네임"
+            placeholder={t('nickname')}
             onChange={onInputChange}
             invalid={isSubmitted && !isUsernameValid}
           />
           {isSubmitted && !isUsernameValid && (
-            <WarningMessage>닉네임이 유효하지 않습니다 :(</WarningMessage>
+            <WarningMessage>{t('nickname_is_not_valid')}</WarningMessage>
           )}
           <CommonInput
             id="email-input"
             name="email"
             value={signUpInfo.email}
-            placeholder="이메일"
+            placeholder={t('email')}
             onChange={onInputChange}
             invalid={isSubmitted && !isEmailValid}
           />
           {isSubmitted && !isEmailValid && (
-            <WarningMessage>이메일이 유효하지 않습니다 :(</WarningMessage>
+            <WarningMessage>{t('email_is_not_valid')}</WarningMessage>
           )}
           <CommonInput
             name="password"
             type="password"
             id="password-input"
             value={signUpInfo.password}
-            placeholder="비밀번호"
+            placeholder={t('password')}
             onChange={onInputChange}
             onKeyDown={onKeySubmit}
           />
           <ProfileImageUploadWrapper>
             <ProfileImageUploadButton onClick={handleClick}>
-              프로필 이미지 업로드
+              {t('upload_profile_image')}
             </ProfileImageUploadButton>
             <input
               type="file"
@@ -230,7 +234,7 @@ export default function SignUp() {
             margin="40px 0"
             onClick={onClickSubmitButton}
           >
-            회원가입
+            {t('sign_up')}
           </CommonButton>
           <ButtonWrapper>
             <AuthSubButton
@@ -238,14 +242,14 @@ export default function SignUp() {
               id="login-button"
               onClick={() => history.push('/login')}
             >
-              로그인
+              {t('login')}
             </AuthSubButton>
             <AuthSubButton
               type="button"
               id="privacy-button"
               onClick={handleOnClickPrivacy}
             >
-              개인정보처리방침
+              {t('personal_information_processing_policy')}
             </AuthSubButton>
           </ButtonWrapper>
         </div>

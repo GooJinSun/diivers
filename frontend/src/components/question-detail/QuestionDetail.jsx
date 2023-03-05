@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router';
 import Tabs from '@material-ui/core/Tabs';
@@ -15,6 +15,7 @@ import QuestionItem from '@common-components/question-item/QuestionItem';
 import Message from '@common-components/message/Message';
 import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
 import { PostListWrapper } from '@styles/wrappers';
+import { useTranslation } from 'react-i18next';
 import { useStyles } from './QuestionDetail.styles';
 
 const QuestionDetail = (props) => {
@@ -62,6 +63,8 @@ const QuestionDetail = (props) => {
     (state) => state.questionReducer.selectedQuestionResponses
   );
 
+  const [t] = useTranslation('translation');
+
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
     if (newValue === 0) setTabName('all');
@@ -69,15 +72,18 @@ const QuestionDetail = (props) => {
     if (newValue === 2) setTabName('anonymous');
   };
 
-  const onIntersect = ([entry]) => {
-    if (entry.isIntersecting) {
-      dispatch(appendResponsesByQuestionWithType(questionId, tabName));
-    }
-  };
+  const onIntersect = useCallback(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        dispatch(appendResponsesByQuestionWithType(questionId, tabName));
+      }
+    },
+    [dispatch, questionId, tabName]
+  );
 
   useEffect(() => {
     dispatch(getResponsesByQuestionWithType(questionId, tabName));
-  }, [dispatch, questionId, tab]);
+  }, [dispatch, questionId, tab, tabName]);
 
   const resetTabs = () => {
     setTab(0);
@@ -88,7 +94,7 @@ const QuestionDetail = (props) => {
       resetTabs();
       dispatch(resetSelectedQuestion());
     };
-  }, [questionId]);
+  }, [dispatch, questionId]);
 
   useEffect(() => {
     let observer;
@@ -97,7 +103,7 @@ const QuestionDetail = (props) => {
       observer.observe(target);
     }
     return () => observer && observer.disconnect();
-  }, [target]);
+  }, [onIntersect, target]);
 
   const responseList = (
     <>
@@ -135,9 +141,9 @@ const QuestionDetail = (props) => {
             textColor="primary"
             className={classes.header}
           >
-            <Tab label="전체" {...a11yProps(0)} />
-            <Tab label="친구" {...a11yProps(1)} />
-            <Tab label="익명" {...a11yProps(2)} />
+            <Tab label={t('question_detail.all')} {...a11yProps(0)} />
+            <Tab label={t('question_detail.friends')} {...a11yProps(1)} />
+            <Tab label={t('question_detail.anonymous')} {...a11yProps(2)} />
           </Tabs>
           {responses?.length !== 0 ? (
             <>
@@ -152,11 +158,14 @@ const QuestionDetail = (props) => {
               </TabPanel>
             </>
           ) : (
-            <Message margin="16px 0" message="표시할 게시물이 없습니다 :(" />
+            <Message
+              margin="16px 0"
+              message={t('feed_common.there_is_no_posts_to_display')}
+            />
           )}
         </>
       ) : (
-        <Message message="존재하지 않는 질문입니다" />
+        <Message message={t('question_detail.this_question_do_not_exit')} />
       )}
     </PostListWrapper>
   );

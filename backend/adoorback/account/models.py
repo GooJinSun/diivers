@@ -5,6 +5,7 @@ import secrets
 import os
 
 from django.apps import apps
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.fields import GenericRelation
@@ -13,6 +14,8 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
+from django.utils.translation import gettext as _
+from django.utils.translation import gettext_lazy as _
 
 from adoorback.models import AdoorTimestampedModel
 
@@ -29,7 +32,22 @@ def to_profile_images(instance, filename):
 def random_profile_color():
     # use random int so that initial users get different colors
     return '#{0:06X}'.format(secrets.randbelow(16777216))
+GENDER_CHOICES = (
+    (0, _('여성')),
+    (1, _('남성')),
+    (2, _('트랜스젠더 (transgender)')),
+    (3, _('논바이너리 (non-binary/non-conforming)')),
+    (4, _('응답하고 싶지 않음')),
+)
 
+ETHNICITY_CHOICES = (
+    (0, _('미국 원주민/알래스카 원주민 (American Indian/Alaska Native)')),
+    (1, _('아시아인 (Asian)')),
+    (2, _('흑인/아프리카계 미국인 (Black/African American)')),
+    (3, _('히스패닉/라틴계 미국인 (Hispanic/Latino)')),
+    (4, _('하와이 원주민/다른 태평양 섬 주민 (Native Hawaiian/Other Pacific Islander)')),
+    (5, _('백인 (White)')),
+)
 
 class User(AbstractUser, AdoorTimestampedModel):
     """User Model
@@ -40,6 +58,13 @@ class User(AbstractUser, AdoorTimestampedModel):
     profile_pic = models.CharField(default=random_profile_color, max_length=7)
     profile_image = models.ImageField(storage=OverwriteStorage(), upload_to=to_profile_images, blank=True, null=True)
     friends = models.ManyToManyField('self', symmetrical=True, blank=True)
+    gender = models.IntegerField(choices=GENDER_CHOICES, null=True)
+    date_of_birth = models.DateField(null=True)
+    ethnicity = models.IntegerField(choices=ETHNICITY_CHOICES, null=True)
+    research_agreement = models.BooleanField(default=False)
+    language = models.CharField(max_length=10,
+                                choices=settings.LANGUAGES,
+                                default=settings.LANGUAGE_CODE)
 
     friendship_targetted_notis = GenericRelation("notification.Notification",
                                                  content_type_field='target_type',
@@ -144,17 +169,20 @@ def create_friend_noti(created, instance, **kwargs):
     if created:
         Notification.objects.create(user=requestee, actor=requester,
                                     origin=requester, target=instance,
-                                    message=f'{requester.username}님이 친구 요청을 보냈습니다.',
+                                    message_ko=f'{requester.username}님이 친구 요청을 보냈습니다.',
+                                    message_en=f'{requester.username} has requested to be your friend.',
                                     redirect_url=f'/users/{requester.username}')
         return
     elif accepted:
         Notification.objects.create(user=requestee, actor=requester,
                                     origin=requester, target=requester,
-                                    message=f'{requester.username}님과 친구가 되었습니다.',
+                                    message_ko=f'{requester.username}님과 친구가 되었습니다.',
+                                    message_en=f'You are now friends with {requester.username}.',
                                     redirect_url=f'/users/{requester.username}')
         Notification.objects.create(user=requester, actor=requestee,
                                     origin=requestee, target=requestee,
-                                    message=f'{requestee.username}님과 친구가 되었습니다.',
+                                    message_ko=f'{requestee.username}님과 친구가 되었습니다.',
+                                    message_en=f'You are now friends with {requestee.username}.',
                                     redirect_url=f'/users/{requestee.username}')
         # add friendship
         requester.friends.add(requestee)

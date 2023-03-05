@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFriendList } from '@modules/friend';
 import FriendItem from '@common-components/friend-item/FriendItem';
+import { useTranslation } from 'react-i18next';
 import { FriendListWrapper, FriendListContainer } from './FriendsPage.styles';
 
 export default function FriendsPage() {
   const dispatch = useDispatch();
   const friendList = useSelector((state) => state.friendReducer.friendList);
 
+  const [t] = useTranslation('translation', { keyPrefix: 'friend_page' });
   useEffect(() => {
     dispatch(getFriendList());
   }, [dispatch]);
@@ -26,7 +28,7 @@ export default function FriendsPage() {
     <FriendListWrapper>
       <FriendListContainer>
         <h3>
-          친구 목록
+          {t('friend_list')}
           {`(${friendList?.length})`}
         </h3>
         {friendItemList}

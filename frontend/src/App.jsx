@@ -34,6 +34,7 @@ import useAppLogin from '@hooks/auth/useAppLogin';
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import { initGA, trackPage } from './ga';
 import useFcm from './hooks/useFcm';
+import './i18n';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -44,7 +45,8 @@ const theme = createTheme({
     secondary: { light: '#eee', main: '#777' }
   },
   typography: {
-    fontFamily: ['Noto Sans KR', 'sans-serif']
+    fontFamily: ['Noto Sans KR', 'sans-serif'],
+    button: { textTransform: 'none' }
   }
 });
 

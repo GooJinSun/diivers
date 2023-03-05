@@ -17,6 +17,7 @@ import {
 } from '@styles/wrappers';
 import { getRandomQuestions, getDailyQuestions } from '@modules/question';
 import { useRecommendedQuestionList } from '@queries/questions';
+import { useTranslation } from 'react-i18next';
 import {
   useStyles,
   NewQuestionButton,
@@ -40,6 +41,8 @@ const QuestionListWidget = ({
   const { data: recommendedQuestions = [] } = useRecommendedQuestionList();
 
   const dispatch = useDispatch();
+
+  const [t] = useTranslation('translation', { keyPrefix: 'widget' });
 
   const handleModalOpen = () => {
     setCustomQuestionModalOpen(true);
@@ -113,7 +116,7 @@ const QuestionListWidget = ({
           <CardContent className={classes.cardContent}>
             <WidgetTitleWrapper>
               <Typography variant="h6" className={classes.title}>
-                추천 질문
+                {t('recommended_questions')}
               </Typography>
               <FlexWrapper>
                 {isFolded ? (
@@ -174,7 +177,7 @@ const QuestionListWidget = ({
           </CardContent>
         </WidgetCard>
         <NewQuestionButton margin="16px 0" onClick={handleModalOpen}>
-          새로운 질문 만들기
+          {t('create_a_question')}
         </NewQuestionButton>
         {isCustomQuestionModalOpen && (
           <CustomQuestionModal

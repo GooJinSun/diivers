@@ -18,15 +18,23 @@ import TabPanel, { a11yProps } from '@common-components/tab-panel/TabPanel';
 import Message from '@common-components/message/Message';
 import { CommonButton } from '@styles/buttons';
 import { useHistory } from 'react-router';
+import i18n from '@i18n';
+import { useTranslation } from 'react-i18next';
 import { useStyles } from './NotificationPage.styles';
 
 const READ_ALL_NOTI_DELAY = 300;
 
 // FIXME: ts 전환시 readonly로 대체
 const NOTIFICATION_TABS = {
-  ALL: { name: '전체', index: 0 },
-  FRIEND_REQUEST: { name: '친구 요청', index: 1 },
-  RESPONSE_REQUEST: { name: '받은 질문', index: 2 }
+  ALL: { name: i18n.t('notification_page.all'), index: 0 },
+  FRIEND_REQUEST: {
+    name: i18n.t('notification_page.friend_requests'),
+    index: 1
+  },
+  RESPONSE_REQUEST: {
+    name: i18n.t('notification_page.received_questions'),
+    index: 2
+  }
 };
 
 export default function NotificationPageNotificationPage() {
@@ -36,6 +44,8 @@ export default function NotificationPageNotificationPage() {
   const [tab, setTab] = useState(NOTIFICATION_TABS.ALL.index);
 
   const classes = useStyles();
+
+  const [t] = useTranslation('translation', { keyPrefix: 'notification_page' });
 
   const notifications = useSelector(
     (state) => state.notiReducer.receivedNotifications
@@ -139,8 +149,8 @@ export default function NotificationPageNotificationPage() {
   const friendRequestList =
     friendRequests.length === 0 ? (
       <Message
-        message="친구 요청이 없습니다."
-        messageDetail="친구를 검색해서 먼저 요청을 보내보세요!"
+        message={t('no_friend_request')}
+        messageDetail={t('search_for_a_friend')}
       />
     ) : (
       friendRequests.map((friendRequestNoti) => {
@@ -166,8 +176,8 @@ export default function NotificationPageNotificationPage() {
         }}
       >
         <Message
-          message="받은 질문이 없습니다."
-          messageDetail="친구에게 먼저 질문을 보내보면 어떨까요? :)"
+          message={t('no_questions_received')}
+          messageDetail={t('why_dont_you_send_a_question_to_your_friend_first')}
           noBorder
         />
         <CommonButton
@@ -176,7 +186,7 @@ export default function NotificationPageNotificationPage() {
           onClick={onClickGoQuestionFeed}
           width="50%"
         >
-          질문 피드 둘러보기
+          {t('looking_around_the_question_feed')}
         </CommonButton>
       </div>
     ) : (

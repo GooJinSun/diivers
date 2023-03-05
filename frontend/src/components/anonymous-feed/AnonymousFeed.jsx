@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import PostList from '@common-components/post-list/PostList';
 import { getPostsByType, appendPosts } from '@modules/post';
 import Message from '@common-components/message/Message';
+import { useTranslation } from 'react-i18next';
 
 const AnonymousFeed = () => {
   const [target, setTarget] = useState(null);
@@ -16,6 +17,8 @@ const AnonymousFeed = () => {
   const isLoading =
     useSelector((state) => state.loadingReducer['post/GET_ANON_POSTS']) ===
     'REQUEST';
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   const onIntersect = useCallback(
     ([entry]) => {
@@ -42,7 +45,7 @@ const AnonymousFeed = () => {
   return (
     <>
       {anonymousPosts?.length === 0 && !isLoading ? (
-        <Message margin="16px 0" message="표시할 게시물이 없습니다 :(" />
+        <Message margin="16px 0" message={t('there_is_no_posts_to_display')} />
       ) : (
         <>
           <PostList

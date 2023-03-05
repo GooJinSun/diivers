@@ -5,6 +5,7 @@ from django.apps import apps
 from django.contrib.auth import get_user_model, authenticate, login
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
+from django.utils import translation
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework import generics
 from rest_framework.exceptions import PermissionDenied
@@ -45,6 +46,9 @@ class UserSignup(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
 
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
         user = User.objects.get(username=request.data.get('username'))
         email_manager.send_verification_email(user)
 
@@ -61,7 +65,8 @@ class UserSignup(generics.CreateAPIView):
                                     actor=admin,
                                     target=admin,
                                     origin=admin,
-                                    message=f"{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?",
+                                    message_ko=f"{obj.username}님, 반갑습니다! :) 먼저 익명피드를 둘러볼까요?",
+                                    message_en=f"Welcome {obj.username}! :) Start with looking around the anonymous feed.",
                                     redirect_url='/anonymous')
 
 
@@ -119,6 +124,9 @@ class SendResetPasswordEmail(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
         if user and user.is_active:
             email_manager.send_reset_password_email(user)
             
@@ -209,7 +217,8 @@ class CurrentUserProfile(generics.RetrieveUpdateAPIView):
                                         actor=admin,
                                         target=admin,
                                         origin=admin,
-                                        message=f"{obj.username}님, 질문 선택을 완료해주셨네요 :) 그럼 오늘의 질문들을 둘러보러 가볼까요?",
+                                        message_ko=f"{obj.username}님, 질문 선택을 완료해주셨네요 :) 그럼 오늘의 질문들을 둘러보러 가볼까요?",
+                                        message_en=f"Nice job selecting your questions {obj.username} :) How about looking around today's questions?",
                                         redirect_url='/questions')
 
 

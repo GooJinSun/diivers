@@ -26,7 +26,7 @@ class NotificationSerializer(serializers.ModelSerializer):
         return obj.target.type == 'FriendRequest'
 
     def get_actor_detail(self, obj):
-        if obj.message[:13] == '익명의 사용자가 회원님의':
+        if obj.message_ko.startswith('익명의 사용자가 회원님의'):
             return AuthorAnonymousSerializer(obj.actor).data
         return AuthorFriendSerializer(obj.actor).data
 

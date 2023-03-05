@@ -7,6 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import { useTranslation } from 'react-i18next';
 import { createPost, editSelectedPost } from '../../../modules/post';
 import {
   useStyles,
@@ -48,7 +49,9 @@ export default function ShareSettings({
     if (isArticle) {
       setShareState({ shareWithFriends: true, shareAnonymously: false });
     }
-  }, [location, postObj]);
+  }, [isArticle, location, postObj]);
+
+  const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
   const handleChange = (e) => {
     const { name, checked } = e.target;
@@ -117,7 +120,7 @@ export default function ShareSettings({
               control={controlShareWithFriends}
               label={
                 <Typography className={classes.label}>
-                  친구에게 공유하기
+                  {t('share_with_friends')}
                 </Typography>
               }
             />
@@ -126,7 +129,7 @@ export default function ShareSettings({
               control={controlShareAnonymously}
               label={
                 <Typography className={classes.label}>
-                  익명으로 공유하기
+                  {t('share_anonymously')}
                 </Typography>
               }
             />
@@ -143,12 +146,12 @@ export default function ShareSettings({
             (edit ? !postObj?.content : !newPost?.content)
           }
         >
-          게시
+          {t('post')}
         </Button>
       </RespFormGroup>
       {isArticle && (
         <ArticleInfo>
-          질문, 답변을 제외한 게시글은 친구들에게만 공개됩니다.
+          {t('posts_excluding_questions_and_answers_are_only_open_to_friends')}
         </ArticleInfo>
       )}
       <Dialog
@@ -160,7 +163,7 @@ export default function ShareSettings({
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            내용을 입력해주세요!
+            {t('please_enter_the_content')}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -170,7 +173,7 @@ export default function ShareSettings({
             color="primary"
             autoFocus
           >
-            확인
+            {t('ok')}
           </Button>
         </DialogActions>
       </Dialog>
