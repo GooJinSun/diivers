@@ -201,6 +201,7 @@
   "message": {
     "you_can_not_see_posts_from_non-friends": "친구가 아닌 사용자의 게시물은 볼 수 없습니다.",
     "make_a_friend_request": "친구 신청을 해보세요 :)",
-    "this_post_is_not_accessible":"이 게시물에 접근할 수 없습니다."
+    "this_post_is_not_accessible":"이 게시물에 접근할 수 없습니다.",
+    "this_draft_does_not_exist": "존재하지 않는 게시글입니다."
   }
 }

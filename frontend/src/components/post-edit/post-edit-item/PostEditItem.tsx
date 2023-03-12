@@ -4,17 +4,17 @@ import QuestionBox from '@common-components/question-box/QuestionBox';
 import ShareSettings from '@common-components/share-settings/ShareSettings';
 import { PostItemWrapper } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
-import { Post } from '@models/posts';
+import { PostDraft } from '@models/posts';
 import { isArticle, isResponse } from '@models/postTypeGuards';
 import { useStyles } from './PostEditItem.styles';
 
 interface PostEditItemProps {
-  postObj: Post;
+  postObj: PostDraft;
 }
 
 const PostEditItem = ({ postObj }: PostEditItemProps) => {
   const classes = useStyles();
-  const [editPost, setEditPost] = useState<Post>(postObj);
+  const [editPost, setEditPost] = useState<PostDraft>(postObj);
 
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
