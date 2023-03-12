@@ -6,9 +6,11 @@ import PostItem from '@common-components/post-item/PostItem';
 import QuestionItem from '@common-components/question-item/QuestionItem';
 import Message from '@common-components/message/Message';
 import { PostListWrapper } from '@styles/wrappers';
+import { useTranslation } from 'react-i18next';
 import LoadingItem from './loading-item/LoadingItem';
 
 export default function PostDetail() {
+  const [t] = useTranslation('translation');
   const selectedPost = useSelector((state) => state.postReducer.selectedPost);
   const selectedPostFailure = useSelector(
     (state) => state.postReducer.selectedPostFailure
@@ -26,7 +28,7 @@ export default function PostDetail() {
   }, [postType, id, dispatch]);
 
   if (selectedPostFailure) {
-    return <Message message="이 게시물에 접근할 수 없습니다." />;
+    return <Message message={t('message.this_post_is_not_accessible')} />;
   }
   if (
     selectedPost?.type === 'Question' ||

@@ -197,5 +197,10 @@
     "user_search_results": "사용자 검색 결과",
     "no_results": "검색 결과 없음",
     "please_enter_a_search_keyword": "검색어(닉네임)를 입력하세요."
+  },
+  "message": {
+    "you_can_not_see_posts_from_non-friends": "친구가 아닌 사용자의 게시물은 볼 수 없습니다.",
+    "make_a_friend_request": "친구 신청을 해보세요 :)",
+    "this_post_is_not_accessible":"이 게시물에 접근할 수 없습니다."
   }
 }
