@@ -4,7 +4,7 @@ import Typography from '@material-ui/core/Typography';
 import { useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Article, Response, Question } from '@models/posts';
+import { PostDraft } from '@models/posts';
 import { createPost, editSelectedPost } from '../../../modules/post';
 import {
   useStyles,
@@ -14,7 +14,7 @@ import {
 } from './ShareSettings.styles';
 
 interface ShareSettingsProps {
-  postObj: Article | Response | Question;
+  postObj: PostDraft;
   isEdit?: boolean;
   isArticle?: boolean;
   resetContent?: () => void;
