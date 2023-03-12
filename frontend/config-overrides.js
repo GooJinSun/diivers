@@ -11,7 +11,8 @@ module.exports = function override(config) {
     '@queries': 'src/queries',
     '@utils': 'src/utils',
     '@styles': 'src/styles',
-    '@i18n': 'src/i18n'
+    '@i18n': 'src/i18n',
+    '@models': 'src/models'
   })(config);
 
   return config;
