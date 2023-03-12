@@ -31,8 +31,8 @@ export default function UserPostList({
   if (isFriendOrMyPage === false) {
     return (
       <Message
-        message="친구가 아닌 사용자의 게시물은 볼 수 없습니다"
-        messageDetail="친구 신청을 해보세요 :)"
+        message={t('message.you_can_not_see_posts_from_non-friends')}
+        messageDetail={t('message.make_a_friend_request')}
         noBorder
       />
     );

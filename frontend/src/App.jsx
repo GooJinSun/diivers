@@ -65,7 +65,9 @@ const App = () => {
   const { isDesktopMin } = useWindowWidth();
 
   const isSelectQuestionPage = location.pathname === '/select-questions';
-  const isAuthPage = location.pathname === '/login' || '/signup';
+
+  const isAuthPage =
+    location.pathname === '/login' || location.pathname === '/signup';
   const showWidget = !isDesktopMin && !isSelectQuestionPage && currentUser;
 
   useEffect(() => {

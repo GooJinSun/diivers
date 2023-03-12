@@ -197,5 +197,10 @@
     "user_search_results": "User search results",
     "no_results": "No results",
     "please_enter_a_search_keyword": "Please enter a nickname"
+  },
+  "message": {
+    "you_can_not_see_posts_from_non-friends": "You can't see posts from non-friends.",
+    "make_a_friend_request": "Make a friend request :)",
+    "this_post_is_not_accessible":"This post is not accessible"
   }
 }

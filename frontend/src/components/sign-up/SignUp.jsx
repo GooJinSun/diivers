@@ -78,6 +78,7 @@ export default function SignUp() {
     )
       setIsInactiveUser(true);
     if (
+      signUpError.detail.includes('email') ||
       signUpError.detail.includes('Email') ||
       signUpError.detail.includes('이메일')
     )
