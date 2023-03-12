@@ -17,8 +17,11 @@
       "@constants/*": ["./src/constants/*"],
       "@hooks/*": ["./src/hooks/*"],
       "@modules/*": ["./src/modules/*"],
+      "@queries/*": [".src/queries/*"],
       "@utils/*": ["./src/utils/*"],
-      "@styles/*": ["./src/styles/*"]
+      "@styles/*": ["./src/styles/*"],
+      "@i18n/*": ["./src/i18n/*"],
+      "@models/*": ["./src/models/*"]
     },
     "preserveConstEnums": true,
     "removeComments": false,
@@ -31,6 +34,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/_common/share-settings/ShareSettings.tsx", "src/components/post-edit/PostEdit.jsx"],
   "exclude": ["node_modules"]
 }
