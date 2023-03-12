@@ -205,20 +205,34 @@ class Post(AdoorModel, SafeDeleteModel):
  
 
 @transaction.atomic
+@receiver(post_delete, sender=User)
 @receiver(post_save, sender=Question)
 @receiver(post_save, sender=Response)
 @receiver(post_save, sender=Article)
-def create_or_softdelete_post(sender, instance, **kwargs):
+def softdelete_post(sender, instance, **kwargs):
     if instance.deleted:
-        content_type = ContentType.objects.get_for_model(sender)
-        try:
-            post = Post.objects.get(content_type=content_type, object_id=instance.id)
-        except Post.DoesNotExist:
-            print('Post object was not found')
-            return
-        post.delete(force_policy=SOFT_DELETE_CASCADE)
-        post.deleted_by_cascade = True
-        post.save()
+        if sender == User:
+            Post.objects.filter(author_id=instance.id).delete(force_policy=SOFT_DELETE_CASCADE)
+            post.deleted_by_cascade = True  # 이거 하는 게 맞을까나
+            post.save()
+        else:
+            content_type = ContentType.objects.get_for_model(sender)
+            try:
+                post = Post.objects.get(content_type=content_type, object_id=instance.id)
+            except Post.DoesNotExist:
+                return
+            post.delete(force_policy=SOFT_DELETE_CASCADE)
+            post.deleted_by_cascade = True  # 이거 하는 게 맞을까나
+            post.save()
+        return
+
+
+@transaction.atomic
+@receiver(post_save, sender=Question)
+@receiver(post_save, sender=Response)
+@receiver(post_save, sender=Article)
+def create_post(sender, instance, **kwargs):
+    if instance.deleted:
         return
 
     content_type = ContentType.objects.get_for_model(sender)
@@ -241,7 +255,7 @@ def create_or_softdelete_post(sender, instance, **kwargs):
 @receiver(post_delete, sender=Question)
 @receiver(post_delete, sender=Response)
 @receiver(post_delete, sender=Article)
-def delete_post(sender, instance, **kwargs):
+def harddelete_post(sender, instance, **kwargs):
     if sender == User:
         Post.objects.filter(author_id=instance.id).delete(force_policy=HARD_DELETE)
     else:
@@ -349,28 +363,31 @@ def protect_article_noti(instance, **kwargs):
 @receiver(pre_save, sender=Question)
 def protect_question_noti_soft(instance, **kwargs):
     # response request에 대한 response 보냈을 때 발생하는 노티, like/comment로 발생하는 노티 모두 보호
-    for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/questions/{instance.id}'):
-        noti.target_type = None
-        noti.origin_type = None
-        noti.save()
+    if instance.deleted:
+        for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/questions/{instance.id}'):
+            noti.target_type = None
+            noti.origin_type = None
+            noti.save()
 
 
 @transaction.atomic
 @receiver(pre_save, sender=Response)
 def protect_response_noti_soft(instance, **kwargs):
     # comment, like로 인한 노티, response request 답변으로 인한 노티 모두 보호
-    for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/responses/{instance.id}'):
-        noti.target_type = None
-        noti.origin_type = None
-        noti.save()
+    if instance.deleted:
+        for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/responses/{instance.id}'):
+            noti.target_type = None
+            noti.origin_type = None
+            noti.save()
 
 
 @transaction.atomic
 @receiver(pre_save, sender=Article)
 def protect_article_noti_soft(instance, **kwargs):
-    # comment, like로 인한 노티 모두 보호
-    for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/articles/{instance.id}'):
-        noti.target_type = None
-        noti.origin_type = None
-        noti.save()
+    if instance.deleted:
+        # comment, like로 인한 노티 모두 보호
+        for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/articles/{instance.id}'):
+            noti.target_type = None
+            noti.origin_type = None
+            noti.save()
 ###
