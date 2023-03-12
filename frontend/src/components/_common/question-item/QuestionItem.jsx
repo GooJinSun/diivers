@@ -53,7 +53,9 @@ export default function QuestionItem({
     question_id: questionObj?.id,
     question_detail: questionObj,
     content: '',
-    type: 'Response'
+    type: 'Response',
+    share_with_friends: false,
+    share_anonymously: false
   });
   const [isQuestionSendModalOpen, setQuestionSendModalOpen] = useState(false);
 
@@ -170,7 +172,7 @@ export default function QuestionItem({
             rowsMin={3}
             onChange={handleContentChange}
           />
-          <ShareSettings newPost={newPost} resetContent={resetContent} />
+          <ShareSettings postObj={newPost} resetContent={resetContent} />
         </>
       )}
       {isQuestionSendModalOpen && (

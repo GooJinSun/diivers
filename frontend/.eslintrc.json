@@ -52,7 +52,13 @@
       "error",
       { "declaration": false, "assignment": false }
     ],
-    "react/jsx-one-expression-per-line": "off"
+    "react/jsx-one-expression-per-line": "off",
+    "no-undef": ["off"],
+    "no-unused-vars": "off",
+    "no-shadow": "off",
+    "react/require-default-props": ["error", {"functions": "ignore"}],
+    "@typescript-eslint/no-shadow": ["error"],
+    "@typescript-eslint/no-unused-vars": ["error"]
   },
   "globals": {
     "shallow": true,
