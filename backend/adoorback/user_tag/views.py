@@ -5,7 +5,7 @@ from django.db.models import Case, Value, When, IntegerField
 
 from account.serializers import UserFriendshipStatusSerializer
 
-from adoorback.validators import adoor_exception_handler
+from adoorback.utils.validators import adoor_exception_handler
 
 User = get_user_model()
 

@@ -14,7 +14,7 @@ from user_tag.models import UserTag
 from adoorback.models import AdoorModel
 
 from adoorback.utils.helpers import wrap_content
-from adoorback.content_types import get_comment_type, get_generic_relation_type
+from adoorback.utils.content_types import get_comment_type, get_generic_relation_type
 from utils.helpers import parse_user_tag_from_content
 
 from safedelete.models import SafeDeleteModel

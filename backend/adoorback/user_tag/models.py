@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 
 from adoorback.models import AdoorTimestampedModel
 from notification.models import Notification
-from adoorback.content_types import get_generic_relation_type
+from adoorback.utils.content_types import get_generic_relation_type
 
 User = get_user_model()
 

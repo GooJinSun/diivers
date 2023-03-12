@@ -2,7 +2,7 @@ import re
 
 from django.contrib.auth import get_user_model
 
-from adoorback.validators import USERNAME_REGEX
+from adoorback.utils.validators import USERNAME_REGEX
 
 User = get_user_model()
 
