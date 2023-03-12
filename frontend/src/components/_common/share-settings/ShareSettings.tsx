@@ -44,8 +44,6 @@ export default function ShareSettings({
   };
 
   const onClickSubmitButton = async () => {
-    onSubmit?.();
-
     if (isEdit) {
       await dispatch(
         editSelectedPost({
@@ -63,6 +61,8 @@ export default function ShareSettings({
       );
       resetContent?.();
     }
+
+    onSubmit?.();
   };
 
   const controlShareWithFriends = (
