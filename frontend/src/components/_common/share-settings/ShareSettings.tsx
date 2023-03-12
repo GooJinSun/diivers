@@ -18,13 +18,15 @@ interface ShareSettingsProps {
   isEdit?: boolean;
   isArticle?: boolean;
   resetContent?: () => void;
+  onSubmit?: () => void;
 }
 
 export default function ShareSettings({
   postObj,
   resetContent,
   isEdit = false,
-  isArticle = false
+  isArticle = false,
+  onSubmit
 }: ShareSettingsProps) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -42,6 +44,8 @@ export default function ShareSettings({
   };
 
   const onClickSubmitButton = async () => {
+    onSubmit?.();
+
     if (isEdit) {
       await dispatch(
         editSelectedPost({
