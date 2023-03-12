@@ -219,7 +219,7 @@ SERVER_EMAIL = 'adoor.team'
 
 # https://fcm-django.readthedocs.io/en/latest/
 FIREBASE_CREDENTIAL_PATH = os.path.join(BASE_DIR, 'serviceAccountKey.json')
-FIREBASE_CREDENTIAL = credentials.Certificate(FIREBASE_CREDENTIAL_PATH);
+FIREBASE_CREDENTIAL = credentials.Certificate(FIREBASE_CREDENTIAL_PATH)
 FIREBASE_APP = initialize_app(FIREBASE_CREDENTIAL)
 FCM_DJANGO_SETTINGS = {
   # an instance of firebase_admin.App to be used as default for all fcm-django requests

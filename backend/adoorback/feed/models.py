@@ -343,10 +343,7 @@ def protect_article_noti(instance, **kwargs):
         noti.save()
 ###
 
-<<<<<<< HEAD
-=======
 
->>>>>>> e653298 (feat: #102 set unique constraint & cascade delete)
 ### notification protection for soft deletion
 @transaction.atomic
 @receiver(pre_save, sender=Question)
@@ -371,14 +368,9 @@ def protect_response_noti_soft(instance, **kwargs):
 @transaction.atomic
 @receiver(pre_save, sender=Article)
 def protect_article_noti_soft(instance, **kwargs):
-    print(kwargs)
     # comment, like로 인한 노티 모두 보호
     for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/articles/{instance.id}'):
         noti.target_type = None
         noti.origin_type = None
         noti.save()
-<<<<<<< HEAD
 ###
-=======
-###
->>>>>>> e653298 (feat: #102 set unique constraint & cascade delete)

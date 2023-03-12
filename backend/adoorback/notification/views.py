@@ -27,6 +27,7 @@ class NotificationList(generics.ListAPIView):
             lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
             translation.activate(lang)
 
+        print(Notification.objects.visible_only().filter(user=self.request.user).first().created_at)
         return Notification.objects.visible_only().filter(user=self.request.user)
 
 
