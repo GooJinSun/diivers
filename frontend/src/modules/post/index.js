@@ -387,7 +387,7 @@ export default function postReducer(state, action) {
     case GET_ANON_POSTS_REQUEST:
     case GET_FRIEND_POSTS_REQUEST:
     case GET_USER_POSTS_REQUEST:
-      return { ...initialState, selectedUserId: action.userId };
+      return { ...state, selectedUserId: action.userId };
     case APPEND_POSTS_REQUEST:
       return {
         ...state,
@@ -410,6 +410,16 @@ export default function postReducer(state, action) {
         next: action.next
       };
     case GET_FRIEND_POSTS_SUCCESS:
+      // NOTE: action.result가 이미 15개만 가져와버리고 있음
+      console.log('GET_FRIEND_POSTS_SUCCESS');
+      // console.log(action.result);
+      // const allList = [...state.friendPosts, ...action.result];
+      // const uniquePostList = Array.from(new Set(allList.map((a) => a.id))).map(
+      //   (id) => {
+      //     return allList.find((a) => a.id === id);
+      //   }
+      // );
+      // console.log(uniquePostList);
       return {
         ...state,
         friendPosts: [...action.result],
