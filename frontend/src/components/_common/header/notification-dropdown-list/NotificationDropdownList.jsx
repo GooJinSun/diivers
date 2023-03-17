@@ -1,4 +1,4 @@
-import React, { useEffect, forwardRef, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
@@ -58,7 +58,7 @@ const NotificationDropdownList = ({ setIsNotiOpen }) => {
   }, [dispatch]);
 
   return (
-    <Card variant="outlined" className={classes.notificationDropdown} ref={ref}>
+    <Card variant="outlined" className={classes.notificationDropdown}>
       <ButtonWrapper>
         <button
           type="button"
@@ -87,7 +87,7 @@ const NotificationDropdownList = ({ setIsNotiOpen }) => {
       )}
     </Card>
   );
-});
+};
 
 NotificationDropdownList.displayName = 'NotificationDropdownList';
 export default React.memo(NotificationDropdownList);
