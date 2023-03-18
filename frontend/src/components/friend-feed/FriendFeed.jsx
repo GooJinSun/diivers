@@ -6,6 +6,7 @@ import NewPost from '@common-components/new-post/NewPost';
 import PostList from '@common-components/post-list/PostList';
 import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
+import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
 
 const FriendFeed = () => {
   const [target, setTarget] = useState(false);
@@ -46,6 +47,7 @@ const FriendFeed = () => {
   return (
     <>
       <NewPost />
+      <GoToDraftButton />
       {friendPosts?.length === 0 && !isLoading ? (
         <Message
           margin="16px 0"

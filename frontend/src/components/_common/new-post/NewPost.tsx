@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import useArticleDraft from '@hooks/useArticleDraft';
 import { ArticleDraft, POST_TYPE } from '@models/posts';
 import useDepsFree from '@hooks/common/useDepsFree';
-import { useHistory } from 'react-router';
 import { useStyles, NewPostWrapper } from './NewPost.styles';
 
 export default function NewPost() {
@@ -30,14 +29,8 @@ export default function NewPost() {
 
   const placeholder = () => t('please_share_your_thoughts');
 
-  const { draftList, saveDraft } = useArticleDraft();
+  const { saveDraft } = useArticleDraft();
   const postInfoRef = useDepsFree(postInfo);
-
-  const history = useHistory();
-
-  const onClickDraft = (id: number) => {
-    history.push(`/draft/articles/${id}`);
-  };
 
   useEffect(() => {
     return () => {
@@ -65,19 +58,6 @@ export default function NewPost() {
           isArticle
         />
       </NewPostWrapper>
-      {!!draftList?.length && (
-        <div>
-          {draftList.map((draft) => (
-            <button
-              key={draft.id}
-              type="button"
-              onClick={() => onClickDraft(draft.id)}
-            >
-              {draft.content}
-            </button>
-          ))}
-        </div>
-      )}
     </>
   );
 }

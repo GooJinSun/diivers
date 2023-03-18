@@ -203,5 +203,8 @@
     "make_a_friend_request": "Make a friend request :)",
     "this_post_is_not_accessible":"This post is not accessible",
     "this_draft_does_not_exist": "This article does not exist"
+  },
+  "draft": {
+    "draft_title": "Draft"
   }
 }
