@@ -1,41 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { TextareaAutosize } from '@material-ui/core';
 import QuestionBox from '@common-components/question-box/QuestionBox';
 import ShareSettings from '@common-components/share-settings/ShareSettings';
 import { PostItemWrapper } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
+import { PostDraft } from '@models/posts';
+import { isArticle, isResponse } from '@models/postTypeGuards';
 import { useStyles } from './PostEditItem.styles';
 
-const PostEditItem = ({ postObj }) => {
+interface PostEditItemProps {
+  postObj: PostDraft;
+}
+
+const PostEditItem = ({ postObj }: PostEditItemProps) => {
   const classes = useStyles();
-  const [editPost, setEditPost] = useState(postObj);
+  const [editPost, setEditPost] = useState<PostDraft>(postObj);
 
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
-  const onInputChange = (e) => {
+  const onInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setEditPost({
       ...postObj,
-      content: e.target.value
+      content: event.target.value
     });
   };
 
+  const placeholder = () =>
+    isArticle(postObj)
+      ? t('please_share_your_thoughts')
+      : t('please_fill_out_the_answer');
+
   return (
     <PostItemWrapper>
-      {postObj?.question && <QuestionBox questionObj={postObj.question} />}
+      {isResponse(postObj) && <QuestionBox questionObj={postObj.question} />}
       <TextareaAutosize
         autoFocus
         id="edit-post-input"
         name="content"
-        placeholder={
-          postObj?.type === 'Article'
-            ? t('please_share_your_thoughts')
-            : t('please_fill_out_the_answer')
-        }
+        placeholder={placeholder()}
         value={editPost?.content}
         onChange={onInputChange}
         className={classes.textarea}
       />
-      <ShareSettings postObj={editPost} edit />
+      <ShareSettings postObj={editPost} isEdit isArticle={isArticle(postObj)} />
     </PostItemWrapper>
   );
 };

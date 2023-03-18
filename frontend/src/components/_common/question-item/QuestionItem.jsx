@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { TextareaAutosize } from '@material-ui/core';
 import CreateIcon from '@material-ui/icons/Create';
 import SendIcon from '@material-ui/icons/Send';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,24 +14,16 @@ import { deletePost } from '@modules/post';
 import CreateTime from '@common-components/create-time/CreateTime';
 import PostAuthorButtons from '@common-components/post-author-buttons/PostAuthorButtons';
 import PostReportButton from '@common-components/post-report-button/PostReportButton';
-import ShareSettings from '@common-components/share-settings/ShareSettings';
 import {
   PostItemHeaderWrapper,
   PostItemButtonsWrapper
 } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
 import QuestionSendModal from './question-send-modal/QuestionSendModal';
-import {
-  useStyles,
-  QuestionItemWrapper,
-  Question
-} from './QuestionItem.styles';
+import { QuestionItemWrapper, Question } from './QuestionItem.styles';
+import NewResponse from './new-response/NewResponse';
 
-export default function QuestionItem({
-  questionObj,
-  onResetContent,
-  questionId
-}) {
+export default function QuestionItem({ questionObj, onSubmit }) {
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
@@ -44,36 +35,13 @@ export default function QuestionItem({
 
   const isAuthor = currentUser?.id === questionObj.author_detail.id;
 
-  const classes = useStyles();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [liked, setLiked] = useState(questionObj.current_user_liked);
   const [likeCount, setLikeCount] = useState(questionObj.like_count);
   const [isWriting, setIsWriting] = useState(false);
-  const [newPost, setNewPost] = useState({
-    question_id: questionObj?.id,
-    question_detail: questionObj,
-    content: '',
-    type: 'Response'
-  });
   const [isQuestionSendModalOpen, setQuestionSendModalOpen] = useState(false);
 
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
-
-  useEffect(() => {
-    setNewPost({
-      question_id: questionId,
-      question_detail: questionObj,
-      content: '',
-      type: 'Response'
-    });
-  }, [questionId, questionObj]);
-
-  const handleContentChange = (e) => {
-    setNewPost((prev) => ({
-      ...prev,
-      content: e.target.value
-    }));
-  };
 
   const toggleLike = () => {
     const postInfo = {
@@ -107,10 +75,10 @@ export default function QuestionItem({
     dispatch(deletePost(questionObj.id, questionObj.type));
   };
 
-  const resetContent = () => {
-    setNewPost((prev) => ({ ...prev, content: '' }));
-    if (onResetContent) onResetContent();
+  const onSubmitHandler = () => {
+    onSubmit?.();
     setIsWriting(false);
+
     if (isQuestionList) history.push('/home');
   };
 
@@ -160,18 +128,7 @@ export default function QuestionItem({
         )}
       </PostItemButtonsWrapper>
       {isWriting && (
-        <>
-          <TextareaAutosize
-            className={classes.textArea}
-            aria-label="new response"
-            id="content-input"
-            placeholder={t('please_fill_out_the_answer')}
-            value={newPost.content}
-            rowsMin={3}
-            onChange={handleContentChange}
-          />
-          <ShareSettings newPost={newPost} resetContent={resetContent} />
-        </>
+        <NewResponse question={questionObj} onSubmit={onSubmitHandler} />
       )}
       {isQuestionSendModalOpen && (
         <QuestionSendModal

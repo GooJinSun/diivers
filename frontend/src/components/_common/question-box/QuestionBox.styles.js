@@ -8,4 +8,5 @@ export const QuestionBoxWrapper = styled.div`
   border-radius: 4px;
   font-weight: 500;
   font-size: 15px;
+  color: black;
 `;

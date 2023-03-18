@@ -34,3 +34,18 @@ export const AuthSubButton = styled.button`
   color: #777;
   font-size: 16px;
 `;
+
+interface BorderCommonButtonProps {
+  width?: number;
+  margin?: string;
+}
+
+export const BorderCommonButton = styled.button<BorderCommonButtonProps>`
+  padding: 12px 11px;
+  border-radius: 4px;
+  color: #f12c56;
+  border: 1px solid #f12c56;
+  background-color: white;
+  width: ${(props) => (props.width ? props.width : '100%')};
+  margin: ${(props) => (props.margin ? props.margin : '4px 0')};
+`;
