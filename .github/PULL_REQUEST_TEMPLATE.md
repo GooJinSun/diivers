@@ -1,13 +1,10 @@
----
-title: "(# ) "
----
-
 ## Issue Number:
 
 ## Self Check List
 
 - [ ] !!! PR이 머지되는 base branch을 꼭 확인해주세요 !!!
 - [ ] base branch로부터 rebase를 했나요?
+- [ ] main으로 머지되는 PR인 경우 [릴리즈 노트](https://github.com/GooJinSun/diivers/releases)를 작성해주세요
 
 ## Types of changes
 

@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: 버그
+about: 버그. 기존 기능에 문제가 있는 경우
 title: "[Bug] "
 labels: bug
 assignees: ""
