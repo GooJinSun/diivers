@@ -10,10 +10,8 @@ export const useInfiniteFriendPostList = () => {
       getNextPageParam: (lastPage) => {
         const nextUrl = lastPage.next;
         if (nextUrl) {
-          // Return next page number
-          return Number(nextUrl.charAt(nextUrl.length - 1));
+          return Number(nextUrl.split('?page=')[1]);
         }
-        // Return false means no next page
         return false;
       }
     }

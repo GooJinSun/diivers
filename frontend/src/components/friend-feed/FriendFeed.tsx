@@ -7,7 +7,7 @@ import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
 import ScrollTopButton from '@common-components/scroll-top-button/ScrollTopButton';
 import useRestoreScroll from '@hooks/useRestoreScroll';
-import { useInfiniteFriendPostList } from 'src/queries/posts';
+import { useInfiniteFriendPostList } from '@queries/posts';
 import { flatMapInfiniteData } from '@queries/utils';
 import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
 
@@ -26,10 +26,11 @@ const FriendFeed = () => {
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
-    isLoading
+    isLoading,
+    refetch: refetchFriendPostList
   } = useInfiniteFriendPostList();
 
-  //TODO(지나): 나중에 범용적인 툴로 빼서 만들기
+  // TODO(지나): 나중에 범용적인 툴로 빼서 만들기
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
@@ -74,7 +75,7 @@ const FriendFeed = () => {
           isLoading={isLoading}
         />
       )}
-      <ScrollTopButton />
+      <ScrollTopButton callback={refetchFriendPostList} />
       <div ref={target} />
     </>
   );

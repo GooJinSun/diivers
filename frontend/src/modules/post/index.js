@@ -30,10 +30,6 @@ export const EDIT_SELECTED_ARTICLE_SUCCESS =
 export const EDIT_SELECTED_ARTICLE_FAILURE =
   'post/EDIT_SELECTED_ARTICLE_FAILURE';
 
-export const GET_FRIEND_POSTS_REQUEST = 'post/GET_FRIEND_POSTS_REQUEST';
-export const GET_FRIEND_POSTS_SUCCESS = 'post/GET_FRIEND_POSTS_SUCCESS';
-export const GET_FRIEND_POSTS_FAILURE = 'post/GET_FRIEND_POSTS_FAILURE';
-
 export const GET_ANON_POSTS_REQUEST = 'post/GET_ANON_POSTS_REQUEST';
 export const GET_ANON_POSTS_SUCCESS = 'post/GET_ANON_POSTS_SUCCESS';
 export const GET_ANON_POSTS_FAILURE = 'post/GET_ANON_POSTS_FAILURE';
@@ -385,7 +381,6 @@ export default function postReducer(state, action) {
         selectedPostFailure: true
       };
     case GET_ANON_POSTS_REQUEST:
-    case GET_FRIEND_POSTS_REQUEST:
     case GET_USER_POSTS_REQUEST:
       return { ...state, selectedUserId: action.userId };
     case APPEND_POSTS_REQUEST:
@@ -407,22 +402,6 @@ export default function postReducer(state, action) {
       return {
         ...state,
         anonymousPosts: [...action.result],
-        next: action.next
-      };
-    case GET_FRIEND_POSTS_SUCCESS:
-      // NOTE: action.result가 이미 15개만 가져와버리고 있음
-      console.log('GET_FRIEND_POSTS_SUCCESS');
-      // console.log(action.result);
-      // const allList = [...state.friendPosts, ...action.result];
-      // const uniquePostList = Array.from(new Set(allList.map((a) => a.id))).map(
-      //   (id) => {
-      //     return allList.find((a) => a.id === id);
-      //   }
-      // );
-      // console.log(uniquePostList);
-      return {
-        ...state,
-        friendPosts: [...action.result],
         next: action.next
       };
     case GET_USER_POSTS_SUCCESS:

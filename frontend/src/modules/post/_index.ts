@@ -1,5 +1,6 @@
 import axios from '../../utils/api';
 
+// TODO(지나) 나중에 PostType 실제 타입으로 대체
 type PostType = {
   id: number;
   content: string;
