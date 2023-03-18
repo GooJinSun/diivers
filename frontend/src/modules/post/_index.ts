@@ -1,16 +1,10 @@
+import { Post } from '@models/posts';
 import axios from '../../utils/api';
-
-// TODO(지나) 나중에 PostType 실제 타입으로 대체
-type PostType = {
-  id: number;
-  content: string;
-  [key: string]: any;
-};
 
 type GetFriendPostsResponse = {
   count: number;
   next: string;
-  results: PostType[];
+  results: Post[];
 };
 
 export const getFriendPosts = async (

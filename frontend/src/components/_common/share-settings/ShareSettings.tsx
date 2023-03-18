@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PostDraft } from '@models/posts';
+import { useInfiniteFriendPostList } from 'src/queries';
 import { createPost, editSelectedPost } from '../../../modules/post';
 import {
   useStyles,
@@ -38,6 +39,8 @@ export default function ShareSettings({
   });
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
+  const { refetch: refetchFriendPostList } = useInfiniteFriendPostList();
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     setShareState((prev) => ({ ...prev, [name]: checked }));
@@ -60,6 +63,7 @@ export default function ShareSettings({
         })
       );
       resetContent?.();
+      refetchFriendPostList();
     }
 
     onSubmit?.();

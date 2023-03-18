@@ -7,8 +7,8 @@ import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
 import ScrollTopButton from '@common-components/scroll-top-button/ScrollTopButton';
 import useRestoreScroll from '@hooks/useRestoreScroll';
-import { useInfiniteFriendPostList } from '@queries/posts';
-import { flatMapInfiniteData } from '@queries/utils';
+import { useInfiniteFriendPostList } from 'src/queries/posts';
+import { flatMapInfiniteData } from 'src/queries/utils';
 import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
 
 const FriendFeed = () => {
@@ -60,12 +60,11 @@ const FriendFeed = () => {
     <>
       <NewPost />
       <GoToDraftButton />
-
       {friendPosts?.length === 0 && !isFetching ? (
         <Message
           margin="16px 0"
           message={t('there_is_no_posts_to_display')}
-          messageDetail={t('make_friends_with_other_users')}
+          messageDetail={t('make_friends_with_other_users') || ''}
           noBorder={undefined}
         />
       ) : (
