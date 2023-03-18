@@ -34,10 +34,17 @@ export default function NewComment({
   };
 
   const handleEnter = (e) => {
-    if (e.keyCode === 13) {
-      handleSubmit();
+    if (e.nativeEvent.isComposing) {
+      return;
+    }
+
+    if (e.key === 'Enter' && e.shiftKey) {
+      return;
+    }
+
+    if (e.key === 'Enter') {
       e.preventDefault();
-      e.stopPropagation();
+      handleSubmit();
     }
   };
 
