@@ -5,6 +5,9 @@ export const ArticleDraftItem = styled(BorderCommonButton)`
   display: flex;
   justify-content: space-between;
   font-size: 14px;
+  .main-contents {
+    text-align: left;
+  }
 `;
 
 export const ResponseDraftItem = styled(BorderCommonButton)`
