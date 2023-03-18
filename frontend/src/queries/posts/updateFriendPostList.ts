@@ -1,5 +1,5 @@
 import { GetFeedResponse } from '@models/feed';
-import { Comment, Post } from '@models/posts';
+import { Comment, Post, POST_TYPE } from '@models/posts';
 import { InfiniteData } from '@tanstack/react-query';
 import getQueryKey from '../getQueryKey';
 import queryClient from '../queryClient';
@@ -188,6 +188,45 @@ export const updatePostsOnDeleteReply = (postKey: string, replyId: number) => {
         }
         return item;
       });
+
+      return {
+        ...data,
+        pages: data.pages.map((page, index) => {
+          if (index === pageIndex) {
+            return { ...page, results: updatedPageResults };
+          }
+
+          return page;
+        })
+      };
+    }
+  );
+};
+
+export const updatePostsOnDeletePost = (
+  postType: POST_TYPE,
+  postId: number
+) => {
+  queryClient.setQueryData<InfiniteData<GetFeedResponse>>(
+    getQueryKey('GET_FRIEND_POST_LIST'),
+    (data) => {
+      if (!data) return;
+
+      const flatPostListWithPageIndex = data.pages.flatMap(
+        ({ results }, index) =>
+          results.flatMap((item) => ({ item, pageIndex: index }))
+      );
+
+      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
+        ({ item }) => `${postType}-${postId}` === `${item.type}-${item.id}`
+      );
+
+      if (!targetPostWithPageIndex) return data;
+      const { pageIndex } = targetPostWithPageIndex;
+
+      const updatedPageResults = data.pages[pageIndex].results.filter(
+        (item) => `${postType}-${postId}` !== `${item.type}-${item.id}`
+      );
 
       return {
         ...data,

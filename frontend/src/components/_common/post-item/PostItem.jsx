@@ -21,7 +21,10 @@ import {
   PostItemButtonsWrapper
 } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
-import { updatePostsOnCreateComment } from 'src/queries/posts/updateFriendPostList';
+import {
+  updatePostsOnCreateComment,
+  updatePostsOnDeletePost
+} from 'src/queries/posts/updateFriendPostList';
 import {
   ContentWrapper,
   CommentWrapper,
@@ -119,6 +122,12 @@ export default function PostItem({
   const handleDelete = () => {
     dispatch(deletePost(postObj.id, postObj.type));
     setIsDeleteDialogOpen(false);
+
+    // FIXME: react-query 확장 적용할 때마다 업데이트 필요
+    if (location.pathname === '/home') {
+      updatePostsOnDeletePost(postObj.type, postObj.id);
+    }
+
     if (isDetailPage) history.replace('/');
   };
 
