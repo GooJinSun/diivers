@@ -5,7 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useHistory } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PostDraft } from '@models/posts';
-import { useInfiniteFriendPostList } from 'src/queries';
+import { useInfiniteFriendPostList } from 'src/queries/posts';
+
 import { createPost, editSelectedPost } from '../../../modules/post';
 import {
   useStyles,
