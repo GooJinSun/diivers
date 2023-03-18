@@ -11,7 +11,11 @@ import AuthorProfile from '@common-components/author-profile/AuthorProfile';
 import CreateTime from '@common-components/create-time/CreateTime';
 import NewComment from '@common-components/new-comment/NewComment';
 import { useTranslation } from 'react-i18next';
-import { updatePostsOnCreateReply } from 'src/queries/posts/updateFriendPostList';
+import {
+  updatePostsOnCreateReply,
+  updatePostsOnDeleteComment,
+  updatePostsOnDeleteReply
+} from 'src/queries/posts/updateFriendPostList';
 import {
   CommentItemWrapper,
   ReplyIcon,
@@ -85,6 +89,15 @@ export default function CommentItem({
 
   const handleDeleteComment = () => {
     dispatch(deleteComment(commentObj.id, postKey, isReply, targetId));
+
+    // FIXME: react-query 확장 적용할 때마다 업데이트 필요
+    if (location.pathname === '/home') {
+      if (isReply) {
+        updatePostsOnDeleteReply(postKey, commentObj.id);
+      } else {
+        updatePostsOnDeleteComment(postKey, commentObj.id);
+      }
+    }
     setIsDeleteDialogOpen(false);
   };
 

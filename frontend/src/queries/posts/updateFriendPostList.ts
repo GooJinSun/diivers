@@ -74,7 +74,6 @@ export const updatePostsOnCreateReply = (
       if (!targetPostWithPageIndex) return data;
       const { pageIndex } = targetPostWithPageIndex;
 
-      console.log(data, pageIndex, targetCommentId, newReply);
       const updatedPageResults = data.pages[pageIndex].results.map((item) => {
         if (postKey === `${item.type}-${item.id}`) {
           return {
@@ -90,6 +89,100 @@ export const updatePostsOnCreateReply = (
                 };
               }
               return comment;
+            })
+          };
+        }
+        return item;
+      });
+
+      return {
+        ...data,
+        pages: data.pages.map((page, index) => {
+          if (index === pageIndex) {
+            return { ...page, results: updatedPageResults };
+          }
+
+          return page;
+        })
+      };
+    }
+  );
+};
+
+export const updatePostsOnDeleteComment = (
+  postKey: string,
+  commentId: number
+) => {
+  queryClient.setQueryData<InfiniteData<GetFeedResponse>>(
+    getQueryKey('GET_FRIEND_POST_LIST'),
+    (data) => {
+      if (!data) return;
+
+      const flatPostListWithPageIndex = data.pages.flatMap(
+        ({ results }, index) =>
+          results.flatMap((item) => ({ item, pageIndex: index }))
+      );
+
+      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
+        ({ item }) => postKey === `${item.type}-${item.id}`
+      );
+
+      if (!targetPostWithPageIndex) return data;
+      const { pageIndex } = targetPostWithPageIndex;
+
+      const updatedPageResults = data.pages[pageIndex].results.map((item) => {
+        if (postKey === `${item.type}-${item.id}`) {
+          return {
+            ...item,
+            comments: item.comments.filter(
+              (comment) => comment.id !== commentId
+            )
+          };
+        }
+        return item;
+      });
+
+      return {
+        ...data,
+        pages: data.pages.map((page, index) => {
+          if (index === pageIndex) {
+            return { ...page, results: updatedPageResults };
+          }
+
+          return page;
+        })
+      };
+    }
+  );
+};
+
+export const updatePostsOnDeleteReply = (postKey: string, replyId: number) => {
+  queryClient.setQueryData<InfiniteData<GetFeedResponse>>(
+    getQueryKey('GET_FRIEND_POST_LIST'),
+    (data) => {
+      if (!data) return;
+
+      const flatPostListWithPageIndex = data.pages.flatMap(
+        ({ results }, index) =>
+          results.flatMap((item) => ({ item, pageIndex: index }))
+      );
+
+      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
+        ({ item }) => postKey === `${item.type}-${item.id}`
+      );
+
+      if (!targetPostWithPageIndex) return data;
+      const { pageIndex } = targetPostWithPageIndex;
+
+      const updatedPageResults = data.pages[pageIndex].results.map((item) => {
+        if (postKey === `${item.type}-${item.id}`) {
+          return {
+            ...item,
+            comments: item.comments.map((comment) => {
+              return {
+                ...comment,
+                replies: comment.replies.filter((reply) => reply.id !== replyId)
+              };
             })
           };
         }
