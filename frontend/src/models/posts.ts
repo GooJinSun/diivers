@@ -20,6 +20,7 @@ export interface ResponseDraft extends ShareSettings {
   type: POST_TYPE.RESPONSE;
   content: string;
   question_id: number;
+  question_detail: Question;
 }
 
 export interface Response extends ShareSettings, ContentsCommon {
