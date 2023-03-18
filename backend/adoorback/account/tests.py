@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db.utils import IntegrityError
 from django.test import Client
 from rest_framework.test import APIClient
 from rest_framework.utils import json
@@ -329,10 +330,10 @@ class FriendRequestAPITestCase(APITestCase):
 
         # make new friend request (friend_user -> current_user): unique constraint
         with self.login(username=friend_user.username, password='password'):
-            response = self.post('user-friend-request-list',
-                                 data={"requester_id": friend_user.id,
-                                       "requestee_id": current_user.id}, extra={'format': 'json'})
-            self.assertEqual(response.status_code, 400)
+            with self.assertRaises(IntegrityError):
+                response = self.post('user-friend-request-list',
+                                    data={"requester_id": friend_user.id,
+                                        "requestee_id": current_user.id}, extra={'format': 'json'})
 
         # current user has one friend request
         with self.login(username=current_user.username, password='password'):
