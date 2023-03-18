@@ -27,8 +27,6 @@ export default function NewPost() {
     setPostInfo((prev) => ({ ...prev, content: '' }));
   };
 
-  const placeholder = () => t('please_share_your_thoughts');
-
   const { saveDraft } = useArticleDraft();
   const postInfoRef = useDepsFree(postInfo);
 
@@ -46,7 +44,7 @@ export default function NewPost() {
         <TextareaAutosize
           id="new-post-input"
           name="content"
-          placeholder={placeholder()}
+          placeholder={t('please_share_your_thoughts') || undefined}
           style={{ minHeight: '70px' }}
           value={postInfo.content}
           onChange={onInputChange}
