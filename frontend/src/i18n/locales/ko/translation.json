@@ -203,5 +203,8 @@
     "make_a_friend_request": "친구 신청을 해보세요 :)",
     "this_post_is_not_accessible":"이 게시물에 접근할 수 없습니다.",
     "this_draft_does_not_exist": "존재하지 않는 게시글입니다."
+  },
+  "draft": {
+    "draft_title": "작성중인 초안"
   }
 }
