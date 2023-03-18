@@ -4,3 +4,4 @@ export const AUTHENTICATION_MIN_WIDTH = 900;
 
 export const DEFAULT_MARGIN = 20;
 export const WIDGET_WIDTH = 300;
+export const BOTTOM_TAB_HEIGHT = 56;

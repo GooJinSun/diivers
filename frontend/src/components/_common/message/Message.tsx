@@ -6,11 +6,11 @@ import { useStyles } from './Message.styles';
 interface MessageProps {
   message: string;
   messageDetail?: string;
-  margin?: number;
+  margin?: string;
   noBorder?: boolean;
 }
 const Message = ({
-  margin = 0,
+  margin = '0',
   message,
   messageDetail,
   noBorder = false

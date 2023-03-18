@@ -9,7 +9,7 @@ describe('<Message/>', () => {
       <Message
         message="message"
         messageDetail="messageDetail"
-        margin={0}
+        margin="0"
         noBorder
       />
     );

@@ -25,7 +25,7 @@ const useAppLogin = () => {
     document.addEventListener('message', handleMessage);
     return () => {
       window.removeEventListener('message', handleMessage);
-      document.addEventListener('message', handleMessage);
+      document.removeEventListener('message', handleMessage);
     };
   }, [handleMessage]);
 };

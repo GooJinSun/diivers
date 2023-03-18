@@ -1,3 +1,2 @@
-import * as questionQueries from './questions';
-
-export { questionQueries };
+export * from './posts';
+export * from './questions';
