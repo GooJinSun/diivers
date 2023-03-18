@@ -1,8 +1,10 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import ShareSettings from '@components/_common/share-settings/ShareSettings';
 import { TextareaAutosize } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
 import { POST_TYPE, Question, ResponseDraft } from '@models/posts';
+import useDepsFree from '@hooks/common/useDepsFree';
+import useResponseDraft from '@hooks/draft/useResponseDraft';
 import { useStyles } from '../QuestionItem.styles';
 
 interface NewResponseProps {
@@ -34,6 +36,18 @@ const NewResponse = ({ question, onSubmit }: NewResponseProps) => {
     setNewPost((prev) => ({ ...prev, content: '' }));
     onSubmit?.();
   };
+
+  const { saveDraft } = useResponseDraft();
+
+  const newPostRef = useDepsFree(newPost);
+  useEffect(() => {
+    return () => {
+      if (!newPostRef.current.content.trim().length) return;
+
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      saveDraft(newPostRef.current);
+    };
+  }, [newPostRef, saveDraft]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router';
-import useArticleDraft from '@hooks/useArticleDraft';
+import useArticleDraft from '@hooks/draft/useArticleDraft';
 import { BorderCommonButton } from '@styles/buttons';
 import { useTranslation } from 'react-i18next';
 

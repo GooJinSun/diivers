@@ -1,4 +1,4 @@
-import useArticleDraft from '@hooks/useArticleDraft';
+import useArticleDraft from '@hooks/draft/useArticleDraft';
 import { PostListWrapper, PostItemWrapper } from '@styles/wrappers';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router';

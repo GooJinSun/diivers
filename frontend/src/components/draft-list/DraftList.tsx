@@ -1,4 +1,4 @@
-import useArticleDraft from '@hooks/useArticleDraft';
+import useArticleDraft from '@hooks/draft/useArticleDraft';
 import { PostListWrapper } from '@styles/wrappers';
 import React from 'react';
 import { useHistory } from 'react-router';
@@ -10,7 +10,7 @@ const DraftList = () => {
   const history = useHistory();
   const [t] = useTranslation('translation', { keyPrefix: 'draft' });
 
-  const { draftList } = useArticleDraft();
+  const { draftList: articleDraftList } = useArticleDraft();
 
   const onClickDraft = (id: number) => {
     history.push(`/draft/articles/${id}`);
@@ -19,8 +19,8 @@ const DraftList = () => {
   return (
     <PostListWrapper>
       <h3>{t('draft_title')}</h3>
-      {!!draftList?.length &&
-        draftList.map((draft) => (
+      {!!articleDraftList?.length &&
+        articleDraftList.map((draft) => (
           <DraftItem
             key={draft.id}
             type="button"

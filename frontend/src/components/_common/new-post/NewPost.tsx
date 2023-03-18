@@ -2,7 +2,7 @@ import React, { useState, useEffect, ChangeEvent } from 'react';
 import { TextareaAutosize } from '@material-ui/core';
 import ShareSettings from '@common-components/share-settings/ShareSettings';
 import { useTranslation } from 'react-i18next';
-import useArticleDraft from '@hooks/useArticleDraft';
+import useArticleDraft from '@hooks/draft/useArticleDraft';
 import { ArticleDraft, POST_TYPE } from '@models/posts';
 import useDepsFree from '@hooks/common/useDepsFree';
 import { useStyles, NewPostWrapper } from './NewPost.styles';
