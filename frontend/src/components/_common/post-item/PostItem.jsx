@@ -22,7 +22,7 @@ import {
 } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
-import { updateComment } from 'src/queries/posts/updateComment';
+import { updatePostsOnCreateComment } from 'src/queries/posts/updateFriendPostList';
 import {
   ContentWrapper,
   CommentWrapper,
@@ -93,7 +93,7 @@ export default function PostItem({
 
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
-      updateComment(queryClient, postObj, newComment);
+      updatePostsOnCreateComment(queryClient, postObj, newComment);
     }
     if (resetAfterComment) resetAfterComment();
   };

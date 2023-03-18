@@ -3,7 +3,7 @@ import { Comment, Post } from '@models/posts';
 import { InfiniteData, QueryClient } from '@tanstack/react-query';
 import getQueryKey from '../getQueryKey';
 
-export const updateComment = (
+export const updatePostsOnCreateComment = (
   queryClient: QueryClient,
   postObj: Post,
   newComment: Comment
