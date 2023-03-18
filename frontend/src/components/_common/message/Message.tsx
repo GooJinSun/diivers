@@ -10,7 +10,7 @@ interface MessageProps {
   noBorder?: boolean;
 }
 const Message = ({
-  margin,
+  margin = 0,
   message,
   messageDetail,
   noBorder = false
