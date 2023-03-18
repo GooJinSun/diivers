@@ -21,7 +21,6 @@ import {
   PostItemButtonsWrapper
 } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from '@tanstack/react-query';
 import { updatePostsOnCreateComment } from 'src/queries/posts/updateFriendPostList';
 import {
   ContentWrapper,
@@ -77,7 +76,6 @@ export default function PostItem({
   };
 
   const location = useLocation();
-  const queryClient = useQueryClient();
 
   const handleSubmit = async (content, isPrivate) => {
     const newCommentObj = {
@@ -93,7 +91,7 @@ export default function PostItem({
 
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
-      updatePostsOnCreateComment(queryClient, postObj, newComment);
+      updatePostsOnCreateComment(postObj, newComment);
     }
     if (resetAfterComment) resetAfterComment();
   };

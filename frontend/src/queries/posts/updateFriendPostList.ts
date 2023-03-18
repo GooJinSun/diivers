@@ -1,10 +1,10 @@
 import { GetFeedResponse } from '@models/feed';
 import { Comment, Post } from '@models/posts';
-import { InfiniteData, QueryClient } from '@tanstack/react-query';
+import { InfiniteData } from '@tanstack/react-query';
 import getQueryKey from '../getQueryKey';
+import queryClient from '../queryClient';
 
 export const updatePostsOnCreateComment = (
-  queryClient: QueryClient,
   postObj: Post,
   newComment: Comment
 ) => {
@@ -33,6 +33,64 @@ export const updatePostsOnCreateComment = (
               item.comments.length > 0
                 ? [...item.comments, newComment]
                 : [newComment]
+          };
+        }
+        return item;
+      });
+
+      return {
+        ...data,
+        pages: data.pages.map((page, index) => {
+          if (index === pageIndex) {
+            return { ...page, results: updatedPageResults };
+          }
+
+          return page;
+        })
+      };
+    }
+  );
+};
+
+export const updatePostsOnCreateReply = (
+  postKey: string,
+  targetCommentId: number,
+  newReply: Comment
+) => {
+  queryClient.setQueryData<InfiniteData<GetFeedResponse>>(
+    getQueryKey('GET_FRIEND_POST_LIST'),
+    (data) => {
+      if (!data) return;
+
+      const flatPostListWithPageIndex = data.pages.flatMap(
+        ({ results }, index) =>
+          results.flatMap((item) => ({ item, pageIndex: index }))
+      );
+
+      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
+        ({ item }) => postKey === `${item.type}-${item.id}`
+      );
+
+      if (!targetPostWithPageIndex) return data;
+      const { pageIndex } = targetPostWithPageIndex;
+
+      console.log(data, pageIndex, targetCommentId, newReply);
+      const updatedPageResults = data.pages[pageIndex].results.map((item) => {
+        if (postKey === `${item.type}-${item.id}`) {
+          return {
+            ...item,
+            comments: item.comments.map((comment) => {
+              if (comment.id === targetCommentId) {
+                return {
+                  ...comment,
+                  replies:
+                    comment.replies.length > 0
+                      ? [...comment.replies, newReply]
+                      : [newReply]
+                };
+              }
+              return comment;
+            })
           };
         }
         return item;

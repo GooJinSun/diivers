@@ -292,6 +292,7 @@ export const createReply =
     if (+selectedQuestion?.id === +targetId) {
       dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
     }
+    return result;
   };
 
 export const deleteComment =
