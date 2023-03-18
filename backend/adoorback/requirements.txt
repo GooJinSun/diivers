@@ -30,7 +30,7 @@ django-cors-headers>=3.5.0
 django-cron>=0.5.1
 django-extensions>=3.0.9
 django-import-export>=2.4.0
-django-modeltranslation>=0.17.0
+django-modeltranslation==0.18.7
 django-mysql>=3.9.0
 django-polymorphic>=3.0.0
 django-queryset-csv>=1.1.0
