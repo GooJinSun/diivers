@@ -39,23 +39,17 @@ export default function NewPost() {
   }, [postInfoRef, saveDraft]);
 
   return (
-    <>
-      <NewPostWrapper>
-        <TextareaAutosize
-          id="new-post-input"
-          name="content"
-          placeholder={t('please_share_your_thoughts') || undefined}
-          style={{ minHeight: '70px' }}
-          value={postInfo.content}
-          onChange={onInputChange}
-          className={classes.textarea}
-        />
-        <ShareSettings
-          postObj={postInfo}
-          resetContent={resetContent}
-          isArticle
-        />
-      </NewPostWrapper>
-    </>
+    <NewPostWrapper>
+      <TextareaAutosize
+        id="new-post-input"
+        name="content"
+        placeholder={t('please_share_your_thoughts') || undefined}
+        style={{ minHeight: '70px' }}
+        value={postInfo.content}
+        onChange={onInputChange}
+        className={classes.textarea}
+      />
+      <ShareSettings postObj={postInfo} resetContent={resetContent} isArticle />
+    </NewPostWrapper>
   );
 }
