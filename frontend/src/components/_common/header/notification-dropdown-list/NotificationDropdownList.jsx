@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import {
-  readAllNotification,
+  readNotifications,
   appendNotifications,
   getNotifications
 } from '@modules/notification';
@@ -16,7 +16,7 @@ import useInfiniteScroll from '@hooks/useInfiniteScroll';
 import { useTranslation } from 'react-i18next';
 import { useStyles, ButtonWrapper } from './NotificationDropdownList.styles';
 
-const READ_ALL_NOTI_DELAY = 300;
+const READ_ALL_NOTI_DELAY = 1000;
 
 const NotificationDropdownList = ({ setIsNotiOpen }) => {
   const [t] = useTranslation('translation', { keyPrefix: 'header' });
@@ -32,6 +32,9 @@ const NotificationDropdownList = ({ setIsNotiOpen }) => {
   const onIntersect = () => {
     if (notifications.length >= 90) return;
     dispatch(appendNotifications());
+    setTimeout(() => {
+      dispatch(readNotifications());
+    }, READ_ALL_NOTI_DELAY);
   };
   const setTarget = useInfiniteScroll(onIntersect);
 
@@ -53,7 +56,7 @@ const NotificationDropdownList = ({ setIsNotiOpen }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(readAllNotification());
+      dispatch(readNotifications());
     }, READ_ALL_NOTI_DELAY);
   }, [dispatch]);
 

@@ -6,7 +6,7 @@ import Tab from '@material-ui/core/Tab';
 import FriendItem from '@common-components/friend-item/FriendItem';
 import NotificationItem from '@common-components/notification-item/NotificationItem';
 import {
-  readAllNotification,
+  readNotifications,
   appendNotifications,
   getNotifications,
   getResponseRequests,
@@ -22,7 +22,7 @@ import i18n from '@i18n';
 import { useTranslation } from 'react-i18next';
 import { useStyles } from './NotificationPage.styles';
 
-const READ_ALL_NOTI_DELAY = 300;
+const READ_ALL_NOTI_DELAY = 1000;
 
 // FIXME: ts 전환시 readonly로 대체
 const NOTIFICATION_TABS = {
@@ -84,6 +84,9 @@ export default function NotificationPageNotificationPage() {
         switch (tab) {
           case NOTIFICATION_TABS.ALL.index:
             dispatch(appendNotifications());
+            setTimeout(() => {
+              dispatch(readNotifications());
+            }, READ_ALL_NOTI_DELAY);
             break;
           case NOTIFICATION_TABS.FRIEND_REQUEST.index:
             dispatch(appendFriendRequests());
@@ -108,7 +111,7 @@ export default function NotificationPageNotificationPage() {
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch(readAllNotification());
+      dispatch(readNotifications());
     }, READ_ALL_NOTI_DELAY);
   }, [dispatch]);
 
