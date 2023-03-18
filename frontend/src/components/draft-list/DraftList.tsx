@@ -6,6 +6,8 @@ import CreateTime from '@common-components/create-time/CreateTime';
 import { useTranslation } from 'react-i18next';
 import useResponseDraft from '@hooks/draft/useResponseDraft';
 import { QuestionBoxWrapper } from '@components/_common/question-box/QuestionBox.styles';
+import { ArticleDraft, ResponseDraft } from '@models/posts';
+import { StoredItem } from '@hooks/draft/useDraft';
 import { ArticleDraftItem, ResponseDraftItem } from './draftList.styles';
 
 const DraftList = () => {
@@ -15,8 +17,9 @@ const DraftList = () => {
   const { draftList: articleDraftList } = useArticleDraft();
   const { draftList: responseDraftList } = useResponseDraft();
 
-  const onClickDraft = (id: number) => {
-    history.push(`/draft/articles/${id}`);
+  const onClickDraft = (draft: (ArticleDraft | ResponseDraft) & StoredItem) => {
+    const { type, id } = draft;
+    history.push(`/draft/${type.toLowerCase()}s/${id}`);
   };
 
   return (
@@ -30,7 +33,7 @@ const DraftList = () => {
             <ArticleDraftItem
               key={draft.id}
               type="button"
-              onClick={() => onClickDraft(draft.id)}
+              onClick={() => onClickDraft(draft)}
             >
               <div className="main-contents">{draft.content}</div>
               <div className="sub-contents">
@@ -44,7 +47,11 @@ const DraftList = () => {
         <>
           <h2>{t('draft_Q&A_title')}</h2>
           {responseDraftList.map((draft) => (
-            <ResponseDraftItem key={draft.id}>
+            <ResponseDraftItem
+              key={draft.id}
+              type="button"
+              onClick={() => onClickDraft(draft)}
+            >
               <QuestionBoxWrapper>
                 {draft.question_detail.content}
               </QuestionBoxWrapper>

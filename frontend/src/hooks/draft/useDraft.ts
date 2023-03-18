@@ -3,7 +3,7 @@ import useLocalStorage from '@hooks/common/useLocalStorage';
 import { useCallback } from 'react';
 import useDepsFree from '../common/useDepsFree';
 
-interface StoredItem {
+export interface StoredItem {
   id: number;
   updated_at: number;
 }
