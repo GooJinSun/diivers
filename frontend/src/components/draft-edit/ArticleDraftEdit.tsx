@@ -1,6 +1,6 @@
 import useArticleDraft from '@hooks/useArticleDraft';
 import { PostListWrapper, PostItemWrapper } from '@styles/wrappers';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
 import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
@@ -22,6 +22,8 @@ const ArticleDraftEdit = () => {
     selectedDraft?.content || ''
   );
 
+  const isSubmitted = useRef(false);
+
   const onChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setArticleContents(event.target.value);
   };
@@ -29,22 +31,25 @@ const ArticleDraftEdit = () => {
   const history = useHistory();
   const onSubmit = () => {
     if (!id) return;
+    isSubmitted.current = true;
     setArticleContents('');
     deleteDraft(parseInt(id, 10));
     history.push('/home');
   };
 
   const articleContentsRef = useDepsFree(articleContents);
+
   useEffect(() => {
     return () => {
+      if (isSubmitted.current) return;
+
       if (!id || !selectedDraft) return;
 
-      if (!articleContentsRef.current) {
+      if (!articleContentsRef.current.trim()) {
         deleteDraft(parseInt(id, 10));
         return;
       }
 
-      // FIXME: submit하면 update되지 않도록
       // eslint-disable-next-line react-hooks/exhaustive-deps
       updateDraft(parseInt(id, 10), articleContentsRef.current);
     };
@@ -68,12 +73,12 @@ const ArticleDraftEdit = () => {
           onChange={onChange}
           className={classes.textarea}
         />
+        <ShareSettings
+          postObj={{ ...selectedDraft, content: articleContents }}
+          isArticle
+          onSubmit={onSubmit}
+        />
       </PostItemWrapper>
-      <ShareSettings
-        postObj={{ ...selectedDraft, content: articleContents }}
-        isArticle
-        onSubmit={onSubmit}
-      />
     </PostListWrapper>
   );
 };

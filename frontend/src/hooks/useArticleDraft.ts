@@ -47,7 +47,6 @@ const useArticleDraft = () => {
 
   const deleteDraft = useCallback(
     (id: number) => {
-      console.log('delete!');
       setList([...listRef.current.filter((item) => item.id !== id)]);
     },
     [listRef, setList]
