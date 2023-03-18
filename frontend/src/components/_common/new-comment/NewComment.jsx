@@ -67,20 +67,22 @@ export default function NewComment({
         value={content}
         className={classes.textarea}
       />
-      <PrivateWrapper>
-        <Checkbox
-          id="check-private"
-          checked={isPrivate}
-          onChange={togglePrivate}
-          size="small"
-          style={{
-            padding: 0,
-            color: 'rgba(0, 0, 0, 0.26)',
-            marginRight: '4px'
-          }}
-        />
-        {t('secret_comment')}
-      </PrivateWrapper>
+      {!isReply && (
+        <PrivateWrapper>
+          <Checkbox
+            id="check-private"
+            checked={isPrivate}
+            onChange={togglePrivate}
+            size="small"
+            style={{
+              padding: 0,
+              color: 'rgba(0, 0, 0, 0.26)',
+              marginRight: '4px'
+            }}
+          />
+          {t('secret_comment')}
+        </PrivateWrapper>
+      )}
       <Button
         onClick={handleSubmit}
         id="submit-button"
