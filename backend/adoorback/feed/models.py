@@ -38,6 +38,10 @@ class Article(AdoorModel):
     def liked_user_ids(self):
         return self.article_likes.values_list('user_id', flat=True)
 
+    @property
+    def participants(self):
+        return self.article_comments.values_list('author_id', flat=True).distinct()
+
     class Meta:
         indexes = [
             models.Index(fields=['-id']),
@@ -116,6 +120,10 @@ class Response(AdoorModel):
     @property
     def liked_user_ids(self):
         return self.response_likes.values_list('user_id', flat=True)
+
+    @property
+    def participants(self):
+        return self.response_comments.values_list('author_id', flat=True).distinct()
 
 
 class ResponseRequest(AdoorTimestampedModel):
