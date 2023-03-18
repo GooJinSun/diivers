@@ -43,7 +43,10 @@ class UserReport(AdoorTimestampedModel, SafeDeleteModel):
 
 @transaction.atomic
 @receiver(post_save, sender=UserReport)
-def delete_blocked_user_friendship(instance, **kwargs):
+def delete_blocked_user_friendship(instance, created, **kwargs):
+    if not created:
+        return
+        
     user = instance.user
     reported_user = instance.reported_user
 

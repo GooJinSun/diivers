@@ -217,6 +217,9 @@ def create_friend_noti(created, instance, **kwargs):
                                     redirect_url=f'/users/{requester.username}')
         return
     elif accepted:
+        if User.are_friends(requestee, requester):  # receiver function was triggered by undelete
+            return
+
         Notification.objects.create(user=requestee, actor=requester,
                                     origin=requester, target=requester,
                                     message_ko=f'{requester.username}님과 친구가 되었습니다.',

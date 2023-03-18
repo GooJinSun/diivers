@@ -70,8 +70,8 @@ class Comment(AdoorModel, SafeDeleteModel):
 
 
 @receiver(post_save, sender=Comment)
-def create_noti(instance, **kwargs):
-    if instance.deleted:
+def create_noti(instance, created, **kwargs):
+    if not created:  # do not run when triggered by soft delete or undelete
         return
 
     origin_author = instance.target.author
