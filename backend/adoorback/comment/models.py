@@ -65,9 +65,6 @@ class Comment(AdoorModel, SafeDeleteModel):
     def participants(self):
         return self.replies.values_list('author_id', flat=True).distinct()
 
-    class Meta:
-        base_manager_name = 'objects'
-
 
 @receiver(post_save, sender=Comment)
 def create_noti(instance, created, **kwargs):

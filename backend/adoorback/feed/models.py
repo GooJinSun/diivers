@@ -96,7 +96,6 @@ class Question(AdoorModel, SafeDeleteModel):
         return self.question_likes.values_list('user_id', flat=True)
 
     class Meta:
-        base_manager_name = 'objects'
         ordering = ['id']
 
 
@@ -194,7 +193,6 @@ class Post(AdoorModel, SafeDeleteModel):
 
     class Meta:
         ordering = ['-id']
-        base_manager_name = 'objects'
         indexes = [
             models.Index(fields=['-id']),
         ]
