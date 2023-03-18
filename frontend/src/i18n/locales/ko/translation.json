@@ -205,6 +205,8 @@
     "this_draft_does_not_exist": "존재하지 않는 게시글입니다."
   },
   "draft": {
-    "draft_title": "작성중인 초안"
+    "draft_title": "작성중인 초안",
+    "draft_TMI_title": "TMI 초안",
+    "draft_Q&A_title": "Q&A 초안"
   }
 }

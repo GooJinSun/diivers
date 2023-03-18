@@ -128,11 +128,7 @@ const QuestionDetail = (props) => {
         <LoadingList />
       ) : question ? (
         <>
-          <QuestionItem
-            questionObj={question}
-            questionId={questionId}
-            onResetContent={() => resetTabs()}
-          />
+          <QuestionItem questionObj={question} onSubmit={() => resetTabs()} />
           <Tabs
             value={tab}
             onChange={handleTabChange}

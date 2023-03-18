@@ -1,29 +1,27 @@
 import useLocalStorage from '@hooks/common/useLocalStorage';
-import { ArticleDraft } from '@models/posts';
+
 import { useCallback } from 'react';
-import useDepsFree from './common/useDepsFree';
+import useDepsFree from '../common/useDepsFree';
 
-const DRAFT_LIST = 'article_draft_list';
-
-interface ArticleDraftStoredItem extends ArticleDraft {
+export interface StoredItem {
   id: number;
   updated_at: number;
 }
 
-const useArticleDraft = () => {
-  const [list, setList] = useLocalStorage<ArticleDraftStoredItem[]>(
-    DRAFT_LIST,
-    []
+const useDraft = <T>(key: string) => {
+  const [list, setList] = useLocalStorage<(T & StoredItem)[]>(
+    key,
+    [] as (T & StoredItem)[]
   );
 
   const listRef = useDepsFree(list);
 
   const saveDraft = useCallback(
-    (article: ArticleDraft) => {
+    (draft: T) => {
       const timeStamp = new Date().getTime();
       setList([
         ...listRef.current,
-        { ...article, id: timeStamp, updated_at: timeStamp }
+        { ...draft, id: timeStamp, updated_at: timeStamp }
       ]);
     },
     [listRef, setList]
@@ -55,4 +53,4 @@ const useArticleDraft = () => {
   return { draftList: list, saveDraft, updateDraft, deleteDraft };
 };
 
-export default useArticleDraft;
+export default useDraft;

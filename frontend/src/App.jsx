@@ -33,6 +33,7 @@ import { MainWrapper, FeedWrapper } from '@styles/wrappers';
 import useAppLogin from '@hooks/auth/useAppLogin';
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import ArticleDraftEdit from '@components/draft-edit/ArticleDraftEdit';
+import ResponseDraftEdit from '@components/draft-edit/ResponseDraftEdit';
 import DraftList from '@components/draft-list/DraftList';
 import { initGA, trackPage } from './ga';
 import useFcm from './hooks/useFcm';
@@ -146,6 +147,11 @@ const App = () => {
               exact
               path="/draft/articles/:id"
               component={ArticleDraftEdit}
+            />
+            <PrivateRoute
+              exact
+              path="/draft/responses/:id"
+              component={ResponseDraftEdit}
             />
             <Route exact path="/search" component={SearchResults} />
             <PrivateRoute path="/:postType/:id" component={PostDetail} />

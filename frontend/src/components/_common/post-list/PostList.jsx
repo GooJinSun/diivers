@@ -9,14 +9,7 @@ export default function PostList({ posts, isAppending, isLoading }) {
   const postList = posts.map((post) => {
     const postKey = `${post.type}-${post.id}`;
     if (post['content-type'] === 'Question' || post.type === 'Question')
-      return (
-        <QuestionItem
-          key={postKey}
-          postKey={postKey}
-          questionObj={post}
-          questionId={post.id}
-        />
-      );
+      return <QuestionItem key={postKey} questionObj={post} />;
     return <PostItem key={postKey} postKey={postKey} postObj={post} />;
   });
 

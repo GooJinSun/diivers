@@ -205,6 +205,8 @@
     "this_draft_does_not_exist": "This article does not exist"
   },
   "draft": {
-    "draft_title": "Draft"
+    "draft_title": "Draft",
+    "draft_TMI_title": "TMI Draft",
+    "draft_Q&A_title": "Q&A Draft"
   }
 }
