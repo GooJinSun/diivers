@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from 'react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { getFriendPosts } from '../../modules/post/_index';
 import getQueryKey from '../getQueryKey';
 

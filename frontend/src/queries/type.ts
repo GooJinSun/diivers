@@ -1,4 +1,7 @@
-import { UseInfiniteQueryOptions, UseQueryOptions } from 'react-query';
+import {
+  UseInfiniteQueryOptions,
+  UseQueryOptions
+} from '@tanstack/react-query';
 
 export type QueryHookOptions<
   T extends (...args: any) => any,
