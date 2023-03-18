@@ -108,28 +108,18 @@ const Header = () => {
 
   const { isMobile, isDesktopMin } = useWindowWidth();
 
-  // 노티 아이콘 및 드롭다운 handler
-  useEffect(() => {
-    const handleNotiClickOutside = (event) => {
-      if (!notiIconRef.current) return;
-      if (notiIconRef.current.contains(event.target)) {
-        return setIsNotiOpen((prev) => !prev);
-      }
-      if (
-        notiDropDownRef.current &&
-        isNotiOpen &&
-        !notiDropDownRef.current.contains(event.target)
-      ) {
-        return setIsNotiOpen(false);
-      }
-    };
+  const toggleNotiOpen = () => {
+    setIsNotiOpen((prev) => !prev);
+  };
 
-    window.addEventListener('click', handleNotiClickOutside);
+  const hanleOnClickNotiOutside = (e) => {
+    if (notiIconRef.current.contains(e.target)) {
+      return;
+    }
+    setIsNotiOpen(false);
+  };
 
-    return () => {
-      window.removeEventListener('click', handleNotiClickOutside);
-    };
-  }, [isNotiOpen]);
+  useOnClickOutside(notiDropDownRef, hanleOnClickNotiOutside);
 
   const renderHeaderSignedInItems = useCallback(() => {
     // 데스크톱 최소 화면 width 대응
@@ -146,6 +136,7 @@ const Header = () => {
               disableRipple
               color="secondary"
               ref={notiIconRef}
+              onClick={toggleNotiOpen}
             >
               <Badge
                 variant="dot"
@@ -232,6 +223,7 @@ const Header = () => {
             disableRipple
             ref={notiIconRef}
             color="secondary"
+            onClick={toggleNotiOpen}
           >
             <Badge
               variant="dot"
