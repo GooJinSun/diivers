@@ -54,24 +54,15 @@ const Header = () => {
   const unreadNotifications = notifications?.filter((noti) => !noti.is_read);
   const notiBadgeInvisible = unreadNotifications?.length === 0;
 
-  const handleNotiClose = () => {
-    setIsNotiOpen(false);
-  };
-
   const handleSearchClose = () => {
     setIsSearchOpen(false);
   };
 
-  useOnClickOutside(notiDropDownRef && notiIconRef, handleNotiClose);
   useOnClickOutside(searchRef, handleSearchClose);
 
   const handleClickLogout = () => {
     dispatch(logout());
     history.push('/login');
-  };
-
-  const toggleNotiOpen = () => {
-    setIsNotiOpen(!isNotiOpen);
   };
 
   useEffect(() => {
@@ -117,6 +108,29 @@ const Header = () => {
 
   const { isMobile, isDesktopMin } = useWindowWidth();
 
+  // 노티 아이콘 및 드롭다운 handler
+  useEffect(() => {
+    const handleNotiClickOutside = (event) => {
+      if (!notiIconRef.current) return;
+      if (notiIconRef.current.contains(event.target)) {
+        return setIsNotiOpen((prev) => !prev);
+      }
+      if (
+        notiDropDownRef.current &&
+        isNotiOpen &&
+        !notiDropDownRef.current.contains(event.target)
+      ) {
+        return setIsNotiOpen(false);
+      }
+    };
+
+    window.addEventListener('click', handleNotiClickOutside);
+
+    return () => {
+      window.removeEventListener('click', handleNotiClickOutside);
+    };
+  }, [isNotiOpen]);
+
   const renderHeaderSignedInItems = useCallback(() => {
     // 데스크톱 최소 화면 width 대응
     if (!isMobile && isDesktopMin) {
@@ -128,14 +142,10 @@ const Header = () => {
           <div className={classes.right}>
             <IconButton
               aria-label="show new notifications"
-              ref={notiIconRef}
               className={`${classes.iconButton} noti-button`}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleNotiOpen();
-              }}
               disableRipple
               color="secondary"
+              ref={notiIconRef}
             >
               <Badge
                 variant="dot"
@@ -219,12 +229,8 @@ const Header = () => {
           <IconButton
             aria-label="show new notifications"
             className={`${classes.iconButton} noti-button`}
-            ref={notiIconRef}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleNotiOpen();
-            }}
             disableRipple
+            ref={notiIconRef}
             color="secondary"
           >
             <Badge
@@ -284,8 +290,8 @@ const Header = () => {
     isMobile,
     notiBadgeInvisible,
     onKeySubmit,
-    query,
-    toggleNotiOpen
+    query
+    // toggleNotiOpen
   ]);
 
   return (
@@ -318,10 +324,9 @@ const Header = () => {
         </AppBar>
       </div>
       {isNotiOpen && (
-        <NotificationDropdownList
-          setIsNotiOpen={setIsNotiOpen}
-          ref={notiDropDownRef}
-        />
+        <div ref={notiDropDownRef}>
+          <NotificationDropdownList setIsNotiOpen={setIsNotiOpen} />
+        </div>
       )}
       <div ref={searchRef}>
         {isSearchOpen && (
