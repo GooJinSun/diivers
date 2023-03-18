@@ -51,12 +51,12 @@ export const APPEND_RESPONSE_REQUESTS_SUCCESS =
 export const APPEND_RESPONSE_REQUESTS_FAILURE =
   'RESPONSE_REQUESTS/APPEND_NOTIFICATION_FAILURE';
 
-export const READ_ALL_NOTIFICATIONS_REQUEST =
-  'notification/READ_ALL_NOTIFICATIONS_REQUEST';
-export const READ_ALL_NOTIFICATIONS_SUCCESS =
-  'notification/READ_ALL_NOTIFICATIONS_SUCCESS';
-export const READ_ALL_NOTIFICATIONS_FAILURE =
-  'notification/READ_ALL_NOTIFICATIONS_FAILURE';
+export const READ_NOTIFICATIONS_REQUEST =
+  'notification/READ_NOTIFICATIONS_REQUEST';
+export const READ_NOTIFICATIONS_SUCCESS =
+  'notification/READ_NOTIFICATIONS_SUCCESS';
+export const READ_NOTIFICATIONS_FAILURE =
+  'notification/READ_NOTIFICATIONS_FAILURE';
 
 export const getNotifications = () => async (dispatch) => {
   let res;
@@ -181,20 +181,36 @@ export const appendResponseRequests = () => async (dispatch, getState) => {
   });
 };
 
-export const readAllNotification = () => async (dispatch) => {
+export const readNotifications = () => async (dispatch, getState) => {
+  const { receivedNotifications } = getState().notiReducer;
+
+  if (!receivedNotifications) {
+    return;
+  }
+
+  const unreadNotifications = receivedNotifications
+    .filter((noti) => !noti.is_read)
+    .map((noti) => noti.id);
+
+  if (unreadNotifications.length === 0) {
+    return;
+  }
+
   let res;
-  dispatch({ type: 'notification/READ_ALL_NOTIFICATIONS_REQUEST' });
+  dispatch({ type: 'notification/READ_NOTIFICATIONS_REQUEST' });
   try {
-    res = await axios.put(`/notifications/`);
+    res = await axios.patch(`/notifications/read/`, {
+      ids: unreadNotifications
+    });
   } catch (error) {
     dispatch({
-      type: 'notification/READ_ALL_NOTIFICATIONS_FAILURE',
+      type: 'notification/READ_NOTIFICATIONS_FAILURE',
       error
     });
     return;
   }
   dispatch({
-    type: 'notification/READ_ALL_NOTIFICATIONS_SUCCESS',
+    type: 'notification/READ_NOTIFICATIONS_SUCCESS',
     res: res.data
   });
 };
