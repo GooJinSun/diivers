@@ -11,12 +11,13 @@ import {
   NotiCreatedAt
 } from './NotificationItem.styles';
 
-const NotificationItem = ({ notiObj, isNotificationPage }) => {
+const NotificationItem = ({ notiObj, isNotificationPage, setIsNotiOpen }) => {
   const classes = useStyles();
   const history = useHistory();
 
   const handleClickNotiItem = () => {
     history.push(notiObj.redirect_url);
+    setIsNotiOpen(false);
   };
 
   const { actor_detail } = notiObj;

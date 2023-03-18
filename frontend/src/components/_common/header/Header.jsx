@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -32,6 +32,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const notiDropDownRef = useRef(null);
+  const notiIconRef = useRef(null);
   const searchRef = useRef(null);
 
   const [t] = useTranslation('translation', { keyPrefix: 'header' });
@@ -53,24 +54,15 @@ const Header = () => {
   const unreadNotifications = notifications?.filter((noti) => !noti.is_read);
   const notiBadgeInvisible = unreadNotifications?.length === 0;
 
-  const handleNotiClose = () => {
-    setIsNotiOpen(false);
-  };
-
   const handleSearchClose = () => {
     setIsSearchOpen(false);
   };
 
-  useOnClickOutside(notiDropDownRef, handleNotiClose);
   useOnClickOutside(searchRef, handleSearchClose);
 
   const handleClickLogout = () => {
     dispatch(logout());
     history.push('/login');
-  };
-
-  const toggleNotiOpen = () => {
-    setIsNotiOpen(!isNotiOpen);
   };
 
   useEffect(() => {
@@ -116,7 +108,20 @@ const Header = () => {
 
   const { isMobile, isDesktopMin } = useWindowWidth();
 
-  const renderHeaderSignedInItems = () => {
+  const toggleNotiOpen = () => {
+    setIsNotiOpen((prev) => !prev);
+  };
+
+  const hanleOnClickNotiOutside = (e) => {
+    if (notiIconRef.current.contains(e.target)) {
+      return;
+    }
+    setIsNotiOpen(false);
+  };
+
+  useOnClickOutside(notiDropDownRef, hanleOnClickNotiOutside);
+
+  const renderHeaderSignedInItems = useCallback(() => {
     // 데스크톱 최소 화면 width 대응
     if (!isMobile && isDesktopMin) {
       return (
@@ -128,12 +133,10 @@ const Header = () => {
             <IconButton
               aria-label="show new notifications"
               className={`${classes.iconButton} noti-button`}
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleNotiOpen();
-              }}
               disableRipple
               color="secondary"
+              ref={notiIconRef}
+              onClick={toggleNotiOpen}
             >
               <Badge
                 variant="dot"
@@ -217,12 +220,10 @@ const Header = () => {
           <IconButton
             aria-label="show new notifications"
             className={`${classes.iconButton} noti-button`}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleNotiOpen();
-            }}
             disableRipple
+            ref={notiIconRef}
             color="secondary"
+            onClick={toggleNotiOpen}
           >
             <Badge
               variant="dot"
@@ -273,7 +274,17 @@ const Header = () => {
         </div>
       </>
     );
-  };
+  }, [
+    currentUser,
+    handleClickLogout,
+    isDesktopMin,
+    isDrawerOpen,
+    isMobile,
+    notiBadgeInvisible,
+    onKeySubmit,
+    query
+    // toggleNotiOpen
+  ]);
 
   return (
     <>
@@ -304,11 +315,11 @@ const Header = () => {
           </Toolbar>
         </AppBar>
       </div>
-      <div ref={notiDropDownRef}>
-        {isNotiOpen && (
+      {isNotiOpen && (
+        <div ref={notiDropDownRef}>
           <NotificationDropdownList setIsNotiOpen={setIsNotiOpen} />
-        )}
-      </div>
+        </div>
+      )}
       <div ref={searchRef}>
         {isSearchOpen && (
           <SearchDropdownList setIsSearchOpen={setIsSearchOpen} />
@@ -317,4 +328,5 @@ const Header = () => {
     </>
   );
 };
+
 export default Header;

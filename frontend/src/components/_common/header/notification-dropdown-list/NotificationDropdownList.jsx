@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import List from '@material-ui/core/List';
@@ -39,13 +39,17 @@ const NotificationDropdownList = ({ setIsNotiOpen }) => {
     dispatch(getNotifications());
   }, [dispatch]);
 
-  const notificationList = notifications?.map((noti) => (
-    <NotificationItem
-      key={`noti-${noti.id}`}
-      notiObj={noti}
-      setIsNotiOpen={setIsNotiOpen}
-    />
-  ));
+  const notificationList = useMemo(
+    () =>
+      notifications?.map((noti) => (
+        <NotificationItem
+          key={`noti-${noti.id}`}
+          notiObj={noti}
+          setIsNotiOpen={setIsNotiOpen}
+        />
+      )),
+    []
+  );
 
   useEffect(() => {
     setTimeout(() => {
@@ -85,4 +89,5 @@ const NotificationDropdownList = ({ setIsNotiOpen }) => {
   );
 };
 
-export default NotificationDropdownList;
+NotificationDropdownList.displayName = 'NotificationDropdownList';
+export default React.memo(NotificationDropdownList);
