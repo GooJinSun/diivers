@@ -24,6 +24,7 @@ export default function CommentItem({
   postKey,
   commentObj,
   isReply = false,
+  clickReplyButton,
   isAuthor = false,
   isAnon = false
 }) {
@@ -38,6 +39,11 @@ export default function CommentItem({
 
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
+  const toggleReplyInputOpen = () => {
+    clickReplyButton?.();
+    setIsReplyInputOpen((prev) => !prev);
+  };
+
   const replyItems = commentObj?.replies?.map((reply) => {
     const isReplyAuthor = currentUser?.id === reply.author_detail?.id;
     if (reply.is_private && !isAuthor && !isReplyAuthor && !isCommentAuthor) {
@@ -51,6 +57,7 @@ export default function CommentItem({
         isReply
         commentObj={reply}
         isAnon={isAnon}
+        clickReplyButton={toggleReplyInputOpen}
       />
     );
   });
@@ -70,7 +77,6 @@ export default function CommentItem({
     dispatch(deleteComment(commentObj.id, postKey, isReply, targetId));
     setIsDeleteDialogOpen(false);
   };
-  const toggleReplyInputOpen = () => setIsReplyInputOpen((prev) => !prev);
 
   const onCancelDelete = () => {
     setIsDeleteDialogOpen(false);
@@ -123,11 +129,9 @@ export default function CommentItem({
             }}
           >
             <CreateTime createdTime={commentObj.created_at} />
-            {!isReply && (
-              <ReplyWrapper onClick={toggleReplyInputOpen}>
-                {t('reply')}
-              </ReplyWrapper>
-            )}
+            <ReplyWrapper onClick={toggleReplyInputOpen}>
+              {t('reply')}
+            </ReplyWrapper>
             {isCommentAuthor && (
               <DeleteWrapper
                 onClick={() => setIsDeleteDialogOpen(true)}
@@ -161,7 +165,7 @@ export default function CommentItem({
       </CommentItemWrapper>
       <div>{replyItems}</div>
       <div>
-        {isReplyInputOpen && (
+        {isReplyInputOpen && !isReply && (
           <NewComment
             isReply
             onSubmit={handleReplySubmit}
