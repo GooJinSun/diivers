@@ -29,9 +29,9 @@ const FriendFeed = () => {
     isLoading
   } = useInfiniteFriendPostList();
 
+  //TODO(지나): 나중에 범용적인 툴로 빼서 만들기
   const handleObserver = useCallback(
-    // eslint-disable-next-line no-unused-vars
-    (entries: IntersectionObserverEntry[], _observer: IntersectionObserver) => {
+    (entries: IntersectionObserverEntry[]) => {
       const [entry] = entries;
       if (entry.isIntersecting && hasNextPage) {
         fetchNextPage();
