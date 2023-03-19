@@ -1,11 +1,11 @@
 import { GetFeedResponse } from '@models/feed';
-import { Comment, Post, POST_TYPE } from '@models/posts';
+import { Comment } from '@models/posts';
 import { InfiniteData } from '@tanstack/react-query';
 import getQueryKey from '../getQueryKey';
 import queryClient from '../queryClient';
 
 export const updatePostsOnCreateComment = (
-  postObj: Post,
+  postKey: string,
   newComment: Comment
 ) => {
   queryClient.setQueryData<InfiniteData<GetFeedResponse>>(
@@ -19,14 +19,14 @@ export const updatePostsOnCreateComment = (
       );
 
       const targetPostWithPageIndex = flatPostListWithPageIndex.find(
-        ({ item }) => item.id === postObj?.id && item.type === postObj?.type
+        ({ item }) => postKey === `${item.type}-${item.id}`
       );
 
       if (!targetPostWithPageIndex) return data;
       const { pageIndex } = targetPostWithPageIndex;
 
       const updatedPageResults = data.pages[pageIndex].results.map((item) => {
-        if (item.id === postObj.id && item.type === postObj.type) {
+        if (postKey === `${item.type}-${item.id}`) {
           return {
             ...item,
             comments:
@@ -203,10 +203,7 @@ export const updatePostsOnDeleteReply = (postKey: string, replyId: number) => {
   );
 };
 
-export const updatePostsOnDeletePost = (
-  postType: POST_TYPE,
-  postId: number
-) => {
+export const updatePostsOnDeletePost = (postKey: string) => {
   queryClient.setQueryData<InfiniteData<GetFeedResponse>>(
     getQueryKey('GET_FRIEND_POST_LIST'),
     (data) => {
@@ -218,14 +215,14 @@ export const updatePostsOnDeletePost = (
       );
 
       const targetPostWithPageIndex = flatPostListWithPageIndex.find(
-        ({ item }) => `${postType}-${postId}` === `${item.type}-${item.id}`
+        ({ item }) => postKey === `${item.type}-${item.id}`
       );
 
       if (!targetPostWithPageIndex) return data;
       const { pageIndex } = targetPostWithPageIndex;
 
       const updatedPageResults = data.pages[pageIndex].results.filter(
-        (item) => `${postType}-${postId}` !== `${item.type}-${item.id}`
+        (item) => postKey !== `${item.type}-${item.id}`
       );
 
       return {

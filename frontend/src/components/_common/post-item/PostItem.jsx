@@ -94,7 +94,7 @@ export default function PostItem({
 
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
-      updatePostsOnCreateComment(postObj, newComment);
+      updatePostsOnCreateComment(`${postObj.type}-${postObj.id}`, newComment);
     }
     if (resetAfterComment) resetAfterComment();
   };
@@ -125,7 +125,7 @@ export default function PostItem({
 
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
-      updatePostsOnDeletePost(postObj.type, postObj.id);
+      updatePostsOnDeletePost(`${postObj.type}-${postObj.id}`);
     }
 
     if (isDetailPage) history.replace('/');
