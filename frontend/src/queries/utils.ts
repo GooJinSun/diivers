@@ -1,4 +1,4 @@
-import { InfiniteData } from 'react-query';
+import { InfiniteData } from '@tanstack/react-query';
 
 export type KeysMatching<T, V> = {
   [K in keyof T]: T[K] extends V ? K : never;

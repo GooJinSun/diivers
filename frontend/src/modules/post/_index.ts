@@ -1,16 +1,10 @@
-import { Post } from '@models/posts';
+import { GetFeedResponse } from '@models/feed';
 import axios from '../../utils/api';
-
-type GetFriendPostsResponse = {
-  count: number;
-  next: string;
-  results: Post[];
-};
 
 export const getFriendPosts = async (
   pageNumber: number
-): Promise<GetFriendPostsResponse> => {
-  let data: GetFriendPostsResponse = {
+): Promise<GetFeedResponse> => {
+  let data: GetFeedResponse = {
     results: [],
     count: 0,
     next: ''

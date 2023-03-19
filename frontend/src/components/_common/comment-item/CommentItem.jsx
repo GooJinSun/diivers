@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LockIcon from '@material-ui/icons/Lock';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
@@ -11,6 +11,7 @@ import AuthorProfile from '@common-components/author-profile/AuthorProfile';
 import CreateTime from '@common-components/create-time/CreateTime';
 import NewComment from '@common-components/new-comment/NewComment';
 import { useTranslation } from 'react-i18next';
+import useMutateFriendPostList from 'src/queries/posts/useMutateFriendPostList';
 import {
   CommentItemWrapper,
   ReplyIcon,
@@ -62,7 +63,11 @@ export default function CommentItem({
     );
   });
 
-  const handleReplySubmit = (content, isPrivate) => {
+  const location = useLocation();
+  const { mutateOnCreateReply, mutateOnDeleteComment, mutateOnDeleteReply } =
+    useMutateFriendPostList();
+
+  const handleReplySubmit = async (content, isPrivate) => {
     const newReplyObj = {
       target_type: 'Comment',
       target_id: commentObj.id,
@@ -70,11 +75,27 @@ export default function CommentItem({
       is_anonymous: commentObj?.is_anonymous,
       content
     };
-    dispatch(createReply(newReplyObj, postKey, targetId));
+    const { data: newReply } = await dispatch(
+      createReply(newReplyObj, postKey, targetId)
+    );
+
+    // FIXME: react-query 확장 적용할 때마다 업데이트 필요
+    if (location.pathname === '/home') {
+      mutateOnCreateReply(postKey, commentObj.id, newReply);
+    }
   };
 
   const handleDeleteComment = () => {
     dispatch(deleteComment(commentObj.id, postKey, isReply, targetId));
+
+    // FIXME: react-query 확장 적용할 때마다 업데이트 필요
+    if (location.pathname === '/home') {
+      if (isReply) {
+        mutateOnDeleteReply(postKey, commentObj.id);
+      } else {
+        mutateOnDeleteComment(postKey, commentObj.id);
+      }
+    }
     setIsDeleteDialogOpen(false);
   };
 

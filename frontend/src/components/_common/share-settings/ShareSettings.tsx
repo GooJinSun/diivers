@@ -64,7 +64,8 @@ export default function ShareSettings({
         })
       );
       resetContent?.();
-      refetchFriendPostList();
+
+      refetchFriendPostList({ refetchPage: () => true });
     }
 
     onSubmit?.();

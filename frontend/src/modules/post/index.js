@@ -258,10 +258,13 @@ export const createComment =
       result: result.data,
       postKey
     });
+
     const { selectedQuestion } = getState().questionReducer;
     if (+selectedQuestion?.id === +targetId) {
       dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
     }
+
+    return result;
   };
 
 export const createReply =
@@ -289,6 +292,7 @@ export const createReply =
     if (+selectedQuestion?.id === +targetId) {
       dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
     }
+    return result;
   };
 
 export const deleteComment =

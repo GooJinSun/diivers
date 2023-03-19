@@ -21,6 +21,7 @@ import {
   PostItemButtonsWrapper
 } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
+import useMutateFriendPostList from 'src/queries/posts/useMutateFriendPostList';
 import {
   ContentWrapper,
   CommentWrapper,
@@ -74,7 +75,11 @@ export default function PostItem({
     setIsDeleteDialogOpen(false);
   };
 
-  const handleSubmit = (content, isPrivate) => {
+  const location = useLocation();
+  const { mutateOnCreateComment, mutateOnDeletePost } =
+    useMutateFriendPostList();
+
+  const handleSubmit = async (content, isPrivate) => {
     const newCommentObj = {
       target_type: postObj.type,
       target_id: postObj.id,
@@ -82,7 +87,14 @@ export default function PostItem({
       is_private: isPrivate,
       is_anonymous: isAnon || onlyAnonPost
     };
-    dispatch(createComment(newCommentObj, postKey, postObj?.question_id));
+    const { data: newComment } = await dispatch(
+      createComment(newCommentObj, postKey, postObj?.question_id)
+    );
+
+    // FIXME: react-query 확장 적용할 때마다 업데이트 필요
+    if (location.pathname === '/home') {
+      mutateOnCreateComment(`${postObj.type}-${postObj.id}`, newComment);
+    }
     if (resetAfterComment) resetAfterComment();
   };
 
@@ -109,6 +121,12 @@ export default function PostItem({
   const handleDelete = () => {
     dispatch(deletePost(postObj.id, postObj.type));
     setIsDeleteDialogOpen(false);
+
+    // FIXME: react-query 확장 적용할 때마다 업데이트 필요
+    if (location.pathname === '/home') {
+      mutateOnDeletePost(`${postObj.type}-${postObj.id}`);
+    }
+
     if (isDetailPage) history.replace('/');
   };
 

@@ -25,7 +25,7 @@ export interface ResponseDraft extends ShareSettings {
 
 export interface Response extends ShareSettings, ContentsCommon {
   type: POST_TYPE.RESPONSE;
-  comment: Comment[];
+  comments: Comment[];
   question: Question;
   question_id: number;
 }
