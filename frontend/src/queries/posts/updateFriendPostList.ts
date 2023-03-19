@@ -4,6 +4,21 @@ import { InfiniteData } from '@tanstack/react-query';
 import getQueryKey from '../getQueryKey';
 import queryClient from '../queryClient';
 
+const findTargetPage = (
+  data: InfiniteData<GetFeedResponse>,
+  postKey: string
+) => {
+  if (!data) return;
+
+  const flatPostListWithPageIndex = data.pages.flatMap(({ results }, index) =>
+    results.flatMap((item) => ({ item, pageIndex: index }))
+  );
+
+  return flatPostListWithPageIndex.find(
+    ({ item }) => postKey === `${item.type}-${item.id}`
+  );
+};
+
 export const updatePostsOnCreateComment = (
   postKey: string,
   newComment: Comment
@@ -13,17 +28,10 @@ export const updatePostsOnCreateComment = (
     (data) => {
       if (!data) return;
 
-      const flatPostListWithPageIndex = data.pages.flatMap(
-        ({ results }, index) =>
-          results.flatMap((item) => ({ item, pageIndex: index }))
-      );
+      const targetPageWithPageIndex = findTargetPage(data, postKey);
 
-      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
-        ({ item }) => postKey === `${item.type}-${item.id}`
-      );
-
-      if (!targetPostWithPageIndex) return data;
-      const { pageIndex } = targetPostWithPageIndex;
+      if (!targetPageWithPageIndex) return data;
+      const { pageIndex } = targetPageWithPageIndex;
 
       const updatedPageResults = data.pages[pageIndex].results.map((item) => {
         if (postKey === `${item.type}-${item.id}`) {
@@ -62,17 +70,10 @@ export const updatePostsOnCreateReply = (
     (data) => {
       if (!data) return;
 
-      const flatPostListWithPageIndex = data.pages.flatMap(
-        ({ results }, index) =>
-          results.flatMap((item) => ({ item, pageIndex: index }))
-      );
+      const targetPageWithPageIndex = findTargetPage(data, postKey);
 
-      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
-        ({ item }) => postKey === `${item.type}-${item.id}`
-      );
-
-      if (!targetPostWithPageIndex) return data;
-      const { pageIndex } = targetPostWithPageIndex;
+      if (!targetPageWithPageIndex) return data;
+      const { pageIndex } = targetPageWithPageIndex;
 
       const updatedPageResults = data.pages[pageIndex].results.map((item) => {
         if (postKey === `${item.type}-${item.id}`) {
@@ -118,17 +119,10 @@ export const updatePostsOnDeleteComment = (
     (data) => {
       if (!data) return;
 
-      const flatPostListWithPageIndex = data.pages.flatMap(
-        ({ results }, index) =>
-          results.flatMap((item) => ({ item, pageIndex: index }))
-      );
+      const targetPageWithPageIndex = findTargetPage(data, postKey);
 
-      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
-        ({ item }) => postKey === `${item.type}-${item.id}`
-      );
-
-      if (!targetPostWithPageIndex) return data;
-      const { pageIndex } = targetPostWithPageIndex;
+      if (!targetPageWithPageIndex) return data;
+      const { pageIndex } = targetPageWithPageIndex;
 
       const updatedPageResults = data.pages[pageIndex].results.map((item) => {
         if (postKey === `${item.type}-${item.id}`) {
@@ -162,17 +156,10 @@ export const updatePostsOnDeleteReply = (postKey: string, replyId: number) => {
     (data) => {
       if (!data) return;
 
-      const flatPostListWithPageIndex = data.pages.flatMap(
-        ({ results }, index) =>
-          results.flatMap((item) => ({ item, pageIndex: index }))
-      );
+      const targetPageWithPageIndex = findTargetPage(data, postKey);
 
-      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
-        ({ item }) => postKey === `${item.type}-${item.id}`
-      );
-
-      if (!targetPostWithPageIndex) return data;
-      const { pageIndex } = targetPostWithPageIndex;
+      if (!targetPageWithPageIndex) return data;
+      const { pageIndex } = targetPageWithPageIndex;
 
       const updatedPageResults = data.pages[pageIndex].results.map((item) => {
         if (postKey === `${item.type}-${item.id}`) {
@@ -209,17 +196,10 @@ export const updatePostsOnDeletePost = (postKey: string) => {
     (data) => {
       if (!data) return;
 
-      const flatPostListWithPageIndex = data.pages.flatMap(
-        ({ results }, index) =>
-          results.flatMap((item) => ({ item, pageIndex: index }))
-      );
+      const targetPageWithPageIndex = findTargetPage(data, postKey);
 
-      const targetPostWithPageIndex = flatPostListWithPageIndex.find(
-        ({ item }) => postKey === `${item.type}-${item.id}`
-      );
-
-      if (!targetPostWithPageIndex) return data;
-      const { pageIndex } = targetPostWithPageIndex;
+      if (!targetPageWithPageIndex) return data;
+      const { pageIndex } = targetPageWithPageIndex;
 
       const updatedPageResults = data.pages[pageIndex].results.filter(
         (item) => postKey !== `${item.type}-${item.id}`
