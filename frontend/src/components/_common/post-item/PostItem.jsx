@@ -21,10 +21,7 @@ import {
   PostItemButtonsWrapper
 } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
-import {
-  updatePostsOnCreateComment,
-  updatePostsOnDeletePost
-} from 'src/queries/posts/updateFriendPostList';
+import useMutateFriendPostList from 'src/queries/posts/useMutateFriendPostList';
 import {
   ContentWrapper,
   CommentWrapper,
@@ -79,6 +76,8 @@ export default function PostItem({
   };
 
   const location = useLocation();
+  const { mutateOnCreateComment, mutateOnDeletePost } =
+    useMutateFriendPostList();
 
   const handleSubmit = async (content, isPrivate) => {
     const newCommentObj = {
@@ -94,7 +93,7 @@ export default function PostItem({
 
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
-      updatePostsOnCreateComment(`${postObj.type}-${postObj.id}`, newComment);
+      mutateOnCreateComment(`${postObj.type}-${postObj.id}`, newComment);
     }
     if (resetAfterComment) resetAfterComment();
   };
@@ -125,7 +124,7 @@ export default function PostItem({
 
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
-      updatePostsOnDeletePost(`${postObj.type}-${postObj.id}`);
+      mutateOnDeletePost(`${postObj.type}-${postObj.id}`);
     }
 
     if (isDetailPage) history.replace('/');

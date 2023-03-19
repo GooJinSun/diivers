@@ -11,11 +11,7 @@ import AuthorProfile from '@common-components/author-profile/AuthorProfile';
 import CreateTime from '@common-components/create-time/CreateTime';
 import NewComment from '@common-components/new-comment/NewComment';
 import { useTranslation } from 'react-i18next';
-import {
-  updatePostsOnCreateReply,
-  updatePostsOnDeleteComment,
-  updatePostsOnDeleteReply
-} from 'src/queries/posts/updateFriendPostList';
+import useMutateFriendPostList from 'src/queries/posts/useMutateFriendPostList';
 import {
   CommentItemWrapper,
   ReplyIcon,
@@ -68,6 +64,8 @@ export default function CommentItem({
   });
 
   const location = useLocation();
+  const { mutateOnCreateReply, mutateOnDeleteComment, mutateOnDeleteReply } =
+    useMutateFriendPostList();
 
   const handleReplySubmit = async (content, isPrivate) => {
     const newReplyObj = {
@@ -83,7 +81,7 @@ export default function CommentItem({
 
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
-      updatePostsOnCreateReply(postKey, commentObj.id, newReply);
+      mutateOnCreateReply(postKey, commentObj.id, newReply);
     }
   };
 
@@ -93,9 +91,9 @@ export default function CommentItem({
     // FIXME: react-query 확장 적용할 때마다 업데이트 필요
     if (location.pathname === '/home') {
       if (isReply) {
-        updatePostsOnDeleteReply(postKey, commentObj.id);
+        mutateOnDeleteReply(postKey, commentObj.id);
       } else {
-        updatePostsOnDeleteComment(postKey, commentObj.id);
+        mutateOnDeleteComment(postKey, commentObj.id);
       }
     }
     setIsDeleteDialogOpen(false);
