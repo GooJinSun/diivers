@@ -36,9 +36,9 @@ def default_user():
 
 class Notification(AdoorTimestampedModel, SafeDeleteModel):
     user = models.ForeignKey(User, related_name='received_noti_set',
-                             on_delete=models.SET_NULL, null=True)
+                             on_delete=models.CASCADE, null=True)
     actor = models.ForeignKey(User, related_name='sent_noti_set',
-                              on_delete=models.SET_NULL, null=True)
+                              on_delete=models.CASCADE, null=True)
 
     # target: notification을 발생시킨 직접적인 원인(?)
     target_type = models.ForeignKey(ContentType,

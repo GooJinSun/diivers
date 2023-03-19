@@ -33,13 +33,20 @@ class UserFriendshipCase(TestCase):
         user = User.objects.first()
         self.assertEqual(user.friends.count(), 1)
 
-    def test_on_delete_user_cascade(self):
+    def test_on_delete_undelete_user_cascade(self):
         user = User.objects.first()
         user_id = user.id
         friend = user.friends.first()
+        friends_cnt = friend.friends.count()
+
         user.delete()
         self.assertEqual(User.objects.filter(id=user_id).count(), 0)
-        self.assertEqual(friend.friends.count(), 0)
+        self.assertEqual(friend.friends.count(), friends_cnt - 1)
+
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user_id).count(), 1)
+        self.assertEqual(friend.friends.count(), friends_cnt)
 
 
 class FriendRequestTestCase(TestCase):
@@ -55,35 +62,50 @@ class FriendRequestTestCase(TestCase):
         self.assertEqual(friendrequest.__str__(),
                          f'{friendrequest.requester} sent to {friendrequest.requestee} ({friendrequest.accepted})')
 
-    def test_on_delete_requester_cascade(self):
+    def test_on_delete_undelete_requester_cascade(self):
         user = FriendRequest.objects.first().requester
-        sent_friend_requests = user.sent_friend_requests.all()
-        self.assertEqual(sent_friend_requests.count(), 2)
+        sent_friend_requests_cnt = user.sent_friend_requests.all().count()
+        self.assertEqual(sent_friend_requests_cnt, 2)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=user.id).count(), 0)
         self.assertEqual(FriendRequest.objects.filter(requester_id=user.id).count(), 0)
         self.assertEqual(FriendRequest.objects.filter(requestee_id=user.id).count(), 0)
 
-    def test_on_delete_requestee_cascade(self):
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user.id).count(), 1)
+        self.assertEqual(FriendRequest.objects.filter(requester_id=user.id).count(), sent_friend_requests_cnt)
+
+    def test_on_delete_undelete_requestee_cascade(self):
         user = FriendRequest.objects.first().requestee
-        received_friend_requests = user.received_friend_requests.all()
-        self.assertEqual(received_friend_requests.count(), 1)
+        received_friend_requests_cnt = user.received_friend_requests.all().count()
+        self.assertEqual(received_friend_requests_cnt, 1)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=user.id).count(), 0)
         self.assertEqual(FriendRequest.objects.filter(requester_id=user.id).count(), 0)
         self.assertEqual(FriendRequest.objects.filter(requestee_id=user.id).count(), 0)
 
-    def test_on_delete_responder_cascade(self):
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user.id).count(), 1)
+        self.assertEqual(FriendRequest.objects.filter(requestee_id=user.id).count(), received_friend_requests_cnt)
+
+    def test_on_delete_undelete_responder_cascade(self):
         user = FriendRequest.objects.first().requestee
-        received_friend_requests = user.received_friend_requests.all()
-        self.assertGreater(received_friend_requests.count(), 0)
+        received_friend_requests_cnt = user.received_friend_requests.all().count()
+        self.assertGreater(received_friend_requests_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=user.id).count(), 0)
         self.assertEqual(FriendRequest.objects.filter(requester_id=user.id).count(), 0)
         self.assertEqual(FriendRequest.objects.filter(requestee_id=user.id).count(), 0)
+
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user.id).count(), 1)
+        self.assertEqual(FriendRequest.objects.filter(requestee_id=user.id).count(), received_friend_requests_cnt)
 
 
 class APITestCase(TestCase):

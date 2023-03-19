@@ -33,15 +33,15 @@ class FeedTestCase(TestCase):
         self.assertEqual(article.__str__(), article.content)
 
     # all feeds must be deleted along with user
-    def test_on_delete_user_cascade(self):
+    def test_on_delete_undelete_user_cascade(self):
         fill_data()
         user = User.objects.get(id=2)
-        articles = user.article_set.all()
-        responses = user.response_set.all()
-        questions = user.question_set.all()
-        self.assertGreater(articles.count(), 0)
-        self.assertGreater(responses.count(), 0)
-        self.assertGreater(questions.count(), 0)
+        articles_cnt = user.article_set.all().count()
+        responses_cnt = user.response_set.all().count()
+        questions_cnt = user.question_set.all().count()
+        self.assertGreater(articles_cnt, 0)
+        self.assertGreater(responses_cnt, 0)
+        self.assertGreater(questions_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=2).count(), 0)
@@ -49,13 +49,25 @@ class FeedTestCase(TestCase):
         self.assertEqual(Response.objects.filter(author_id=2).count(), 0)
         self.assertEqual(Question.objects.filter(author_id=2).count(), 0)
 
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=2).count(), 1)
+        self.assertEqual(Article.objects.filter(author_id=2).count(), articles_cnt)
+        self.assertEqual(Response.objects.filter(author_id=2).count(), responses_cnt)
+        self.assertEqual(Question.objects.filter(author_id=2).count(), questions_cnt)
+
     # response must be deleted along with question
-    def test_on_delete_question_cascade(self):
+    def test_on_delete_undelete_question_cascade(self):
         response = Response.objects.last()
         response_id = response.id
+        question = response.question
 
-        response.question.delete()
+        question.delete()
         self.assertEqual(Response.objects.filter(id=response_id).count(), 0)
+
+        # undelete
+        question.undelete()
+        self.assertEqual(Response.objects.filter(id=response_id).count(), 1)
 
     # post content must change to reflect target content
     def test_post_update(self):
@@ -67,11 +79,18 @@ class FeedTestCase(TestCase):
                                              object_id=response.id).last().content, response.content)
 
     # post content must be removed along with target
-    def test_post_delete(self):
+    def test_post_delete_undelete(self):
         response = Response.objects.last()
+        response_id = response.id
+        posts_cnt = Post.objects.filter(object_id=response.id).count()
         response.delete()
 
-        self.assertEqual(Post.objects.filter(object_id=response.id).count(), 0)
+        self.assertEqual(Post.objects.filter(content_type=get_response_type(), 
+                                             object_id=response_id).count(), 0)
+
+        # undelete
+        response.undelete()
+        self.assertEqual(Post.objects.filter(object_id=response.id).count(), posts_cnt)
 
 
 class ResponseRequestTestCase(TestCase):
@@ -88,33 +107,47 @@ class ResponseRequestTestCase(TestCase):
     def test_response_request_count(self):
         self.assertGreater(ResponseRequest.objects.count(), 0)  # due to unique constraint
 
-    def test_on_delete_actor_cascade(self):
+    def test_on_delete_undelete_actor_cascade(self):
         user = ResponseRequest.objects.first().requester
-        sent_response_requests = user.sent_response_request_set.all()
-        self.assertGreater(sent_response_requests.count(), 0)
+        sent_response_requests_cnt = user.sent_response_request_set.all().count()
+        self.assertGreater(sent_response_requests_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=user.id).count(), 0)
         self.assertEqual(ResponseRequest.objects.filter(requester_id=user.id).count(), 0)
         self.assertEqual(ResponseRequest.objects.filter(requestee_id=user.id).count(), 0)
 
-    def test_on_delete_recipient_cascade(self):
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user.id).count(), 1)
+        self.assertEqual(ResponseRequest.objects.filter(requester_id=user.id).count(), sent_response_requests_cnt)
+
+    def test_on_delete_undelete_recipient_cascade(self):
         user = ResponseRequest.objects.first().requestee
-        received_response_requests = user.received_response_request_set.all()
-        self.assertGreater(received_response_requests.count(), 0)
+        received_response_requests_cnt = user.received_response_request_set.all().count()
+        self.assertGreater(received_response_requests_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=user.id).count(), 0)
         self.assertEqual(ResponseRequest.objects.filter(requestee_id=user.id).count(), 0)
         self.assertEqual(ResponseRequest.objects.filter(requester_id=user.id).count(), 0)
 
-    def test_on_delete_question_cascade(self):
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user.id).count(), 1)
+        self.assertEqual(ResponseRequest.objects.filter(requestee_id=user.id).count(), received_response_requests_cnt)
+
+    def test_on_delete_undelete_question_cascade(self):
         question = ResponseRequest.objects.first().question
-        response_request = ResponseRequest.objects.filter(question_id=question.id)
-        self.assertGreater(response_request.count(), 0)
+        response_request_cnt = ResponseRequest.objects.filter(question_id=question.id).count()
+        self.assertGreater(response_request_cnt, 0)
 
         question.delete()
         self.assertEqual(ResponseRequest.objects.filter(question_id=question.id).count(), 0)
+
+        # undelete
+        question.undelete()
+        self.assertEqual(ResponseRequest.objects.filter(question_id=question.id).count(), response_request_cnt)
 
 
 class APITestCase(TestCase):

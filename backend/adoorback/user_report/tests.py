@@ -96,7 +96,7 @@ class UserReportTestCase(TestCase):
             curr_noti_count = Notification.objects.count()
             self.assertEqual(curr_noti_count, prev_noti_count)  # notis from/for blocked users should NOT be created
 
-    def test_user_report_deletion(self):
+    def test_user_report_deletion_undeletion(self):
         user4 = self.make_user(username='user4')
         user5 = self.make_user(username='user5')
         user6 = self.make_user(username='user6')
@@ -120,9 +120,14 @@ class UserReportTestCase(TestCase):
         self.assertEqual(ResponseRequest.objects.count(), 0)
         self.assertEqual(FriendRequest.objects.count(), 0)
 
-        User.objects.get(id=user4.id).delete()
+        user = User.objects.get(id=user4.id)
+        user.delete()
 
         self.assertEqual(UserReport.objects.count(), 0)
+
+        # undelete
+        user.undelete()
+        self.assertEqual(UserReport.objects.count(), 1)
 
 
 class APITestCase(TestCase):
