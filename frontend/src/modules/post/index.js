@@ -189,8 +189,8 @@ export const createPost = (newPost) => async (dispatch, getState) => {
   const postType = `${newPost.type.toLowerCase()}s`;
   const payload = {
     ...newPost,
-    share_anonymously: newPost.shareAnonymously,
-    share_with_friends: newPost.shareWithFriends
+    share_anonymously: newPost.share_anonymously,
+    share_with_friends: newPost.share_with_friends
   };
   let result;
   try {
