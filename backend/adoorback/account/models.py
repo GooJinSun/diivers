@@ -79,10 +79,6 @@ class UserCustomManager(UserManager, SafeDeleteManager):
     _safedelete_visibility = DELETED_INVISIBLE
 
 
-class UserCustomManager(UserManager, SafeDeleteManager):
-    _safedelete_visibility = DELETED_INVISIBLE
-
-
 class User(AbstractUser, AdoorTimestampedModel, SafeDeleteModel):
     """User Model
     This model extends the Django Abstract User model

@@ -308,17 +308,3 @@ def create_request_answered_noti(instance, created, **kwargs):
         Notification.objects.create(actor=actor, user=user,
                                     origin=origin, target=target,
                                     message_ko=message_ko, message_en=message_en, redirect_url=redirect_url)
-
-
-@transaction.atomic
-@receiver(post_save, sender=Response)
-def delete_response_request(instance, created, **kwargs):
-    if not created:
-        return
-
-    try:
-        response_requests = ResponseRequest.objects.filter(requestee_id=instance.author.id,
-                                                           question=instance.question)
-    except ResponseRequest.DoesNotExist:
-        return
-    response_requests.delete(force_policy=HARD_DELETE)
