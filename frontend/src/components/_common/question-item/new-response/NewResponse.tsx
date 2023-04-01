@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from 'react';
+import React, { ChangeEvent, useState, useEffect, useRef } from 'react';
 import ShareSettings from '@components/_common/share-settings/ShareSettings';
 import { TextareaAutosize } from '@material-ui/core';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,10 @@ const NewResponse = ({ question, onSubmit }: NewResponseProps) => {
     }));
   };
 
+  const isSubmitted = useRef(false);
+
   const onSubmitHandler = () => {
+    isSubmitted.current = true;
     setNewPost((prev) => ({ ...prev, content: '' }));
     onSubmit?.();
   };
@@ -42,6 +45,7 @@ const NewResponse = ({ question, onSubmit }: NewResponseProps) => {
   const newPostRef = useDepsFree(newPost);
   useEffect(() => {
     return () => {
+      if (isSubmitted.current) return;
       if (!newPostRef.current.content.trim().length) return;
 
       // eslint-disable-next-line react-hooks/exhaustive-deps

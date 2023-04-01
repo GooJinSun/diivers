@@ -57,7 +57,7 @@ export default function ShareSettings({
       );
       history.push(location.pathname.slice(0, -4));
     } else {
-      dispatch(
+      await dispatch(
         createPost({
           ...postObj,
           ...shareState
