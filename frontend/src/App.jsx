@@ -30,7 +30,6 @@ import useLoginWithToken from '@hooks/auth/useLoginWithToken';
 import useLogOutIfRefreshTokenExpired from '@hooks/auth/useLogOutIfRefreshTokenExpired';
 import GlobalStyle from '@styles/globalStyle';
 import { MainWrapper, FeedWrapper } from '@styles/wrappers';
-import useAppLogin from '@hooks/auth/useAppLogin';
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import ArticleDraftEdit from '@components/draft-edit/ArticleDraftEdit';
 import ResponseDraftEdit from '@components/draft-edit/ResponseDraftEdit';
@@ -38,6 +37,8 @@ import DraftList from '@components/draft-list/DraftList';
 import { initGA, trackPage } from './ga';
 import useFcm from './hooks/useFcm';
 import './i18n';
+import useAppLogin from './hooks/app/useAppLogin';
+import useAppRedirect from './hooks/app/useAppRedirect';
 
 axios.defaults.xsrfHeaderName = 'X-CSRFTOKEN';
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -58,6 +59,7 @@ const App = () => {
   const location = useLocation();
 
   useAppLogin();
+  useAppRedirect();
   useLoginWithToken();
   useLogOutIfRefreshTokenExpired();
 
