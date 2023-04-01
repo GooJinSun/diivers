@@ -15,6 +15,8 @@ from account.models import FriendRequest
 from adoorback.settings.base import BASE_URL
 from adoorback.utils.exceptions import InActiveUser, NoUsername, WrongPassword
 
+from django.db.models import Q
+
 User = get_user_model()
 
 
@@ -65,7 +67,8 @@ class CustomTokenObtainPairSerializer(TokenObtainSerializer):
 
         if not api_settings.USER_AUTHENTICATION_RULE(self.user):
             try:
-                user = User.objects.get(username=authenticate_kwargs["username"])
+                username = authenticate_kwargs["username"]
+                user = User.objects.get(Q(username=username) | Q(email=username))
             except:
                 raise NoUsername()
             if not user.is_active:
