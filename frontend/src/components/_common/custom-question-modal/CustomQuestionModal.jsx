@@ -24,8 +24,8 @@ const CustomQuestionModal = ({ open, handleClose }) => {
   const [newCustomQuestion, setNewCustomQuestion] = useState({
     content: '',
     type: 'Question',
-    shareWithFriends: true,
-    shareAnonymously: true
+    share_share_with_friends: true,
+    share_anonymously: true
   });
 
   const handleInputChange = (e) => {
