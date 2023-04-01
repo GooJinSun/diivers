@@ -13,6 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenViewBase
+from safedelete.models import SOFT_DELETE_CASCADE
 
 from account.models import FriendRequest
 from account.serializers import UserProfileSerializer, \
@@ -317,7 +318,7 @@ class UserFriendRequestDestroy(generics.DestroyAPIView):
 
     @transaction.atomic
     def perform_destroy(self, obj):
-        obj.delete()
+        obj.delete(force_policy=SOFT_DELETE_CASCADE)
 
 
 class UserFriendRequestUpdate(generics.UpdateAPIView):

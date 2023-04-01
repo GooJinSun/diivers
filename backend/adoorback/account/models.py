@@ -7,7 +7,7 @@ import os
 from django.apps import apps
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models, transaction
 from django.db.models.signals import post_save, m2m_changed
@@ -16,6 +16,14 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
+
+from adoorback.models import AdoorTimestampedModel
+
+from safedelete import DELETED_INVISIBLE
+from safedelete.models import SafeDeleteModel
+from safedelete.models import SOFT_DELETE_CASCADE, HARD_DELETE
+from safedelete.managers import SafeDeleteManager
 
 from adoorback.models import AdoorTimestampedModel
 
@@ -66,7 +74,12 @@ ETHNICITY_CHOICES = (
     (5, _('백인 (White)')),
 )
 
-class User(AbstractUser, AdoorTimestampedModel):
+
+class UserCustomManager(UserManager, SafeDeleteManager):
+    _safedelete_visibility = DELETED_INVISIBLE
+
+
+class User(AbstractUser, AdoorTimestampedModel, SafeDeleteModel):
     """User Model
     This model extends the Django Abstract User model
     """
@@ -89,6 +102,10 @@ class User(AbstractUser, AdoorTimestampedModel):
     friendship_originated_notis = GenericRelation("notification.Notification",
                                                   content_type_field='origin_type',
                                                   object_id_field='origin_id')
+
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
+    objects = UserCustomManager()
 
     class Meta:
         indexes = [
@@ -125,7 +142,7 @@ class User(AbstractUser, AdoorTimestampedModel):
         return list(ContentReport.objects.filter(user=self).values_list('post_id', flat=True))
 
 
-class FriendRequest(AdoorTimestampedModel):
+class FriendRequest(AdoorTimestampedModel, SafeDeleteModel):
     """FriendRequest Model
     This model describes FriendRequest between users
     """
@@ -142,10 +159,12 @@ class FriendRequest(AdoorTimestampedModel):
                                                       content_type_field='target_type',
                                                       object_id_field='target_id')
 
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['requester', 'requestee', ], name='unique_friend_request'),
+                fields=['requester', 'requestee', ], condition=Q(deleted__isnull=True), name='unique_friend_request'),
         ]
         indexes = [
             models.Index(fields=['-updated_at']),
@@ -166,15 +185,18 @@ def delete_friend_noti(action, pk_set, instance, **kwargs):
     if action == "post_remove":
         friend = User.objects.get(id=pk_set.pop())
         # remove friendship related notis from both users
-        friend.friendship_targetted_notis.filter(user=instance).delete()
-        instance.friendship_targetted_notis.filter(user=friend).delete()
-        FriendRequest.objects.filter(requester=instance, requestee=friend).delete()
-        FriendRequest.objects.filter(requester=friend, requestee=instance).delete()
+        friend.friendship_targetted_notis.filter(user=instance).delete(force_policy=HARD_DELETE)
+        instance.friendship_targetted_notis.filter(user=friend).delete(force_policy=HARD_DELETE)
+        FriendRequest.objects.filter(requester=instance, requestee=friend).delete(force_policy=HARD_DELETE)
+        FriendRequest.objects.filter(requester=friend, requestee=instance).delete(force_policy=HARD_DELETE)
 
 
 @transaction.atomic
 @receiver(post_save, sender=FriendRequest)
 def create_friend_noti(created, instance, **kwargs):
+    if instance.deleted:
+        return
+
     accepted = instance.accepted
     Notification = apps.get_model('notification', 'Notification')
     requester = instance.requester
@@ -191,6 +213,9 @@ def create_friend_noti(created, instance, **kwargs):
                                     redirect_url=f'/users/{requester.username}')
         return
     elif accepted:
+        if User.are_friends(requestee, requester):  # receiver function was triggered by undelete
+            return
+
         Notification.objects.create(user=requestee, actor=requester,
                                     origin=requester, target=requester,
                                     message_ko=f'{requester.username}님과 친구가 되었습니다.',

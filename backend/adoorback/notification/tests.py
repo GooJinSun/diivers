@@ -46,18 +46,23 @@ class DeleteActorNotificationTestCase(TestCase):
         set_seed(N)
 
     # test on delete actor user
-    def test_on_delete_actor_cascade(self):
+    def test_on_delete_undelete_actor_cascade(self):
         user = User.objects.last()
         user_id = user.id
         sent_notis = user.sent_noti_set.visible_only()
-        noti_acted = Notification.objects.visible_only().filter(actor_id=user_id)
-        self.assertEqual(sent_notis.count(), noti_acted.count())
+        noti_acted_cnt = Notification.objects.visible_only().filter(actor_id=user_id).count()
+        self.assertEqual(sent_notis.count(), noti_acted_cnt)
         self.assertGreater(sent_notis.count(), 0)
-        self.assertGreater(noti_acted.count(), 0)
+        self.assertGreater(noti_acted_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=user_id).count(), 0)
         self.assertEqual(Notification.objects.visible_only().filter(actor_id=user_id).count(), 0)
+
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user_id).count(), 1)
+        self.assertEqual(Notification.objects.visible_only().filter(actor_id=user_id).count(), noti_acted_cnt)
 
 
 class DeleteRecipientNotificationTestCase(TestCase):
@@ -66,19 +71,24 @@ class DeleteRecipientNotificationTestCase(TestCase):
         set_seed(N)
 
     # test on delete recipient user
-    def test_on_delete_recipient_cascade(self):
+    def test_on_delete_undelete_recipient_cascade(self):
         fill_data()
         user = User.objects.first()
         user_id = user.id
         received_notis = user.received_noti_set.visible_only()
-        noti_received = Notification.objects.visible_only().filter(user_id=user_id)
-        self.assertEqual(received_notis.count(), noti_received.count())
+        noti_received_cnt = Notification.objects.visible_only().filter(user_id=user_id).count()
+        self.assertEqual(received_notis.count(), noti_received_cnt)
         self.assertGreater(received_notis.count(), 0)
-        self.assertGreater(noti_received.count(), 0)
+        self.assertGreater(noti_received_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=user_id).count(), 0)
         self.assertEqual(Notification.objects.visible_only().filter(user_id=user_id).count(), 0)
+
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=user_id).count(), 1)
+        self.assertEqual(Notification.objects.visible_only().filter(user_id=user_id).count(), noti_received_cnt)
 
 
 class DeleteObjectNotificationTestCase(TestCase):
@@ -87,30 +97,47 @@ class DeleteObjectNotificationTestCase(TestCase):
         set_seed(N)
 
     # test on delete target
-    def test_on_delete_target_cascade(self):
+    def test_on_delete_undelete_target_cascade(self):
         # target = comment
         noti = Notification.objects.visible_only().filter(target_type=get_comment_type()).last()
         target = noti.target
         target_id = target.id
+        comment_noti_cnt = Notification.objects.visible_only().filter(
+            target_type=get_comment_type(), target_id=target_id).count()
         target.delete()
         self.assertEqual(Notification.objects.visible_only().filter(
             target_type=get_comment_type(), target_id=target_id).count(), 0)
+        # undelete
+        target.undelete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            target_type=get_comment_type(), target_id=target_id).count(), comment_noti_cnt)
 
         # target = like
         noti = Notification.objects.visible_only().filter(target_type=get_like_type()).last()
         target = noti.target
         target_id = target.id
+        like_noti_cnt = Notification.objects.visible_only().filter(
+            target_type=get_like_type(), target_id=target_id).count()
         target.delete()
         self.assertEqual(Notification.objects.visible_only().filter(
             target_type=get_like_type(), target_id=target_id).count(), 0)
+        # undelete
+        target.undelete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            target_type=get_like_type(), target_id=target_id).count(), like_noti_cnt)
 
         # target = response request
         noti = Notification.objects.visible_only().filter(target_type=get_response_request_type()).last()
         target = noti.target
         target_id = target.id
+        rr_noti_cnt = Notification.objects.visible_only().filter(
+            target_type=get_response_request_type(), target_id=target_id).count()
         target.delete()
         self.assertEqual(Notification.objects.visible_only().filter(
             target_type=get_response_request_type(), target_id=target_id).count(), 0)
+        target.undelete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            target_type=get_response_request_type(), target_id=target_id).count(), rr_noti_cnt)
 
 
 class DeleteFeedNotificationTestCase(TestCase):
@@ -119,46 +146,82 @@ class DeleteFeedNotificationTestCase(TestCase):
         set_seed(N)
 
     # test on delete origin
-    def test_on_delete_origin_cascade(self):
+    def test_on_delete_undelete_origin_cascade(self):
         # origin = comment
         noti = Notification.objects.visible_only().filter(origin_type=get_comment_type()).last()
         origin = noti.origin
         origin_id = origin.id
+        comment_noti_cnt = Notification.objects.visible_only().filter(
+            origin_type=get_comment_type(), origin_id=origin_id).count()
         origin.delete()
         self.assertEqual(Notification.objects.visible_only().filter(
             origin_type=get_comment_type(), origin_id=origin_id).count(), 0)
+        # undelete
+        origin.undelete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            origin_type=get_comment_type(), origin_id=origin_id).count(), comment_noti_cnt)
 
         # origin = article
         fill_data()
         noti = Notification.objects.visible_only().filter(origin_type=get_article_type()).last()
         origin = noti.origin
         origin_id = origin.id
+        article_noti_cnt = Notification.objects.visible_only().filter(
+            origin_type=get_article_type(), origin_id=origin_id).count()
+        article_redirect_cnt = Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/articles/{origin_id}').count()
         origin.delete()
         self.assertEqual(Notification.objects.visible_only().filter(
             origin_type=get_article_type(), origin_id=origin_id).count(), 0)
-        self.assertGreater(Notification.objects.visible_only().filter(
-            redirect_url__icontains=f'/articles/{origin_id}').count(), 0)  # 노티 자체가 안 보이지는 않아야 함
+        self.assertEqual(Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/articles/{origin_id}').count(), 0)
+        # undelete
+        origin.undelete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            origin_type=get_article_type(), origin_id=origin_id).count(), article_noti_cnt)
+        self.assertEqual(Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/articles/{origin_id}').count(), article_redirect_cnt)
 
         # origin = response
         noti = Notification.objects.visible_only().filter(origin_type=get_response_type()).last()
         origin = noti.origin
         origin_id = origin.id
+        response_noti_cnt = Notification.objects.visible_only().filter(
+            origin_type=get_response_type(), origin_id=origin_id).count()
+        response_redirect_cnt = Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/responses/{origin_id}').count()
         origin.delete()
         self.assertEqual(Notification.objects.visible_only().filter(
             origin_type=get_response_type(), origin_id=origin_id).count(), 0)
-        self.assertGreater(Notification.objects.visible_only().filter(
-            redirect_url__icontains=f'/responses/{origin_id}').count(), 0)  # 노티 자체가 안 보이지는 않아야 함
+        self.assertEqual(Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/responses/{origin_id}').count(), 0)
+        # undelete
+        origin.undelete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            origin_type=get_response_type(), origin_id=origin_id).count(), response_noti_cnt)
+        self.assertEqual(Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/responses/{origin_id}').count(), response_redirect_cnt)
 
         # origin = question
         noti = Notification.objects.visible_only().filter(target_type=get_response_request_type(),
                                                           origin_type=get_question_type()).last()
         origin = noti.origin
         origin_id = origin.id
+        question_noti_cnt = Notification.objects.visible_only().filter(
+            origin_type=get_question_type(), origin_id=origin_id).count()
+        question_redirect_cnt = Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/questions/{origin_id}').count()
         origin.delete()
         self.assertEqual(Notification.objects.visible_only().filter(
-            origin_type=get_question_type(), origin_id=origin_id).count(), 0)  # origin type은 바뀌어야 함
-        self.assertGreater(Notification.objects.visible_only().filter(
-            redirect_url__icontains=f'/questions/{origin_id}').count(), 0)  # 노티 자체가 안 보이지는 않아야 함
+            origin_type=get_question_type(), origin_id=origin_id).count(), 0)
+        self.assertEqual(Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/questions/{origin_id}').count(), 0)
+        # undelete
+        origin.undelete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            origin_type=get_question_type(), origin_id=origin_id).count(), question_noti_cnt)
+        self.assertEqual(Notification.objects.visible_only().filter(
+            redirect_url__icontains=f'/questions/{origin_id}').count(), question_redirect_cnt)
 
 
 class APITestCase(TestCase):

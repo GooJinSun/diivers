@@ -26,40 +26,59 @@ class LikeTestCase(TestCase):
         self.assertEqual(like.__str__(), f'{like.user} likes {like.content_type} ({like.object_id})')
         self.assertEqual(like.type, 'Like')
 
-    def test_on_delete_user_cascade(self):
+    def test_on_delete_undelete_user_cascade(self):
         fill_data()
         user = User.objects.get(id=2)
-        self.assertGreater(user.like_set.count(), 0)
+        like_cnt = user.like_set.count()
+        self.assertGreater(like_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=2).count(), 0)
         self.assertEqual(Like.objects.filter(user_id=2).count(), 0)
 
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=2).count(), 1)
+        self.assertEqual(Like.objects.filter(user_id=2).count(), like_cnt)
+
     # like must be deleted along with target Feed
-    def test_on_delete_feed_cascade(self):
+    def test_on_delete_undelete_feed_cascade(self):
         article_model = get_article_type()
         question_model = get_question_type()
         article = Like.objects.filter(content_type=article_model).last().target
         question = Like.objects.filter(content_type=question_model).last().target
+        article_id = article.id
+        question_id = question.id
+        article_like_cnt = Like.objects.filter(content_type=article_model, object_id=article_id).count()
+        question_like_cnt = Like.objects.filter(content_type=question_model, object_id=question_id).count()
         self.assertGreater(article.article_likes.count(), 0)
         self.assertGreater(question.question_likes.count(), 0)
 
-        article_id = article.id
-        question_id = question.id
         article.delete()
         question.delete()
         self.assertEqual(Like.objects.filter(content_type=article_model, object_id=article_id).count(), 0)
         self.assertEqual(Like.objects.filter(content_type=question_model, object_id=question_id).count(), 0)
 
+        # undelete
+        article.undelete()
+        question.undelete()
+        self.assertEqual(Like.objects.filter(content_type=article_model, object_id=article_id).count(), article_like_cnt)
+        self.assertEqual(Like.objects.filter(content_type=question_model, object_id=question_id).count(), question_like_cnt)
+
     # like must be deleted along with target Comment
-    def test_delete_comment_cascade(self):
+    def test_delete_undelete_comment_cascade(self):
         content_type = get_comment_type()
         comment = Like.objects.filter(content_type=content_type).last().target
         object_id = comment.id
+        comment_like_cnt = Like.objects.filter(content_type=content_type, object_id=object_id).count()
         self.assertGreater(comment.comment_likes.count(), 0)
 
         comment.delete()
         self.assertEqual(Like.objects.filter(content_type=content_type, object_id=object_id).count(), 0)
+
+        # undelete
+        comment.undelete()
+        self.assertEqual(Like.objects.filter(content_type=content_type, object_id=object_id).count(), comment_like_cnt)
 
 
 class APITestCase(TestCase):

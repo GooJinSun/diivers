@@ -1,21 +1,26 @@
 import datetime
 from django.db import models, transaction
-from django.db.models.signals import post_save, post_delete, pre_delete
+from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.dispatch import receiver
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from comment.models import Comment
 from like.models import Like
 from adoorback.models import AdoorModel, AdoorTimestampedModel
 from notification.models import Notification
 
+from safedelete.models import SafeDeleteModel
+from safedelete.models import SOFT_DELETE_CASCADE, HARD_DELETE
+from safedelete.managers import SafeDeleteManager
+
 User = get_user_model()
 
 
-class Article(AdoorModel):
+class Article(AdoorModel, SafeDeleteModel):
     author = models.ForeignKey(User, related_name='article_set', on_delete=models.CASCADE)
     share_with_friends = models.BooleanField(default=True)
     share_anonymously = models.BooleanField(default=True)
@@ -29,6 +34,8 @@ class Article(AdoorModel):
     article_originated_notis = GenericRelation(Notification,
                                                content_type_field='origin_type',
                                                object_id_field='origin_id')
+
+    _safedelete_policy = SOFT_DELETE_CASCADE
 
     @property
     def type(self):
@@ -48,7 +55,7 @@ class Article(AdoorModel):
         ]
 
 
-class QuestionManager(models.Manager):
+class QuestionManager(SafeDeleteManager):
 
     def admin_questions_only(self, **kwargs):
         return self.filter(is_admin_question=True, **kwargs)
@@ -60,7 +67,7 @@ class QuestionManager(models.Manager):
         return self.filter(selected_date__date=datetime.date.today(), **kwargs)
 
 
-class Question(AdoorModel):
+class Question(AdoorModel, SafeDeleteModel):
     author = models.ForeignKey(User, related_name='question_set', on_delete=models.CASCADE)
 
     selected_date = models.DateTimeField(null=True)
@@ -78,6 +85,8 @@ class Question(AdoorModel):
 
     objects = QuestionManager()
 
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
     @property
     def type(self):
         return self.__class__.__name__
@@ -87,11 +96,10 @@ class Question(AdoorModel):
         return self.question_likes.values_list('user_id', flat=True)
 
     class Meta:
-        base_manager_name = 'objects'
         ordering = ['id']
 
 
-class Response(AdoorModel):
+class Response(AdoorModel, SafeDeleteModel):
     author = models.ForeignKey(User, related_name='response_set', on_delete=models.CASCADE)
     share_with_friends = models.BooleanField(default=True)
     share_anonymously = models.BooleanField(default=True)
@@ -106,6 +114,8 @@ class Response(AdoorModel):
     response_originated_notis = GenericRelation(Notification,
                                                 content_type_field='origin_type',
                                                 object_id_field='origin_id')
+
+    _safedelete_policy = SOFT_DELETE_CASCADE
 
     class Meta:
         ordering = ['-id']
@@ -126,7 +136,7 @@ class Response(AdoorModel):
         return self.response_comments.values_list('author_id', flat=True).distinct()
 
 
-class ResponseRequest(AdoorTimestampedModel):
+class ResponseRequest(AdoorTimestampedModel, SafeDeleteModel):
     requester = models.ForeignKey(User, related_name='sent_response_request_set', on_delete=models.CASCADE)
     requestee = models.ForeignKey(User, related_name='received_response_request_set', on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -138,10 +148,13 @@ class ResponseRequest(AdoorTimestampedModel):
                                                         content_type_field='origin_type',
                                                         object_id_field='origin_id')
 
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['requester', 'requestee', 'question'], name='unique_response_request'),
+                fields=['requester', 'requestee', 'question'], condition=Q(deleted__isnull=True), 
+                name='unique_response_request'),
         ]
         indexes = [
             models.Index(fields=['-id']),
@@ -155,7 +168,7 @@ class ResponseRequest(AdoorTimestampedModel):
         return self.__class__.__name__
 
 
-class PostManager(models.Manager):
+class PostManager(SafeDeleteManager):
 
     def friend_posts_only(self, **kwargs):
         return self.filter(share_with_friends=True, **kwargs)
@@ -164,7 +177,7 @@ class PostManager(models.Manager):
         return self.filter(share_anonymously=True, **kwargs)
 
 
-class Post(AdoorModel):
+class Post(AdoorModel, SafeDeleteModel):
     author_id = models.IntegerField()
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -176,9 +189,10 @@ class Post(AdoorModel):
 
     objects = PostManager()
 
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
     class Meta:
         ordering = ['-id']
-        base_manager_name = 'objects'
         indexes = [
             models.Index(fields=['-id']),
         ]
@@ -189,10 +203,33 @@ class Post(AdoorModel):
  
 
 @transaction.atomic
+@receiver(post_save, sender=User)
+@receiver(post_save, sender=Question)
+@receiver(post_save, sender=Response)
+@receiver(post_save, sender=Article)
+def softdelete_post(sender, instance, **kwargs):
+    if instance.deleted:
+        if sender == User:
+            posts = Post.objects.filter(author_id=instance.id)
+            posts.delete(force_policy=SOFT_DELETE_CASCADE)
+        else:
+            content_type = ContentType.objects.get_for_model(sender)
+            try:
+                post = Post.objects.get(content_type=content_type, object_id=instance.id)
+            except Post.DoesNotExist:
+                return
+            post.delete(force_policy=SOFT_DELETE_CASCADE)
+        return
+
+
+@transaction.atomic
 @receiver(post_save, sender=Question)
 @receiver(post_save, sender=Response)
 @receiver(post_save, sender=Article)
 def create_post(sender, instance, **kwargs):
+    if instance.deleted:
+        return
+
     content_type = ContentType.objects.get_for_model(sender)
     try:
         post = Post.objects.get(content_type=content_type, object_id=instance.id)
@@ -213,17 +250,23 @@ def create_post(sender, instance, **kwargs):
 @receiver(post_delete, sender=Question)
 @receiver(post_delete, sender=Response)
 @receiver(post_delete, sender=Article)
-def delete_post(sender, instance, **kwargs):
+def harddelete_post(sender, instance, **kwargs):
     if sender == User:
-        Post.objects.filter(author_id=instance.id).delete()
+        Post.objects.filter(author_id=instance.id).delete(force_policy=HARD_DELETE)
     else:
         Post.objects.get(content_type=ContentType.objects.get_for_model(sender),
-                         object_id=instance.id).delete()
+                         object_id=instance.id).delete(force_policy=HARD_DELETE)
 
 
 @transaction.atomic
 @receiver(post_save, sender=ResponseRequest)
-def create_response_request_noti(instance, **kwargs):
+def create_response_request_noti(instance, created, **kwargs):
+    if instance.deleted:
+        return
+    
+    if not created:
+        return
+
     target = instance
     origin = instance.question
     requester = instance.requester
@@ -241,6 +284,9 @@ def create_response_request_noti(instance, **kwargs):
 @transaction.atomic
 @receiver(post_save, sender=Response)
 def create_request_answered_noti(instance, created, **kwargs):
+    if instance.deleted:
+        return
+
     if not created or not instance.share_with_friends:  # response edit만 해줬거나 익명으로만 공개한 경우
         return
 
@@ -262,33 +308,3 @@ def create_request_answered_noti(instance, created, **kwargs):
         Notification.objects.create(actor=actor, user=user,
                                     origin=origin, target=target,
                                     message_ko=message_ko, message_en=message_en, redirect_url=redirect_url)
-
-
-@transaction.atomic
-@receiver(pre_delete, sender=Question)
-def protect_question_noti(instance, **kwargs):
-    # response request에 대한 response 보냈을 때 발생하는 노티, like/comment로 발생하는 노티 모두 보호
-    for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/questions/{instance.id}'):
-        noti.target_type = None
-        noti.origin_type = None
-        noti.save()
-
-
-@transaction.atomic
-@receiver(pre_delete, sender=Response)
-def protect_response_noti(instance, **kwargs):
-    # comment, like로 인한 노티, response request 답변으로 인한 노티 모두 보호
-    for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/responses/{instance.id}'):
-        noti.target_type = None
-        noti.origin_type = None
-        noti.save()
-
-
-@transaction.atomic
-@receiver(pre_delete, sender=Article)
-def protect_article_noti(instance, **kwargs):
-    # comment, like로 인한 노티 모두 보호
-    for noti in Notification.objects.visible_only().filter(redirect_url__icontains=f'/articles/{instance.id}'):
-        noti.target_type = None
-        noti.origin_type = None
-        noti.save()

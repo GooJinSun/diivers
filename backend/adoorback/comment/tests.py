@@ -26,24 +26,31 @@ class CommentTestCase(TestCase):
         self.assertEqual(comment.type, 'Comment')
 
     # comments of user must be deleted accordingly
-    def test_on_delete_user_cascade(self):
+    def test_on_delete_undelete_user_cascade(self):
         fill_data()
         user = User.objects.get(id=2)
-        comments = user.comment_set.all()
-        self.assertGreater(comments.count(), 0)
+        comments_cnt = user.comment_set.all().count()
+        self.assertGreater(comments_cnt, 0)
 
         user.delete()
         self.assertEqual(User.objects.filter(id=2).count(), 0)
         self.assertEqual(Comment.objects.filter(author_id=2).count(), 0)
 
+        # undelete
+        user.undelete()
+        self.assertEqual(User.objects.filter(id=2).count(), 1)
+        self.assertEqual(Comment.objects.filter(author_id=2).count(), comments_cnt)
+
     # comment must be deleted along with target
-    def test_on_delete_feed_cascade(self):
+    def test_on_delete_undelete_feed_cascade(self):
         article = Comment.objects.filter(content_type=get_article_type()).last().target
         response = Comment.objects.filter(content_type=get_response_type()).last().target
         article_id = article.id
         response_id = response.id
-        self.assertGreater(article.article_comments.count(), 0)
-        self.assertGreater(response.response_comments.count(), 0)
+        article_comments_cnt = article.article_comments.count()
+        response_comments_cnt = response.response_comments.count()
+        self.assertGreater(article_comments_cnt, 0)
+        self.assertGreater(response_comments_cnt, 0)
 
         article.delete()
         response.delete()
@@ -52,15 +59,29 @@ class CommentTestCase(TestCase):
         self.assertEqual(Comment.objects.filter(content_type=get_response_type(),
                                                 object_id=response_id).count(), 0)
 
+        # undelete
+        article.undelete()
+        response.undelete()
+        self.assertEqual(Comment.objects.filter(content_type=get_article_type(),
+                                                object_id=article_id).count(), article_comments_cnt)
+        self.assertEqual(Comment.objects.filter(content_type=get_response_type(),
+                                                object_id=response_id).count(), response_comments_cnt)
+
     # comment must also work properly when target is Comment
-    def test_reply_comment(self):
+    def test_delete_undelete_comment_reply(self):
         reply = Comment.objects.filter(content_type=get_comment_type()).last()
         reply_id = reply.id
         comment_id = reply.object_id
-
-        Comment.objects.get(id=comment_id).delete()
+        comment = Comment.objects.get(id=comment_id)
+        
+        comment.delete()
         self.assertEqual(Comment.objects.filter(id=comment_id).count(), 0)
         self.assertEqual(Comment.objects.filter(id=reply_id).count(), 0)
+
+        # undelete
+        comment.undelete()
+        self.assertEqual(Comment.objects.filter(id=comment_id).count(), 1)
+        self.assertEqual(Comment.objects.filter(id=reply_id).count(), 1)
 
 
 class APITestCase(TestCase):

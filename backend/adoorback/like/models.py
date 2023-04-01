@@ -5,6 +5,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 
 from adoorback.utils.content_types import get_comment_type
 from adoorback.models import AdoorTimestampedModel
@@ -12,10 +13,14 @@ from notification.models import Notification
 
 from adoorback.utils.helpers import wrap_content
 
+from safedelete.models import SafeDeleteModel
+from safedelete.models import SOFT_DELETE_CASCADE
+from safedelete.managers import SafeDeleteManager
+
 User = get_user_model()
 
 
-class LikeManager(models.Manager):
+class LikeManager(SafeDeleteManager):
     use_for_related_fields = True
 
     def comment_likes_only(self, **kwargs):
@@ -25,7 +30,7 @@ class LikeManager(models.Manager):
         return self.exclude(content_type=get_comment_type(), **kwargs)
 
 
-class Like(AdoorTimestampedModel):
+class Like(AdoorTimestampedModel, SafeDeleteModel):
     user = models.ForeignKey(User, related_name='like_set', on_delete=models.CASCADE)
     is_anonymous = models.BooleanField(default=False)
 
@@ -41,9 +46,11 @@ class Like(AdoorTimestampedModel):
                                             object_id_field='origin_id')
     objects = LikeManager()
 
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'content_type', 'object_id'], name='unique_like'),
+            models.UniqueConstraint(fields=['user', 'content_type', 'object_id'], condition=Q(deleted__isnull=True), name='unique_like'),
         ]
         ordering = ['id']
 
@@ -57,7 +64,10 @@ class Like(AdoorTimestampedModel):
 
 @transaction.atomic
 @receiver(post_save, sender=Like)
-def create_like_noti(instance, **kwargs):
+def create_like_noti(instance, created, **kwargs):
+    if instance.deleted or not created:
+        return
+
     user = instance.target.author
     actor = instance.user
     origin = instance.target

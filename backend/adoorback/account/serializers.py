@@ -3,7 +3,6 @@ import secrets
 from django.db import transaction
 from django.contrib.auth import authenticate, get_user_model
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 from django.urls import reverse
 from django.utils import translation
 from rest_framework_simplejwt.serializers import TokenObtainSerializer
@@ -120,12 +119,6 @@ class UserFriendRequestCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = FriendRequest
         fields = ['requester_id', 'requestee_id', 'accepted']
-        validators = [
-            UniqueTogetherValidator(
-                queryset=FriendRequest.objects.all(),
-                fields=['requester_id', 'requestee_id']
-            )
-        ]
 
 
 class UserFriendRequestUpdateSerializer(serializers.ModelSerializer):

@@ -2,7 +2,6 @@ from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from rest_framework import serializers
 from rest_framework.exceptions import NotAcceptable
-from rest_framework.validators import UniqueTogetherValidator
 from django.urls import reverse
 
 from feed.models import Article, Response, Question, Post, ResponseRequest
@@ -400,10 +399,3 @@ class ResponseRequestSerializer(serializers.ModelSerializer):
     class Meta():
         model = ResponseRequest
         fields = ['id', 'requester_id', 'requestee_id', 'question_id']
-
-        validators = [
-            UniqueTogetherValidator(
-                queryset=ResponseRequest.objects.all(),
-                fields=['requester_id', 'requestee_id', 'question_id']
-            )
-        ]

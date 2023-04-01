@@ -14,10 +14,14 @@ from adoorback.utils.content_types import get_comment_type, get_generic_relation
 
 from adoorback.utils.helpers import wrap_content
 
+from safedelete.models import SafeDeleteModel
+from safedelete.models import SOFT_DELETE_CASCADE
+from safedelete.managers import SafeDeleteManager
+
 User = get_user_model()
 
 
-class CommentManager(models.Manager):
+class CommentManager(SafeDeleteManager):
 
     def comments_only(self, **kwargs):
         return self.exclude(content_type=get_comment_type(), **kwargs)
@@ -26,7 +30,7 @@ class CommentManager(models.Manager):
         return self.filter(content_type=get_comment_type(), **kwargs)
 
 
-class Comment(AdoorModel):
+class Comment(AdoorModel, SafeDeleteModel):
     author = models.ForeignKey(User, related_name='comment_set', on_delete=models.CASCADE)
     is_private = models.BooleanField(default=False)
     is_anonymous = models.BooleanField(default=False)
@@ -47,6 +51,8 @@ class Comment(AdoorModel):
 
     objects = CommentManager()
 
+    _safedelete_policy = SOFT_DELETE_CASCADE
+
     @property
     def type(self):
         return self.__class__.__name__
@@ -59,12 +65,12 @@ class Comment(AdoorModel):
     def participants(self):
         return self.replies.values_list('author_id', flat=True).distinct()
 
-    class Meta:
-        base_manager_name = 'objects'
-
 
 @receiver(post_save, sender=Comment)
-def create_noti(instance, **kwargs):
+def create_noti(instance, created, **kwargs):
+    if not created:  # do not run when triggered by soft delete or undelete
+        return
+
     origin_author = instance.target.author
     actor = instance.author
     origin = instance.target

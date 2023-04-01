@@ -10,11 +10,14 @@ from adoorback.models import AdoorTimestampedModel
 from firebase_admin.messaging import Message
 from firebase_admin.messaging import Notification as FirebaseNotification
 from fcm_django.models import FCMDevice
+from safedelete.models import SafeDeleteModel
+from safedelete.models import SOFT_DELETE_CASCADE
+from safedelete.managers import SafeDeleteManager
 
 User = get_user_model()
 
 
-class NotificationManager(models.Manager):
+class NotificationManager(SafeDeleteManager):
 
     def visible_only(self, **kwargs):
         return self.filter(is_visible=True, **kwargs)
@@ -31,11 +34,11 @@ def default_user():
     return User.objects.filter(is_superuser=True).first()
 
 
-class Notification(AdoorTimestampedModel):
+class Notification(AdoorTimestampedModel, SafeDeleteModel):
     user = models.ForeignKey(User, related_name='received_noti_set',
-                             on_delete=models.SET_NULL, null=True)
+                             on_delete=models.CASCADE, null=True)
     actor = models.ForeignKey(User, related_name='sent_noti_set',
-                              on_delete=models.SET_NULL, null=True)
+                              on_delete=models.CASCADE, null=True)
 
     # target: notification을 발생시킨 직접적인 원인(?)
     target_type = models.ForeignKey(ContentType,
@@ -61,6 +64,8 @@ class Notification(AdoorTimestampedModel):
     is_read = models.BooleanField(default=False)
 
     objects = NotificationManager()
+
+    _safedelete_policy = SOFT_DELETE_CASCADE
 
     class Meta:
         ordering = ['-created_at']
