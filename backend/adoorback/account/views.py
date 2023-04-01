@@ -2,7 +2,9 @@ import json
 # import sentry_sdk
 
 from django.apps import apps
+from django.core import exceptions
 from django.contrib.auth import get_user_model
+from django.contrib.auth.password_validation import validate_password
 from django.db import transaction
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseBadRequest
 from django.utils import translation
@@ -87,7 +89,7 @@ class UserSignup(generics.CreateAPIView):
                     raise ExistingEmail()
                 if 'invalid' in e.get_codes()['email']:
                     raise InvalidEmail()
-            raise e
+            raise e  # includes password validation errors
 
         self.perform_create(serializer)
 
@@ -171,7 +173,11 @@ class ResetPassword(generics.UpdateAPIView):
         return HttpResponse(status=400)
 
     @transaction.atomic
-    def update_password(self, user, raw_password):
+    def update_password(self, user, raw_password):       
+        try:
+            validate_password(password=raw_password, user=user)
+        except exceptions.ValidationError as e:
+            raise e
         user.set_password(raw_password)
         user.save()
 
