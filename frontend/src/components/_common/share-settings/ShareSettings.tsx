@@ -57,15 +57,19 @@ export default function ShareSettings({
       );
       history.push(location.pathname.slice(0, -4));
     } else {
+      resetContent?.();
+
       await dispatch(
         createPost({
           ...postObj,
           ...shareState
         })
       );
-      resetContent?.();
 
+      // FIXME: feed는 캐싱하면 의도치 않게 stale한 응답을 보여줄 수 있음
       refetchFriendPostList({ refetchPage: () => true });
+
+      if (location.pathname === '/questions') history.push('/home');
     }
 
     onSubmit?.();
