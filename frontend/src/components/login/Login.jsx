@@ -61,7 +61,7 @@ export default function Login() {
           id="username-input"
           name="username"
           value={loginInfo.username}
-          placeholder={t('nickname')}
+          placeholder={t('nickname_or_email')}
           onChange={handleChange}
           onKeyDown={onKeySubmit}
         />

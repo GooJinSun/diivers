@@ -34,7 +34,7 @@
   },
   "login": {
     "login": "Login",
-    "nickname": "nickname",
+    "nickname_or_email": "nickname or email",
     "password": "password",
     "sign_up": "Sign Up",
     "forgot_password": "Forgot password"
