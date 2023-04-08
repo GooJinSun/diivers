@@ -2,7 +2,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db import models, transaction
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from adoorback.models import AdoorTimestampedModel
@@ -77,19 +77,17 @@ class Notification(AdoorTimestampedModel, SafeDeleteModel):
         return self.message
 
 
-@transaction.atomic
 @receiver(post_save, sender=Notification)
 def send_firebase_notification(created, instance, **kwargs):
     if not created:
         return
 
     message = Message(
-        notification = FirebaseNotification(
-            title = 'Diivers',
-            body = instance.message,
-        ),
         data = {
-            'url': instance.redirect_url
+            'body' : instance.message,
+            'url': instance.redirect_url,
+            'tag': str(instance.id),
+            'type': 'new',
         }
     )
 
@@ -97,4 +95,20 @@ def send_firebase_notification(created, instance, **kwargs):
         FCMDevice.objects.filter(user_id = instance.user.id).send_message(message, False)
     except Exception as e:
         print("error while sending a firebase notification: ", e)
-    
+
+
+@receiver(pre_delete, sender=Notification)
+def cancel_firebase_notification(sender, instance, **kwargs):
+    message = Message(
+        data = {
+            'body' : '삭제된 알림입니다.',
+            'url': '/home',
+            'tag': str(instance.id),
+            'type': 'cancel',
+        }
+    )
+
+    try:
+        FCMDevice.objects.filter(user_id = instance.user.id).send_message(message, False)
+    except Exception as e:
+        print("error while sending a firebase notification: ", e)
