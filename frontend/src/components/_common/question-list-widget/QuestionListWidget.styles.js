@@ -2,12 +2,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import styled from 'styled-components';
 import { CommonButton } from '@styles/buttons';
+import { MOBILE_MIN_WIDTH } from '@constants/layout';
 import ListItemLink from './list-item-link/ListItemLink';
 
 export const NewQuestionButton = styled(CommonButton)`
   width: 275px;
   box-shadow: '0 5px 10px rgba(154, 160, 185, 0.05), 0 5px 10px rgba(166, 173, 201, 0.2)';
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     padding-right: 10px;
     width: 93vw;
   }
@@ -21,7 +22,7 @@ export const QuestionWidgetWrapper = styled.div`
 `;
 
 export const WidgetCard = styled(Card)`
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     padding-right: 10px;
     width: 90vw;
   }

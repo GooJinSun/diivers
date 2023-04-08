@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
+import { MOBILE_MIN_WIDTH } from '@constants/layout';
 
 export const CommentItemWrapper = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ CommentItemWrapper.displayName = 'CommentItem';
 export const CommentContent = styled.div`
   margin: 4px 8px 0 8px;
   word-break: break-all;
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     margin: 3px 6px;
   }
 `;
@@ -56,7 +57,7 @@ export const DeleteWrapper = styled.div`
 DeleteWrapper.displayName = 'DeleteWrapper';
 
 export const ReplyIcon = styled(SubdirectoryArrowRightIcon)`
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     margin: 0;
   }
   margin-right: 3px;

@@ -25,7 +25,7 @@ export const Question = styled.div`
   word-break: break-all;
   padding: 8px 0;
   white-space: pre-wrap;
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     padding: 16px;
   }
 `;

@@ -1,6 +1,7 @@
 import { FormGroup } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
+import { MOBILE_MIN_WIDTH } from '@constants/layout';
 
 export const ShareSettingsWrapper = styled.div`
   display: flex;
@@ -9,7 +10,7 @@ export const ShareSettingsWrapper = styled.div`
 `;
 
 export const RespFormGroup = styled(FormGroup)`
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     flex-direction: row;
     justify-content: flex-end;
     button {

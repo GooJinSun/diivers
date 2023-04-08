@@ -1,9 +1,10 @@
 import { makeStyles } from '@material-ui/core/styles';
 import styled from 'styled-components';
+import { MOBILE_MIN_WIDTH } from '@constants/layout';
 import TabPanel from './tab-panel/TabPanel';
 
 export const MobileTabPanel = styled(TabPanel)`
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     padding: 0 !important;
 
     .MuiBox-root {
@@ -29,7 +30,7 @@ export const UserReportButtonWrapper = styled.div`
 `;
 
 export const MobileWrapper = styled.div`
-  @media (max-width: 650px) {
+  @media (max-width: ${MOBILE_MIN_WIDTH}px) {
     border: none !important;
   }
   width: 100%;

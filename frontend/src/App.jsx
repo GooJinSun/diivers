@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
@@ -34,7 +34,6 @@ import useWindowWidth from '@hooks/env/useWindowWidth';
 import ArticleDraftEdit from '@components/draft-edit/ArticleDraftEdit';
 import ResponseDraftEdit from '@components/draft-edit/ResponseDraftEdit';
 import DraftList from '@components/draft-list/DraftList';
-import { WINDOW_MAX_WIDTH, WINDOW_MIN_WIDTH } from '@constants/layout';
 import useFcm from './hooks/useFcm';
 import './i18n';
 import useAppLogin from './hooks/app/useAppLogin';
@@ -57,9 +56,9 @@ const theme = createTheme({
 const App = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const [viewport, setViewport] = useState({
-    width: 'device-width'
-  });
+  // const [viewport, setViewport] = useState({
+  //   width: 'device-width'
+  // });
 
   useAppLogin();
   useAppRedirect();
@@ -70,43 +69,19 @@ const App = () => {
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
-  const { isDesktopMin } = useWindowWidth();
+  const { isMobile } = useWindowWidth();
 
   const isSelectQuestionPage = location.pathname === '/select-questions';
 
   const isAuthPage =
     location.pathname === '/login' || location.pathname === '/signup';
-  const showWidget = !isDesktopMin && !isSelectQuestionPage && currentUser;
+  const showWidget = !isMobile && !isSelectQuestionPage && currentUser;
 
   useEffect(() => {
     if (currentUser) {
       dispatch(getNotifications());
     }
   }, [location, dispatch, currentUser]);
-
-  // 현재 서비스를 모바일 대응만 하기 위함
-  useEffect(() => {
-    const handleResize = () => {
-      const width = Math.max(
-        Math.min(window.outerWidth, WINDOW_MAX_WIDTH),
-        WINDOW_MIN_WIDTH
-      );
-      setViewport({ width: String(width) });
-    };
-
-    handleResize();
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    const { width } = viewport;
-    const metaTag = document.querySelector('meta[name="viewport"]');
-    metaTag.setAttribute('content', `width=${width}, user-scalable=no`);
-  }, [viewport]);
 
   return (
     <MuiThemeProvider theme={theme}>

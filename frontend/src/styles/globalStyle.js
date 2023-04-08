@@ -1,33 +1,33 @@
 import { createGlobalStyle } from 'styled-components';
-import { WINDOW_MIN_WIDTH, WINDOW_MAX_WIDTH } from '@constants/layout';
+import {
+  MOBILE_MIN_WIDTH,
+  WINDOW_MAX_WIDTH,
+  WINDOW_MIN_WIDTH
+} from '@constants/layout';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Pacifico&family=Quicksand&display=swap');@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Quicksand&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
-  html {
+  html, header {
     max-width: ${WINDOW_MAX_WIDTH}px;
     min-width: ${WINDOW_MIN_WIDTH}px;
     background-color: #f5f5f5;
-    height: 100%;
     margin: auto;
   }
 
-  header {
-    width: 100%;
+  #bottom-nav {
     max-width: ${WINDOW_MAX_WIDTH}px;
     min-width: ${WINDOW_MIN_WIDTH}px;
     margin: auto;
+    width: 100%;
   }
 
   body {
-    white-space: pre-line;
     margin: 0;
     font-family: 'Noto Sans KR', sans-serif;
     width: 100%;
-    height: 100%;
     background-color: white;
-
   }
 
   a {
@@ -56,7 +56,7 @@ const GlobalStyle = createGlobalStyle`
   
   .MuiDialog-paperFullWidth {
     max-height: 60vh;
-    @media (max-width: 650px) {
+    @media (max-width: ${MOBILE_MIN_WIDTH}px) {
       position: fixed !important;
       top: 20% !important;
       margin: 0 !important;

@@ -6,8 +6,8 @@ import {
   AUTHENTICATION_MIN_WIDTH
 } from '@constants/layout';
 
-export const MainWrapper = styled.main`
-  margin: 80px ${DEFAULT_MARGIN}px 100px ${DEFAULT_MARGIN}px;
+export const MainWrapper = styled.div`
+  padding: 80px ${DEFAULT_MARGIN}px 100px ${DEFAULT_MARGIN}px;
   display: flex;
   justify-content: center;
   @media (max-width: ${MOBILE_MIN_WIDTH}px) {

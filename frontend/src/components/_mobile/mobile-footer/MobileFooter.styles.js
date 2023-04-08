@@ -4,15 +4,18 @@ import styled from 'styled-components';
 
 export const useStyles = makeStyles({
   root: {
-    width: '100vw',
     position: 'fixed',
     bottom: 0,
-    zIndex: 999,
-    background: '#fff',
+    backgroundColor: '#fff',
+    display: 'flex',
+    zIndex: 999
+  },
+  footer: {
+    width: '100%',
     boxShadow: 'rgba(0, 0, 0, 0.15) 0px 1px 12px'
   },
   icon: {
-    minWidth: '20vw'
+    width: '20%'
   }
 });
 

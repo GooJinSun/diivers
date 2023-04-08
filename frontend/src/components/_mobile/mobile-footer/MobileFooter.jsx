@@ -38,63 +38,64 @@ export default function MobileFooter({ notiBadgeInvisible }) {
   }, [pathname]);
 
   return (
-    <BottomNavigation
-      value={value}
-      onChange={(event, newValue) => {
-        history.push(newValue);
-        setValue(newValue);
-      }}
-      id="bottom-nav"
-      showLabels
-      className={classes.root}
-    >
-      <BottomNavigationAction
-        value="/home"
-        label={t('home')}
-        icon={<HomeIcon />}
-        className={`${classes.icon} link`}
-      />
-      <BottomNavigationAction
-        value="/anonymous"
-        label={t('anonymous_feed')}
-        icon={<SupervisorAccountIcon />}
-        className={`${classes.icon} link`}
-      />
-      <SmallFontBottomNavAction
-        value="/questions"
-        label={t('daily_questions')}
-        icon={<LiveHelpIcon />}
-        className={`${classes.icon} link`}
-        style={{ padding: '6px 4px', fontSize: '0.7rem' }}
-      />
-      <BottomNavigationAction
-        value="/notifications"
-        label={t('notifications')}
-        icon={
-          <Badge
-            variant="dot"
-            invisible={notiBadgeInvisible}
-            color="primary"
-            overlap="rectangular"
-          >
-            <NotificationsIcon />
-          </Badge>
-        }
-        className={`${classes.icon} link`}
-      />
-      <BottomNavigationAction
-        value="/my-page"
-        icon={
-          <UserProfileItem
-            userName={currentUser?.username}
-            profileImageUrl={currentUser?.profile_image}
-            width={20}
-            height={20}
-          />
-        }
-        label={t('my_page')}
-        className={`${classes.icon} link`}
-      />
-    </BottomNavigation>
+    <div id="bottom-nav" className={classes.root}>
+      <BottomNavigation
+        value={value}
+        onChange={(event, newValue) => {
+          history.push(newValue);
+          setValue(newValue);
+        }}
+        showLabels
+        className={classes.footer}
+      >
+        <BottomNavigationAction
+          value="/home"
+          label={t('home')}
+          icon={<HomeIcon />}
+          className={`${classes.icon} link`}
+        />
+        <BottomNavigationAction
+          value="/anonymous"
+          label={t('anonymous_feed')}
+          icon={<SupervisorAccountIcon />}
+          className={`${classes.icon} link`}
+        />
+        <SmallFontBottomNavAction
+          value="/questions"
+          label={t('daily_questions')}
+          icon={<LiveHelpIcon />}
+          className={`${classes.icon} link`}
+          style={{ padding: '6px 4px', fontSize: '0.7rem' }}
+        />
+        <BottomNavigationAction
+          value="/notifications"
+          label={t('notifications')}
+          icon={
+            <Badge
+              variant="dot"
+              invisible={notiBadgeInvisible}
+              color="primary"
+              overlap="rectangular"
+            >
+              <NotificationsIcon />
+            </Badge>
+          }
+          className={`${classes.icon} link`}
+        />
+        <BottomNavigationAction
+          value="/my-page"
+          icon={
+            <UserProfileItem
+              userName={currentUser?.username}
+              profileImageUrl={currentUser?.profile_image}
+              width={20}
+              height={20}
+            />
+          }
+          label={t('my_page')}
+          className={`${classes.icon} link`}
+        />
+      </BottomNavigation>
+    </div>
   );
 }

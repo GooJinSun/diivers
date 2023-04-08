@@ -20,7 +20,6 @@ import SearchDropdownList from '@common-components/search-dropdown-list/SearchDr
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import NotificationDropdownList from './notification-dropdown-list/NotificationDropdownList';
 import NavLinkList from './nav-list/NavLinkList';
-
 import { useStyles, HelloUsername } from './Header.styles';
 
 const Header = () => {
@@ -106,7 +105,7 @@ const Header = () => {
     setIsDrawerOpen(false);
   };
 
-  const { isMobile, isDesktopMin } = useWindowWidth();
+  const { isMobile } = useWindowWidth();
 
   const toggleNotiOpen = () => {
     setIsNotiOpen((prev) => !prev);
@@ -122,53 +121,6 @@ const Header = () => {
   useOnClickOutside(notiDropDownRef, hanleOnClickNotiOutside);
 
   const renderHeaderSignedInItems = useCallback(() => {
-    // 데스크톱 최소 화면 width 대응
-    if (!isMobile && isDesktopMin) {
-      return (
-        <>
-          <div className={classes.left}>
-            <NavLinkList />
-          </div>
-          <div className={classes.right}>
-            <IconButton
-              aria-label="show new notifications"
-              className={`${classes.iconButton} noti-button`}
-              disableRipple
-              color="secondary"
-              ref={notiIconRef}
-              onClick={toggleNotiOpen}
-            >
-              <Badge
-                variant="dot"
-                invisible={notiBadgeInvisible}
-                color="primary"
-                overlap="rectangular"
-              >
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              id="drawer-open-button"
-              color="secondary"
-              aria-label="open drawer"
-              edge="end"
-              onClick={() => {
-                setIsDrawerOpen(true);
-              }}
-              style={{ display: isDrawerOpen && 'none' }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <MobileDrawer
-              open={isDrawerOpen}
-              handleDrawerClose={handleDrawerClose}
-              onLogout={handleClickLogout}
-            />
-          </div>
-        </>
-      );
-    }
-
     // 모바일 width 대응
     if (isMobile) {
       return (
@@ -285,7 +237,6 @@ const Header = () => {
     currentUser?.profile_image,
     currentUser?.username,
     handleClickLogout,
-    isDesktopMin,
     isDrawerOpen,
     isMobile,
     notiBadgeInvisible,
@@ -296,9 +247,6 @@ const Header = () => {
 
   return (
     <>
-      {isMobile && currentUser && (
-        <MobileFooter notiBadgeInvisible={notiBadgeInvisible} />
-      )}
       <div className={classes.grow}>
         <AppBar className={classes.header}>
           <Toolbar>
@@ -333,6 +281,9 @@ const Header = () => {
           <SearchDropdownList setIsSearchOpen={setIsSearchOpen} />
         )}
       </div>
+      {isMobile && currentUser && (
+        <MobileFooter notiBadgeInvisible={notiBadgeInvisible} />
+      )}
     </>
   );
 };
