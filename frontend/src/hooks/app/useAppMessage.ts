@@ -1,16 +1,35 @@
 import { useEffect } from 'react';
+import { PostMessageDataType, PostMessageKeyType } from './app.types';
 
-const useAppMessage = ({ cb }: { cb: () => void }) => {
+type MessageDataType = Extract<
+  PostMessageDataType,
+  { key: PostMessageKeyType }
+>;
+
+const useAppMessage = ({
+  cb,
+  key
+}: {
+  cb: (data: PostMessageDataType) => void;
+  key: PostMessageKeyType;
+}) => {
   useEffect(() => {
     // ios
-    window.addEventListener('message', cb);
-    // android
-    document.addEventListener('message', cb);
+    window.addEventListener('message', (e) => {
+      const data = JSON.parse(e.data) as MessageDataType;
+      if (data.key === key) {
+        cb(data);
+      }
+    });
     return () => {
-      window.removeEventListener('message', cb);
-      document.removeEventListener('message', cb);
+      window.addEventListener('message', (e) => {
+        const data = JSON.parse(e.data) as MessageDataType;
+        if (data.key === key) {
+          cb(data);
+        }
+      });
     };
-  }, [cb]);
+  }, [cb, key]);
 };
 
 export default useAppMessage;
