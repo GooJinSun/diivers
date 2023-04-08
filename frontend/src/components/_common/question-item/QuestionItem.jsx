@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import CreateIcon from '@material-ui/icons/Create';
@@ -27,8 +27,6 @@ import NewResponse from './new-response/NewResponse';
 export default function QuestionItem({ questionObj, onSubmit }) {
   const dispatch = useDispatch();
   const location = useLocation();
-  const history = useHistory();
-  const isQuestionList = location.pathname === '/questions';
   const isAnon =
     location?.pathname.includes('anonymous') ||
     location?.search?.includes('anonymous=True');
@@ -84,8 +82,6 @@ export default function QuestionItem({ questionObj, onSubmit }) {
   const onSubmitHandler = () => {
     onSubmit?.();
     setIsWriting(false);
-
-    if (isQuestionList) history.push('/home');
   };
 
   return (

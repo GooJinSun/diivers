@@ -26,7 +26,6 @@ const FriendFeed = () => {
     fetchNextPage,
     isFetchingNextPage,
     isFetching,
-    isLoading,
     refetch: refetchFriendPostList
   } = useInfiniteFriendPostList();
 
@@ -71,7 +70,7 @@ const FriendFeed = () => {
         <PostList
           posts={friendPosts}
           isAppending={isFetchingNextPage}
-          isLoading={isLoading}
+          isLoading={isFetching}
         />
       )}
       <ScrollTopButton callback={refetchFriendPostList} />
