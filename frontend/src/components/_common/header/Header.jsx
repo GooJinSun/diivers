@@ -275,15 +275,23 @@ const Header = () => {
       </>
     );
   }, [
-    currentUser,
+    classes.grow,
+    classes.iconButton,
+    classes.left,
+    classes.logoutButton,
+    classes.right,
+    classes.sectionDesktop,
+    classes.textField,
+    currentUser?.profile_image,
+    currentUser?.username,
     handleClickLogout,
     isDesktopMin,
     isDrawerOpen,
     isMobile,
     notiBadgeInvisible,
     onKeySubmit,
-    query
-    // toggleNotiOpen
+    query,
+    t
   ]);
 
   return (
@@ -292,7 +300,7 @@ const Header = () => {
         <MobileFooter notiBadgeInvisible={notiBadgeInvisible} />
       )}
       <div className={classes.grow}>
-        <AppBar position="static" className={classes.header}>
+        <AppBar className={classes.header}>
           <Toolbar>
             <Link to="/" className={classes.logo} />
             {currentUserIsLoading ? null : currentUser ? (

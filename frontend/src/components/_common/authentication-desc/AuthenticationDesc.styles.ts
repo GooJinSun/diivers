@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import { AUTHENTICATION_MIN_WIDTH } from '@constants/layout';
+import styled from 'styled-components';
 
 export const AuthenticationDescWrapper = styled.div`
   max-width: 300px;
