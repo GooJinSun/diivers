@@ -20,7 +20,6 @@ import SearchDropdownList from '@common-components/search-dropdown-list/SearchDr
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import NotificationDropdownList from './notification-dropdown-list/NotificationDropdownList';
 import NavLinkList from './nav-list/NavLinkList';
-
 import { useStyles, HelloUsername } from './Header.styles';
 
 const Header = () => {
@@ -245,6 +244,7 @@ const Header = () => {
               <UserProfileItem
                 userName={currentUser?.username}
                 profileImageUrl={currentUser?.profile_image}
+                profileIconColor={currentUser?.profile_pic}
               />
             </Link>
             <Link to={`/users/${currentUser?.username}`}>
