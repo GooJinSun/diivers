@@ -15,7 +15,6 @@ import userReducer from './user';
 import loadingReducer from './loading';
 import searchReducer from './search';
 import likeReducer from './like';
-import scrollReducer from './scroll';
 
 const rootReducer = combineReducers({
   friendReducer,
@@ -25,8 +24,7 @@ const rootReducer = combineReducers({
   questionReducer,
   userReducer,
   loadingReducer,
-  searchReducer,
-  scrollReducer
+  searchReducer
 });
 
 const isProduction = process.env.NODE_ENV !== 'development';
