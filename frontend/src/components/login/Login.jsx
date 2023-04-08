@@ -11,10 +11,13 @@ import {
   AuthenticationFormWrapper
 } from '@styles/wrappers';
 import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
+import useWindowWidth from '@hooks/env/useWindowWidth';
 
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const { isMobile } = useWindowWidth();
 
   const [loginInfo, setLoginInfo] = useState({ username: '', password: '' });
 
@@ -53,7 +56,7 @@ export default function Login() {
   };
 
   return (
-    <AuthenticationWithDescWrapper>
+    <AuthenticationWithDescWrapper isMobile={isMobile}>
       <AuthenticationDesc />
       <AuthenticationFormWrapper>
         <h1>{t('login')}</h1>

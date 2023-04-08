@@ -1,7 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   MOBILE_MIN_WIDTH,
-  DESKTOP_MIN_WIDTH,
   DEFAULT_MARGIN,
   WIDGET_WIDTH,
   AUTHENTICATION_MIN_WIDTH
@@ -27,14 +26,15 @@ export const AuthenticationFormWrapper = styled.div`
   }
 `;
 
-export const AuthenticationWithDescWrapper = styled.div`
+export const AuthenticationWithDescWrapper = styled.div<{ isMobile: boolean }>`
   display: flex;
   width: ${AUTHENTICATION_MIN_WIDTH}px;
-
-  @media (max-width: ${AUTHENTICATION_MIN_WIDTH}px) {
-    width: 100%;
-    flex-direction: column;
-  }
+  ${(props) =>
+    props.isMobile &&
+    css`
+      width: 100%;
+      flex-direction: column;
+    `}
 `;
 
 export const AuthentiCationWrapper = styled.div`
@@ -48,11 +48,7 @@ interface FeedWrapperProps {
 
 export const FeedWrapper = styled.div<FeedWrapperProps>`
   ${(props) =>
-    !props.isAuthPage &&
-    `width: calc(100% - 2 * ${WIDGET_WIDTH}px);
-    @media (max-width: ${DESKTOP_MIN_WIDTH}px) {
-      width: calc(100% - 2 * ${DEFAULT_MARGIN}px);
-    }`}
+    !props.isAuthPage && `width: calc(100% - 2 * ${WIDGET_WIDTH}px);`}
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -105,7 +105,7 @@ const App = () => {
   useEffect(() => {
     const { width } = viewport;
     const metaTag = document.querySelector('meta[name="viewport"]');
-    metaTag.setAttribute('content', `width=${width}, user-scalable=0`);
+    metaTag.setAttribute('content', `width=${width}, user-scalable=no`);
   }, [viewport]);
 
   return (
