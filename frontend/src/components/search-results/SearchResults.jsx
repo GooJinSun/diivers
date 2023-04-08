@@ -44,7 +44,7 @@ export default function SearchResults() {
 
     if (Object.keys(searchObj.results).length && searchObj.results.length) {
       return (
-        <span>
+        <div>
           {searchObj.searchError ? (
             searchObj.message && <p className="message">{searchObj.message}</p>
           ) : (
@@ -56,14 +56,18 @@ export default function SearchResults() {
               {userItemList}
             </FriendListWrapper>
           )}
-        </span>
+        </div>
       );
     }
     return <Message message={t('no_results')} />;
   };
 
   return (
-    <span>
+    <div
+      style={{
+        width: '100%'
+      }}
+    >
       {renderSearchResults()}
 
       <PageNavigation
@@ -74,6 +78,6 @@ export default function SearchResults() {
         handlePrevClick={(event) => handlePageClick('prev', event)}
         handleNextClick={(event) => handlePageClick('next', event)}
       />
-    </span>
+    </div>
   );
 }
