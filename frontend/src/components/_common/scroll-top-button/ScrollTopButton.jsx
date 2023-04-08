@@ -4,7 +4,7 @@ import VerticalAlignTop from '@material-ui/icons/VerticalAlignTop';
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import { ButtonWrapper } from './ScrollTopButton.styles';
 
-const ScrollTopButton = (callback) => {
+const ScrollTopButton = ({ callback }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const onClick = () => {
