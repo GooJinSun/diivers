@@ -76,7 +76,6 @@ const App = () => {
     if (currentUser) {
       dispatch(getNotifications());
     }
-    trackPage(location.pathname);
   }, [location, dispatch, currentUser]);
 
   return (
