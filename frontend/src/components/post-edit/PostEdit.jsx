@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { getSelectedPost } from '@modules/post';
 import { PostListWrapper } from '@styles/wrappers';
 import PostEditItem from './post-edit-item/PostEditItem';
+import LoadingItem from '../post-detail/loading-item/LoadingItem';
 
 const PostEdit = () => {
   const { postType, id } = useParams();
@@ -15,12 +16,22 @@ const PostEdit = () => {
     dispatch(getSelectedPost(postType, id));
   }, [postType, id, dispatch]);
 
+  const isLoading =
+    useSelector(
+      (state) =>
+        state.loadingReducer[
+          `post/GET_SELECTED_${postType.toUpperCase().slice(0, -1)}`
+        ]
+    ) === 'REQUEST';
+
   return (
-    selectedPost && (
-      <PostListWrapper>
+    <PostListWrapper>
+      {isLoading || !selectedPost ? (
+        <LoadingItem />
+      ) : (
         <PostEditItem postObj={selectedPost} />
-      </PostListWrapper>
-    )
+      )}
+    </PostListWrapper>
   );
 };
 
