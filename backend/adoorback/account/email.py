@@ -11,15 +11,9 @@ class ActivateTokenGenerator(PasswordResetTokenGenerator):
         return (six.text_type(user.pk) + six.text_type(timestamp)) + six.text_type(user.is_active)
 
 
-class RevisitTokenGenerator(PasswordResetTokenGenerator):
-    def _make_hash_value(self, user, timestamp):
-        return (six.text_type(user.pk) + six.text_type(timestamp)) + six.text_type(user.is_dormant)
-
-
 class EmailManager():
     activate_token_generator = ActivateTokenGenerator()
     pw_reset_token_generator = PasswordResetTokenGenerator()
-    revisit_token_generator = RevisitTokenGenerator()
 
     def send_verification_email(self, user):
         token = self.activate_token_generator.make_token(user)
@@ -43,7 +37,6 @@ class EmailManager():
         email.send()
 
     def send_dormant_inform_email(self, user):
-        token = self.revisit_token_generator.make_token(user)
         mail_title = _("Diivers 장기 미접속 계정 휴면 전환 안내")
         mail_to = [user.email]
         dormant_date = (date.today() + timedelta(days=30)).isoformat()
@@ -55,8 +48,8 @@ class EmailManager():
         message_data += _("분리보관 항목: 이메일 주소, 생년월일, 성별, 인종\n\n \
                            휴면 전환을 원치 않으시는 경우, ")
         message_data += f"{dormant_date}"
-        message_data += _("이전에 Diivers를 방문하여 로그인해주시기 바랍니다.\n바로 로그인하기 : ")
-        message_data += f"{settings.FRONTEND_URL}/revisit/{user.id}/{token}\n\n"
+        message_data += _("이전에 Diivers를 방문하여 로그인해주시기 바랍니다.\n다이버스 바로가기 : ")
+        message_data += f"{settings.FRONTEND_URL}\n\n"
         message_data += _("감사합니다.")
         email = EmailMessage(mail_title, message_data, to=mail_to)
         email.send()
