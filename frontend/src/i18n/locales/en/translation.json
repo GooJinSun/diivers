@@ -7,6 +7,9 @@
     "logout": "Logout",
     "login": "Login",
     "view_all_notifications": "View all notifications"
+  }, 
+  "common_popup": {
+    "allow_desktop_notification_to_receive_updates_from_friends_as_push_notifications": "Allow desktop notification to receive updates from friends as push notifications!"
   },
   "mobile": {
     "drawer": {

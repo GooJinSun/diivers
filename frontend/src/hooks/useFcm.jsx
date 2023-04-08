@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging } from 'firebase/messaging';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { setFcmToken } from '../modules/user';
@@ -16,6 +16,8 @@ const useFcm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const [showPermissionPopup, setShowPermissionPopup] = useState(false);
+
   useEffect(() => {
     if (!currentUser) return;
 
@@ -25,8 +27,13 @@ const useFcm = () => {
         const messaging = getMessaging(app);
 
         const permission = await requestPermission();
+
         if (!permission || !app || !messaging) return;
 
+        if (permission !== 'granted') {
+          setShowPermissionPopup(true);
+          return;
+        }
         const token = await getFCMRegistrationToken(messaging);
         addForegroundMessageEventListener(messaging, history.push);
 
@@ -38,6 +45,8 @@ const useFcm = () => {
 
     initializeFirebase();
   }, [currentUser, dispatch, history.push]);
+
+  return showPermissionPopup;
 };
 
 export default useFcm;

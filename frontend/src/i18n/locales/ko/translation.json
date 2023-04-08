@@ -8,6 +8,9 @@
     "login": "로그인",
     "view_all_notifications": "알림 전체 보기"
   },
+  "common_popup": {
+    "allow_desktop_notification_to_receive_updates_from_friends_as_push_notifications!": "데스크탑 알림 활성화 권한을 허용해 친구들의 새로운 소식을 푸시 알림으로 받아보세요!"
+  },
   "mobile": {
     "drawer": {
       "friends": "친구",

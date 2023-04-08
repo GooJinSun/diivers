@@ -14,8 +14,7 @@ export const firebaseConfig = {
 export const requestPermission = async () => {
   try {
     const permission = await Notification.requestPermission();
-    if (permission === 'granted') return true;
-    return false;
+    return permission;
   } catch (e) {
     return false;
   }
