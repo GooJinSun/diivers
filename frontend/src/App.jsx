@@ -35,7 +35,6 @@ import useWindowWidth from '@hooks/env/useWindowWidth';
 import ArticleDraftEdit from '@components/draft-edit/ArticleDraftEdit';
 import ResponseDraftEdit from '@components/draft-edit/ResponseDraftEdit';
 import DraftList from '@components/draft-list/DraftList';
-import { initGA, trackPage } from './ga';
 import useFcm from './hooks/useFcm';
 import './i18n';
 
@@ -72,10 +71,6 @@ const App = () => {
   const isAuthPage =
     location.pathname === '/login' || location.pathname === '/signup';
   const showWidget = !isDesktopMin && !isSelectQuestionPage && currentUser;
-
-  useEffect(() => {
-    initGA();
-  }, []);
 
   useEffect(() => {
     if (currentUser) {
