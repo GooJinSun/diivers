@@ -108,9 +108,8 @@ export default function PostItem({
   };
 
   const handleDelete = async () => {
-    await dispatch(deletePost(postObj.id, postObj.type));
     setIsDeleteDialogOpen(false);
-
+    await dispatch(deletePost(postObj.id, postObj.type));
     if (isDetailPage) history.replace('/');
   };
 
