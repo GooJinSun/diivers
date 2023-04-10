@@ -19,7 +19,6 @@ import {
   PostItemButtonsWrapper
 } from '@styles/wrappers';
 import { useTranslation } from 'react-i18next';
-import useMutateFriendPostList from 'src/queries/posts/useMutateFriendPostList';
 import QuestionSendModal from './question-send-modal/QuestionSendModal';
 import { QuestionItemWrapper, Question } from './QuestionItem.styles';
 import NewResponse from './new-response/NewResponse';
@@ -69,14 +68,9 @@ export default function QuestionItem({ questionObj, onSubmit }) {
   const handleModalClose = () => {
     setQuestionSendModalOpen(false);
   };
-  const { mutateOnDeletePost } = useMutateFriendPostList();
-  const handleDelete = () => {
-    dispatch(deletePost(questionObj.id, questionObj.type));
 
-    // FIXME: react-query 확장 적용할 때마다 업데이트 필요
-    if (location.pathname === '/home') {
-      mutateOnDeletePost(questionObj.type, questionObj.id);
-    }
+  const handleDelete = async () => {
+    await dispatch(deletePost(questionObj.id, questionObj.type));
   };
 
   const onSubmitHandler = () => {

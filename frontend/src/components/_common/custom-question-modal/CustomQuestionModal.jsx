@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import { createPost } from '@modules/post';
 import { useTranslation } from 'react-i18next';
-import { useInfiniteFriendPostList } from '@queries/posts';
 import { useStyles, SubmitButtonWrapper } from './CustomQuestionModal.styles';
 
 const CustomQuestionModal = ({ open, handleClose }) => {
@@ -18,8 +17,6 @@ const CustomQuestionModal = ({ open, handleClose }) => {
   const [t] = useTranslation('translation', {
     keyPrefix: 'custom_question_modal'
   });
-
-  const { refetch: refetchFriendPostList } = useInfiniteFriendPostList();
 
   const [newCustomQuestion, setNewCustomQuestion] = useState({
     content: '',
@@ -35,9 +32,8 @@ const CustomQuestionModal = ({ open, handleClose }) => {
     }));
   };
 
-  const onClickSubmitButton = () => {
-    dispatch(createPost(newCustomQuestion));
-    refetchFriendPostList({ refetchPage: () => true });
+  const onClickSubmitButton = async () => {
+    await dispatch(createPost(newCustomQuestion));
     handleClose();
   };
 

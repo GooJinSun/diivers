@@ -30,6 +30,10 @@ export const EDIT_SELECTED_ARTICLE_SUCCESS =
 export const EDIT_SELECTED_ARTICLE_FAILURE =
   'post/EDIT_SELECTED_ARTICLE_FAILURE';
 
+export const GET_FRIEND_POSTS_REQUEST = 'post/GET_FRIEND_POSTS_REQUEST';
+export const GET_FRIEND_POSTS_SUCCESS = 'post/GET_FRIEND_POSTS_SUCCESS';
+export const GET_FRIEND_POSTS_FAILURE = 'post/GET_FRIEND_POSTS_FAILURE';
+
 export const GET_ANON_POSTS_REQUEST = 'post/GET_ANON_POSTS_REQUEST';
 export const GET_ANON_POSTS_SUCCESS = 'post/GET_ANON_POSTS_SUCCESS';
 export const GET_ANON_POSTS_FAILURE = 'post/GET_ANON_POSTS_FAILURE';
@@ -292,7 +296,6 @@ export const createReply =
     if (+selectedQuestion?.id === +targetId) {
       dispatch(getResponsesByQuestionWithType(selectedQuestion?.id, 'all'));
     }
-    return result;
   };
 
 export const deleteComment =
@@ -406,6 +409,12 @@ export default function postReducer(state, action) {
       return {
         ...state,
         anonymousPosts: [...action.result],
+        next: action.next
+      };
+    case GET_FRIEND_POSTS_SUCCESS:
+      return {
+        ...state,
+        friendPosts: [...action.result],
         next: action.next
       };
     case GET_USER_POSTS_SUCCESS:
