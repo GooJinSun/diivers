@@ -7,6 +7,10 @@ import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
 import { appendPosts, getPostsByType } from '@modules/post';
 import { RootState } from '@modules/index';
+<<<<<<< HEAD
+=======
+import ScrollTopButton from '@common-components/scroll-top-button/ScrollTopButton';
+>>>>>>> 8ef0db5 (fix: restore ScrollTopButton)
 import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
 
 const FriendFeed = () => {
@@ -68,6 +72,11 @@ const FriendFeed = () => {
           isLoading={isLoading}
         />
       )}
+      <ScrollTopButton
+        callback={() => {
+          dispatch(getPostsByType('friend'));
+        }}
+      />
       <div ref={target} />
     </>
   );
