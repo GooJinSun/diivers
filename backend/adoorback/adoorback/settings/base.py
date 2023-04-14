@@ -101,10 +101,8 @@ AUTH_USER_MODEL = 'account.User'
 LOGIN_REDIRECT_URL = '/api/user/'
 
 CRON_CLASSES = [
-    "feed.cron.DailyQuestionCronJob",
-    "feed.cron.RankQuestionsCronJob",
-    "account.cron.SendSelectQuestionsNotiCronJob",
-    "account.cron.SendAddFriendsNotiCronJob",
+    "account.cron.SendDormantInformEmailCronJob",
+    "account.cron.MakeUsersDormantCronJob",
 ]
 
 # reference: https://github.com/jazzband/django-redis
@@ -130,8 +128,8 @@ CACHES = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'tracking.middleware.VisitorTrackingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'tracking.middleware.VisitorTrackingMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
