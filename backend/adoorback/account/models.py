@@ -14,7 +14,7 @@ from django.db.models.signals import post_save, m2m_changed
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
-from django.utils.translation import gettext as 
+from django.utils.translation import gettext as _
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 
