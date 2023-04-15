@@ -15,7 +15,7 @@ def parse_user_tag_from_content(content):
 
     words = content.split(' ')
     for i, word in enumerate(words):
-        if word[0] != '@':
+        if len(word) == 0 or word[0] != '@':
             continue
 
         # cut username by regex (exclude unallowed characters)
