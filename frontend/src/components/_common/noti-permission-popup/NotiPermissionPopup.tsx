@@ -6,14 +6,6 @@ import useWindowWidth from '@hooks/env/useWindowWidth';
 import { isMac } from '@utils/getUserAgent';
 import { StyledNotiPermissionPopup } from './NotiPermissionPopup.styles';
 
-declare global {
-  interface Window {
-    ReactNativeWebView: {
-      postMessage: any;
-    };
-  }
-}
-
 interface NotiPermissionPopupProps {
   requestPermission: () => void;
   onNotiPopupClose: () => void;
@@ -25,21 +17,12 @@ const NotiPermissionPopup = ({
 }: NotiPermissionPopupProps) => {
   const [t] = useTranslation('translation', { keyPrefix: 'common_popup' });
 
-  const onClickRequestPermission = () => {
-    if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage('OPEN_SETTINGS');
-      return;
-    }
-
-    requestPermission();
-  };
-
   const { isMobile } = useWindowWidth();
 
   return (
     <StyledNotiPermissionPopup isMobile={isMobile}>
       <div>
-        <button type="button" onClick={onClickRequestPermission}>
+        <button type="button" onClick={requestPermission}>
           {t(
             'allow_notification_to_receive_updates_from_friends_as_push_notifications'
           )}
