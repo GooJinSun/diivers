@@ -6,10 +6,6 @@
 
 ## Frontend
 
-### 환경변수 세팅
-- `frontend/.env`에 FCM 관련 환경변수를 세팅해줍니다
-
-
 ### Run
 ```
 cd frontend
