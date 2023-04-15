@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import useWindowWidth from '@hooks/env/useWindowWidth';
+import { isMac } from '@utils/getUserAgent';
 import { StyledNotiPermissionPopup } from './NotiPermissionPopup.styles';
 
 declare global {
@@ -12,11 +13,6 @@ declare global {
     };
   }
 }
-
-const isMac = (userAgent?: string) => {
-  if (!userAgent) return false;
-  return userAgent.indexOf('Mac') !== -1;
-};
 
 interface NotiPermissionPopupProps {
   requestPermission: () => void;
