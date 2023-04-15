@@ -3,6 +3,9 @@ import { Checkbox, Button, TextareaAutosize } from '@material-ui/core';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import LockIcon from '@material-ui/icons/Lock';
 import { useTranslation } from 'react-i18next';
+import useAsyncEffect from '@hooks/useAsyncEffect';
+import axios from '@utils/api';
+import UserTagList from '@common-components/user-tag-list/UserTagList';
 import {
   NewCommentWrapper,
   PrivateWrapper,
@@ -12,11 +15,16 @@ import {
 export default function NewComment({
   isReply = false,
   onSubmit,
-  forcePrivate = false
+  forcePrivate = false,
+  isPostAnon
 }) {
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
-
+  const userTagAllowed = !isPostAnon;
   const [content, setContent] = useState('');
+  // 누군가를 태그할 가능성이 있는 단어
+  const [tagQuery, setTagQuery] = useState('');
+  // 태그 목록
+  const [userTagList, setUserTagList] = useState([]);
   const [isPrivate, setIsPrivate] = useState(forcePrivate);
   const placeholder = isReply
     ? t('please_enter_a_reply')
@@ -25,8 +33,31 @@ export default function NewComment({
   const classes = useStyles();
 
   const handleContentChange = (e) => {
-    setContent(e.target.value);
+    const {
+      target: { value }
+    } = e;
+    setContent(value);
+
+    if (userTagAllowed) {
+      if (!value.endsWith(' ') && value.includes('@')) {
+        const words = value.split(' ');
+        const lastWord = words[words.length - 1];
+        const atIndex = lastWord.indexOf('@');
+        if (atIndex >= 0) {
+          const query = lastWord.slice(atIndex + 1);
+          setTagQuery(query);
+        }
+      }
+    }
   };
+
+  useAsyncEffect(async () => {
+    if (!userTagAllowed) return;
+    const { data } = await axios.get(`/user_tags/search/?query=${tagQuery}`);
+    if (data) {
+      setUserTagList(data.results);
+    }
+  }, [tagQuery, userTagAllowed]);
 
   const togglePrivate = () => {
     if (forcePrivate) return;
@@ -50,8 +81,20 @@ export default function NewComment({
 
   const handleSubmit = () => {
     if (!content) return;
-    onSubmit(content, isPrivate);
+    onSubmit(content.trim(), isPrivate);
     setContent('');
+    setUserTagList([]);
+  };
+
+  const handleOnSelectUserTag = (tag) => {
+    setContent((prev) => {
+      const lastTagQueryIndex = prev.lastIndexOf(`@${tagQuery}`);
+      const filteredContent = `${prev.substring(0, lastTagQueryIndex)}@${
+        tag.username
+      }`;
+      return filteredContent;
+    });
+    setUserTagList([]);
   };
 
   return (
@@ -64,6 +107,13 @@ export default function NewComment({
             color: 'rgb(187, 187, 187)',
             marginRight: '4px'
           }}
+        />
+      )}
+      {/* 유저 태그 리스트  */}
+      {userTagAllowed && (
+        <UserTagList
+          userTagList={userTagList}
+          onSelectUserTag={handleOnSelectUserTag}
         />
       )}
       <TextareaAutosize

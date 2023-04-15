@@ -6,6 +6,7 @@ export const NewCommentWrapper = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
+  position: relative;
 `;
 
 NewCommentWrapper.displayName = 'NewCommentWrapper';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LockIcon from '@material-ui/icons/Lock';
-import { useLocation, useParams } from 'react-router';
+import { useLocation, useParams, useHistory } from 'react-router';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
@@ -12,6 +12,7 @@ import CreateTime from '@common-components/create-time/CreateTime';
 import NewComment from '@common-components/new-comment/NewComment';
 import { useTranslation } from 'react-i18next';
 import useMutateFriendPostList from 'src/queries/posts/useMutateFriendPostList';
+import { primaryColor } from '@constants/colors';
 import {
   CommentItemWrapper,
   ReplyIcon,
@@ -37,6 +38,7 @@ export default function CommentItem({
   const [likeCount, setLikeCount] = useState(commentObj.like_count || 0);
   const dispatch = useDispatch();
   const { id: targetId } = useParams();
+  const history = useHistory();
 
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
@@ -119,6 +121,10 @@ export default function CommentItem({
     setLiked((prev) => !prev);
   };
 
+  const handleClickUserTag = (taggedUserName) => {
+    history.push(`/users/${taggedUserName}`);
+  };
+
   return (
     <>
       <CommentItemWrapper id={commentObj.id}>
@@ -140,7 +146,7 @@ export default function CommentItem({
               isAuthor={isCommentAuthor}
             />
             <CommentContent id="comment-content">
-              {commentObj.content}
+              {getCommentContent(commentObj, handleClickUserTag)}
             </CommentContent>
           </div>
           <div
@@ -191,6 +197,7 @@ export default function CommentItem({
             isReply
             onSubmit={handleReplySubmit}
             forcePrivate={commentObj.is_private}
+            isPostAnon={isAnon}
           />
         )}
         <AlertDialog
@@ -203,3 +210,44 @@ export default function CommentItem({
     </>
   );
 }
+
+const getCommentContent = (comment, handleClickUserTag) => {
+  const originalComment = comment.content;
+  const userTags = comment.user_tags;
+
+  let lastIndex = 0;
+  const result = [];
+  userTags.forEach((tag) => {
+    const { tagged_username, offset, length } = tag;
+    const prefix = originalComment.substring(lastIndex, offset - 1);
+    const highlightedTag = (
+      <Highlight
+        key={tag.id}
+        onClick={() => handleClickUserTag(tagged_username)}
+      >
+        @{tagged_username}
+      </Highlight>
+    );
+    result.push(prefix);
+    result.push(highlightedTag);
+    lastIndex = offset + length;
+  });
+
+  result.push(originalComment.substring(lastIndex));
+
+  return result;
+};
+
+const Highlight = ({ children }) => {
+  return (
+    <span
+      style={{
+        color: primaryColor,
+        cursor: 'pointer',
+        backgroundColor: 'rgba(255, 57, 91, 0.4)'
+      }}
+    >
+      {children}
+    </span>
+  );
+};

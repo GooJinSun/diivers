@@ -197,7 +197,7 @@ export default function PostItem({
       <div style={{ borderTop: '1px solid #eee', margin: '8px 0' }} />
       <>
         <CommentWrapper>{commentList}</CommentWrapper>
-        <NewComment isAnon={isAnon} onSubmit={handleSubmit} />
+        <NewComment isPostAnon={isAnon} onSubmit={handleSubmit} />
         <CommentInfo>
           {isAnon || onlyAnonPost
             ? t('comments_are_only_visible_to_anonymous_feed')
