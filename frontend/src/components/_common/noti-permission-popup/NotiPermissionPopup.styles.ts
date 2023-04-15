@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 
-export const StyledNotiPermissionPopup = styled.div`
+interface StyledNotiPermissionPopupProps {
+  isMobile: boolean;
+}
+export const StyledNotiPermissionPopup = styled.div<StyledNotiPermissionPopupProps>`
   display: flex;
   align-items: center;
   justify-content: center;
   position: fixed;
   left: 0;
-  bottom: 0;
+  bottom: ${(props) => (props.isMobile ? '56px' : 0)};
   width: 100%;
   background-color: #f12c56;
   padding: 8px;
@@ -27,6 +30,7 @@ export const StyledNotiPermissionPopup = styled.div`
     a {
       display: block;
       color: white;
+      text-align: center;
 
       &:hover {
         text-decoration: underline;
