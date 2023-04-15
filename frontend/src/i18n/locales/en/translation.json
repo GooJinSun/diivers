@@ -9,7 +9,8 @@
     "view_all_notifications": "View all notifications"
   }, 
   "common_popup": {
-    "allow_desktop_notification_to_receive_updates_from_friends_as_push_notifications": "Allow desktop notification to receive updates from friends as push notifications!"
+    "allow_notification_to_receive_updates_from_friends_as_push_notifications": "Allow notification to receive updates from friends as push notifications!",
+    "please_check_your_system_preferences": "If you don't get any notifications, please check the system preferences of your device."
   },
   "mobile": {
     "drawer": {

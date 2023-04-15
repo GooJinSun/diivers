@@ -16,24 +16,27 @@ const useFcm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [showPermissionPopup, setShowPermissionPopup] = useState(false);
+  const [notiPermissionStatus, setNotiPermissionStatus] = useState(
+    Notification.permission
+  );
+
+  const requestPermissionHandler = async () => {
+    const permission = await requestPermission();
+    setNotiPermissionStatus(permission);
+  };
+
+  const onNotiPopupClose = () => setNotiPermissionStatus();
 
   useEffect(() => {
     if (!currentUser) return;
 
-    const initializeFirebase = async () => {
+    const initializeFcm = async () => {
       try {
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
 
-        const permission = await requestPermission();
+        if (notiPermissionStatus !== 'granted' || !app || !messaging) return;
 
-        if (!permission || !app || !messaging) return;
-
-        if (permission !== 'granted') {
-          setShowPermissionPopup(true);
-          return;
-        }
         const token = await getFCMRegistrationToken(messaging);
         addForegroundMessageEventListener(messaging, history.push);
 
@@ -43,10 +46,10 @@ const useFcm = () => {
       }
     };
 
-    initializeFirebase();
-  }, [currentUser, dispatch, history.push]);
+    initializeFcm();
+  }, [currentUser, dispatch, history.push, notiPermissionStatus]);
 
-  return showPermissionPopup;
+  return { notiPermissionStatus, requestPermissionHandler, onNotiPopupClose };
 };
 
 export default useFcm;

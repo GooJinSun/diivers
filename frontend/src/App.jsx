@@ -61,7 +61,8 @@ const App = () => {
   useLoginWithToken();
   useLogOutIfRefreshTokenExpired();
 
-  const showPermissionPopup = useFcm();
+  const { notiPermissionStatus, requestPermissionHandler, onNotiPopupClose } =
+    useFcm();
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
@@ -165,7 +166,12 @@ const App = () => {
           </Switch>
         </FeedWrapper>
         {showWidget && <FriendListWidget />}
-        {showPermissionPopup && <NotiPermissionPopup />}
+        {notiPermissionStatus === 'default' && (
+          <NotiPermissionPopup
+            requestPermission={requestPermissionHandler}
+            onNotiPopupClose={onNotiPopupClose}
+          />
+        )}
       </MainWrapper>
     </MuiThemeProvider>
   );

@@ -9,7 +9,8 @@
     "view_all_notifications": "알림 전체 보기"
   },
   "common_popup": {
-    "allow_desktop_notification_to_receive_updates_from_friends_as_push_notifications!": "데스크탑 알림 활성화 권한을 허용해 친구들의 새로운 소식을 푸시 알림으로 받아보세요!"
+    "allow_notification_to_receive_updates_from_friends_as_push_notifications": "알림을 허용해 친구들의 새로운 소식을 푸시 알림으로 받아보세요!",
+    "please_check_your_system_preferences": "알림이 오지 않는다면 시스템의 알림 설정을 확인해주세요."
   },
   "mobile": {
     "drawer": {
