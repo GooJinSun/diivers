@@ -9,3 +9,7 @@ export const FriendListWrapper = styled.div`
   margin-bottom: 16px;
 `;
 FriendListWrapper.displayName = 'FriendListWrapper';
+
+export const SearchResultsWrppaer = styled.div`
+  width: 100%;
+`;
