@@ -22,7 +22,7 @@ const FriendFeed = () => {
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage,
-    isFetching,
+    isLoading,
     refetch: refetchFriendPostList
   } = useInfiniteFriendPostList();
 
@@ -56,7 +56,7 @@ const FriendFeed = () => {
     <>
       <NewPost />
       <GoToDraftButton />
-      {friendPosts?.length === 0 && !isFetching ? (
+      {friendPosts?.length === 0 && !isLoading ? (
         <Message
           margin="16px 0"
           message={t('there_is_no_posts_to_display')}
@@ -67,7 +67,7 @@ const FriendFeed = () => {
         <PostList
           posts={friendPosts}
           isAppending={isFetchingNextPage}
-          isLoading={isFetching}
+          isLoading={isLoading}
         />
       )}
       <ScrollTopButton callback={refetchFriendPostList} />
