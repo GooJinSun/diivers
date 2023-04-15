@@ -16,17 +16,15 @@ importScripts(
 // Initialize the Firebase app in the service worker by passing in
 // your app's Firebase config object.
 // https://firebase.google.com/docs/web/setup#config-object
-// eslint-disable-next-line no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const firebaseApp = firebase.initializeApp({
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
-  // databaseURL: 'https://project-id.firebaseio.com',
-  // storageBucket: 'project-id.appspot.com',
-  // measurementId: 'G-measurement-id'
+  apiKey: 'AIzaSyBfQY-WwCn-0v49OybMRcEY3iT4iTIA2Uc',
+  authDomain: 'diivers.firebaseapp.com',
+  projectId: 'diivers',
+  storageBucket: 'diivers.appspot.com',
+  messagingSenderId: '212831338880',
+  appId: '1:212831338880:web:fb5ae035f87ed3fd7f8165',
+  measurementId: 'G-Z4CFQWR4R4'
 });
 
 // NOTE: Most importantly, in your service worker add a 'notificationclick' event listener before calling firebase.messaging()

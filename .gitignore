@@ -6,7 +6,6 @@ node_modules
 /frontend/.pnp
 /frontend/.pnp.js
 /frontend/.env
-/frontend/public/firebase-messaging-sw.js
 
 # testing
 /frontend/coverage
