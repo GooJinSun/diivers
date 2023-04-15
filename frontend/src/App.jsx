@@ -26,6 +26,7 @@ import Header from '@common-components/header/Header';
 import QuestionListWidget from '@common-components/question-list-widget/QuestionListWidget';
 import FriendListWidget from '@common-components/friend-list-widget/FriendListWidget';
 import PrivateRoute from '@common-components/private-route/PrivateRoute';
+import NotiPermissionPopup from '@common-components/noti-permission-popup/NotiPermissionPopup';
 import useLoginWithToken from '@hooks/auth/useLoginWithToken';
 import useLogOutIfRefreshTokenExpired from '@hooks/auth/useLogOutIfRefreshTokenExpired';
 import GlobalStyle from '@styles/globalStyle';
@@ -62,7 +63,8 @@ const App = () => {
   useLoginWithToken();
   useLogOutIfRefreshTokenExpired();
 
-  useFcm();
+  const { notiPermissionStatus, requestPermissionHandler, onNotiPopupClose } =
+    useFcm();
 
   const currentUser = useSelector((state) => state.userReducer.currentUser);
 
@@ -166,6 +168,12 @@ const App = () => {
           </Switch>
         </FeedWrapper>
         {showWidget && <FriendListWidget />}
+        {notiPermissionStatus === 'default' && (
+          <NotiPermissionPopup
+            requestPermission={requestPermissionHandler}
+            onNotiPopupClose={onNotiPopupClose}
+          />
+        )}
       </MainWrapper>
     </MuiThemeProvider>
   );
