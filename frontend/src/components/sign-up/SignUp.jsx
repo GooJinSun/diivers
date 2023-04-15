@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
-import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import { CommonButton } from '@styles/buttons';
 import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
 import MoreAboutDiiversModal from '@common-components/more-about-diivers-modal/MoreAboutDiiversModal';
@@ -37,7 +36,6 @@ export default function SignUp() {
   const profileImageFileInput = React.useRef(null);
 
   const [profileImagePreview, setProfileImagePreview] = useState();
-  const [isProfileImageAlert, setIsProfileImageAlert] = useState(false);
 
   const [termsCheckState, setTermsCheckState] = useState(false);
   const [privacyCheckState, setPrivacyCheckState] = useState(false);
@@ -296,12 +294,6 @@ export default function SignUp() {
           )}
         </SignUpButtonWrapper>
       </AuthenticationFormWrapper>
-      <ConfirmAlertDialog
-        message={t('image_size_is_too_large')}
-        onConfirm={() => setIsProfileImageAlert(false)}
-        onClose={setIsProfileImageAlert}
-        isOpen={isProfileImageAlert}
-      />
       <MoreAboutDiiversModal
         open={moreAboutDiiversModalOpen}
         handleClose={() => setMoreAboutDiiversModalOpen(false)}
