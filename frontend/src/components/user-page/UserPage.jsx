@@ -227,6 +227,7 @@ export default function UserPage() {
                     accept="image/jpeg, image/png"
                     onChange={onImageChange}
                     style={{ display: 'none' }}
+                    multiple={false}
                   />
                   <EditIcon fontSize="inherit" color="secondary" />
                 </label>

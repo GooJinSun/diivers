@@ -16,6 +16,7 @@ import {
   AuthenticationWithDescWrapper,
   AuthenticationFormWrapper
 } from '@styles/wrappers';
+import { cropAndResize } from '@utils/imageCropHelper';
 import {
   ProfileImageUploadWrapper,
   ProfileImageUploadButton,
@@ -115,14 +116,14 @@ export default function SignUp() {
     setSignUpInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onImageChange = (e) => {
+  const onImageChange = async (e) => {
     resetSignUpStatus();
 
     const profileImage = e.target.files[0];
-    if (profileImage.size > 400 * 400) {
-      return setIsProfileImageAlert(true);
-    }
-    const objectUrl = URL.createObjectURL(profileImage);
+
+    if (!profileImage) return;
+    const croppedImage = await cropAndResize(file);
+    const objectUrl = URL.createObjectURL(croppedImage);
     setProfileImagePreview(objectUrl);
     setSignUpInfo((prev) => ({ ...prev, profileImage }));
   };
