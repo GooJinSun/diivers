@@ -17,6 +17,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Deploy Backend Code
+      uses: appleboy/ssh-action@v0.1.4
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_KEY }}
+        script: |
+          source ~/venv3.9/bin/activate
+          cd /home/ubuntu/adoor
+          git checkout main ${{ github.event.inputs.commit }}
+          git pull
+          cd /home/ubuntu/adoor/backend/adoorback
+          pip install -r requirements.txt
+          ./manage.py migrate
+          ${{ github.event.inputs.additional_command }}
+          sudo systemctl restart uwsgi
+
     - name: Checkout code
       uses: actions/checkout@v3
       with:
@@ -58,20 +75,3 @@ jobs:
         key: ${{ secrets.SERVER_KEY }}
         script: |
           sudo systemctl restart nginx.service
-
-    - name: Deploy Backend Code
-      uses: appleboy/ssh-action@v0.1.4
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_KEY }}
-        script: |
-          source ~/venv3.9/bin/activate
-          cd /home/ubuntu/adoor
-          git checkout main ${{ github.event.inputs.commit }}
-          git pull
-          cd /home/ubuntu/adoor/backend/adoorback
-          pip install -r requirements.txt
-          ./manage.py migrate
-          ${{ github.event.inputs.additional_command }}
-          sudo systemctl restart uwsgi
