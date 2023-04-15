@@ -1,6 +1,5 @@
 interface QueryList {
   GET_RECOMMENDED_QUESTIONS: undefined;
-  GET_FRIEND_POST_LIST: undefined;
 }
 
 const getQueryKey = <T extends keyof QueryList>(

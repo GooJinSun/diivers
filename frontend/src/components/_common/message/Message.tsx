@@ -5,7 +5,7 @@ import { useStyles } from './Message.styles';
 
 interface MessageProps {
   message: string;
-  messageDetail?: string;
+  messageDetail?: string | null;
   margin?: string;
   noBorder?: boolean;
 }
