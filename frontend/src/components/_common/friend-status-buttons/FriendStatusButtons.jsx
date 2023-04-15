@@ -73,7 +73,7 @@ export default function FriendStatusButtons({
           id="friend-status-button"
         >
           {t('friend')}
-          <span> ✓</span>
+          <span style={{ marginLeft: 4 }}>✓</span>
         </FriendButton>
       </ButtonsWrapper>
     );

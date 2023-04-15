@@ -5,7 +5,10 @@ import Message from '@common-components/message/Message';
 import { fetchSearchResults } from '@modules/search';
 import { useTranslation } from 'react-i18next';
 import PageNavigation from './page-navigation/PageNavigation';
-import { FriendListWrapper } from './SearchResults.styles';
+import {
+  FriendListWrapper,
+  SearchResultsWrppaer
+} from './SearchResults.styles';
 
 export default function SearchResults() {
   const dispatch = useDispatch();
@@ -44,7 +47,7 @@ export default function SearchResults() {
 
     if (Object.keys(searchObj.results).length && searchObj.results.length) {
       return (
-        <span>
+        <div>
           {searchObj.searchError ? (
             searchObj.message && <p className="message">{searchObj.message}</p>
           ) : (
@@ -56,16 +59,15 @@ export default function SearchResults() {
               {userItemList}
             </FriendListWrapper>
           )}
-        </span>
+        </div>
       );
     }
     return <Message message={t('no_results')} />;
   };
 
   return (
-    <span>
+    <SearchResultsWrppaer>
       {renderSearchResults()}
-
       <PageNavigation
         totalPages={searchObj.totalPages}
         currentPageNo={searchObj.currentPageNo}
@@ -74,6 +76,6 @@ export default function SearchResults() {
         handlePrevClick={(event) => handlePageClick('prev', event)}
         handleNextClick={(event) => handlePageClick('next', event)}
       />
-    </span>
+    </SearchResultsWrppaer>
   );
 }

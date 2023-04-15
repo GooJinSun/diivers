@@ -174,7 +174,8 @@ export default function UserPage() {
         <PostListWrapper>
           <UserPageContainer
             style={{
-              paddingTop: isMyPage ? 50 : 20
+              paddingTop: isMyPage ? 50 : 20,
+              paddingRight: isMyPage ? 0 : 20
             }}
           >
             {!isMyPage && (
