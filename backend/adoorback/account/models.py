@@ -25,7 +25,7 @@ from safedelete.models import SOFT_DELETE_CASCADE, HARD_DELETE
 from safedelete.managers import SafeDeleteManager
 
 from adoorback.models import AdoorTimestampedModel
-from adoorback.validators import AdoorUsernameValidator
+from adoorback.utils.validators import AdoorUsernameValidator
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):
