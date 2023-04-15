@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { requestSignUp } from '@modules/user';
-import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import { CommonButton } from '@styles/buttons';
 import AuthenticationDesc from '@common-components/authentication-desc/AuthenticationDesc';
 import MoreAboutDiiversModal from '@common-components/more-about-diivers-modal/MoreAboutDiiversModal';
@@ -16,6 +15,7 @@ import {
   AuthenticationWithDescWrapper,
   AuthenticationFormWrapper
 } from '@styles/wrappers';
+import { cropAndResize } from '@utils/imageCropHelper';
 import {
   ProfileImageUploadWrapper,
   ProfileImageUploadButton,
@@ -36,7 +36,6 @@ export default function SignUp() {
   const profileImageFileInput = React.useRef(null);
 
   const [profileImagePreview, setProfileImagePreview] = useState();
-  const [isProfileImageAlert, setIsProfileImageAlert] = useState(false);
 
   const [termsCheckState, setTermsCheckState] = useState(false);
   const [privacyCheckState, setPrivacyCheckState] = useState(false);
@@ -115,14 +114,12 @@ export default function SignUp() {
     setSignUpInfo((prev) => ({ ...prev, [name]: value }));
   };
 
-  const onImageChange = (e) => {
+  const onImageChange = async (e) => {
     resetSignUpStatus();
-
     const profileImage = e.target.files[0];
-    if (profileImage.size > 400 * 400) {
-      return setIsProfileImageAlert(true);
-    }
-    const objectUrl = URL.createObjectURL(profileImage);
+    if (!profileImage) return;
+    const croppedImage = await cropAndResize(profileImage);
+    const objectUrl = URL.createObjectURL(croppedImage);
     setProfileImagePreview(objectUrl);
     setSignUpInfo((prev) => ({ ...prev, profileImage }));
   };
@@ -295,12 +292,6 @@ export default function SignUp() {
           )}
         </SignUpButtonWrapper>
       </AuthenticationFormWrapper>
-      <ConfirmAlertDialog
-        message={t('image_size_is_too_large')}
-        onConfirm={() => setIsProfileImageAlert(false)}
-        onClose={setIsProfileImageAlert}
-        isOpen={isProfileImageAlert}
-      />
       <MoreAboutDiiversModal
         open={moreAboutDiiversModalOpen}
         handleClose={() => setMoreAboutDiiversModalOpen(false)}

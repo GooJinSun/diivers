@@ -11,11 +11,11 @@ import { getFriendList, deleteFriend } from '@modules/friend';
 import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
 import { getSelectedUserPosts, appendPosts } from '@modules/post';
 import Message from '@common-components/message/Message';
-import ConfirmAlertDialog from '@common-components/confirm-alert-dialog/ConfirmAlertDialog';
 import axios from '@utils/api';
 import { PostListWrapper } from '@styles/wrappers';
 import EditIcon from '@material-ui/icons/Edit';
 import { useTranslation } from 'react-i18next';
+import { cropAndResize } from '@utils/imageCropHelper';
 import UserPostList from './user-post-list/UserPostList';
 import UserReportButton from './user-report-button/UserReportButton';
 import {
@@ -144,27 +144,14 @@ export default function UserPage() {
     setIsDeleteDialogOpen(false);
   };
 
-  const [isProfileImageAlert, setIsProfileImageAlert] = useState(false);
-  const [profileImage, setProfileImage] = useState(undefined);
-
-  const onImageChange = (e) => {
-    setProfileImage(e.target.files[0]);
-  };
-
-  useEffect(() => {
-    if (!profileImage) {
-      return;
-    }
-
-    if (profileImage.size > 400 * 400) {
-      return setIsProfileImageAlert(true);
-    }
-
+  const onImageChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const croppedImage = await cropAndResize(file);
     const formData = new FormData();
-    formData.append('profile_image', profileImage);
-
+    formData.append('profile_image', croppedImage, 'profile_image.jpg');
     dispatch(changeProfileImage(formData));
-  }, [profileImage, dispatch]);
+  };
 
   return (
     <MobileWrapper className={classes.root}>
@@ -240,6 +227,7 @@ export default function UserPage() {
                     accept="image/jpeg, image/png"
                     onChange={onImageChange}
                     style={{ display: 'none' }}
+                    multiple={false}
                   />
                   <EditIcon fontSize="inherit" color="secondary" />
                 </label>
@@ -321,14 +309,6 @@ export default function UserPage() {
             <div ref={setTarget} />
           </MobileTabPanel>
         </PostListWrapper>
-      )}
-      {isMyPage && (
-        <ConfirmAlertDialog
-          message={t('profile_image_is_too_big')}
-          onConfirm={() => setIsProfileImageAlert(false)}
-          onClose={setIsProfileImageAlert}
-          isOpen={isProfileImageAlert}
-        />
       )}
     </MobileWrapper>
   );

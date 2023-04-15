@@ -59,27 +59,27 @@
     "terms_and_privacy": "Terms and Privacy",
     "consent_to_participate_in_the study": "Consent to participate in the study",
     "learn_more_about_Diivers": "Learn more about Diivers",
-    "image_size_is_too_large":"Image size is too large.\nPlease use an image of 400 * 400 or less."
+    "image_size_is_too_large": "Image size is too large.\nPlease use an image of 400 * 400 or less."
   },
   "more_about_diivers": {
-    "learn_more_about_Diivers":"Learn more about Diivers",
+    "learn_more_about_Diivers": "Learn more about Diivers",
     "desc": "* Diivers services are being used in research by the University of Washington, Information Science (HCI). \nEven if you don't agree with the study, you can sign up for Diivers, and if you click the sign up button, you agree to Diivers' terms and conditions and personal information processing policies.\nOnly users who agree to use the data for research will receive the following selection information, and the data will be encrypted and managed, not commercially used, and can be used for analysis of research.\nIf you agree with the study, please enter the additional information below. \nOnce again, I would like to inform you that personal information is encrypted and not used for purposes other than research.",
     "gender": "Gender",
     "female": "Female",
     "male": "Male",
     "transgender": "Transgender",
     "non_binary": "Non-binary/Non-conforming",
-    "dont_want_to_respond":"Don't want to respond",
-    "date_of_birth":"Date of Birth",
-    "ethnicity":"Ethnicity",
-    "american_indian":"American Indian/Alaska Native",
+    "dont_want_to_respond": "Don't want to respond",
+    "date_of_birth": "Date of Birth",
+    "ethnicity": "Ethnicity",
+    "american_indian": "American Indian/Alaska Native",
     "asian": "Asian",
-    "black":"Black/African American",
+    "black": "Black/African American",
     "hispanic": "Hispanic/Latino",
-    "native_hawaiian":"Native Hawaiian/Other Pacific Islander",
-    "white":"White",
-    "refuse":"Refuse",
-    "approve":"Approve"
+    "native_hawaiian": "Native Hawaiian/Other Pacific Islander",
+    "white": "White",
+    "refuse": "Refuse",
+    "approve": "Approve"
   },
   "account_activate": {
     "authenticating": "Authenticating...",
@@ -87,7 +87,7 @@
     "invalid_link": "Invalid link.",
     "go_to_login": "Go to Login",
     "login_and_tour_diivers": "Log in and tour the Diivers",
-    "sign_up":"Sign Up"
+    "sign_up": "Sign Up"
   },
   "lost_password": {
     "email_has_been_sent_successfully_completed": "An Email has been sent.",
@@ -175,8 +175,7 @@
     "written_questions": "Written Questions",
     "report_this_user": "Report this user",
     "block_this_user": "Block this user",
-    "break_friends": "Break Friends",
-    "profile_image_is_too_big": "The size of the image is too large.\nPlease use images smaller than 400*400."
+    "break_friends": "Break Friends"
   },
   "friend_page": {
     "friend_list": "Friend List",
@@ -205,7 +204,7 @@
   "message": {
     "you_can_not_see_posts_from_non-friends": "You can't see posts from non-friends.",
     "make_a_friend_request": "Make a friend request :)",
-    "this_post_is_not_accessible":"This post is not accessible",
+    "this_post_is_not_accessible": "This post is not accessible",
     "this_draft_does_not_exist": "This article does not exist"
   },
   "draft": {
