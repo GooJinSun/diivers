@@ -1,14 +1,15 @@
-import { getToken, onMessage } from 'firebase/messaging';
 import axios from '@utils/api';
+import { getToken, onMessage } from 'firebase/messaging';
 
 // Your web app's Firebase configuration
 export const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID
+  apiKey: 'AIzaSyBfQY-WwCn-0v49OybMRcEY3iT4iTIA2Uc',
+  authDomain: 'diivers.firebaseapp.com',
+  projectId: 'diivers',
+  storageBucket: 'diivers.appspot.com',
+  messagingSenderId: '212831338880',
+  appId: '1:212831338880:web:fb5ae035f87ed3fd7f8165',
+  measurementId: 'G-Z4CFQWR4R4'
 };
 
 export const requestPermission = async () => {
@@ -28,7 +29,8 @@ export const getFCMRegistrationToken = async (messaging) => {
 
   try {
     const registrationToken = await getToken(messaging, {
-      vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
+      vapidKey:
+        'BJbDPBE9aQ5MTEf1nSiviZNEE83hEWIMbiV45a_lNolcSefw5pxfckjdJafeUBXjHFs72rpjCYi9kbMAtHiKQlQ'
     });
 
     if (!registrationToken) return;
