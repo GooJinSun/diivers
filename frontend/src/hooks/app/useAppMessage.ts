@@ -15,18 +15,16 @@ const useAppMessage = ({
 }) => {
   useEffect(() => {
     // ios
-    window.addEventListener('message', (e) => {
-      const data = JSON.parse(e.data) as MessageDataType;
-      if (data.key === key) {
-        cb(data);
-      }
+    window.addEventListener('message', ({ data }) => {
+      if (data.key !== key) return;
+      const messageData = JSON.parse(data) as MessageDataType;
+      cb(messageData);
     });
     return () => {
-      window.addEventListener('message', (e) => {
-        const data = JSON.parse(e.data) as MessageDataType;
-        if (data.key === key) {
-          cb(data);
-        }
+      window.addEventListener('message', ({ data }) => {
+        if (data.key !== key) return;
+        const messageData = JSON.parse(data) as MessageDataType;
+        cb(messageData);
       });
     };
   }, [cb, key]);

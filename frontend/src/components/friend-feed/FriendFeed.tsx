@@ -6,7 +6,6 @@ import PostList from '@common-components/post-list/PostList';
 import Message from '@common-components/message/Message';
 import { useTranslation } from 'react-i18next';
 import ScrollTopButton from '@common-components/scroll-top-button/ScrollTopButton';
-import useRestoreScroll from '@hooks/useRestoreScroll';
 import { useInfiniteFriendPostList } from 'src/queries/posts';
 import { flatMapInfiniteData } from 'src/queries/utils';
 import GoToDraftButton from './go-to-draft-button/GoToDraftButton';
@@ -17,8 +16,6 @@ const FriendFeed = () => {
   const dispatch = useDispatch();
 
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
-
-  useRestoreScroll();
 
   const {
     data,
