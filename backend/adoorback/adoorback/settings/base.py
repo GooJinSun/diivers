@@ -243,3 +243,5 @@ FCM_DJANGO_SETTINGS = {
 LOCALE_PATHS = [
    os.path.join(BASE_DIR, 'locale'),
 ]
+
+AUTHENTICATION_BACKENDS = ('account.backends.CustomModelBackend',)

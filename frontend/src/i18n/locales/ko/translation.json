@@ -38,7 +38,7 @@
   },
   "login": {
     "login": "로그인",
-    "nickname": "닉네임",
+    "nickname_or_email": "닉네임 또는 이메일",
     "password": "비밀번호",
     "sign_up": "회원가입",
     "forgot_password": "비밀번호를 잊어버렸어요"

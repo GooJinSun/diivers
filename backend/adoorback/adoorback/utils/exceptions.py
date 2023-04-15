@@ -12,7 +12,7 @@ class InActiveUser(AuthenticationFailed):
 
 class NoUsername(AuthenticationFailed):
     status_code = status.HTTP_406_NOT_ACCEPTABLE
-    default_detail = _("존재하지 않는 닉네임입니다.")
+    default_detail = _("존재하지 않는 닉네임/이메일입니다.")
     default_code = 'username_does_not_exist'
 
 
