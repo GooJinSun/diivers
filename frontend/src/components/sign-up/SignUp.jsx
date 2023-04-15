@@ -116,11 +116,9 @@ export default function SignUp() {
 
   const onImageChange = async (e) => {
     resetSignUpStatus();
-
     const profileImage = e.target.files[0];
-
     if (!profileImage) return;
-    const croppedImage = await cropAndResize(file);
+    const croppedImage = await cropAndResize(profileImage);
     const objectUrl = URL.createObjectURL(croppedImage);
     setProfileImagePreview(objectUrl);
     setSignUpInfo((prev) => ({ ...prev, profileImage }));
