@@ -5,6 +5,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import useWindowWidth from '@hooks/env/useWindowWidth';
 import { StyledNotiPermissionPopup } from './NotiPermissionPopup.styles';
 
+declare global {
+  interface Window {
+    ReactNativeWebView: {
+      postMessage: any;
+    };
+  }
+}
+
 const isMac = (userAgent?: string) => {
   if (!userAgent) return false;
   return userAgent.indexOf('Mac') !== -1;
@@ -21,12 +29,21 @@ const NotiPermissionPopup = ({
 }: NotiPermissionPopupProps) => {
   const [t] = useTranslation('translation', { keyPrefix: 'common_popup' });
 
+  const onClickRequestPermission = () => {
+    if (window.ReactNativeWebView) {
+      window.ReactNativeWebView.postMessage('OPEN_SETTINGS');
+      return;
+    }
+
+    requestPermission();
+  };
+
   const { isMobile } = useWindowWidth();
 
   return (
     <StyledNotiPermissionPopup isMobile={isMobile}>
       <div>
-        <button type="button" onClick={requestPermission}>
+        <button type="button" onClick={onClickRequestPermission}>
           {t(
             'allow_notification_to_receive_updates_from_friends_as_push_notifications'
           )}
