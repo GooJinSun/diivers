@@ -4,7 +4,9 @@ from django.utils.timezone import make_aware
 from django.contrib.auth import get_user_model
 from django_cron import CronJobBase, Schedule
 
+from account.email import email_manager
 from notification.models import Notification
+from tracking.models import Visitor
 
 User = get_user_model()
 
@@ -68,3 +70,55 @@ class SendAddFriendsNotiCronJob(CronJobBase):
         print('=========================')
         print("Cron job complete...............")
         print('=========================')
+
+
+class SendDormantInformEmailCronJob(CronJobBase):
+    RUN_AT_TIMES = ['12:00']
+
+    schedule = Schedule(run_every_mins=RUN_AT_TIMES)
+    code = 'account.send_dormant_inform_email'
+
+    def do(self):
+        print('=========================')
+        print("Sends users that have not visited for 11 months an informing email that the account will be dormant in 30 days.")
+        today = make_aware(datetime.now())
+        visited_users = Visitor.objects.user_stats(today - timedelta(days=335), today)
+        inform_users = set(User.objects.all()) - set(visited_users)
+        user_cnt = 0
+        for user in inform_users:
+            if user.is_dormant:
+                continue
+            # lang = user.language
+            # translation.activate(lang)
+            email_manager.send_dormant_inform_email(user)
+            user_cnt += 1
+
+        print(f'Successfully sent mail to {user_cnt} users.')
+        print('=========================')
+        print("Cron job complete...............")
+        print('=========================')
+        
+
+class MakeUsersDormantCronJob(CronJobBase):
+    RUN_AT_TIMES = ['00:00']
+
+    schedule = Schedule(run_every_mins=RUN_AT_TIMES)
+    code = 'account.make_users_dormant'
+
+    def do(self):
+        print('=========================')
+        print("Make users that have not visited for 1 year dormant.")
+        today = make_aware(datetime.now())
+        visited_users = Visitor.objects.user_stats(today - timedelta(days=365), today)
+        dormant_users = set(User.objects.all()) - set(visited_users)
+        user_cnt = 0
+        for user in dormant_users:
+            if not user.is_dormant:
+                user.is_dormant = True
+                user_cnt += 1
+
+        print(f'Successfully made {user_cnt} users dormant.')
+        print('=========================')
+        print("Cron job complete...............")
+        print('=========================')
+        
