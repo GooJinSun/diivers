@@ -3,6 +3,7 @@ import { getMessaging } from 'firebase/messaging';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { getMobileDeviceInfo } from '@utils/getUserAgent';
 import { setFcmToken } from '../modules/user';
 import {
   requestPermission,
@@ -16,7 +17,11 @@ const useFcm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [notiPermissionStatus, setNotiPermissionStatus] = useState(null);
+  const { isMobile } = getMobileDeviceInfo();
+
+  const [notiPermissionStatus, setNotiPermissionStatus] = useState(
+    !isMobile ? Notification.permission : null
+  );
 
   const requestPermissionHandler = async () => {
     const permission = await requestPermission();
@@ -26,15 +31,12 @@ const useFcm = () => {
   const onNotiPopupClose = () => setNotiPermissionStatus();
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser || isMobile) return;
 
     const initializeFcm = async () => {
       try {
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
-        await Notification.requestPermission().then((permission) =>
-          setNotiPermissionStatus(permission)
-        );
 
         if (notiPermissionStatus !== 'granted' || !app || !messaging) return;
 
@@ -48,7 +50,7 @@ const useFcm = () => {
     };
 
     initializeFcm();
-  }, [currentUser, dispatch, history.push, notiPermissionStatus]);
+  }, [currentUser, dispatch, history.push, notiPermissionStatus, isMobile]);
 
   return { notiPermissionStatus, requestPermissionHandler, onNotiPopupClose };
 };

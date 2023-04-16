@@ -29,7 +29,7 @@ const NotiPermissionPopup = ({
         </button>
         {/* https://gist.github.com/rmcdongit/f66ff91e0dad78d4d6346a75ded4b751 */}
         {/* TODO: 맥 이외의 환경 확인 필요 */}
-        {isMac(window?.navigator.userAgent) && (
+        {isMac() && (
           <a href="x-apple.systempreferences:com.apple.preference.notifications">
             {t('please_check_your_system_preferences')}
           </a>
