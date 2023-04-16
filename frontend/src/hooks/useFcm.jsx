@@ -16,9 +16,7 @@ const useFcm = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const [notiPermissionStatus, setNotiPermissionStatus] = useState(
-    Notification.permission
-  );
+  const [notiPermissionStatus, setNotiPermissionStatus] = useState(null);
 
   const requestPermissionHandler = async () => {
     const permission = await requestPermission();
@@ -34,6 +32,9 @@ const useFcm = () => {
       try {
         const app = initializeApp(firebaseConfig);
         const messaging = getMessaging(app);
+        await Notification.requestPermission().then((permission) =>
+          setNotiPermissionStatus(permission)
+        );
 
         if (notiPermissionStatus !== 'granted' || !app || !messaging) return;
 
