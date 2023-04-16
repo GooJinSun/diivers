@@ -4,6 +4,7 @@ from django.utils.timezone import make_aware
 from django.contrib.auth import get_user_model
 from django_cron import CronJobBase, Schedule
 
+from account.algorithms.csv_writer import create_dormant_csv, delete_dormant_users_from_csv
 from account.email import email_manager
 from notification.models import Notification
 from tracking.models import Visitor
@@ -83,17 +84,14 @@ class SendDormantInformEmailCronJob(CronJobBase):
         print("Sends users that have not visited for 11 months an informing email that the account will be dormant in 30 days.")
         today = make_aware(datetime.now())
         visited_users = Visitor.objects.user_stats(today - timedelta(days=335), today)
-        inform_users = set(User.objects.all()) - set(visited_users)
+        inform_users = User.objects.filter(id__in=[x.id for x in set(User.objects.all()) - set(visited_users)]).filter(is_dormant=False)
         user_cnt = 0
         for user in inform_users:
-            if user.is_dormant:
-                continue
             # lang = user.language
             # translation.activate(lang)
             email_manager.send_dormant_inform_email(user)
-            user_cnt += 1
 
-        print(f'Successfully sent mail to {user_cnt} users.')
+        print(f'Successfully sent mail to {len(inform_users)} users.')
         print('=========================')
         print("Cron job complete...............")
         print('=========================')
@@ -110,14 +108,19 @@ class MakeUsersDormantCronJob(CronJobBase):
         print("Make users that have not visited for 1 year dormant.")
         today = make_aware(datetime.now())
         visited_users = Visitor.objects.user_stats(today - timedelta(days=365), today)
-        dormant_users = set(User.objects.all()) - set(visited_users)
-        user_cnt = 0
-        for user in dormant_users:
-            if not user.is_dormant:
-                user.is_dormant = True
-                user_cnt += 1
+        dormant_users = User.objects.filter(id__in=[x.id for x in set(User.objects.all()) - set(visited_users)]).filter(is_dormant=False)
 
-        print(f'Successfully made {user_cnt} users dormant.')
+        create_dormant_csv(dormant_users)
+
+        for user in dormant_users:
+            user.is_dormant = True
+            user.email = f'{user.id}@{user.id}.com'
+            user.gender = None
+            user.date_of_birth = None
+            user.ethnicity = None
+            user.save()
+
+        print(f'Successfully made {len(dormant_users)} users dormant.')
         print('=========================')
         print("Cron job complete...............")
         print('=========================')
