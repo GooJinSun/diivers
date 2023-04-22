@@ -184,11 +184,11 @@ export const requestReactivate = (id, token) => {
 };
 
 // 휴면 계정 메일 전송
-export const requestReactivateEmail = (emailInfo) => {
+export const requestReactivateEmail = (userInfo) => {
   return async (dispatch) => {
     dispatch({ type: REACTIVATE_EMAIL_REQUEST });
     try {
-      await axios.post(`user/send-reactivate-email/`, emailInfo);
+      await axios.post(`user/send-reactivate-email/`, userInfo);
       dispatch({ type: REACTIVATE_EMAIL_SUCCESS });
     } catch (error) {
       dispatch({ type: REACTIVATE_EMAIL_FAILURE });

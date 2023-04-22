@@ -25,7 +25,7 @@ const AccountDormant = () => {
   const sendEmailAuthentication = () => {
     dispatch(
       requestReactivateEmail({
-        email: currentUser.email
+        id: currentUser.id
       })
     );
   };
