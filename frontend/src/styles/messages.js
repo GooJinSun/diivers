@@ -1,7 +1,14 @@
 import styled from 'styled-components';
 
-export const WarningMessage = styled.div`
+const CommonMessage = styled.div`
   font-size: 14px;
-  color: #ff395b;
   margin-bottom: 4px;
+`;
+
+export const WarningMessage = styled(CommonMessage)`
+  color: #ff395b;
+`;
+
+export const ConstraintsMessage = styled(CommonMessage)`
+  color: #b5b5b5;
 `;

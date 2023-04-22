@@ -7,6 +7,7 @@ import { AuthentiCationWrapper } from '@styles/wrappers';
 import { CommonButton, AuthSubButton } from '@styles/buttons';
 import { CommonInput } from '@styles/inputs';
 import { useTranslation } from 'react-i18next';
+import { ConstraintsMessage, WarningMessage } from '../../styles/messages';
 
 export default function ResetPassword() {
   const history = useHistory();
@@ -18,6 +19,7 @@ export default function ResetPassword() {
   const [passwordInfo, setPasswordInfo] = useState({ password: '' });
   const [isResetPasswordSuccess, setIsResetPasswordSuccess] = useState(false);
   const [isResetPasswordFail, setIsResetPasswordFail] = useState(false);
+  const [invalidPasswordMsg, setInvalidPasswordMsg] = useState();
 
   const [t] = useTranslation('translation', { keyPrefix: 'reset_password' });
 
@@ -35,13 +37,18 @@ export default function ResetPassword() {
     setIsResetPasswordFail(resetPasswordStatus === 'FAILURE');
   }, [resetPasswordStatus]);
 
+  const { resetPasswordError } = useSelector((state) => state.userReducer);
+  useEffect(() => {
+    setInvalidPasswordMsg(resetPasswordError?.password);
+  }, [resetPasswordError?.password]);
+
   const handleChange = (e) => {
     setPasswordInfo({ password: e.target.value });
+    setIsResetPasswordFail(false);
+    setInvalidPasswordMsg(undefined);
   };
 
   const onClickSubmitButton = () => {
-    setIsResetPasswordSuccess(false);
-    setIsResetPasswordFail(false);
     dispatch(requestResetPassword(id, token, passwordInfo));
   };
 
@@ -55,7 +62,7 @@ export default function ResetPassword() {
     <AuthentiCationWrapper>
       {isResetPasswordSuccess ? (
         <div>{t('password_initialization_is_complete')}</div>
-      ) : isResetPasswordFail ? (
+      ) : isResetPasswordFail && !invalidPasswordMsg ? (
         <div>{t('invalid_link')}</div>
       ) : (
         <div>
@@ -68,7 +75,13 @@ export default function ResetPassword() {
             type="password"
             onChange={handleChange}
             onKeyDown={onKeySubmit}
+            invalid={invalidPasswordMsg}
           />
+          {invalidPasswordMsg ? (
+            <WarningMessage>{invalidPasswordMsg}</WarningMessage>
+          ) : (
+            <ConstraintsMessage>{t('password_constraints')}</ConstraintsMessage>
+          )}
           <CommonButton
             id="submit-button"
             disabled={passwordInfo.password === ''}

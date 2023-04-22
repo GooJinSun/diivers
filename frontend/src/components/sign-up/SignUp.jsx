@@ -8,7 +8,7 @@ import AuthenticationDesc from '@common-components/authentication-desc/Authentic
 import MoreAboutDiiversModal from '@common-components/more-about-diivers-modal/MoreAboutDiiversModal';
 import { openHTML } from '@utils/openHTML';
 import { CommonInput } from '@styles/inputs';
-import { WarningMessage } from '@styles/messages';
+import { WarningMessage, ConstraintsMessage } from '@styles/messages';
 import RemoveIcon from '@material-ui/icons/RemoveCircle';
 import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@material-ui/core';
@@ -46,6 +46,7 @@ export default function SignUp() {
   const [isUsernameInvalid, setIsUsernameInvalid] = useState(false);
   const [isEmailInvalid, setIsEmailInvalid] = useState(false);
   const [isInactiveUser, setIsInactiveUser] = useState(false);
+  const [isPasswordInvalid, setIsPasswordInvalid] = useState(false);
 
   const isSignUpLoading =
     useSelector((state) => state.loadingReducer['user/SIGN_UP']) === 'REQUEST';
@@ -68,21 +69,22 @@ export default function SignUp() {
     if (!isSubmitted || !signUpError) return;
 
     if (
-      signUpError.detail.includes('Username') ||
-      signUpError.detail.includes('닉네임')
+      signUpError.detail?.includes('Username') ||
+      signUpError.detail?.includes('닉네임')
     )
       setIsUsernameInvalid(true);
     if (
-      signUpError.detail.includes('active') ||
-      signUpError.detail.includes('인증')
+      signUpError.detail?.includes('active') ||
+      signUpError.detail?.includes('인증')
     )
       setIsInactiveUser(true);
     if (
-      signUpError.detail.includes('email') ||
-      signUpError.detail.includes('Email') ||
-      signUpError.detail.includes('이메일')
+      signUpError.detail?.includes('email') ||
+      signUpError.detail?.includes('Email') ||
+      signUpError.detail?.includes('이메일')
     )
       setIsEmailInvalid(true);
+    if (signUpError.password) setIsPasswordInvalid(true);
   }, [isSubmitted, signUpError]);
 
   const [signUpInfo, setSignUpInfo] = useState({
@@ -106,6 +108,7 @@ export default function SignUp() {
     setIsUsernameInvalid(false);
     setIsEmailInvalid(false);
     setIsInactiveUser(false);
+    setIsPasswordInvalid(false);
   };
 
   const onInputChange = (e) => {
@@ -199,7 +202,13 @@ export default function SignUp() {
           placeholder={t('password')}
           onChange={onInputChange}
           onKeyDown={onKeySubmit}
+          invalid={isSubmitted && isPasswordInvalid}
         />
+        {isSubmitted && isPasswordInvalid ? (
+          <WarningMessage>{signUpError.password}</WarningMessage>
+        ) : (
+          <ConstraintsMessage>{t('password_constraints')}</ConstraintsMessage>
+        )}
         <ProfileImageUploadWrapper>
           <ProfileImageUploadButton onClick={handleClick}>
             {t('upload_profile_image')}
