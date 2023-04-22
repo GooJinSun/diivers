@@ -173,11 +173,15 @@ class ResetPassword(generics.UpdateAPIView):
         return HttpResponse(status=400)
 
     @transaction.atomic
-    def update_password(self, user, raw_password):       
+    def update_password(self, user, raw_password):
+        errors = dict()
         try:
             validate_password(password=raw_password, user=user)
         except exceptions.ValidationError as e:
-            raise e
+            errors['password'] = [list(e.messages)[0]]
+            if errors:
+                raise ValidationError(errors)
+
         user.set_password(raw_password)
         user.save()
 
