@@ -21,6 +21,7 @@ import {
   IconButton
 } from './CommentItem.styles';
 import { getCommentContent } from './CommentItem.helper';
+import LinkifyContents from '../linkify-contents/LinkifyContents';
 
 export default function CommentItem({
   postKey,
@@ -141,7 +142,7 @@ export default function CommentItem({
               isAuthor={isCommentAuthor}
             />
             <CommentContent id="comment-content">
-              {getCommentContent(commentObj)}
+              <LinkifyContents>{getCommentContent(commentObj)}</LinkifyContents>
             </CommentContent>
           </div>
           <div
