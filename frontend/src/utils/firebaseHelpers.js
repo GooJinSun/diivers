@@ -1,5 +1,6 @@
 import axios from '@utils/api';
 import { getToken, onMessage } from 'firebase/messaging';
+import i18n from '@i18n';
 
 // Your web app's Firebase configuration
 export const firebaseConfig = {
@@ -63,10 +64,10 @@ export const deactivateFirebaseDevice = (token) => {
 
 export const addForegroundMessageEventListener = (messaging) => {
   onMessage(messaging, (payload) => {
-    const { body, url, tag, type } = payload.data;
+    const { message_en, message_ko, url, tag, type } = payload.data;
     const title = 'Diivers';
     const options = {
-      body,
+      body: i18n.language === 'ko' ? message_ko : message_en,
       tag,
       icon: 'https://diivers.world/assets/logo/full-logo.svg',
       data: {

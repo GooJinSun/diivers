@@ -39,10 +39,11 @@ self.addEventListener('notificationclick', (e) => {
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  const { body, tag, url, type } = payload.data;
+  const { message_en, message_ko, url, tag, type } = payload.data;
   const title = 'Diivers';
+
   const options = {
-    body,
+    body: self.navigator.language === 'ko' ? message_ko : message_en,
     tag,
     icon: 'https://diivers.world/assets/logo/full-logo.svg',
     data: {
