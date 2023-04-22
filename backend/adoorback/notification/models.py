@@ -97,8 +97,11 @@ def send_firebase_notification(created, instance, **kwargs):
         print("error while sending a firebase notification: ", e)
 
 
-@receiver(pre_delete, sender=Notification)
+@receiver(post_save, sender=Notification)
 def cancel_firebase_notification(sender, instance, **kwargs):
+    if not instance.deleted:
+        return
+
     message = Message(
         data = {
             'body' : '삭제된 알림입니다.',
