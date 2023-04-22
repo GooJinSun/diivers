@@ -169,13 +169,15 @@
     "are_you_sure_you_want_to_delete_this_friend": "친구를 삭제하시겠습니까?",
     "do_you_want_to_block_this_user": "이 사용자를 차단하시겠습니까?",
     "do_you_want_to_report_this_user": "이 사용자를 신고하시겠습니까?",
+    "do_you_want_to_delete_this_user": "다이버스를 떠나시겠어요?\n\n다이버스에서 작성한 모든 글과 활동 내역이 삭제되며, 복구할 수 없습니다.\n\n더 나은 서비스를 제공하기 위하여 저희가 개선할 점이 있다면 언제든지 말씀해주세요. 여러분의 소중한 의견을 토대로 보다 나은 서비스를 제공하겠습니다.\n\n앞으로도 항상 행운이 함께하시길 기원합니다. 그동안 함께 해주셔서 감사합니다.",
     "all": "전체",
     "my_q&a": "나의 Q&A",
     "tmi": "아무말 대잔치",
     "written_questions": "작성한 질문",
     "report_this_user": "사용자 신고",
     "block_this_user": "사용자 차단",
-    "break_friends": "친구 끊기"
+    "break_friends": "친구 끊기",
+    "delete_this_user": "회원 탈퇴"
   },
   "friend_page": {
     "friend_list": "친구 목록",

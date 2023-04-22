@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { useTranslation } from 'react-i18next';
-import { useStyles, ReportButtonWrapper } from './UserReportButton.styles';
+import { useStyles, ReportButtonWrapper } from './UserButton.styles';
 
 export default function UserReportButton({
   onClickBlockUser,
