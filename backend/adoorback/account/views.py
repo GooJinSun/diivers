@@ -177,6 +177,49 @@ class ResetPassword(generics.UpdateAPIView):
         user.save()
 
 
+class SendReActivateEmail(generics.CreateAPIView):
+    serializer_class = UserProfileSerializer
+
+    def get_exception_handler(self):
+        return adoor_exception_handler
+    
+    def get_object(self):
+        return User.objects.filter(email=self.request.data['email']).first()
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
+        if user and user.is_active:
+            email_manager.send_reactivate_email(user)
+            
+        return HttpResponse(status=200) # whether email is valid or not, response will be always success-response
+
+
+class UserReActivate(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+
+    def get_exception_handler(self):
+        print(self.request.headers)
+        return adoor_exception_handler
+
+    def update(self, request, *args, **kwargs):
+        token = self.kwargs.get('token')
+        user = self.get_object()
+        if email_manager.check_reactivate_token(user, token):
+            self.reactivate(user)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=400)
+
+    @transaction.atomic
+    def reactivate(self, user):
+        user.is_dormant = False
+        user.save()
+
+
 class SignupQuestions(generics.ListAPIView):
     queryset = Question.objects.order_by('?')[:10]
     serializer_class = QuestionAnonymousSerializer

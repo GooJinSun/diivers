@@ -17,6 +17,8 @@ urlpatterns = [
          name='signup-questions'),
     path('send-reset-password-email/', views.SendResetPasswordEmail.as_view(), name='user-send-reset-password-email'),
     path('reset-password/<int:pk>/<str:token>/', views.ResetPassword.as_view(), name='user-reset-password'),
+    path('send-reactivate-email/', views.SendReActivateEmail.as_view(), name='user-send-reactivate-email'),
+    path('reactivate/<int:pk>/<str:token>/', views.UserReActivate.as_view(), name='user-reactivate'),
 
     # User Profile related
     path('', views.UserList.as_view(), name='user-list'),

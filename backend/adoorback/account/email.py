@@ -11,9 +11,15 @@ class ActivateTokenGenerator(PasswordResetTokenGenerator):
         return (six.text_type(user.pk) + six.text_type(timestamp)) + six.text_type(user.is_active)
 
 
+class ReActivateTokenGenerator(PasswordResetTokenGenerator):
+    def _make_hash_value(self, user, timestamp):
+        return (six.text_type(user.pk) + six.text_type(timestamp)) + six.text_type(user.is_dormant)
+
+
 class EmailManager():
     activate_token_generator = ActivateTokenGenerator()
     pw_reset_token_generator = PasswordResetTokenGenerator()
+    reactivate_token_generator = ReActivateTokenGenerator()
 
     def send_verification_email(self, user):
         token = self.activate_token_generator.make_token(user)
@@ -54,10 +60,23 @@ class EmailManager():
         email = EmailMessage(mail_title, message_data, to=mail_to)
         email.send()
 
+    def send_reactivate_email(self, user):
+        token = self.reactivate_token_generator.make_token(user)
+        mail_title = _("휴면 해제를 위해 이메일 인증을 완료해주세요")
+        mail_to = [user.email]
+        message_data = _("아래 링크를 클릭하면 휴면 해제를 위한 인증이 완료됩니다.\n\n")
+        message_data += f"{settings.FRONTEND_URL}/reactivate/{user.id}/{token}\n\n"
+        message_data += _("감사합니다.")
+        email = EmailMessage(mail_title, message_data, to=mail_to)
+        email.send()
+
     def check_activate_token(self, user, token):
         return self.activate_token_generator.check_token(user, token)
 
     def check_reset_password_token(self, user, token):
         return self.pw_reset_token_generator.check_token(user, token)
+
+    def check_reactivate_token(self, user, token):
+        return self.reactivate_token_generator.check_token(user, token)
 
 email_manager = EmailManager()
