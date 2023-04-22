@@ -64,6 +64,13 @@ interface QuestionShareSettings extends ShareSettings {
   share_anonymously: true;
 }
 
+export interface UserTag {
+  id: number;
+  tagged_username: string;
+  offset: number;
+  length: number;
+}
+
 export interface Comment extends ContentsCommon {
   is_anonymous: boolean;
   is_private: boolean;
@@ -71,6 +78,7 @@ export interface Comment extends ContentsCommon {
   replies: Comment[];
   target_id: number;
   type: 'Comment';
+  user_tags: UserTag[];
 }
 
 export interface Author {

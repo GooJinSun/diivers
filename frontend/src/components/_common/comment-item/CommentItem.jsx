@@ -12,7 +12,6 @@ import CreateTime from '@common-components/create-time/CreateTime';
 import NewComment from '@common-components/new-comment/NewComment';
 import { useTranslation } from 'react-i18next';
 import useMutateFriendPostList from 'src/queries/posts/useMutateFriendPostList';
-import { primaryColor } from '@constants/colors';
 import {
   CommentItemWrapper,
   ReplyIcon,
@@ -21,6 +20,7 @@ import {
   DeleteWrapper,
   IconButton
 } from './CommentItem.styles';
+import { getCommentContent } from './CommentItem.helper';
 
 export default function CommentItem({
   postKey,
@@ -205,42 +205,3 @@ export default function CommentItem({
     </>
   );
 }
-
-const getCommentContent = (comment) => {
-  const originalComment = comment.content;
-  const userTags = comment.user_tags;
-
-  let lastIndex = 0;
-  const result = [];
-  userTags.forEach((tag) => {
-    const { tagged_username, offset, length } = tag;
-    const prefix = originalComment.substring(lastIndex, offset - 1);
-    const highlightedTag = (
-      <Highlight key={tag.id} username={tagged_username}>
-        @{tagged_username}
-      </Highlight>
-    );
-    result.push(prefix);
-    result.push(highlightedTag);
-    lastIndex = offset + length;
-  });
-
-  result.push(originalComment.substring(lastIndex));
-
-  return result;
-};
-
-const Highlight = ({ children, username }) => {
-  return (
-    <a
-      href={`/users/${username}`}
-      style={{
-        color: primaryColor,
-        cursor: 'pointer',
-        backgroundColor: 'rgba(255, 57, 91, 0.4)'
-      }}
-    >
-      {children}
-    </a>
-  );
-};
