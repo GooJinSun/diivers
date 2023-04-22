@@ -11,6 +11,7 @@ import {
   PrivateWrapper,
   useStyles
 } from './NewComment.styles';
+import { extractTagQuery } from './NewComment.helper';
 
 export default function NewComment({
   isReply = false,
@@ -37,22 +38,17 @@ export default function NewComment({
     const {
       target: { value }
     } = e;
+
     setContent(value);
 
     // 유저 태그 관련 로직
     if (!userTagAllowed) return;
     if (!value) {
-      return setUserTagList([]);
+      setUserTagList([]);
+      return;
     }
-    if (!value.endsWith(' ') && value.includes('@')) {
-      const words = value.split(' ');
-      const lastWord = words[words.length - 1];
-      const atIndex = lastWord.indexOf('@');
-      if (atIndex >= 0) {
-        const query = lastWord.slice(atIndex + 1);
-        setTagQuery(query);
-      }
-    }
+    const query = extractTagQuery(value);
+    if (query) setTagQuery(query);
   };
 
   useAsyncEffect(async () => {
