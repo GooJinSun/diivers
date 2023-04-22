@@ -21,6 +21,14 @@ export const ACTIVATE_REQUEST = 'user/ACTIVATE_REQUEST';
 export const ACTIVATE_SUCCESS = 'user/ACTIVATE_SUCCESS';
 export const ACTIVATE_FAILURE = 'user/ACTIVATE_FAILURE';
 
+export const REACTIVATE_REQUEST = 'user/REACTIVATE_REQUEST';
+export const REACTIVATE_SUCCESS = 'user/REACTIVATE_SUCCESS';
+export const REACTIVATE_FAILURE = 'user/REACTIVATE_FAILURE';
+
+export const REACTIVATE_EMAIL_REQUEST = 'user/REACTIVATE_EMAIL_REQUEST';
+export const REACTIVATE_EMAIL_SUCCESS = 'user/REACTIVATE_EMAIL_SUCCESS';
+export const REACTIVATE_EMAIL_FAILURE = 'user/REACTIVATE_EMAIL_FAILURE';
+
 export const RESET_PASSWORD_EMAIL_REQUEST = 'user/RESET_PASSWORD_EMAIL_REQUEST';
 export const RESET_PASSWORD_EMAIL_SUCCESS = 'user/RESET_PASSWORD_EMAIL_SUCCESS';
 export const RESET_PASSWORD_EMAIL_FAILURE = 'user/RESET_PASSWORD_EMAIL_FAILURE';
@@ -158,6 +166,32 @@ export const requestActivate = (id, token) => {
       dispatch({ type: ACTIVATE_SUCCESS });
     } catch (error) {
       dispatch({ type: ACTIVATE_FAILURE, error });
+    }
+  };
+};
+
+// 휴면 계정 해제
+export const requestReactivate = (id, token) => {
+  return async (dispatch) => {
+    dispatch({ type: ACTIVATE_REQUEST });
+    try {
+      await axios.put(`user/reactivate/${id}/${token}/`);
+      dispatch({ type: ACTIVATE_SUCCESS });
+    } catch (error) {
+      dispatch({ type: ACTIVATE_FAILURE, error });
+    }
+  };
+};
+
+// 휴면 계정 메일 전송
+export const requestReactivateEmail = (emailInfo) => {
+  return async (dispatch) => {
+    dispatch({ type: REACTIVATE_EMAIL_REQUEST });
+    try {
+      await axios.post(`user/send-reactivate-email/`, emailInfo);
+      dispatch({ type: REACTIVATE_EMAIL_SUCCESS });
+    } catch (error) {
+      dispatch({ type: REACTIVATE_EMAIL_FAILURE });
     }
   };
 };
