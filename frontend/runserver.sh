@@ -5,7 +5,7 @@ rm -f tmp.db adoorback/db.sqlite3
 rm -r */migrations
 pip3.7 install -r requirements.txt
 
-python3.7 manage.py makemigrations account feed comment like notification user_report content_report user_tag
+python3.7 manage.py makemigrations
 python3.7 manage.py migrate
 
 # for seed data (optional)
