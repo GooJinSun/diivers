@@ -55,7 +55,8 @@
     "terms_and_privacy": "Terms and Privacy",
     "consent_to_participate_in_the study": "Consent to participate in the study",
     "learn_more_about_Diivers": "Learn more about Diivers",
-    "image_size_is_too_large":"Image size is too large.\nPlease use an image of 400 * 400 or less."
+    "image_size_is_too_large":"Image size is too large.\nPlease use an image of 400 * 400 or less.",
+    "password_constraints": "The password must be at least 8 characters with a mix of upper and lowercase letters, numbers and symbols"
   },
   "more_about_diivers": {
     "learn_more_about_Diivers":"Learn more about Diivers",

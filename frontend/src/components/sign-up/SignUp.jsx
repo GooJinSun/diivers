@@ -8,7 +8,7 @@ import AuthenticationDesc from '@common-components/authentication-desc/Authentic
 import MoreAboutDiiversModal from '@common-components/more-about-diivers-modal/MoreAboutDiiversModal';
 import { openHTML } from '@utils/openHTML';
 import { CommonInput } from '@styles/inputs';
-import { WarningMessage } from '@styles/messages';
+import { WarningMessage, ConstraintsMessage } from '@styles/messages';
 import RemoveIcon from '@material-ui/icons/RemoveCircle';
 import { useTranslation } from 'react-i18next';
 import { CircularProgress } from '@material-ui/core';
@@ -204,8 +204,10 @@ export default function SignUp() {
           onKeyDown={onKeySubmit}
           invalid={isSubmitted && isPasswordInvalid}
         />
-        {isSubmitted && isPasswordInvalid && (
+        {isSubmitted && isPasswordInvalid ? (
           <WarningMessage>{signUpError.password}</WarningMessage>
+        ) : (
+          <ConstraintsMessage>{t('password_constraints')}</ConstraintsMessage>
         )}
         <ProfileImageUploadWrapper>
           <ProfileImageUploadButton onClick={handleClick}>
