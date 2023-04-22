@@ -20,6 +20,7 @@ import {
   DeleteWrapper,
   IconButton
 } from './CommentItem.styles';
+import { getCommentContent } from './CommentItem.helper';
 
 export default function CommentItem({
   postKey,
@@ -140,7 +141,7 @@ export default function CommentItem({
               isAuthor={isCommentAuthor}
             />
             <CommentContent id="comment-content">
-              {commentObj.content}
+              {getCommentContent(commentObj)}
             </CommentContent>
           </div>
           <div
@@ -191,6 +192,7 @@ export default function CommentItem({
             isReply
             onSubmit={handleReplySubmit}
             forcePrivate={commentObj.is_private}
+            isPostAnon={isAnon}
           />
         )}
         <AlertDialog

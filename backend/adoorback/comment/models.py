@@ -5,14 +5,17 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.contrib.auth import get_user_model
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.db import IntegrityError
 
 from like.models import Like
 from account.models import User
 from notification.models import Notification
+from user_tag.models import UserTag
 from adoorback.models import AdoorModel
-from adoorback.utils.content_types import get_comment_type, get_generic_relation_type
 
 from adoorback.utils.helpers import wrap_content
+from adoorback.utils.content_types import get_comment_type, get_generic_relation_type
+from utils.helpers import parse_user_tag_from_content
 
 from safedelete.models import SafeDeleteModel
 from safedelete.models import SOFT_DELETE_CASCADE
@@ -41,7 +44,8 @@ class Comment(AdoorModel, SafeDeleteModel):
 
     replies = GenericRelation('self')
     comment_likes = GenericRelation(Like)
- 
+    comment_user_tags = GenericRelation(UserTag)
+
     comment_targetted_notis = GenericRelation(Notification,
                                               content_type_field='target_type',
                                               object_id_field='target_id')
@@ -177,3 +181,36 @@ def create_noti(instance, created, **kwargs):
                                         message_ko=f'회원님이 댓글을 남긴 {origin_target_name_ko}에 새로운 댓글이 달렸습니다: "{content_preview}"',
                                         message_en=f'There\'s a new comment on the {origin_target_name_en} you commented on: "{content_preview}"',
                                         redirect_url=redirect_url)
+
+
+@transaction.atomic
+@receiver(post_save, sender=Comment)
+def create_user_tag(instance, **kwargs):
+    content = instance.content
+    tagging_user = instance.author
+    object_id = instance.id
+    content_type = get_generic_relation_type(instance.type)
+
+    if instance.is_anonymous:
+        return
+
+    tagged_users, word_indices = parse_user_tag_from_content(content)
+
+    words = content.split(' ')
+    for i, tagged_user in enumerate(tagged_users):
+        tagged_username = tagged_user.username
+        word_idx = word_indices[i]
+        try:
+            offset = sum([len(w) for w in words[:word_idx]]) + word_idx + 1  # length of words + spaces + '@'
+            UserTag.objects.create(tagging_user_id=tagging_user.id, tagged_user_id=tagged_user.id,
+                                   object_id=object_id, content_type=content_type, 
+                                   offset=offset, length=len(tagged_username), username_str=tagged_username)
+        except IntegrityError as e:
+            constraint_failed = False
+            for arg in e.args:
+                if 'constraint' in arg:
+                    constraint_failed = True
+            if constraint_failed:
+                continue
+            else:
+                print("error creating UserTag: ", e.args)

@@ -5,11 +5,13 @@ from rest_framework.test import APIClient
 from comment.models import Comment
 from like.models import Like
 from notification.models import Notification
+from feed.models import Article
 
 from adoorback.test.seed import set_seed, fill_data
 from adoorback.utils.content_types import get_comment_type, get_like_type, \
     get_article_type, get_question_type, get_response_type, \
-    get_response_request_type, get_friend_request_type
+    get_response_request_type, get_friend_request_type, \
+    get_user_tag_type
 
 User = get_user_model()
 N = 10
@@ -138,6 +140,20 @@ class DeleteObjectNotificationTestCase(TestCase):
         target.undelete()
         self.assertEqual(Notification.objects.visible_only().filter(
             target_type=get_response_request_type(), target_id=target_id).count(), rr_noti_cnt)
+
+        # target = user tag
+        user = self.make_user(username='user')
+        friend_user_1 = self.make_user(username='friend_user_1')
+        user.friends.add(friend_user_1)
+        article = Article.objects.create(author=user, content='test article')
+        comment = Comment.objects.create(author=user, target=article,
+                                         content='hi @' + friend_user_1.username, is_private=False)  # user tag created
+        noti = Notification.objects.visible_only().filter(target_type=get_user_tag_type()).last()
+        target = noti.target
+        target_id = target.id
+        target.delete()
+        self.assertEqual(Notification.objects.visible_only().filter(
+            target_type=get_user_tag_type(), target_id=target_id).count(), 0)
 
 
 class DeleteFeedNotificationTestCase(TestCase):
