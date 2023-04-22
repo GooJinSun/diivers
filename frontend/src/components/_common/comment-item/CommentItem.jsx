@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LockIcon from '@material-ui/icons/Lock';
-import { useLocation, useParams, useHistory } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
@@ -38,7 +38,6 @@ export default function CommentItem({
   const [likeCount, setLikeCount] = useState(commentObj.like_count || 0);
   const dispatch = useDispatch();
   const { id: targetId } = useParams();
-  const history = useHistory();
 
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
 
@@ -121,10 +120,6 @@ export default function CommentItem({
     setLiked((prev) => !prev);
   };
 
-  const handleClickUserTag = (taggedUserName) => {
-    history.push(`/users/${taggedUserName}`);
-  };
-
   return (
     <>
       <CommentItemWrapper id={commentObj.id}>
@@ -146,7 +141,7 @@ export default function CommentItem({
               isAuthor={isCommentAuthor}
             />
             <CommentContent id="comment-content">
-              {getCommentContent(commentObj, handleClickUserTag)}
+              {getCommentContent(commentObj)}
             </CommentContent>
           </div>
           <div
@@ -211,7 +206,7 @@ export default function CommentItem({
   );
 }
 
-const getCommentContent = (comment, handleClickUserTag) => {
+const getCommentContent = (comment) => {
   const originalComment = comment.content;
   const userTags = comment.user_tags;
 
@@ -221,10 +216,7 @@ const getCommentContent = (comment, handleClickUserTag) => {
     const { tagged_username, offset, length } = tag;
     const prefix = originalComment.substring(lastIndex, offset - 1);
     const highlightedTag = (
-      <Highlight
-        key={tag.id}
-        onClick={() => handleClickUserTag(tagged_username)}
-      >
+      <Highlight key={tag.id} username={tagged_username}>
         @{tagged_username}
       </Highlight>
     );
@@ -238,9 +230,10 @@ const getCommentContent = (comment, handleClickUserTag) => {
   return result;
 };
 
-const Highlight = ({ children }) => {
+const Highlight = ({ children, username }) => {
   return (
-    <span
+    <a
+      href={`/users/${username}`}
       style={{
         color: primaryColor,
         cursor: 'pointer',
@@ -248,6 +241,6 @@ const Highlight = ({ children }) => {
       }}
     >
       {children}
-    </span>
+    </a>
   );
 };
