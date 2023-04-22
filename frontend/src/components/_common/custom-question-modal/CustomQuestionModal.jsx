@@ -59,7 +59,7 @@ const CustomQuestionModal = ({ open, handleClose }) => {
           className={classes.textArea}
           aria-label="new custom question"
           placeholder={t('create_a_new_question')}
-          rowsMin={3}
+          minRows={3}
           value={newCustomQuestion.content}
           onChange={handleInputChange}
         />

@@ -29,6 +29,7 @@ import {
   ShareSettingInfo,
   CommentInfo
 } from './PostItem.styles';
+import LinkifyContents from '../linkify-contents/LinkifyContents';
 
 export default function PostItem({
   postObj,
@@ -148,7 +149,9 @@ export default function PostItem({
         )}
       </PostItemHeaderWrapper>
       {postObj.question && <QuestionBox questionObj={postObj.question} />}
-      <ContentWrapper>{postObj.content}</ContentWrapper>
+      <ContentWrapper>
+        <LinkifyContents>{postObj.content}</LinkifyContents>
+      </ContentWrapper>
       <CreateTime createdTime={postObj.created_at} />
       <PostItemFooterWrapper>
         <ShareSettingsWrapper>

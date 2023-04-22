@@ -61,7 +61,7 @@ const NewResponse = ({ question, onSubmit }: NewResponseProps) => {
         id="content-input"
         placeholder={t('please_fill_out_the_answer') || undefined}
         value={newPost.content}
-        rowsMin={3}
+        minRows={3}
         onChange={handleContentChange}
       />
       <ShareSettings postObj={newPost} resetContent={onSubmitHandler} />
