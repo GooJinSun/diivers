@@ -15,6 +15,7 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenViewBase
 from safedelete.models import SOFT_DELETE_CASCADE
 
+from account.algorithms.csv_writer import delete_dormant_users_from_csv, USER_INFO_FIELDS, get_dormant_user_df
 from account.models import FriendRequest
 from account.serializers import UserProfileSerializer, \
     UserFriendRequestCreateSerializer, UserFriendRequestUpdateSerializer, \
@@ -143,7 +144,13 @@ class SendResetPasswordEmail(generics.CreateAPIView):
         return adoor_exception_handler
     
     def get_object(self):
-        return User.objects.filter(email=self.request.data['email']).first()
+        email = self.request.data['email']
+        user = User.objects.filter(email=email).first()
+        if not user:
+            dormant_users = get_dormant_user_df()
+            user_id = int(dormant_users[dormant_users['email'] == email]['id'].values[0])
+            user = User.objects.get(id=user_id)
+        return user
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()
@@ -174,6 +181,56 @@ class ResetPassword(generics.UpdateAPIView):
     @transaction.atomic
     def update_password(self, user, raw_password):
         user.set_password(raw_password)
+        user.save()
+
+
+class SendReActivateEmail(generics.CreateAPIView):
+    serializer_class = UserProfileSerializer
+
+    def get_exception_handler(self):
+        return adoor_exception_handler
+    
+    def get_object(self):
+        return User.objects.get(id=self.request.data['id'])
+
+    def post(self, request, *args, **kwargs):
+        user = self.get_object()
+        if 'HTTP_ACCEPT_LANGUAGE' in self.request.META:
+            lang = self.request.META['HTTP_ACCEPT_LANGUAGE']
+            translation.activate(lang)
+        if user and user.is_active:
+            email_manager.send_reactivate_email(user)
+            
+        return HttpResponse(status=200) # whether email is valid or not, response will be always success-response
+
+
+class UserReActivate(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+
+    def get_exception_handler(self):
+        print(self.request.headers)
+        return adoor_exception_handler
+
+    def update(self, request, *args, **kwargs):
+        token = self.kwargs.get('token')
+        user = self.get_object()
+        if email_manager.check_reactivate_token(user, token):
+            self.reactivate(user)
+            return HttpResponse(status=204)
+        else:
+            return HttpResponse(status=400)
+
+    @transaction.atomic
+    def reactivate(self, user):
+        user.is_dormant = False
+        user_info = delete_dormant_users_from_csv(User.objects.filter(id=user.id))[user.id]
+        for idx, field in enumerate(USER_INFO_FIELDS):
+            try:
+                new_value = int(user_info[idx])
+            except:
+                new_value = None if user_info[idx] == 'None' else user_info[idx]
+            setattr(user, field, new_value)
         user.save()
 
 
