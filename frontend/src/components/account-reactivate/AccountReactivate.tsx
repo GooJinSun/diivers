@@ -19,7 +19,7 @@ const AccountReactivate = () => {
   const { id, token } = useParams<AccountReactivateParams>();
   const history = useHistory();
 
-  const activateStatus = useSelector(
+  const reactivateStatus = useSelector(
     (state: RootState) => state.loadingReducer['user/REACTIVATE']
   );
 
@@ -27,8 +27,8 @@ const AccountReactivate = () => {
     keyPrefix: 'account_reactivate'
   });
 
-  const isLoading = activateStatus === 'REQUEST';
-  const isSucceed = activateStatus === 'SUCCESS';
+  const isLoading = reactivateStatus === 'REQUEST';
+  const isSucceed = reactivateStatus === 'SUCCESS';
 
   const onClickLogin = () => history.push('/login');
   const onClickSignUp = () => history.push('/signup');

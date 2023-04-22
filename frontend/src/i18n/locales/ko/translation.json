@@ -89,6 +89,15 @@
     "login_and_tour_diivers": "로그인하고 다이버스 둘러보기",
     "sign_up": "회원가입"
   },
+  "account_dormant": {
+    "your_account_is_dormant": "Diivers는 고객님의 소중한 정보 보호를 위해 1년 이상의 이용 기록이 없는 경우 휴면 상태로 전환합니다.",
+    "you_need_to_reactivate_account": "회원님 계정의 휴면여부 확인, 복구를 위하여 반드시 본인 확인 절차가 필요합니다.",
+    "click_email_authenticate_button": "아래 '이메일 인증' 버튼을 클릭해주세요.",
+    "email_authenticate": "이메일 인증",
+    "email_has_been_sent": "가입시 입력하셨던 아래의 메일로 인증 메일이 전송되었습니다.",
+    "please_check_authentication_email": "해당 인증 메일에서 링크를 눌러 휴면 해제를 진행해주세요.",
+    "you_can_use_after_reactivation": "휴면 해제 후 정상 이용이 가능합니다."
+  },
   "account_reactivate": {
     "authenticating": "휴면 계정 해제 중 ...",
     "account_reactivation_is_completed": "정상적으로 휴면 해제가 되었습니다.",
