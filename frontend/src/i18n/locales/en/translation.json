@@ -7,7 +7,7 @@
     "logout": "Logout",
     "login": "Login",
     "view_all_notifications": "View all notifications"
-  }, 
+  },
   "common_popup": {
     "allow_notification_to_receive_updates_from_friends_as_push_notifications": "Allow notification to receive updates from friends as push notifications!",
     "please_check_your_system_preferences": "If you don't get any notifications, please check the system preferences of your device."
@@ -87,6 +87,14 @@
     "invalid_link": "Invalid link.",
     "go_to_login": "Go to Login",
     "login_and_tour_diivers": "Log in and tour the Diivers",
+    "sign_up": "Sign Up"
+  },
+  "account_reactivate": {
+    "authenticating": "Reactivating the dormant account...",
+    "account_reactivation_is_completed": "The account has been successfully reactivated.",
+    "please_login": "Please log in.",
+    "invalid_link": "The link is invalid.",
+    "go_to_login": "Go to Login",
     "sign_up": "Sign Up"
   },
   "lost_password": {

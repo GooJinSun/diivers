@@ -86,7 +86,15 @@
     "email_authentication_is_completed": "이메일 인증이 완료되었습니다.",
     "invalid_link": "유효하지 않은 링크입니다.",
     "go_to_login": "로그인하러 가기",
-    "login_and_tour_diivers": " 로그인하고 다이버스 둘러보기",
+    "login_and_tour_diivers": "로그인하고 다이버스 둘러보기",
+    "sign_up": "회원가입"
+  },
+  "account_reactivate": {
+    "authenticating": "휴면 계정 해제 중 ...",
+    "account_reactivation_is_completed": "정상적으로 휴면 해제가 되었습니다.",
+    "please_login": "로그인 해주세요.",
+    "invalid_link": "유효하지 않은 링크입니다.",
+    "go_to_login": "로그인하러 가기",
     "sign_up": "회원가입"
   },
   "lost_password": {
