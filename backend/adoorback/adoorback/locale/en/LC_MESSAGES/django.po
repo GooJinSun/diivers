@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-01 15:46+0900\n"
+"POT-Creation-Date: 2023-04-22 10:51+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: account/email.py:17
+#: account/email.py:26
 msgid "이메일 인증을 완료해주세요"
 msgstr "Please verify your email."
 
-#: account/email.py:19
+#: account/email.py:28
 msgid ""
 "아래 링크를 클릭하면 회원가입 인증이 완료됩니다.\n"
 "\n"
@@ -32,15 +32,16 @@ msgstr ""
 "\n"
 "Link : "
 
-#: account/email.py:21 account/email.py:32
+#: account/email.py:30 account/email.py:41 account/email.py:59
+#: account/email.py:69
 msgid "감사합니다."
 msgstr "Thank you."
 
-#: account/email.py:27
+#: account/email.py:36
 msgid "비밀번호 변경 링크입니다."
 msgstr "Reset your Diivers password"
 
-#: account/email.py:30
+#: account/email.py:39
 msgid ""
 "님, 아래 링크를 클릭하면 비밀번호 변경이 가능합니다.\n"
 "\n"
@@ -50,56 +51,103 @@ msgstr ""
 "\n"
 "Link : "
 
-#: account/models.py:32 account/models.py:53
+#: account/email.py:46
+msgid "Diivers 장기 미접속 계정 휴면 전환 안내"
+msgstr "[Diivers] Notice of inactive account dormant transition"
+
+#: account/email.py:50
+msgid ""
+"님, 장기간 Diivers 서비스 이용이 없으셨던 회원님의 계정이 휴면계정으로 전환"
+"될 예정입니다.\n"
+"                            저장된 개인정보는 안전하게 분리보관함을 안내드립"
+"니다.\n"
+"\n"
+"                            휴면 전환 예정일: "
+msgstr ", we inform you that your Diivers account will be switched to a dormant state since it has not been used for a year.\nYour personal information will be safely stored separately.\nScheduled date of transition: "
+
+#: account/email.py:54
+msgid ""
+"분리보관 항목: 이메일 주소, 생년월일, 성별, 인종\n"
+"\n"
+"                            휴면 전환을 원치 않으시는 경우, "
+msgstr "Personal information to be managed separately: email address, date of birth, gender, ethnicity\nIf you do not want your account to be switched to a dormant state, please visit Diivers and log in before "
+
+#: account/email.py:57
+msgid ""
+"이전에 Diivers를 방문하여 로그인해주시기 바랍니다.\n"
+"다이버스 바로가기 : "
+msgstr ".\nVisit Diivers : "
+
+#: account/email.py:65
+#, fuzzy
+#| msgid "이메일 인증을 완료해주세요"
+msgid "휴면 해제를 위해 이메일 인증을 완료해주세요"
+msgstr "Please verify your email."
+
+#: account/email.py:67
+#, fuzzy
+#| msgid ""
+#| "아래 링크를 클릭하면 회원가입 인증이 완료됩니다.\n"
+#| "\n"
+#| "회원가입 링크 : "
+msgid ""
+"아래 링크를 클릭하면 휴면 해제를 위한 인증이 완료됩니다.\n"
+"\n"
+msgstr ""
+"Click the following link to complete verification.\n"
+"\n"
+"Link : "
+
+#: account/models.py:40 account/models.py:61
 msgid "여성"
 msgstr "Female"
 
-#: account/models.py:33 account/models.py:54
+#: account/models.py:41 account/models.py:62
 msgid "남성"
 msgstr "Male"
 
-#: account/models.py:34 account/models.py:55
+#: account/models.py:42 account/models.py:63
 msgid "트랜스젠더 (transgender)"
 msgstr "Transgender"
 
-#: account/models.py:35 account/models.py:56
+#: account/models.py:43 account/models.py:64
 msgid "논바이너리 (non-binary/non-conforming)"
 msgstr "Non-binary/Non-conforming"
 
-#: account/models.py:36 account/models.py:57
+#: account/models.py:44 account/models.py:65
 msgid "응답하고 싶지 않음"
 msgstr "Do not want to reply"
 
-#: account/models.py:40 account/models.py:61
+#: account/models.py:48 account/models.py:69
 msgid "미국 원주민/알래스카 원주민 (American Indian/Alaska Native)"
 msgstr "American Indian/Alaska Native"
 
-#: account/models.py:41 account/models.py:62
+#: account/models.py:49 account/models.py:70
 msgid "아시아인 (Asian)"
 msgstr "Asian"
 
-#: account/models.py:42 account/models.py:63
+#: account/models.py:50 account/models.py:71
 msgid "흑인/아프리카계 미국인 (Black/African American)"
 msgstr "Black/African American"
 
-#: account/models.py:43 account/models.py:64
+#: account/models.py:51 account/models.py:72
 msgid "히스패닉/라틴계 미국인 (Hispanic/Latino)"
 msgstr "Hispanic/Latino"
 
-#: account/models.py:44 account/models.py:65
+#: account/models.py:52 account/models.py:73
 msgid ""
 "하와이 원주민/다른 태평양 섬 주민 (Native Hawaiian/Other Pacific Islander)"
 msgstr "Native Hawaiian/Other Pacific Islander"
 
-#: account/models.py:45 account/models.py:66
+#: account/models.py:53 account/models.py:74
 msgid "백인 (White)"
 msgstr "White"
 
-#: adoorback/settings/base.py:187
+#: adoorback/settings/base.py:193
 msgid "한국어"
 msgstr "Korean"
 
-#: adoorback/settings/base.py:188
+#: adoorback/settings/base.py:194
 msgid "영어"
 msgstr "English"
 
