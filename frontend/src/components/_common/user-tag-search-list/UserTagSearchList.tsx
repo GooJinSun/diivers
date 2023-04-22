@@ -1,5 +1,5 @@
 import React from 'react';
-import * as S from './UserTagList.styles';
+import * as S from './UserTagSearchList.styles';
 
 type UserTag = {
   id: number;
@@ -9,12 +9,12 @@ type UserTag = {
   url: string;
 };
 
-type UserTagListProps = {
+type UserTagSearchListProps = {
   userTagList: UserTag[];
   onSelectUserTag: (tag: UserTag) => void;
 };
 
-const UserTagList: React.FC<UserTagListProps> = ({
+const UserTagSearchList: React.FC<UserTagSearchListProps> = ({
   userTagList,
   onSelectUserTag
 }) => {
@@ -30,4 +30,4 @@ const UserTagList: React.FC<UserTagListProps> = ({
   );
 };
 
-export default UserTagList;
+export default UserTagSearchList;

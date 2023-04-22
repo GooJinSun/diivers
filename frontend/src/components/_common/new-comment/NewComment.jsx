@@ -5,7 +5,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import { useTranslation } from 'react-i18next';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import axios from '@utils/api';
-import UserTagList from '@common-components/user-tag-list/UserTagList';
+import UserTagSearchList from '@common-components/user-tag-list/UserTagList';
 import {
   NewCommentWrapper,
   PrivateWrapper,
@@ -38,7 +38,11 @@ export default function NewComment({
     } = e;
     setContent(value);
 
+    // 유저 태그 관련 로직
     if (!userTagAllowed) return;
+    if (!value) {
+      return setUserTagList([]);
+    }
     if (!value.endsWith(' ') && value.includes('@')) {
       const words = value.split(' ');
       const lastWord = words[words.length - 1];
@@ -51,7 +55,7 @@ export default function NewComment({
   };
 
   useAsyncEffect(async () => {
-    if (!userTagAllowed || !tagQuery) return;
+    if (!userTagAllowed) return;
     const { data } = await axios.get(`/user_tags/search/?query=${tagQuery}`);
     if (data) {
       setUserTagList(data.results);
@@ -108,9 +112,9 @@ export default function NewComment({
           }}
         />
       )}
-      {/* 유저 태그 리스트  */}
+      {/* 유저 태그 후보 리스트  */}
       {userTagAllowed && (
-        <UserTagList
+        <UserTagSearchList
           userTagList={userTagList}
           onSelectUserTag={handleOnSelectUserTag}
         />
