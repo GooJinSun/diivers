@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Checkbox, Button, TextareaAutosize } from '@material-ui/core';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import LockIcon from '@material-ui/icons/Lock';
@@ -20,6 +20,7 @@ export default function NewComment({
 }) {
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
   const userTagAllowed = !isPostAnon;
+  const commentInputRef = useRef(null);
   const [content, setContent] = useState('');
   // 누군가를 태그할 가능성이 있는 단어
   const [tagQuery, setTagQuery] = useState('');
@@ -94,9 +95,10 @@ export default function NewComment({
       const lastTagQueryIndex = prev.lastIndexOf(`@${tagQuery}`);
       const filteredContent = `${prev.substring(0, lastTagQueryIndex)}@${
         tag.username
-      }`;
+      } `;
       return filteredContent;
     });
+    commentInputRef.current.focus();
     setUserTagList([]);
   };
 
@@ -126,6 +128,7 @@ export default function NewComment({
         onKeyDown={handleEnter}
         value={content}
         className={classes.textarea}
+        ref={commentInputRef}
       />
       {!isReply && (
         <PrivateWrapper>
