@@ -38,21 +38,20 @@ export default function NewComment({
     } = e;
     setContent(value);
 
-    if (userTagAllowed) {
-      if (!value.endsWith(' ') && value.includes('@')) {
-        const words = value.split(' ');
-        const lastWord = words[words.length - 1];
-        const atIndex = lastWord.indexOf('@');
-        if (atIndex >= 0) {
-          const query = lastWord.slice(atIndex + 1);
-          setTagQuery(query);
-        }
+    if (!userTagAllowed) return;
+    if (!value.endsWith(' ') && value.includes('@')) {
+      const words = value.split(' ');
+      const lastWord = words[words.length - 1];
+      const atIndex = lastWord.indexOf('@');
+      if (atIndex >= 0) {
+        const query = lastWord.slice(atIndex + 1);
+        setTagQuery(query);
       }
     }
   };
 
   useAsyncEffect(async () => {
-    if (!userTagAllowed) return;
+    if (!userTagAllowed || !tagQuery) return;
     const { data } = await axios.get(`/user_tags/search/?query=${tagQuery}`);
     if (data) {
       setUserTagList(data.results);
