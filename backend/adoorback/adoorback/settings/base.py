@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'trackstats',
     'fcm_django',
     'safedelete',
+    'tracking',
 ]
 
 SITE_ID = 1
@@ -129,6 +130,7 @@ CACHES = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'tracking.middleware.VisitorTrackingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -245,3 +247,8 @@ LOCALE_PATHS = [
 ]
 
 AUTHENTICATION_BACKENDS = ('account.backends.CustomModelBackend',)
+
+SESSION_ENGINE = "django.contrib.sessions.backends.file"
+SESSION_FILE_PATH = os.path.join(BASE_DIR, 'sessions')
+TRACK_ANONYMOUS_USERS = False
+TRACK_IGNORE_STATUS_CODES = [400, 404, 403, 405, 410, 500]

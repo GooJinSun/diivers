@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import include, path
+from django.urls import include, path, re_path
 from django.conf.urls import url
 from django.views.static import serve
 from django.conf.urls.i18n import i18n_patterns
@@ -35,6 +35,7 @@ urlpatterns = i18n_patterns(
     path('api/secret/', admin.site.urls),
     path('api/user/', include('rest_framework.urls', namespace='rest_framework')),
     path('api/devices/', FCMDeviceAuthorizedViewSet.as_view({'post': 'create'}), name='create_fcm_device'),
+    path('api/tracking/', include('tracking.urls')),
     prefix_default_language=False
 )
 

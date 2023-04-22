@@ -38,6 +38,7 @@ django-redis>=4.12.1
 django-rest-polymorphic>=0.1.9
 django-safedelete>=1.3.0
 django-test-plus>=1.4.0
+django-tracking2==0.5.1
 django-trackstats>=0.5.0
 djangorestframework>=3.12.1
 djangorestframework-simplejwt==5.2.0
