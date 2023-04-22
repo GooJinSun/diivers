@@ -84,7 +84,9 @@ def send_firebase_notification(created, instance, **kwargs):
 
     message = Message(
         data = {
-            'body' : instance.message,
+            'body': instance.message,
+            'message_en': instance.message_en,
+            'message_ko': instance.message_ko,
             'url': instance.redirect_url,
             'tag': str(instance.id),
             'type': 'new',
