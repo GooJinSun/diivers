@@ -15,6 +15,7 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenViewBase
 from safedelete.models import SOFT_DELETE_CASCADE
 
+from account.algorithms.csv_writer import delete_dormant_users_from_csv
 from account.models import FriendRequest
 from account.serializers import UserProfileSerializer, \
     UserFriendRequestCreateSerializer, UserFriendRequestUpdateSerializer, \
@@ -218,6 +219,7 @@ class UserReActivate(generics.UpdateAPIView):
     def reactivate(self, user):
         user.is_dormant = False
         user.save()
+        delete_dormant_users_from_csv(User.objects.filter(id=user.id))
 
 
 class SignupQuestions(generics.ListAPIView):

@@ -4,7 +4,7 @@ from django.utils.timezone import make_aware
 from django.contrib.auth import get_user_model
 from django_cron import CronJobBase, Schedule
 
-from account.algorithms.csv_writer import create_dormant_csv, delete_dormant_users_from_csv
+from account.algorithms.csv_writer import create_dormant_csv
 from account.email import email_manager
 from notification.models import Notification
 from tracking.models import Visitor
