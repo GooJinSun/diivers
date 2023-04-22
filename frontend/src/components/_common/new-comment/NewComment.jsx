@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Checkbox, Button, TextareaAutosize } from '@material-ui/core';
 import SubdirectoryArrowRightIcon from '@material-ui/icons/SubdirectoryArrowRight';
 import LockIcon from '@material-ui/icons/Lock';
 import { useTranslation } from 'react-i18next';
+import useAsyncEffect from '@hooks/useAsyncEffect';
+import axios from '@utils/api';
+import UserTagSearchList from '@components/_common/user-tag-search-list/UserTagSearchList';
 import {
   NewCommentWrapper,
   PrivateWrapper,
   useStyles
 } from './NewComment.styles';
+import { extractTagQuery } from './NewComment.helper';
 
 export default function NewComment({
   isReply = false,
   onSubmit,
-  forcePrivate = false
+  forcePrivate = false,
+  isPostAnon
 }) {
   const [t] = useTranslation('translation', { keyPrefix: 'feed_common' });
-
+  const userTagAllowed = !isPostAnon;
+  const commentInputRef = useRef(null);
   const [content, setContent] = useState('');
+  // 누군가를 태그할 가능성이 있는 단어
+  const [tagQuery, setTagQuery] = useState('');
+  // 태그 목록
+  const [userTagList, setUserTagList] = useState([]);
   const [isPrivate, setIsPrivate] = useState(forcePrivate);
   const placeholder = isReply
     ? t('please_enter_a_reply')
@@ -25,8 +35,29 @@ export default function NewComment({
   const classes = useStyles();
 
   const handleContentChange = (e) => {
-    setContent(e.target.value);
+    const {
+      target: { value }
+    } = e;
+
+    setContent(value);
+
+    // 유저 태그 관련 로직
+    if (!userTagAllowed) return;
+    if (!value) {
+      setUserTagList([]);
+      return;
+    }
+    const query = extractTagQuery(value);
+    if (query) setTagQuery(query);
   };
+
+  useAsyncEffect(async () => {
+    if (!userTagAllowed) return;
+    const { data } = await axios.get(`/user_tags/search/?query=${tagQuery}`);
+    if (data) {
+      setUserTagList(data.results);
+    }
+  }, [tagQuery, userTagAllowed]);
 
   const togglePrivate = () => {
     if (forcePrivate) return;
@@ -50,8 +81,21 @@ export default function NewComment({
 
   const handleSubmit = () => {
     if (!content) return;
-    onSubmit(content, isPrivate);
+    onSubmit(content.trim(), isPrivate);
     setContent('');
+    setUserTagList([]);
+  };
+
+  const handleOnSelectUserTag = (tag) => {
+    setContent((prev) => {
+      const lastTagQueryIndex = prev.lastIndexOf(`@${tagQuery}`);
+      const filteredContent = `${prev.substring(0, lastTagQueryIndex)}@${
+        tag.username
+      } `;
+      return filteredContent;
+    });
+    commentInputRef.current.focus();
+    setUserTagList([]);
   };
 
   return (
@@ -66,6 +110,13 @@ export default function NewComment({
           }}
         />
       )}
+      {/* 유저 태그 후보 리스트  */}
+      {userTagAllowed && (
+        <UserTagSearchList
+          userTagList={userTagList}
+          onSelectUserTag={handleOnSelectUserTag}
+        />
+      )}
       <TextareaAutosize
         id="comment-input"
         placeholder={placeholder}
@@ -73,6 +124,7 @@ export default function NewComment({
         onKeyDown={handleEnter}
         value={content}
         className={classes.textarea}
+        ref={commentInputRef}
       />
       {!isReply && (
         <PrivateWrapper>
