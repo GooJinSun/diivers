@@ -10,6 +10,10 @@ export const SIGN_UP_REQUEST = 'user/SIGN_UP_REQUEST';
 export const SIGN_UP_SUCCESS = 'user/SIGN_UP_SUCCESS';
 export const SIGN_UP_FAILURE = 'user/SIGN_UP_FAILURE';
 
+export const DELETE_CURRENT_USER_REQUEST = 'user/DELETE_CURRENT_USER_REQUEST';
+export const DELETE_CURRENT_USER_SUCCESS = 'user/DELETE_CURRENT_USER_SUCCESS';
+export const DELETE_CURRENT_USER_FAILURE = 'user/DELETE_CURRENT_USER_FAILURE';
+
 export const LOGIN_REQUEST = 'user/LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'user/LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'user/LOGIN_FAILURE';
@@ -269,6 +273,20 @@ export const getSelectedUser = (userName) => async (dispatch) => {
   });
 };
 
+export const deleteCurrentUser = () => async (dispatch) => {
+  dispatch(logout());
+  dispatch({ type: DELETE_CURRENT_USER_REQUEST });
+  try {
+    await axios.delete('/user/me/delete/');
+  } catch (error) {
+    dispatch({ type: DELETE_CURRENT_USER_FAILURE, error });
+    return;
+  }
+  dispatch({
+    type: DELETE_CURRENT_USER_SUCCESS
+  });
+};
+
 export const setFcmToken = (fcmToken) => (dispatch) => {
   if (!fcmToken) return;
   dispatch({ type: SET_FCM_TOKEN, fcmToken });
@@ -314,15 +332,10 @@ export default function userReducer(state, action) {
         currentUser: null,
         loginError: action.error
       };
+    case DELETE_CURRENT_USER_REQUEST:
     case LOGOUT_REQUEST:
       deactivateFirebaseDevice(state.fcmToken);
-      return {
-        ...state,
-        currentUser: null,
-        loginError: false,
-        selectQuestion: true,
-        fcmToken: null
-      };
+      return initialState;
     case SIGN_UP_SUCCESS:
       return {
         ...state,

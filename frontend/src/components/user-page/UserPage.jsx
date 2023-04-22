@@ -5,7 +5,11 @@ import Tab from '@material-ui/core/Tab';
 import { useParams } from 'react-router';
 import AppBar from '@material-ui/core/AppBar';
 import AlertDialog from '@common-components/alert-dialog/AlertDialog';
-import { getSelectedUser, changeProfileImage } from '@modules/user';
+import {
+  getSelectedUser,
+  changeProfileImage,
+  deleteCurrentUser
+} from '@modules/user';
 import UserProfileItem from '@common-components/user-profile-item/UserProfileItem';
 import { getFriendList, deleteFriend } from '@modules/friend';
 import FriendStatusButtons from '@common-components/friend-status-buttons/FriendStatusButtons';
@@ -17,7 +21,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import { useTranslation } from 'react-i18next';
 import { cropAndResize } from '@utils/imageCropHelper';
 import UserPostList from './user-post-list/UserPostList';
-import UserReportButton from './user-report-button/UserReportButton';
+import UserReportButton from './user-button/UserReportButton';
+import UserDeleteButton from './user-button/UserDeleteButton';
 import {
   MobileTabPanel,
   UserReportButtonWrapper,
@@ -40,6 +45,7 @@ export default function UserPage() {
   const isMyPage = selectedUser?.id === currentUser?.id;
   const [isBlock, setIsBlock] = useState(false);
   const [isReport, setIsReport] = useState(false);
+  const [isUserDeleteModalOpen, setIsUserDeleteModalOpen] = useState(false);
 
   const isFriendOrMyPage = isFriend || isMyPage;
 
@@ -130,6 +136,19 @@ export default function UserPage() {
     setIsReport(true);
   };
 
+  const onClickDeleteUser = () => {
+    setIsUserDeleteModalOpen(true);
+  };
+
+  const onCancelDeleteUser = () => {
+    setIsUserDeleteModalOpen(false);
+  };
+
+  const onConfirmDeleteUser = async () => {
+    setIsUserDeleteModalOpen(false);
+    dispatch(deleteCurrentUser());
+  };
+
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const onClickDeleteFriendButton = () => {
     setIsDeleteDialogOpen(true);
@@ -161,11 +180,22 @@ export default function UserPage() {
         <PostListWrapper>
           <UserPageContainer
             style={{
-              paddingTop: isMyPage ? 50 : 20,
-              paddingRight: isMyPage ? 0 : 20
+              paddingTop: 20,
+              paddingRight: 20
             }}
           >
-            {!isMyPage && (
+            {isMyPage ? (
+              <UserReportButtonWrapper>
+                <UserDeleteButton onClickUserDelete={onClickDeleteUser} />
+                {/* 회원 탈퇴 모달 팝업 */}
+                <AlertDialog
+                  onConfirm={onConfirmDeleteUser}
+                  onClose={onCancelDeleteUser}
+                  isOpen={isUserDeleteModalOpen}
+                  message={t('do_you_want_to_delete_this_user')}
+                />
+              </UserReportButtonWrapper>
+            ) : (
               <UserReportButtonWrapper>
                 <UserReportButton
                   onClickBlockUser={onClickBlockUser}

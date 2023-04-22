@@ -201,6 +201,23 @@ class UserList(generics.ListAPIView):
             queryset = User.objects.all()
         return queryset
 
+class CurrentUserDelete(generics.DestroyAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    @transaction.atomic
+    def perform_destroy(self, instance):
+        # email cannot be null, so set it to a dummy value
+        instance.email = f"{instance.username}@{instance.username}"
+        instance.gender = None
+        instance.ethnicity = None
+        instance.date_of_birth = None
+        instance.save()
+        # user is soft-deleted, contents user created will be cascade-deleted
+        instance.delete(force_policy=SOFT_DELETE_CASCADE)
 
 class CurrentUserFriendList(generics.ListAPIView):
     serializer_class = AuthorFriendSerializer
