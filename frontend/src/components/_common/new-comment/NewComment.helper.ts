@@ -3,7 +3,7 @@
  */
 export const extractTagQuery = (value: string) => {
   // 입력값 value에서 '@'로 시작하는 문자열을 추출하여 matches 배열에 저장한다.
-  const matches = value.match(/@(\w+)/g);
+  const matches = value.match(/@([\p{L}\p{N}_-]+)/gu);
   // matches 배열이 존재하는 경우 마지막 요소의 tagQuery를 추출하여 반환한다.
   if (matches) {
     const lastMatch = matches[matches.length - 1];
