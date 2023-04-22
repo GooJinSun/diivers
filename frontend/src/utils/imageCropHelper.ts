@@ -7,19 +7,18 @@ export const cropAndResize = (file: File) =>
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      // 이미지의 가로세로 비율(ratio)을 계산하여, 크롭할 영역 계산
-      const ratio = Math.min(400 / img.width, 400 / img.height);
-      const cropWidth = img.width * ratio;
-      const cropHeight = img.height * ratio;
+      // 이미지를 적절한 크기로 crop
+      const cropWidth = Math.min(img.width, img.height);
       const cropX = (img.width - cropWidth) / 2;
-      const cropY = (img.height - cropHeight) / 2;
+      const cropY = (img.height - cropWidth) / 2;
 
       // 캔버스 크기 설정
-      canvas.width = 400;
-      canvas.height = 400;
+      const size = 400;
+      canvas.width = size;
+      canvas.height = size;
 
-      // 이미지 중앙에 위치시키기
-      ctx?.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, 400, 400);
+      // 이미지 리사이즈
+      ctx?.drawImage(img, cropX, cropY, cropWidth, cropWidth, 0, 0, size, size);
 
       // 변환된 Blob 객체 반환
       canvas.toBlob((blob) => {
