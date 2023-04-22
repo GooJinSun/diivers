@@ -10,9 +10,10 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.settings import api_settings
 from django.contrib.auth.models import update_last_login
 
+from account.algorithms.csv_writer import get_dormant_user_df
 from account.models import FriendRequest
 from adoorback.settings.base import BASE_URL
-from adoorback.utils.exceptions import InActiveUser, NoUsername, WrongPassword
+from adoorback.utils.exceptions import InActiveUser, NoUsername, WrongPassword, ExistingEmail
 
 from django.db.models import Q
 
@@ -41,6 +42,14 @@ class UserProfileSerializer(serializers.HyperlinkedModelSerializer):
         user.is_active = False
         user.save()
         return user
+
+    def validate(self, attrs):       
+        # check if email exists among dormant users
+        dormant_user_emails = get_dormant_user_df()['email'].tolist()
+        if attrs.get('email') in dormant_user_emails:
+            raise ExistingEmail()
+
+        return super(UserProfileSerializer, self).validate(attrs)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainSerializer):

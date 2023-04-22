@@ -15,7 +15,7 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenViewBase
 from safedelete.models import SOFT_DELETE_CASCADE
 
-from account.algorithms.csv_writer import delete_dormant_users_from_csv, USER_INFO_FIELDS
+from account.algorithms.csv_writer import delete_dormant_users_from_csv, USER_INFO_FIELDS, get_dormant_user_df
 from account.models import FriendRequest
 from account.serializers import UserProfileSerializer, \
     UserFriendRequestCreateSerializer, UserFriendRequestUpdateSerializer, \
@@ -144,7 +144,13 @@ class SendResetPasswordEmail(generics.CreateAPIView):
         return adoor_exception_handler
     
     def get_object(self):
-        return User.objects.filter(email=self.request.data['email']).first()
+        email = self.request.data['email']
+        user = User.objects.filter(email=email).first()
+        if not user:
+            dormant_users = get_dormant_user_df()
+            user_id = int(dormant_users[dormant_users['email'] == email]['id'].values[0])
+            user = User.objects.get(id=user_id)
+        return user
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()
