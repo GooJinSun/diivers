@@ -64,7 +64,8 @@ const initialState = {
   selectedUser: null,
   selectQuestion: true,
   fcmToken: null,
-  profileImageUpdatedAt: Date.now()
+  profileImageUpdatedAt: Date.now(),
+  resetPasswordError: null
 };
 
 export const skipOrCompleteSelectQuestions = () => {
@@ -145,7 +146,7 @@ export const requestResetPassword = (id, token, passwordInfo) => {
       await axios.patch(`user/reset-password/${id}/${token}/`, passwordInfo);
       dispatch({ type: RESET_PASSWORD_SUCCESS });
     } catch (error) {
-      dispatch({ type: RESET_PASSWORD_FAILURE });
+      dispatch({ type: RESET_PASSWORD_FAILURE, error: error.response?.data });
     }
   };
 };
@@ -374,6 +375,16 @@ export default function userReducer(state, action) {
         profileImageUpdatedAt: action.profileImageUpdatedAt
       };
     }
+    case RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        resetPasswordError: null
+      };
+    case RESET_PASSWORD_FAILURE:
+      return {
+        ...state,
+        resetPasswordError: action.error
+      };
     default:
       return state;
   }
