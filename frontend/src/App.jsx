@@ -4,6 +4,8 @@ import { Route, Switch, Redirect, useLocation } from 'react-router-dom';
 import { MuiThemeProvider, createTheme } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import AccountActivate from '@components/account-activate/AccountActivate';
+import AccountReactivate from '@components/account-reactivate/AccountReactivate';
+import AccountDormant from '@components/account-dormant/AccountDormant';
 import AnonymousFeed from '@components/anonymous-feed/AnonymousFeed';
 import FriendFeed from '@components/friend-feed/FriendFeed';
 import FriendsPage from '@components/friends-page/FriendsPage';
@@ -97,6 +99,12 @@ const App = () => {
               path="/activate/:id/:token"
               component={AccountActivate}
             />
+            <Route
+              exact
+              path="/reactivate/:id/:token"
+              component={AccountReactivate}
+            />
+            <Route exact path="/account-dormant" component={AccountDormant} />
             <Route exact path="/lost-password" component={LostPassword} />
             <Route
               exact

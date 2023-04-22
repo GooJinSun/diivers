@@ -25,7 +25,13 @@ export default function Login() {
 
   useEffect(() => {
     if (!currentUser) return;
-    if (!currentUser.question_history) history.push('/select-questions');
+    const { question_history, is_dormant } = currentUser;
+    // 휴면 계정의 경우 account-dormant 페이지로 이동
+    if (is_dormant) {
+      history.push('/account-dormant');
+      return;
+    }
+    if (!question_history) history.push('/select-questions');
     else history.push('/');
   }, [currentUser, history]);
 

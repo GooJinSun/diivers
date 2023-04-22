@@ -7,7 +7,7 @@
     "logout": "Logout",
     "login": "Login",
     "view_all_notifications": "View all notifications"
-  }, 
+  },
   "common_popup": {
     "allow_notification_to_receive_updates_from_friends_as_push_notifications": "Allow notification to receive updates from friends as push notifications!",
     "please_check_your_system_preferences": "If you don't get any notifications, please check the system preferences of your device."
@@ -87,6 +87,23 @@
     "invalid_link": "Invalid link.",
     "go_to_login": "Go to Login",
     "login_and_tour_diivers": "Log in and tour the Diivers",
+    "sign_up": "Sign Up"
+  },
+  "account_dormant": {
+    "your_account_is_dormant": "Diivers puts inactive accounts in dormant status for the protection of customers' valuable information when there has been no usage history for over a year.",
+    "you_need_to_reactivate_account": "To check the dormant status of your account and recover it, you must go through the personal verification process.",
+    "click_email_authenticate_button": "Please click the 'Email Authentication' button below.",
+    "email_authenticate": "Email Authentication",
+    "email_has_been_sent": "An authentication email has been sent to the email you provided during Sign Up.",
+    "please_check_authentication_email": "Please click the link in the authentication email to proceed with account reactivation.",
+    "you_can_use_after_reactivation": "After the account reactivation, normal use will be possible."
+  },
+  "account_reactivate": {
+    "authenticating": "Reactivating the dormant account...",
+    "account_reactivation_is_completed": "The account has been successfully reactivated.",
+    "please_login": "Please log in.",
+    "invalid_link": "The link is invalid.",
+    "go_to_login": "Go to Login",
     "sign_up": "Sign Up"
   },
   "lost_password": {
