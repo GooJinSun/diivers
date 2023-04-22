@@ -5,7 +5,7 @@ import LockIcon from '@material-ui/icons/Lock';
 import { useTranslation } from 'react-i18next';
 import useAsyncEffect from '@hooks/useAsyncEffect';
 import axios from '@utils/api';
-import UserTagSearchList from '@common-components/user-tag-list/UserTagList';
+import UserTagSearchList from '@components/_common/user-tag-search-list/UserTagSearchList';
 import {
   NewCommentWrapper,
   PrivateWrapper,
