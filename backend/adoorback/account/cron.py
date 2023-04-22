@@ -3,6 +3,7 @@ from datetime import timedelta, datetime
 from django.utils.timezone import make_aware
 from django.contrib.auth import get_user_model
 from django_cron import CronJobBase, Schedule
+from django.db.models import Q
 
 from account.algorithms.csv_writer import create_dormant_csv
 from account.email import email_manager
@@ -83,9 +84,12 @@ class SendDormantInformEmailCronJob(CronJobBase):
         print('=========================')
         print("Sends users that have not visited for 11 months an informing email that the account will be dormant in 30 days.")
         today = make_aware(datetime.now())
-        visited_users = Visitor.objects.user_stats(today - timedelta(days=335), today)
-        inform_users = User.objects.filter(id__in=[x.id for x in set(User.objects.all()) - set(visited_users)]).filter(is_dormant=False)
-        user_cnt = 0
+        threshold_date = today - timedelta(days=335)
+        visited_users = Visitor.objects.user_stats(threshold_date, today)
+        inform_users = User.objects.filter(id__in=[x.id for x in set(User.objects.all()) - set(visited_users)]) \
+            .filter(is_dormant=False) \
+            .filter(Q(visit_history__isnull=False) | Q(created_at__lt=threshold_date))   # exclude those who did not ever visit since sign up
+
         for user in inform_users:
             # lang = user.language
             # translation.activate(lang)
@@ -107,8 +111,11 @@ class MakeUsersDormantCronJob(CronJobBase):
         print('=========================')
         print("Make users that have not visited for 1 year dormant.")
         today = make_aware(datetime.now())
-        visited_users = Visitor.objects.user_stats(today - timedelta(days=365), today)
-        dormant_users = User.objects.filter(id__in=[x.id for x in set(User.objects.all()) - set(visited_users)]).filter(is_dormant=False)
+        threshold_date = today - timedelta(days=365)
+        visited_users = Visitor.objects.user_stats(threshold_date, today)
+        dormant_users = User.objects.filter(id__in=[x.id for x in set(User.objects.all()) - set(visited_users)]) \
+            .filter(is_dormant=False) \
+            .filter(Q(visit_history__isnull=False) | Q(created_at__lt=threshold_date))   # exclude those who did not ever visit since sign up
 
         create_dormant_csv(dormant_users)
 

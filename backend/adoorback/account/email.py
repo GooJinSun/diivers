@@ -1,10 +1,14 @@
 from datetime import date, timedelta
-
+import os
+import pandas as pd
 import six
+
 from django.conf import settings
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.core.mail import EmailMessage
 from django.utils.translation import gettext_lazy as _
+
+from account.algorithms.csv_writer import USER_INFO_FIELDS
 
 class ActivateTokenGenerator(PasswordResetTokenGenerator):
     def _make_hash_value(self, user, timestamp):
@@ -47,14 +51,11 @@ class EmailManager():
         mail_to = [user.email]
         dormant_date = (date.today() + timedelta(days=30)).isoformat()
         message_data = f"{user.username}"
-        message_data += _("님, 장기간 Diivers 서비스 이용이 없으셨던 회원님의 계정이 휴면계정으로 전환될 예정입니다.\n \
-                           저장된 개인정보는 안전하게 분리보관함을 안내드립니다.\n\n \
-                           휴면 전환 예정일: ")
+        message_data += _("님, 장기간 Diivers 서비스 이용이 없으셨던 회원님의 계정이 휴면계정으로 전환될 예정입니다.\n저장된 개인정보는 안전하게 분리보관함을 안내드립니다.\n\n휴면 전환 예정일: ")
         message_data += f"{dormant_date}\n"
-        message_data += _("분리보관 항목: 이메일 주소, 생년월일, 성별, 인종\n\n \
-                           휴면 전환을 원치 않으시는 경우, ")
+        message_data += _("분리보관 항목: 이메일 주소, 생년월일, 성별, 인종\n\n휴면 전환을 원치 않으시는 경우, ")
         message_data += f"{dormant_date}"
-        message_data += _("이전에 Diivers를 방문하여 로그인해주시기 바랍니다.\n다이버스 바로가기 : ")
+        message_data += _(" 이전에 Diivers를 방문하여 로그인해주시기 바랍니다.\n다이버스 바로가기 : ")
         message_data += f"{settings.FRONTEND_URL}\n\n"
         message_data += _("감사합니다.")
         email = EmailMessage(mail_title, message_data, to=mail_to)
@@ -63,7 +64,10 @@ class EmailManager():
     def send_reactivate_email(self, user):
         token = self.reactivate_token_generator.make_token(user)
         mail_title = _("휴면 해제를 위해 이메일 인증을 완료해주세요")
-        mail_to = [user.email]
+        dir_name = os.path.dirname(os.path.abspath(__file__))
+        dormant_users = pd.read_csv(os.path.join(dir_name, 'algorithms/dormant_users.csv'),
+                               names=USER_INFO_FIELDS)
+        mail_to = dormant_users[dormant_users['id'] == user.id]['email'].values
         message_data = _("아래 링크를 클릭하면 휴면 해제를 위한 인증이 완료됩니다.\n\n")
         message_data += f"{settings.FRONTEND_URL}/reactivate/{user.id}/{token}\n\n"
         message_data += _("감사합니다.")

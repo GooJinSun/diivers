@@ -15,7 +15,7 @@ from rest_framework import status
 from rest_framework_simplejwt.views import TokenViewBase
 from safedelete.models import SOFT_DELETE_CASCADE
 
-from account.algorithms.csv_writer import delete_dormant_users_from_csv
+from account.algorithms.csv_writer import delete_dormant_users_from_csv, USER_INFO_FIELDS
 from account.models import FriendRequest
 from account.serializers import UserProfileSerializer, \
     UserFriendRequestCreateSerializer, UserFriendRequestUpdateSerializer, \
@@ -185,7 +185,7 @@ class SendReActivateEmail(generics.CreateAPIView):
         return adoor_exception_handler
     
     def get_object(self):
-        return User.objects.filter(email=self.request.data['email']).first()
+        return User.objects.get(id=self.request.data['id'])
 
     def post(self, request, *args, **kwargs):
         user = self.get_object()
@@ -218,8 +218,14 @@ class UserReActivate(generics.UpdateAPIView):
     @transaction.atomic
     def reactivate(self, user):
         user.is_dormant = False
+        user_info = delete_dormant_users_from_csv(User.objects.filter(id=user.id))[user.id]
+        for idx, field in enumerate(USER_INFO_FIELDS):
+            try:
+                new_value = int(user_info[idx])
+            except:
+                new_value = None if user_info[idx] == 'None' else user_info[idx]
+            setattr(user, field, new_value)
         user.save()
-        delete_dormant_users_from_csv(User.objects.filter(id=user.id))
 
 
 class SignupQuestions(generics.ListAPIView):
