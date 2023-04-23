@@ -93,6 +93,7 @@ INSTALLED_APPS = [
     'fcm_django',
     'safedelete',
     'tracking',
+    'django_celery_results',
 ]
 
 SITE_ID = 1
@@ -253,3 +254,8 @@ SESSION_ENGINE = "django.contrib.sessions.backends.file"
 SESSION_FILE_PATH = os.path.join(BASE_DIR, 'sessions')
 TRACK_ANONYMOUS_USERS = False
 TRACK_IGNORE_STATUS_CODES = [400, 404, 403, 405, 410, 500]
+
+# CELERY SETTINGS
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'

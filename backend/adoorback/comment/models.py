@@ -23,6 +23,118 @@ from safedelete.managers import SafeDeleteManager
 
 User = get_user_model()
 
+from celery import shared_task
+
+@shared_task
+def create_comment_related_notis(origin_author_id, actor_id, origin_type, origin_id, target_id, is_anonymous, content):
+    origin_author = User.objects.get(id=origin_author_id)
+    actor = User.objects.get(id=actor_id)
+    target = Comment.objects.get(id=target_id)
+    origin_content_type = ContentType.objects.get(model=origin_type.lower())
+    origin = origin_content_type.get_object_for_this_type(id=origin_id)
+
+    actor_name_ko = '익명의 사용자가' if is_anonymous else f'{actor.username}님이'
+    actor_name_en = 'An anonymous user' if is_anonymous else f'{actor.username}'
+    content_preview = wrap_content(content)
+
+    # if is_reply
+    if origin_type == 'Comment':
+        redirect_url = f'/{origin.target.type.lower()}s/{origin.target.id}?anonymous={is_anonymous}'
+        # send a notification to the author of the origin comment
+        if origin_author == actor:
+            pass
+        elif actor.id in origin_author.user_report_blocked_ids:
+            pass
+        else:
+            Notification.objects.create(actor=actor,
+                                        user=origin_author,
+                                        origin_id=origin.id,
+                                        origin_type=get_generic_relation_type(origin_type),
+                                        target_id=target.id,
+                                        target_type=get_comment_type(),
+                                        message_ko=f'{actor_name_ko} 회원님의 댓글에 답글을 남겼습니다: "{content_preview}"',
+                                        message_en=f'{actor_name_en} has replied to your comment: "{content_preview}"',
+                                        redirect_url=redirect_url)
+        # send a notification to the author of the feed where the origin comment commented
+        feed_author = origin.target.author
+        if feed_author == origin_author:
+            pass
+        elif feed_author == actor:
+            pass
+        elif actor.id in feed_author.user_report_blocked_ids:
+            pass
+        else:
+            feed_type_ko = '게시글' if origin.target.type == 'Article' else '답변'
+            feed_type_en = 'post' if origin_type == 'Article' else 'answer'
+            Notification.objects.create(actor=actor,
+                                        user=feed_author,
+                                        origin_id=origin.id,
+                                        origin_type=get_generic_relation_type(origin_type),
+                                        target_id=target.id,
+                                        target_type=get_comment_type(),
+                                        message_ko=f'회원님의 {feed_type_ko}에 달린 댓글에 새로운 답글이 달렸습니다: "{content_preview}"',
+                                        message_en=f'There\'s a new reply to the comment on your {feed_type_en}: "{content_preview}"',
+                                        redirect_url=redirect_url)
+        # send notifications to participants of the origin comment
+        for participant_id in origin.participants:
+            if participant_id == origin_author.id:
+                continue
+            if participant_id == feed_author.id:
+                continue
+            if participant_id == actor.id:
+                continue
+            participant = User.objects.get(id=participant_id)
+            if actor.id in participant.user_report_blocked_ids:
+                continue
+            Notification.objects.create(actor=actor,
+                                        user=participant,
+                                        origin_id=origin.id,
+                                        origin_type=get_generic_relation_type(origin_type),
+                                        target_id=target.id,
+                                        target_type=get_comment_type(),
+                                        message_ko=f'회원님이 답글을 남긴 댓글에 새로운 답글이 달렸습니다: "{content_preview}"',
+                                        message_en=f'There\'s a new reply in the comment thread where you left a reply: "{content_preview}"',
+                                        redirect_url=redirect_url)
+
+    # if not reply
+    else:
+        redirect_url = f'/{origin_type.lower()}s/{origin.id}?anonymous={is_anonymous}'
+        # send a notification to the author of the origin feed
+        origin_target_name_ko = '게시글' if origin_type == 'Article' else '답변'
+        origin_target_name_en = 'post' if origin_type == 'Article' else 'answer'
+        if origin_author == actor:
+            pass
+        elif actor.id in origin_author.user_report_blocked_ids:
+            pass
+        else:
+            Notification.objects.create(actor=actor,
+                                        user=origin_author,
+                                        origin_id=origin.id,
+                                        origin_type=get_generic_relation_type(origin_type),
+                                        target_id=target.id,
+                                        target_type=get_comment_type(),
+                                        message_ko = f'{actor_name_ko} 회원님의 {origin_target_name_ko}에 댓글을 남겼습니다: "{content_preview}"',
+                                        message_en = f'{actor_name_en} has commented on your {origin_target_name_en}: "{content_preview}"',
+                                        redirect_url=redirect_url)
+        # send notifications to participants of the origin feed
+        for participant_id in origin.participants:
+            if participant_id == origin_author.id:
+                continue
+            if participant_id == actor.id:
+                continue
+            participant = User.objects.get(id=participant_id)
+            if actor.id in participant.user_report_blocked_ids:
+                continue
+            Notification.objects.create(actor=actor,
+                                        user=participant,
+                                        origin_id=origin.id,
+                                        origin_type=get_generic_relation_type(origin_type),
+                                        target_id=target.id,
+                                        target_type=get_comment_type(),
+                                        message_ko=f'회원님이 댓글을 남긴 {origin_target_name_ko}에 새로운 댓글이 달렸습니다: "{content_preview}"',
+                                        message_en=f'There\'s a new comment on the {origin_target_name_en} you commented on: "{content_preview}"',
+                                        redirect_url=redirect_url)
+
 
 class CommentManager(SafeDeleteManager):
 
@@ -79,108 +191,10 @@ def create_noti(instance, created, **kwargs):
     actor = instance.author
     origin = instance.target
     target = instance
+    is_anonymous = instance.is_anonymous
+    content = instance.content
 
-    actor_name_ko = '익명의 사용자가' if instance.is_anonymous else f'{actor.username}님이'
-    actor_name_en = 'An anonymous user' if instance.is_anonymous else f'{actor.username}'
-    content_preview = wrap_content(instance.content)
-
-    # if is_reply
-    if origin.type == 'Comment':
-        redirect_url = f'/{origin.target.type.lower()}s/{origin.target.id}?anonymous={instance.is_anonymous}'
-        # send a notification to the author of the origin comment
-        if origin_author == actor:
-            pass
-        elif actor.id in origin_author.user_report_blocked_ids:
-            pass
-        else:
-            Notification.objects.create(actor=actor,
-                                        user=origin_author,
-                                        origin_id=origin.id,
-                                        origin_type=get_generic_relation_type(origin.type),
-                                        target_id=target.id,
-                                        target_type=get_comment_type(),
-                                        message_ko=f'{actor_name_ko} 회원님의 댓글에 답글을 남겼습니다: "{content_preview}"',
-                                        message_en=f'{actor_name_en} has replied to your comment: "{content_preview}"',
-                                        redirect_url=redirect_url)
-        # send a notification to the author of the feed where the origin comment commented
-        feed_author = origin.target.author
-        if feed_author == origin_author:
-            pass
-        elif feed_author == actor:
-            pass
-        elif actor.id in feed_author.user_report_blocked_ids:
-            pass
-        else:
-            feed_type_ko = '게시글' if origin.target.type == 'Article' else '답변'
-            feed_type_en = 'post' if origin.type == 'Article' else 'answer'
-            Notification.objects.create(actor=actor,
-                                        user=feed_author,
-                                        origin_id=origin.id,
-                                        origin_type=get_generic_relation_type(origin.type),
-                                        target_id=target.id,
-                                        target_type=get_comment_type(),
-                                        message_ko=f'회원님의 {feed_type_ko}에 달린 댓글에 새로운 답글이 달렸습니다: "{content_preview}"',
-                                        message_en=f'There\'s a new reply to the comment on your {feed_type_en}: "{content_preview}"',
-                                        redirect_url=redirect_url)
-        # send notifications to participants of the origin comment
-        for participant_id in origin.participants:
-            if participant_id == origin_author.id:
-                continue
-            if participant_id == feed_author.id:
-                continue
-            if participant_id == actor.id:
-                continue
-            participant = User.objects.get(id=participant_id)
-            if actor.id in participant.user_report_blocked_ids:
-                continue
-            Notification.objects.create(actor=actor,
-                                        user=participant,
-                                        origin_id=origin.id,
-                                        origin_type=get_generic_relation_type(origin.type),
-                                        target_id=target.id,
-                                        target_type=get_comment_type(),
-                                        message_ko=f'회원님이 답글을 남긴 댓글에 새로운 답글이 달렸습니다: "{content_preview}"',
-                                        message_en=f'There\'s a new reply in the comment thread where you left a reply: "{content_preview}"',
-                                        redirect_url=redirect_url)
-
-    # if not reply
-    else:
-        redirect_url = f'/{origin.type.lower()}s/{origin.id}?anonymous={instance.is_anonymous}'
-        # send a notification to the author of the origin feed
-        origin_target_name_ko = '게시글' if origin.type == 'Article' else '답변'
-        origin_target_name_en = 'post' if origin.type == 'Article' else 'answer'
-        if origin_author == actor:
-            pass
-        elif actor.id in origin_author.user_report_blocked_ids:
-            pass
-        else:
-            Notification.objects.create(actor=actor,
-                                        user=origin_author,
-                                        origin_id=origin.id,
-                                        origin_type=get_generic_relation_type(origin.type),
-                                        target_id=target.id,
-                                        target_type=get_comment_type(),
-                                        message_ko = f'{actor_name_ko} 회원님의 {origin_target_name_ko}에 댓글을 남겼습니다: "{content_preview}"',
-                                        message_en = f'{actor_name_en} has commented on your {origin_target_name_en}: "{content_preview}"',
-                                        redirect_url=redirect_url)
-        # send notifications to participants of the origin feed
-        for participant_id in origin.participants:
-            if participant_id == origin_author.id:
-                continue
-            if participant_id == actor.id:
-                continue
-            participant = User.objects.get(id=participant_id)
-            if actor.id in participant.user_report_blocked_ids:
-                continue
-            Notification.objects.create(actor=actor,
-                                        user=participant,
-                                        origin_id=origin.id,
-                                        origin_type=get_generic_relation_type(origin.type),
-                                        target_id=target.id,
-                                        target_type=get_comment_type(),
-                                        message_ko=f'회원님이 댓글을 남긴 {origin_target_name_ko}에 새로운 댓글이 달렸습니다: "{content_preview}"',
-                                        message_en=f'There\'s a new comment on the {origin_target_name_en} you commented on: "{content_preview}"',
-                                        redirect_url=redirect_url)
+    transaction.on_commit(lambda: create_comment_related_notis.delay(origin_author.id, actor.id, origin.type, origin.id, target.id, is_anonymous, content))
 
 
 @transaction.atomic
